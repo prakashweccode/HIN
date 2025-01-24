@@ -1,0 +1,34 @@
+<div class="w3-row">
+  <div class="w3-third">
+    &nbsp;
+  </div>
+  <div class="w3-third w3-margin-top w3-container">
+    <div class="w3-panel w3-card-2 w3-white w3-small">
+      <div class="w3-margin">
+        <h4 class="w3-center"><strong>Forgot Password</strong></h4>
+      </div>
+      <div class="w3-row w3-padding marginform">
+        <div class="w3-full w3-margin-top">
+          <label>Email</label>
+          <input class="w3-input w3-border" type="text"  [(ngModel)]="forgot.EmailId">
+        </div>
+
+        <div class="w3-full w3-margin-top">
+          <button class="w3-button w3-block w3-mobile w3-primary w3-border" (click)="backToLogin()">Close</button>
+          <button class="w3-button w3-block w3-mobile w3-secondary w3-border w3-margin-top" [disabled]="isValidating?'disabled':''"  (click)="verifyEmail()">Send</button>
+        </div>
+        <p *ngIf="isVerified"><span>Please check your mail to get your access code.</span></p>
+        <div *ngIf="isValidating"> <span>Validating your details please wait ....</span></div>
+      </div>
+      <br>
+    </div>
+  </div>
+  <div class="w3-third">
+    &nbsp;
+  </div>
+</div>
+
+
+
+
+

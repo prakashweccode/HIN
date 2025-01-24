@@ -1,0 +1,175 @@
+<div class="w3-row w3-animate-zoom">
+  <div class="w3-card w3-margin-right w3-margin-left w3-margin-bottom w3-round-large w3-white">
+    <div class="w3-container">
+      <div class="w3-row w3-margin-top-xxlarge">
+        <!--<div class="w3-left">
+          <label class="w3-left w3-xlarge"><b>K9 Lead Gen</b></label>
+        </div>-->
+      </div>
+    </div>
+    <div>
+      <div class="w3-panel w3-light-grey w3-padding w3-border-bottom w3-border-top w3-margin-top-small">
+        <div class="w3-left">
+          <label class="w3-left w3-xlarge"><b>Funnel</b></label>
+        </div>
+        <div class="w3-right">
+          <button class="w3-button w3-right w3-gray w3-round-large w3-margin-right-small" (click)="addDeal()">Done</button>
+          <button class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="savePipeline()">Save</button>
+        </div>
+      </div>
+      <div class="w3-row w3-container">
+        <div class="w3-row marginform">
+          <div class="w3-third w3-margin-right">
+            <label>Name: </label>
+            <input class="w3-input w3-border" type="text" [(ngModel)]="pipeLineGroup.Name" />
+          </div>
+          <div class="w3-third w3-margin-right">
+            <label>Type :</label>
+            <select class="w3-input w3-border" [(ngModel)]="pipeLineGroup.PipelineGroupType">
+              <option value="0" disabled>--Select Type--</option>
+              <option *ngFor="let pipelineGroupType of pipelineGroupTypes" [ngValue]="pipelineGroupType.Id">{{pipelineGroupType.Name}}</option>
+            </select>
+          </div>
+        </div>
+        <div *ngIf="pipelines && pipelines.length == 0">
+          <button class="w3-button w3-secondary w3-margin-bottom w3-margin-top w3-round-large" (click)="openStage(pipeline);"><i class="fa fa-plus w3-medium" aria-hidden="true"></i></button>
+        </div>
+        <div *ngIf="pipelines && pipelines.length > 0">
+          <table class="w3-responsive">
+            <tr>
+              <td *ngFor="let pipeline of sortBy('DisplayOrder');let i = index">
+                <div id="pipe{{pipeline.PipelineId}}" [class]="pipeline.hover?'w3-secondary-l5 w3-margin-right w3-margin-bottom w3-margin-top w3-card-2 w3-round-large w3-col w3-display-container':'w3-secondary-l5 w3-margin-right w3-margin-bottom w3-margin-top w3-card-2 w3-round-large w3-col w3-display-container'"
+                     style="width:250px;min-height:50vh;padding-bottom:50px;" draggable="true" (dragstart)="drag(pipeline)" (drop)="drop(pipeline);pipeline.hover=false;"
+                     (dragover)="allowDrop($event);pipeline.hover=true;" (dragleave)="pipeline.hover=false;">
+
+                  <div class="w3-block w3-secondary-button w3-round-top-right w3-round-top-left">
+                    <div class="w3-row w3-center">
+                      <div class="w3-col s10">
+                        <div class="w3-margin-left w3-left">
+                          <i *ngIf="i>0" class="fa fa-arrow-left w3-medium" (click)="leftStage(pipeline,i);" aria-hidden="true"></i>
+                        </div>
+                        <div class="w3-medium">
+                          {{pipeline.Name}}
+                        </div>
+                      </div>
+                      
+                      <div class="w3-col s2">
+                        <div class="w3-margin-right-medium">
+                          <i  *ngIf="(i+1)!=pipelines.length" class="fa fa-arrow-right w3-medium w3-margin-right-small" (click)="rightStage(pipeline,i);" aria-hidden="true"></i>
+                         
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!--(drop)="drop(pipeline);pipeline.hover=false;"
+  (dragover)="allowDrop($event);pipeline.hover=true;" (dragleave)="pipeline.hover=false;">-->
+                  <!--<div class="w3-right stagearrow">
+    <i class="fa fa-plus w3-text-secondary w3-display-right fa-2x" style="margin-right: -28px; cursor:pointer;" (click)="openStage(pipeline);"></i>
+  </div>
+  <div class="w3-right stagearrow">
+    <i class="fa fa-angle-double-right w3-text-secondary fa-2x w3-display-topright" style="margin-top: 8px;"></i>
+  </div>-->
+                  <div class="w3-container">
+                    <div (dragover)="noAllowDrop($event)" class="w3-margin-top">
+                      <label>Name</label>
+                      <input type="text" class="w3-input w3-border" [(ngModel)]="pipeline.Name" />
+                    </div>
+
+                    <div (dragover)="noAllowDrop($event)" class="w3-margin-top">
+                      <label>Probability</label>
+                      <input type="text" class="w3-input w3-border" [(ngModel)]="pipeline.Probability" />
+                    </div>
+                  </div>
+                  
+                  <!--<div (dragover)="noAllowDrop($event)">
+    <label>Rotting</label>
+    <input type="checkbox" class="w3-input w3-border" [(ngModel)]="pipeline.IsRotting" />
+    <input type="text" class="w3-input w3-border" *ngIf="pipeline.IsRotting" [(ngModel)]="pipeline.RottingDays" />
+  </div>-->
+                  <!--<div style="height:80vh;" [class]="pipeline.hover?'w3-green':''" (drop)="drop(pipeline);pipeline.hover=false;"
+       (dragover)="allowDrop($event);pipeline.hover=true;" (dragleave)="pipeline.hover=false;">
+  </div>-->
+                  &nbsp;
+                  <div class="w3-margin-bottom-medium">
+                    <button class="w3-button w3-round-large w3-margin-right-small w3-display-bottomleft"><i class="fa fa-plus w3-medium" (click)="openStage(pipeline);" aria-hidden="true"></i></button>
+                    <button class="w3-button w3-round-large w3-display-bottommiddle"><i class="fa fa-trash-o fa-lg w3-text-red" aria-hidden="true" (click)="removePipeLine(pipeline)"></i></button>
+
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <!--<ng-container *ngFor="let pipeline of sortBy('DisplayOrder');let i = index">
+
+        <div id="pipe{{i}}" [class]="pipeline.hover?'w3-gray w3-margin w3-opacity w3-hover-shadow w3-col w3-container w3-display-container':'w3-white w3-margin w3-hover-shadow w3-col w3-container w3-display-container'"
+             style="width:250px;min-height:80vh;padding-bottom:50px;" draggable="true" (dragstart)="drag(pipeline)" (drop)="drop(pipeline);pipeline.hover=false;"
+             (dragover)="allowDrop($event);pipeline.hover=true;" (dragleave)="pipeline.hover=false;">
+
+          <div [class]="pipeline.hover?'w3-text-white w3-border-blue grab w3-bottombar':'grab w3-border-green w3-bottombar'" (drop)="drop(pipeline);pipeline.hover=false;"
+               (dragover)="allowDrop($event);pipeline.hover=true;" (dragleave)="pipeline.hover=false;">
+            <h4 [class]="pipeline.hover?'w3-text-white':'w3-text-green'">{{pipeline.Name}}</h4>
+            <div class="w3-right stagearrow">
+              <i class="fa fa-plus w3-text-green w3-display-right fa-2x" style="margin-right: -28px; cursor:pointer;" (click)="openStage(pipeline);"></i>
+            </div>
+            <div class="w3-right stagearrow">
+              <i class="fa fa-angle-double-right w3-text-green fa-2x w3-display-topright" style="margin-top: 8px;"></i>
+            </div>
+          </div>
+          <div (dragover)="noAllowDrop($event)" class="w3-margin-top">
+            <label>Name</label>
+            <input type="text" class="w3-input w3-border" [(ngModel)]="pipeline.Name" />
+          </div>
+          <label>Probability</label>
+          <div (dragover)="noAllowDrop($event)">
+            <input type="text" class="w3-input w3-border" [(ngModel)]="pipeline.Probability" />
+          </div>-->
+          <!--<div (dragover)="noAllowDrop($event)">
+          <label>Rotting</label>
+          <input type="checkbox" class="w3-input w3-border" [(ngModel)]="pipeline.IsRotting" />
+          <input type="text" class="w3-input w3-border" *ngIf="pipeline.IsRotting" [(ngModel)]="pipeline.RottingDays" />
+        </div>-->
+          <!--<div style="height:80vh;" [class]="pipeline.hover?'w3-green':''" (drop)="drop(pipeline);pipeline.hover=false;"
+             (dragover)="allowDrop($event);pipeline.hover=true;" (dragleave)="pipeline.hover=false;">
+        </div>-->
+          <!--&nbsp;
+            <div style="margin-bottom: 8px;">
+              <button class="w3-button w3-round-large w3-display-bottommiddle"><i class="fa fa-remove w3-text-red fa-2x"></i></button>
+
+            </div>
+          </div>
+        </ng-container>-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="addtoggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large w3-secondary-button">
+    <span (click)="closeStage()" class="w3-button w3-margin-right-small w3-display-topright">&times;</span>
+    <div class="w3-small sfcenter w3-margin-top">
+      <div class="w3-animate-opacity marginform">
+        <div class="w3-row w3-round-large w3-secondary-button w3-container w3-padding">
+          <h5 class="w3-left">Add Stage</h5>
+        </div>
+        <div class="w3-row w3-padding w3-primary-l4">
+          <div class="w3-row">
+            <div class="w3-container w3-half">
+              <div class="w3-full">
+                <label>Stage Name *</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="tempPipe.Name" [class.w3-border-red]="checkValidation(stageName)" #stageName="ngModel" required/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w3-row w3-round-bottom-left w3-round-bottom-right w3-secondary-button">
+          <div class="w3-margin w3-right">
+            <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeStage()">Close</button>
+            <button class="w3-button w3-border w3-round-large w3-secondary" [disabled]="checkReqValidation(stageName)" (click)="addStage(tempPipe)">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+   </div>
+</div>

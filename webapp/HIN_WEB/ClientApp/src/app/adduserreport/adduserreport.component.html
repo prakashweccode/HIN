@@ -1,0 +1,109 @@
+<div class="w3-row">
+  <div class="w3-card-2 w3-white w3-small sfcenter w3-round-large w3-animate-zoom">
+    <br />
+    <div class="w3-row w3-padding w3-animate-opacity w3-secondary-l5 w3-border-top w3-border-bottom">
+      <div class="w3-left w3-xlarge"><b>Lead Report By User</b></div>
+      <div class="w3-right">
+        <button class="w3-button w3-margin-right w3-secondary w3-round-large" (click)="cancel()">
+          <i class="fa fa-reply"></i>
+        </button>
+      </div>
+    </div>
+    <div class="w3-container">
+      <div class="w3-row">
+        <div class="w3-full">
+          <div class="marginform">
+
+
+            <!--<div class="w3-full w3-container">
+              <label>Assigned To </label>
+              <app-assignedtogrid [assignedToGrid]="assignedToGrid" (sendAssignedId)="selectAssignedValue($event)"></app-assignedtogrid>
+            </div>-->
+
+            <div class="w3-quarter w3-container">
+
+              <div>
+                <input type="radio" class="w3-radio" name="radioLead" value="1" (change)="handleFrequencyChange($event)" checked />
+                <label for="perlead">&nbsp;Per&nbsp;Day</label>
+              </div>
+              <div class="w3-margin-top" *ngIf="radioReport == 1">
+                <input class="w3-input w3-border" type="date" [(ngModel)]="userReport.reportinput.To" />
+              </div>
+            </div>
+
+            <div class="w3-quarter w3-container">
+              <div>
+                <input type="radio" class="w3-radio" name="radioLead" value="2" (change)="handleFrequencyChange($event)" />
+                <label>&nbsp;Per&nbsp;Month</label>
+              </div>
+              <div class="w3-margin-top">
+                <input class="w3-input w3-border" type="date" [(ngModel)]="userReport.reportinput.From" *ngIf="radioReport == 2" />
+              </div>
+              <div class="w3-margin-top">
+                <input class="w3-input w3-border" type="date" [(ngModel)]="userReport.reportinput.To" *ngIf="radioReport == 2" />
+              </div>
+            </div>
+
+            <div class="w3-quarter w3-container">
+              <div>
+                <input type="radio" class="w3-radio" name="radioLead" value="3" (change)="handleFrequencyChange($event)" />
+                <label>&nbsp;Per&nbsp;Range (Quarterly Basis)</label>
+              </div>
+              <div class="w3-margin-top">
+                <input class="w3-input w3-border" type="date" [(ngModel)]="userReport.reportinput.From" *ngIf="radioReport == 3" />
+              </div>
+              <div class="w3-margin-top">
+                <input class="w3-input w3-border" type="date" [(ngModel)]="userReport.reportinput.To" *ngIf="radioReport == 3" />
+              </div>
+            </div>
+
+            <div class="w3-quarter w3-container">
+              <div>
+                <input type="radio" class="w3-radio" name="radioLead" value="4" (change)="handleFrequencyChange($event)" />
+                <label>&nbsp;Per&nbsp;Year</label>
+              </div>
+              <div class="w3-margin-top">
+                <input class="w3-input w3-border" type="date" [(ngModel)]="userReport.reportinput.To" *ngIf="radioReport == 4" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="w3-center w3-margin">
+        <button class="w3-button w3-secondary w3-border w3-round-large" (click)="getUserByDate()">Get Report</button>
+
+      </div>
+
+      <div class="w3-full">
+        <table class="w3-table w3-bordered">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>User Name</th>
+              <th>Email Id</th>
+              <th>Phone</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of listUser">
+              <td>{{user.FirstName}}</td>
+              <td>{{user.UserName}}</td>
+              <td>{{user.Email}}</td>
+              <td>{{user.PhoneNumber}}</td>
+            </tr>
+            <tr *ngIf="listUser.length == 0">
+              <td>No Records Found.</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+

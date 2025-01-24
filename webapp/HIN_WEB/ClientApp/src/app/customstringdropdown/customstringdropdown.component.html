@@ -1,0 +1,38 @@
+<!--<div>
+  <select class="w3-input w3-border" [(ngModel)]="selectedValue" (ngModelChange)="sendSelectedValue(selectedValue)">
+    <option [ngValue]="0" disabled>--Select--</option>
+    <option> + Add New</option>
+    <option *ngFor="let selectedArray of selectedArrayData" [ngValue]="selectedArray[selectedId]">{{selectedArray[selectedName]}}</option>
+  </select>
+</div>-->
+
+<div>
+  <select class="w3-input w3-border" [(ngModel)]="selectedValue" (ngModelChange)="sendSelectedValue(selectedValue)">
+    <option [ngValue]="0" disabled>--Select--</option>
+    <option *ngIf="isAddEnabled"> + Add New</option>
+    <option *ngFor="let selectedArray of selectedArrayData" [ngValue]="selectedArray.DropDownName">{{selectedArray.DropDownName}}</option>
+  </select>
+</div>
+
+<div *ngIf="addValueModel" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large">
+    <div class="w3-container">
+      <span (click)="closeToggle()" class="w3-button w3-display-topright">&times;</span>
+      <div class="w3-white w3-small sfcenter w3-margin-top">
+        <div class="w3-margin w3-animate-opacity">
+          <div class="w3-row">
+            <h5>Add Value</h5>
+          </div>
+          <div class="w3-full w3-container">
+            <label>Name: </label>
+            <input type="text" class="w3-input w3-border" [(ngModel)]="customDropDown.DropDownName" />
+          </div>
+          <div class="w3-margin w3-right">
+            <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeToggle()">Cancel</button>
+            <button class="w3-button w3-secondary w3-border w3-round-large" (click)="saveDropDownValue()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

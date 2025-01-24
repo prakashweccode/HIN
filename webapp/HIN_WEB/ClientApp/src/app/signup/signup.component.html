@@ -1,0 +1,40 @@
+<div class="w3-third">
+  &nbsp;
+</div>
+<div class="w3-third w3-margin-top w3-container">
+  <div class="w3-panel w3-card-2 w3-white w3-small">
+    <div class="w3-margin">
+      <h4 class="w3-center"><strong>SIGNUP</strong></h4>
+    </div>
+    <div class="w3-row w3-padding marginform">
+      <div class="w3-row">
+        <div class="w3-half">
+          <label>Username*</label>
+          <input class="w3-input w3-border" [(ngModel)]="users.UserName" type="text" [class.w3-border-red]="checkValidation(username)" #username="ngModel" required>
+        </div>
+        <div class="w3-half w3-padding-left-10">
+          <label>Email</label>
+          <input class="w3-input w3-border" [(ngModel)]="users.Email" type="text">
+        </div>
+      </div>
+      <div class="w3-row">
+        <div class="w3-half">
+          <label>Phone Number</label>
+          <input class="w3-input w3-border" [(ngModel)]="users.PhoneNumber" type="number">
+        </div>
+        <div class="w3-half w3-padding-left-10">
+          <label>Password*</label>
+          <input class="w3-input w3-border" [(ngModel)]="users.Password" type="password" [class.w3-border-red]="checkValidation(password)" #password="ngModel" required>
+        </div>
+      </div>
+    </div>
+    <!--<div class="w3-right w3-margin-bottom">-->
+      <button class="w3-button w3-right w3-margin-bottom w3-secondary w3-round-large w3-margin-right-small" [disabled]="checkReqValidation(password)|| checkReqValidation(username) " (click)="saveUsersInfo()">Save</button>
+      <button class="w3-button w3-right w3-margin-bottom w3-secondary w3-round-large w3-margin-right-small" (click)="cancel()" > Cancel </button>
+    <!--</div>-->
+    <br>
+  </div>
+</div>
+<div class="w3-third">
+  &nbsp;
+</div>

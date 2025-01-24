@@ -1,0 +1,1128 @@
+<div class="w3-container">
+  <div class="w3-card-2 w3-white w3-small w3-margin-right w3-margin-left w3-round-large w3-animate-zoom">
+    <div class="w3-row w3-margin-bottom-small">
+      <div class="w3-right w3-margin-top-small">
+        <a class="w3-button w3-secondary w3-round-large w3-margin-right-small" (click)="reloadCurrentRoute()"><i class="fa fa-refresh"></i> Refresh</a>
+        <button *ngIf="lead.LeadId" class="w3-button w3-secondary w3-round-large w3-margin-right-small" (click)="addNewLead()" permissionCheck="2.2.3">+ Add Patient</button>
+        <a class="w3-button w3-secondary w3-round-large w3-margin-right-small" (click)="addLeadCustomField()" permissionCheck="2.2.1">+ Add New Field</a>
+        <!--<a permissionCheck="{{permissionBaseValue}}.2" class="w3-button w3-secondary w3-round-large w3-margin-right-small" (click)="addNewOpportunity(lead)">+ Add Opportunity</a>-->
+        <a class="w3-button w3-secondary w3-round-large w3-margin-right-small" (click)="backtoFunnel()" permissionCheck="2.2.2">Back To Funnel</a>
+        <button class="w3-button w3-right w3-margin-right w3-round-large w3-secondary" (click)="cancel()">
+          <i class="fa fa-reply"></i>
+        </button>
+      </div>
+    </div>
+    <div class="w3-row w3-container w3-animate-opacity w3-secondary-l5 w3-border-top w3-border-bottom">
+      <div class="w3-left w3-container w3-xlarge"><b>Patient</b></div>
+    </div>
+    <div class="w3-panel w3-margin-top-small">
+      <div class="w3-full marginform">
+        <div class="w3-container">
+          <div draggable="true" class="w3-col s2 w3-margin-top" style="width:10%;" (dragstart)="drag($event)" (drop)="drop($event);"
+               (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+            <input id="active" type="checkbox" [(ngModel)]="lead.Inactive" name="leadinactive" />
+            <label for="active">&nbsp;Inactive</label>
+          </div>
+          <div class="w3-col s5" style="width:38.5%;" permissionCheck="2.2.4">
+            <label>Patient Number From EMR*</label>
+            <input class="w3-input w3-border" [(ngModel)]="lead.BatchNumber" type="text" />
+          </div>
+          <div class="w3-col s5" *ngIf="lead?.LeadId && lead?.LeadId > 0 && lead?.CreatedOn">
+            <label class="w3-right"><span class="w3-margin-right">Created On : {{lead.CreatedOn | date : 'MM/dd/yyyy'}}</span><span>Oldest by : {{calculateCreatedByDays(lead.CreatedOn)}} days</span></label>
+          </div>
+        </div>
+
+        <div class="w3-row">
+          <div class="w3-row">
+            <div class="w3-half w3-container marginform">
+              <div class="w3-row">
+                <div class="w3-half" permissionCheck="2.2.5">
+                  <label>Number*</label>
+                  <input class="w3-input w3-border" [(ngModel)]="lead.LeadNumber" type="text" disabled="disabled" />
+                </div>
+                <div class="w3-half w3-padding-left-10">
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" permissionCheck="2.2.6">
+                    <label>First Name*</label>
+                    <div class="w3-border w3-input" (dragover)="noAllowDrop($event)">
+                      <!--[class.w3-border-red]="checkValidation(name)" #lname="ngModel" required-->
+                      <input class="w3-border-none w3-secondary-l5" type="text" *ngIf="!selectedUser || selectedUser.UserId == 0" style="border:none;width:80%" (keypress)="userSearch($event)" [(ngModel)]="lead.LeadName" />
+                      <!--<span class="w3-tag w3-teal" *ngIf="!selectedUser || selectedUser.UserId == 0" style="border:none;width:20%">New</span>-->
+                      <span class="w3-tag w3-teal" *ngIf="selectedUser && selectedUser.UserId > 0">{{selectedUser.FirstName}} <i class="fa fa-close" (click)="selectedUser=null"></i></span>
+                    </div>
+                    <div class="w3-display-container w3-row">
+                      <div class="w3-display-topleft w3-card-2 w3-white w3-bar-block w3-animate-opacity w3-border w3-show" style="width:100%;margin-top:-8px;" *ngIf="UserDetails.length>0">
+                        <div class="w3-bar-item">
+                          Search List <i class="w3-red fa fa-close w3-right w3-padding-small" (click)="UserDetails.length=0"></i>
+                        </div>
+                        <a class="w3-button w3-bar-item" *ngFor="let userDetail of UserDetails" (click)="selectedUser = userDetail;UserDetails.length=0;lead.ContactId=selectedUser.UserId;lead.ContactPersonName=userDetail.FirstName;">{{userDetail.FirstName}}</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="w3-row">
+                <div class="">
+                  <div class="w3-half" permissionCheck="2.2.7">
+                    <label>Middle Name</label>
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="lead.MiddleName" />
+                  </div>
+                </div>
+                <div class="w3-half w3-padding-left-10" permissionCheck="2.2.8">
+                  <label>Second Middle Name</label>
+                  <input class="w3-input w3-border" type="text" [(ngModel)]="lead.SecondMiddleName" />
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="">
+                  <div class="w3-half" permissionCheck="2.2.9">
+                    <label>Last Name *</label>
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="lead.PatientLastName" />
+                  </div>
+                </div>
+                <div class="w3-half w3-padding-left-10" permissionCheck="2.2.10">
+                  <label>Second Last Name</label>
+                  <input class="w3-input w3-border" type="text" [(ngModel)]="lead.SecondLastName" />
+                </div>
+              </div>
+
+              <div class="w3-row">
+                <div class="w3-half" permissionCheck="2.2.11">
+                  <label>D.O.B *</label>
+                  <input class="w3-input w3-border" type="date" [ngModel]="changeEstimateDateFormat(lead.Dob)"
+                         (ngModelChange)="lead.Dob = $event" />
+                </div>
+                <div class="w3-half w3-padding-left-10" permissionCheck="2.2.12">
+                  <label>Age *</label>
+                  <input class="w3-input w3-border" [(ngModel)]="lead.Age" type="number" />
+                </div>
+              </div>
+
+              <div class="w3-row">
+                <div class="w3-half" permissionCheck="2.2.13">
+                  <label>Gender</label>
+                  <select class="w3-input w3-border" [(ngModel)]="lead.GenderId">
+                    <option value="0">--select--</option>
+                    <option *ngFor="let gender of listGender" [ngValue]="gender.GenderId">{{gender.GenderName}}</option>
+                  </select>
+                </div>
+                <div class="w3-half w3-padding-left-10" permissionCheck="2.2.14">
+                  <label>Occupation</label>
+                  <input class="w3-input w3-border" [(ngModel)]="lead.Occupation" type="text" />
+                </div>
+              </div>
+
+              <div class="w3-row">
+                <div class="w3-half">
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" permissionCheck="2.2.15">
+                    <label> Employer </label>
+                    <div class="w3-border w3-input" (dragover)="noAllowDrop($event)">
+                      <input class="w3-border-none w3-secondary-l5" type="text" *ngIf="!selectedOrg || selectedOrg.Id == 0" style="border:none;width:80%" (keypress)="orgSearch($event)" [(ngModel)]="lead.CompanyName" />
+                      <!--<span class="w3-tag w3-teal" *ngIf="!selectedOrg || selectedOrg.Id == 0" style="border:none;width:20%">New</span>-->
+                      <span class="w3-tag w3-teal" *ngIf="selectedOrg && selectedOrg.Id > 0">{{selectedOrg.Name}} <i class="fa fa-close" (click)="selectedOrg=null"></i></span>
+                    </div>
+                    <div class="w3-display-container w3-row">
+                      <div class="w3-display-topleft w3-card-2 w3-white w3-bar-block w3-animate-opacity w3-border w3-show" style="width:100%;margin-top:-8px;" *ngIf="organizations.length>0">
+                        <div class="w3-bar-item">Search List <i class="w3-red fa fa-close w3-right w3-padding-small" (click)="organizations.length=0"></i></div>
+                        <a class="w3-bar-item w3-button" *ngFor="let organization of organizations" (click)="selectedOrg = organization;organizations.length=0;lead.OrganizationId=organization.Id;lead.OrganizationName=organization.Name;">{{organization.Name}}</a>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="w3-half w3-padding-left-10">
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" permissionCheck="2.2.16">
+                    <label>Funnel</label>
+                    <select permissionCheck="{{permissionBaseValue}}.5.3" class="w3-input w3-border" (dragover)="noAllowDrop($event)" [(ngModel)]="lead.PipelineGroupId" (change)="getPipeLineByPipeLineGroupId(lead.PipelineGroupId)">
+                      <option [ngValue]="0" disabled>--Select Pipeline--</option>
+                      <option [ngValue]="-1">+ New Funnel</option>
+                      <option *ngFor="let pipeLineGroup of listPipeLineGroup" [ngValue]="pipeLineGroup.PipelineGroupId">{{pipeLineGroup.Name}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="w3-full" permissionCheck="2.2.16">
+                <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                     (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                  <label>Funnel stage</label>
+                  <div class="sf-stage-selector">
+                    <label permissionCheck="{{permissionBaseValue}}.5.4" class="{{selectedPipeIndex==i?'w3-display-container sf-stage-selector__stage sf-stage-selector__stage--current':'w3-display-container sf-stage-selector__stage'}} tooltip" (click)="selectedPipeIndex=i;lead.PipelineId=pipeline.PipelineId" *ngFor="let pipeline of sortBy('DisplayOrder');let i = index">
+                      <span class="bottomtooltiptext">{{pipeline.Name}}</span>
+                      <i class="fa fa-angle-right w3-text-white fa-3x w3-display-right" style="margin-right: 6px;margin-top: -1px;"></i>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <app-primarycontact [entityId]="entityId" [entityType]="entityType" permissionCheck="2.2.17"></app-primarycontact>
+
+              <app-customsection [entityType]="entityType" [alignment]="'left'" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="leftLeadCustomFieldValues"></app-customsection>
+            </div>
+
+            <div class="w3-container w3-half marginform">
+
+              <div class="w3-row">
+                <div class="">
+                  <div class="w3-half" permissionCheck="2.2.18">
+                    <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                         (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                      <label>Status</label>
+                      <app-customdropdown [getApiPath]="'CustomDropDown/GetLeadStatus'" [isAddEnabled]="true" [selectedValue]="lead.LeadStatus" (saveSelectedValue)="chageLeadStatus($event)" [saveApiPath]="'CustomDropDown/SaveLeadStatus'"></app-customdropdown>
+                    </div>
+                  </div>
+                  <div class="w3-half w3-padding-left-10" permissionCheck="2.2.19">
+                    <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                         (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                      <label>Security Group*</label>
+                      <select class="w3-input w3-border" [(ngModel)]="lead.SecurityGroupId" [class.w3-border-red]="checkValidation(securityGroupId)" #securityGroupId="ngModel" required>
+                        <option value="0" disabled>-select-</option>
+                        <option *ngFor="let data of lstGroups;" value="{{data.UserGroupId}}">{{data.Name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="w3-row">
+                <div class="w3-half" permissionCheck="2.2.20">
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                    <label>Assigned To</label>
+                    <app-assignedtogrid [assignedToGrid]="assignedToGrid" (sendAssignedId)="selectOwner($event)"></app-assignedtogrid>
+                    <!--<app-assignedto (sendAssignedId)="lead.Owner=$event" [assignedTo]="lead.Owner"></app-assignedto>-->
+                  </div>
+                </div>
+
+                <div class="w3-half w3-padding-left-10" permissionCheck="2.2.21">
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                    <label>Created By</label>
+                    <app-createdby [createdby]="lead.CreatedBy"></app-createdby>
+                  </div>
+                </div>
+              </div>
+
+              <!--<div class="w3-row">
+                <div class="w3-half">
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" permissionCheck="{{permissionBaseValue}}.15">
+                    <label>Industry</label>
+                    <app-customdropdown [getApiPath]="'CustomDropDown/GetIndustryType'" [isAddEnabled]="true" [selectedValue]="lead.Industry" (saveSelectedValue)="lead.Industry=$event" [saveApiPath]="'CustomDropDown/SaveIndustryType'"></app-customdropdown>
+                  </div>
+                </div>
+              </div>-->
+
+              <div class="w3-full" permissionCheck="2.2.22">
+                <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                     (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                  <label>Address</label>
+                  <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.Address" />
+                </div>
+              </div>
+
+              <div class="w3-row">
+                <div class="">
+                  <div class="w3-half" permissionCheck="2.2.23">
+                    <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                         (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                      <label>City</label>
+                      <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.City" />
+                    </div>
+                  </div>
+                  <div class="w3-half w3-padding-left-10" permissionCheck="2.2.24">
+                    <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                         (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                      <label>State</label>
+                      <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.State" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="">
+                  <div class="w3-half" permissionCheck="2.2.25">
+                    <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                         (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                      <label>Country</label>
+                      <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.Country" />
+                    </div>
+                  </div>
+                  <div class="w3-half w3-padding-left-10" permissionCheck="2.2.26">
+                    <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                         (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                      <label>Zipcode</label>
+                      <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.ZipCode" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="w3-row">
+
+                <div class="w3-half" permissionCheck="2.2.27">
+                  <label>Office Number</label>
+                  <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.OfficeNumber" />
+                </div>
+
+                <div class="w3-half w3-padding-left-10" permissionCheck="2.2.28">
+                  <div>
+                    <label>Website</label>
+                    <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.Website" />
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="w3-full">
+                <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                     (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                  <label>Remarks</label>
+                  <textarea class="w3-input w3-border" rows="3" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.Reason"></textarea>
+                </div>
+              </div>
+              <app-customsection [entityType]="entityType" [alignment]="'right'" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="rightLeadCustomFieldValues"></app-customsection>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="w3-bar w3-container w3-center w3-margin-top-xxlarge w3-border-secondary">
+          <div class="w3-left">
+            <button [class]="activeContainer == 'tab1'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab1'" permissionCheck="2.2.29">Origins</button>
+            <button [disabled]="!lead.LeadId" [class]="activeContainer == 'tab5'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab5'" permissionCheck="2.2.30">Contacts ({{contactInformations.length}})</button>
+            <button [disabled]="!lead.LeadId" [class]="activeContainer == 'tab2'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab2'" permissionCheck="2.2.31">Notes ({{notesInfos.length}})</button>
+            <button [disabled]="!lead.LeadId" [class]="activeContainer == 'tab9'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab9'" permissionCheck="2.2.32">Appointments ({{liveServices.length}})</button>
+            <button [disabled]="!lead.LeadId" [class]="activeContainer == 'insurance'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'insurance'" permissionCheck="2.2.33">Insurance</button>
+            <button [disabled]="!lead.LeadId" [class]="activeContainer == 'employer'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'employer'" permissionCheck="2.2.34">Employer </button>
+            <button [disabled]="!lead.LeadId" *ngIf="loggedUser.User.IsAdmin" [class]="activeContainer == 'onedrive'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'onedrive'" permissionCheck="2.2.35">Files</button>
+          </div>
+        </div>
+
+        <div *ngIf="activeContainer == 'onedrive'" class="w3-white" permissionCheck="2.2.35">
+          <div class="w3-margin w3-animate-opacity">
+            <!--<h6 class="w3-left w3-margin-0">One Drive</h6>-->
+            <div class="w3-row" *ngIf="lead.LeadId">
+              <app-onedrive-explorer [EmrNo]="lead.BatchNumber" [searchString]="lead.LeadName+' '+lead.PatientLastName+'_'+lead.BatchNumber+'-'"></app-onedrive-explorer>
+            </div>
+          </div>
+        </div>
+
+
+        <div *ngIf="activeContainer == 'tab9'" class="w3-white" permissionCheck="2.2.32">
+          <div class="w3-animate-opacity">
+            <h6 class="w3-left w3-margin-0">Appointments </h6>
+            <div class="w3-full">
+              <button type="button" (click)="addNewService(lead)" class="w3-button w3-secondary w3-border w3-round-large w3-right" permissionCheck="2.2.32.1">+ Add Appointment</button>
+            </div>
+            <div class="w3-full">
+              <div class="w3-row">
+                <div class="w3-left">
+                  <button [class]="serviceTabs == 'presentServices'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="serviceTabs = 'presentServices'">Live ({{liveServices.length}})</button>
+                  <button [class]="serviceTabs == 'pastServices'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="serviceTabs = 'pastServices'">Past ({{PastServices.length}})</button>
+                </div>
+              </div>
+              <table class="w3-table w3-bordered" *ngIf="serviceTabs == 'presentServices'">
+                <thead>
+                  <tr>
+                    <th>Number</th>
+                    <th>Oppointment</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Assignee</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of liveServices">
+                    <td><a class="hyper-link" (click)="redirectToService(data)">{{data.ServiceNumber}}</a></td>
+                    <td><a class="hyper-link" (click)="redirectToService(data)">{{data.ServiceName}}</a></td>
+                    <td>{{data.Type == 1 ? 'Service' : 'Job'}}</td>
+                    <td>{{data.StatusId == null?'Inprogress':getServiceStatusById(data.StatusId)}}</td>
+                    <td>{{getAssignedNameById(data.AssignedTo)}}</td>
+                  </tr>
+                  <tr *ngIf="liveServices.length == 0">
+                    <td>No records</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <table class="w3-table w3-bordered" *ngIf="serviceTabs == 'pastServices'">
+                <thead>
+                  <tr>
+                    <th>Number</th>
+                    <th>Oppointment</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Assignee</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of PastServices">
+                    <td><a class="hyper-link" (click)="redirectToService(data)">{{data.ServiceNumber}}</a></td>
+                    <td><a class="hyper-link" (click)="redirectToService(data)">{{data.ServiceName}}</a></td>
+                    <td>{{data.Type == 1 ? 'Service' : 'Job'}}</td>
+                    <td>{{data.StatusId == null?'Inprogress':getServiceStatusById(data.StatusId)}}</td>
+                    <td>{{getAssignedNameById(data.AssignedTo)}}</td>
+                  </tr>
+                  <tr *ngIf="PastServices.length == 0">
+                    <td>No records</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+        </div>
+        <div *ngIf="activeContainer == 'tab8'" class="w3-white ">
+          <div class="w3-margin w3-animate-opacity">
+            <div class="w3-full">
+              <h6 class="w3-left w3-margin-bottom-small w3-margin-top-small">Proposals</h6>
+              <button type="button" (click)="addNewQuote()" class="w3-button w3-secondary w3-border w3-round-large w3-right">New Proposal</button>
+            </div>
+            <div class="w3-full" permissionCheck="7.2.24.2">
+              <table class="w3-table w3-bordered">
+                <thead>
+                  <tr>
+                    <th gridPermissionCheck="7.2.24.4">Discription</th>
+                    <th gridPermissionCheck="7.2.24.5">Quote Date</th>
+                    <th gridPermissionCheck="7.2.24.6">Status</th>
+                    <th gridPermissionCheck="7.2.24.7">Total Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let quote of listQuote" style="cursor:pointer" (click)="viewQuote(quote);">
+                    <td gridPermissionCheck="7.2.24.4">{{quote.QuoteDescription}}</td>
+                    <td gridPermissionCheck="7.2.24.5">{{quote.Date | date : 'MM/dd/yyy HH:mm'}}</td>
+                    <td gridPermissionCheck="7.2.24.6">{{quote.StatusId}}</td>
+                    <td gridPermissionCheck="7.2.24.7">{{quote.FinalPrice}}</td>
+                  </tr>
+                  <tr *ngIf="listQuote.length == 0">
+                    <td>No Records Found.</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="activeContainer == 'tab7'" class="w3-white" permissionCheck="2.2.35">
+          <div class="w3-margin w3-animate-opacity">
+            <h6 class="w3-left">Files</h6>
+            <div class="w3-row">
+              <app-sf-file-explorer [entity]="entityType" [entityNumber]="entityNumber"></app-sf-file-explorer>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="activeContainer == 'tab5'" class="w3-container w3-white" permissionCheck="2.2.30">
+          <div class="w3-animate-opacity">
+            <!--<h6 class="w3-margin-0">Contacts </h6>-->
+            <div class="w3-row">
+              <div class="w3-full">
+                <app-contactinformation [dataSource]="contactInformations" (chooseSelectedContact)="selectedContactData($event)" [additionalInfo]="false" [entityType]="entityType" [entityId]="entityId" [basePermission]="permissionBaseValue"></app-contactinformation>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="w3-container w3-white" *ngIf="activeContainer == 'tab2'" permissionCheck="2.2.31">
+          <div class="w3-animate-opacity">
+            <h6 class="w3-left w3-margin-0">Notes</h6>
+            <div class="w3-full">
+              <app-notesinfo [entityType]="entityType" [notesDataSource]="notesInfos" [entityId]="entityId" [basePermission]="permissionBaseValue"></app-notesinfo>
+            </div>
+          </div>
+        </div>
+        <div class="w3-container w3-white" *ngIf="activeContainer == 'tab6'">
+          <div class="w3-animate-opacity">
+            <h6 class="w3-left w3-margin-0">Affiliate</h6>
+            <div class="w3-row">
+              <app-categorylist [entity]="entityType" [categoryType]="1" title="Lead" [entityId]="entityId" [selectedValues]="selectedCategories" (dataEmitter)="AffliateData($event)" (categoryEmitter)="MapCategoryValues($event)" [basePermission]="permissionBaseValue"></app-categorylist>
+            </div>
+          </div>
+        </div>
+        <div class="w3-container w3-white" *ngIf="activeContainer == 'tab3'">
+          <div class="w3-animate-opacity">
+            <h6 class="w3-left w3-margin-0">Opportunities </h6>
+            <div class="w3-full">
+              <button type="button" permissionCheck="{{permissionBaseValue}}.70" (click)="addNewOpportunity(lead)" class="w3-button w3-secondary w3-border w3-round-large w3-right">+ Add Opportunity</button>
+            </div>
+            <div class="w3-full">
+              <div class="w3-row">
+                <div class="w3-left">
+                  <button [class]="dealTabs == 'presentDeals'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="dealTabs = 'presentDeals'">Live ({{presentLeadOpportunities.length}})</button>
+                  <button [class]="dealTabs == 'pastDeals'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="dealTabs = 'pastDeals'">Past Opportunities ({{pastLeadOpportunities.length}})</button>
+                </div>
+              </div>
+              <table class="w3-table w3-bordered" *ngIf="dealTabs == 'presentDeals'">
+                <thead>
+                  <tr>
+                    <th>Opportunity Status</th>
+                    <th gridPermissionCheck="{{permissionBaseValue}}.71">Opportunity Name</th>
+                    <th gridPermissionCheck="{{permissionBaseValue}}.72">Expected Revenue</th>
+                    <th gridPermissionCheck="{{permissionBaseValue}}.73">Estimate Date</th>
+                    <th gridPermissionCheck="{{permissionBaseValue}}.74">Funnel Stage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of presentLeadOpportunities">
+                    <td><a class="hyper-link" (click)="redirectToDeal(data)">{{data.StatusId == null?'Inprogress':getStatusNameById(data.StatusId)}}</a></td>
+                    <td gridPermissionCheck="{{permissionBaseValue}}.71"><a class="hyper-link" (click)="redirectToDeal(data)">{{data.DealName}}</a></td>
+                    <td gridPermissionCheck="{{permissionBaseValue}}.72">{{data.ExpectedRevenue}}</td>
+                    <td gridPermissionCheck="{{permissionBaseValue}}.73">{{data.EstimationDate| date : 'MM/dd/yyy'}}</td>
+                    <td gridPermissionCheck="{{permissionBaseValue}}.74">{{getPipelineNameById(data.PipelineId)}}</td>
+                  </tr>
+                  <tr *ngIf="presentLeadOpportunities.length == 0">
+                    <td>No records</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+              <table class="w3-table w3-bordered" *ngIf="dealTabs == 'pastDeals'">
+                <thead>
+                  <tr>
+                    <th>Opportunity Status</th>
+                    <th gridPermissionCheck="{{permissionBaseValue}}.71">Opportunity Name</th>
+                    <th gridPermissionCheck="{{permissionBaseValue}}.72">Expected Revenue</th>
+                    <th gridPermissionCheck="{{permissionBaseValue}}.73">Estimate Date</th>
+                    <th gridPermissionCheck="{{permissionBaseValue}}.74">Funnel Stage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of pastLeadOpportunities">
+                    <td><a class="hyper-link" (click)="redirectToDeal(data)">{{data.StatusId == null?'Inprogress':getStatusNameById(data.StatusId)}}</a></td>
+                    <td gridPermissionCheck="{{permissionBaseValue}}.71"><a class="hyper-link" (click)="redirectToDeal(data)">{{data.DealName}}</a></td>
+                    <td gridPermissionCheck="{{permissionBaseValue}}.72">{{data.ExpectedRevenue}}</td>
+                    <td gridPermissionCheck="{{permissionBaseValue}}.73">{{data.EstimationDate}}</td>
+                    <td gridPermissionCheck="{{permissionBaseValue}}.74">{{getPipelineNameById(data.PipelineId)}}</td>
+                  </tr>
+                  <tr *ngIf="pastLeadOpportunities.length == 0">
+                    <td>No records</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="w3-container w3-white" *ngIf="activeContainer == 'tab4' && lead.IsCommercial">
+          <div class="w3-full">
+            <button type="button" permissionCheck="{{permissionBaseValue}}.38" (click)="addLeadCompanyProfileCustomField()" class="w3-button w3-secondary w3-border w3-round-large w3-right">+ Add New Field</button>
+          </div>
+          <div class="w3-animate-opacity">
+            <h6 class="w3-left w3-margin-0">Company Profile</h6>
+            <div class="w3-row">
+
+              <div class="w3-full">
+                <div class="w3-half marginform">
+                  <div class="w3-full">
+                    <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                         (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" permissionCheck="{{permissionBaseValue}}.36">
+                      <label>Number of Employees</label>
+                      <input permissionCheck="{{permissionBaseValue}}.36" class="w3-input w3-border" (dragover)="noAllowDrop($event)" type="number" [(ngModel)]="lead.NoOfEmployee" />
+                    </div>
+                  </div>
+
+                  <app-customsection [alignment]="'left'" [entityType]="leadCompanyProfileEntityType" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="companyProfileLeftCustomFieldValues"></app-customsection>
+                </div>
+                <div class="w3-half w3-container marginform">
+                  <div class="w3-full">
+                    <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                         (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" permissionCheck="{{permissionBaseValue}}.37">
+                      <label>Size (Annual Revenue)</label>
+                      <input permissionCheck="{{permissionBaseValue}}.37" class="w3-input w3-border" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.AnnualRevenue" />
+                    </div>
+                  </div>
+                  <app-customsection [alignment]="'right'" [entityType]="leadCompanyProfileEntityType" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="companyProfileRightCustomFieldValues"></app-customsection>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="w3-container w3-white" *ngIf="activeContainer == 'tab1'">
+          <div class="w3-full">
+            <button type="button" (click)="addLeadOriginsCustomField()" class="w3-button w3-secondary w3-border w3-round-large w3-right">+ Add New Field</button>
+          </div>
+          <div class="w3-animate-opacity">
+            <h6 class="w3-margin-0">Lead Origins</h6>
+            <div class="w3-row">
+              <div class="w3-full">
+                <div class="w3-half marginform">
+                  <div class="w3-full" permissionCheck="2.2.29.1">
+                    <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                         (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                      <label>Origin</label>
+
+                      <app-customdropdown [isAddEnabled]="true" [getApiPath]="'CustomDropDown/GetLeadOriginType'" [selectedValue]="lead.OriginId" (saveSelectedValue)="lead.OriginId = $event" [saveApiPath]="'CustomDropDown/SaveLeadOriginType'"></app-customdropdown>
+                    </div>
+                  </div>
+
+
+
+                  <!--[selectedArrayData]="leadOriginTypes" [selectedId]="'Id'" [selectedName]="'Name'" (saveNewValue)="SaveTable($event)"-->
+
+                  <div class="w3-full">
+                    <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                         (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" permissionCheck="{{permissionBaseValue}}.26" *ngIf="lead.OriginId == 2">
+                      <label>Social Media</label>
+                      <select permissionCheck="{{permissionBaseValue}}.26" class="w3-input w3-border" (dragover)="noAllowDrop($event)" [(ngModel)]="lead.SocialMediaId">
+                        <option value="0" disabled>--Select Social Media--</option>
+                        <option *ngFor="let socialMediaType of socialMediaTypes" [ngValue]="socialMediaType.Id">{{socialMediaType.Name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="w3-full">
+                    <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                         (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" permissionCheck="{{permissionBaseValue}}.27" *ngIf="lead.OriginId == 2 && lead.SocialMediaId > 0">
+                      <label>{{getSocialMediaTypeNameById(lead.SocialMediaId) + " Id"}}</label>
+                      <input permissionCheck="{{permissionBaseValue}}.27" class="w3-input w3-border" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.SocialMediaLink" />
+                    </div>
+                  </div>
+                  <div class="w3-full">
+                    <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                         (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" permissionCheck="{{permissionBaseValue}}.28" *ngIf="lead.OriginId == 1">
+                      <label>Event Name</label>
+                      <select permissionCheck="{{permissionBaseValue}}.28" class="w3-input w3-border" (dragover)="noAllowDrop($event)" [(ngModel)]="lead.EventId">
+                        <option value="0" disabled>--Select Event Show--</option>
+                        <option *ngFor="let eventShow of listEventShow" [ngValue]="eventShow.Id">{{eventShow.Name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="w3-full">
+                    <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                         (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" permissionCheck="{{permissionBaseValue}}.29" *ngIf="lead.OriginId == 5">
+                      <label>Website</label>
+                      <input permissionCheck="{{permissionBaseValue}}.29" class="w3-input w3-border" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.OriginsWebsite" />
+                    </div>
+                  </div>
+                  <div class="w3-full">
+                    <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                         (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" *ngIf="lead.OriginId == 6" permissionCheck="{{permissionBaseValue}}.30">
+                      <label>Networking</label>
+                      <select permissionCheck="{{permissionBaseValue}}.30" class="w3-input w3-border" (dragover)="noAllowDrop($event)" (change)="changeNetWorkContact(lead.NetworkingId)" [(ngModel)]="lead.NetworkingId">
+                        <option value="0" disabled>--select--</option>
+                        <option *ngFor="let networking of listNetworking" [ngValue]="networking.NetworkingId">{{networking.NetworkingName}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="w3-full" *ngIf="lead.NetworkingId>0">
+                    <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                         (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" *ngIf="lead.OriginId == 6" permissionCheck="{{permissionBaseValue}}.31">
+                      <label>Contact</label>
+                      <div class="w3-row" *ngIf="lead.NetworkContactId">
+                        <button class="w3-col s11 w3-input w3-border w3-secondary-theme2 w3-button w3-round-bottom-right-0 w3-round-top-right-0" (click)="viewContactModal(lead.NetworkingId)">{{getNetWorkContactName(lead.NetworkContactId)}}</button>
+                        <i class="w3-col s1 w3-input w3-border w3-secondary-theme2 w3-button w3-round-bottom-left-0 w3-round-top-left-0" (click)="clearData()">X</i>
+                      </div>
+                      <button *ngIf="!lead.NetworkContactId" permissionCheck="{{permissionBaseValue}}.31" class="w3-input w3-border w3-secondary-theme2 w3-button" (click)="viewContactModal(lead.NetworkingId)">--Select Contact--</button>
+                    </div>
+                  </div>
+
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" *ngIf="lead.OriginId == 4" permissionCheck="{{permissionBaseValue}}.32">
+                    <!--<div class="w3-full">
+                      <label>Referral</label>
+                    </div>-->
+                    <div class="w3-full">
+                      <label>Vendor</label>
+                      <select permissionCheck="{{permissionBaseValue}}.32" class="w3-input w3-border" (dragover)="noAllowDrop($event)" [(ngModel)]="lead.VendorId">
+                        <option value="0" disabled>--Select Vendor--</option>
+                        <option *ngFor="let vendor of listVendor" [ngValue]="vendor.VendorId">{{vendor.Name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" *ngIf="lead.OriginId == 7">
+                    <div class="w3-full">
+                      <label>Partner</label>
+                      <select class="w3-input w3-border" (dragover)="noAllowDrop($event)" [(ngModel)]="lead.PartnerId">
+                        <option value="0" disabled>--Select Partner--</option>
+                        <option *ngFor="let partner of listPartner" [ngValue]="partner.PartnerId">{{partner.Name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" *ngIf="lead.OriginId == 8">
+                    <div class="w3-full">
+                      <label>Referral</label>
+                      <select class="w3-input w3-border" (dragover)="noAllowDrop($event)" [(ngModel)]="lead.ReferralId">
+                        <option value="0" disabled>--Select Referral--</option>
+                        <option *ngFor="let referral of listReferral" [ngValue]="referral.ReferralId">{{referral.Name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" *ngIf="lead.OriginId == 9">
+                    <div class="w3-full">
+                      <label>Patient</label>
+                      <select class="w3-input w3-border" (dragover)="noAllowDrop($event)" [(ngModel)]="lead.OriginLeadId">
+                        <option value="0" disabled>--Select Lead--</option>
+                        <option *ngFor="let lead of listAllLeads" [ngValue]="lead.LeadId">{{lead.LeadName}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" *ngIf="lead.OriginId == 10">
+                    <div class="w3-full">
+                      <label>User</label>
+                      <select class="w3-input w3-border" (dragover)="noAllowDrop($event)" [(ngModel)]="lead.InternalSales">
+                        <option value="0" disabled>--Select User--</option>
+                        <option *ngFor="let lead of users" [ngValue]="lead.UserId">{{lead.Name}}</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <app-customsection [entityType]="leadOriginsEntityType" [alignment]="'left'" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="leadOriginLeftCustomFieldValues"></app-customsection>
+                </div>
+                <div class="w3-container w3-half marginform">
+                  <div class="w3-full">
+                    <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                         (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" *ngIf="lead.OriginId == 1" permissionCheck="{{permissionBaseValue}}.34">
+                      <label>Event Date</label>
+                      <input permissionCheck="{{permissionBaseValue}}.34" class="w3-input w3-border" (dragover)="noAllowDrop($event)" placeholder="MM/DD/YYYY" type="date" [ngModel]="changeEstimateDateFormat(lead.OriginsDate)" (ngModelChange)="lead.OriginsDate = $event" />
+                    </div>
+                  </div>
+                  <div class="w3-full" permissionCheck="2.2.29.2">
+                    <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                         (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" permissionCheck="{{permissionBaseValue}}.35">
+                      <label>Remarks</label>
+                      <div><textarea permissionCheck="{{permissionBaseValue}}.35" class="w3-input w3-border" (dragover)="noAllowDrop($event)" [(ngModel)]="lead.OriginNotes"></textarea></div>
+                    </div>
+                  </div>
+                  <app-customsection [entityType]="leadOriginsEntityType" [alignment]="'right'" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="leadOriginRightCustomFieldValues"></app-customsection>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="w3-container w3-white" *ngIf="activeContainer == 'insurance'" permissionCheck="2.2.33">
+          <div class="w3-animate-opacity">
+            <h6 class="w3-margin-0">Insurance Information</h6>
+            <div class="w3-row">
+              <div class="w3-half">
+                <div>
+                  <label>Start Date</label>
+                  <input class="w3-input w3-border" placeholder="MM/DD/YYYY" type="date" />
+                </div>
+              </div>
+              <div class="w3-half w3-padding-left-10">
+                <div>
+                  <label>End Date</label>
+                  <input class="w3-input w3-border" placeholder="MM/DD/YYYY" type="date" />
+                </div>
+              </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-full">
+                <div class="w3-half marginform">
+                  <div class="w3-row">
+                    <div class="w3-full">
+                      <label>Primary:</label>
+                    </div>
+                  </div>
+                  <div class="w3-row">
+                    <div class="w3-half">
+                      <div>
+                        <label>Ins Co Addr</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                    <div class="w3-half w3-padding-left-10">
+                      <div>
+                        <label>Subscriber ID</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-row">
+                    <div class="w3-half">
+                      <div>
+                        <label>Group</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                    <div class="w3-half w3-padding-left-10">
+                      <div>
+                        <label>Policy</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-row">
+                    <div class="w3-half">
+                      <div>
+                        <label>Insured Name</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                    <div class="w3-half w3-padding-left-10">
+                      <div>
+                        <label>Rel to Insured</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-row">
+                    <div class="w3-half">
+                      <div>
+                        <label>Insured Addr</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                    <div class="w3-half w3-padding-left-10">
+                      <div>
+                        <label>Employer</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-row">
+                    <div class="w3-full">
+                      <label>Employer ID</label>
+                      <input class="w3-input w3-border" type="text" />
+                    </div>
+                  </div>
+                </div>
+                <div class="w3-container w3-half marginform">
+                  <div class="w3-row">
+                    <div class="w3-full">
+                      <label>Secondary:</label>
+                    </div>
+                  </div>
+                  <div class="w3-row">
+                    <div class="w3-half">
+                      <div>
+                        <label>Ins Co Addr</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                    <div class="w3-half w3-padding-left-10">
+                      <div>
+                        <label>Subscriber ID</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-row">
+                    <div class="w3-half">
+                      <div>
+                        <label>Group</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                    <div class="w3-half w3-padding-left-10">
+                      <div>
+                        <label>Policy</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-row">
+                    <div class="w3-half">
+                      <div>
+                        <label>Insured Name</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                    <div class="w3-half w3-padding-left-10">
+                      <div>
+                        <label>Rel to Insured</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-row">
+                    <div class="w3-half">
+                      <div>
+                        <label>Insured Addr</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                    <div class="w3-half w3-padding-left-10">
+                      <div>
+                        <label>Employer</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-row">
+                    <div class="w3-full">
+                      <label>Employer ID</label>
+                      <input class="w3-input w3-border" type="text" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="w3-container w3-white" *ngIf="activeContainer == 'employer'" permissionCheck="2.2.34">
+          <div class="w3-animate-opacity">
+            <h6 class="w3-margin-0">Employer Information</h6>
+            <div class="w3-row">
+              <div class="w3-full">
+                <div class="w3-half marginform">
+                  <div class="w3-row">
+                    <div class="w3-half">
+                      <div>
+                        <label>Start Date</label>
+                        <input class="w3-input w3-border" placeholder="MM/DD/YYYY" type="date" />
+                      </div>
+                    </div>
+                    <div class="w3-half w3-padding-left-10">
+                      <div>
+                        <label>End Date</label>
+                        <input class="w3-input w3-border" placeholder="MM/DD/YYYY" type="date" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-row">
+                    <div class="w3-half">
+                      <div>
+                        <label>Company Name*</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                    <div class="w3-half w3-padding-left-10">
+                      <div>
+                        <label>Tel Number*</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-row">
+                    <div class="w3-half">
+                      <div>
+                        <label>Contact Name*</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                    <div class="w3-half w3-padding-left-10">
+                      <div>
+                        <label>Email*</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="w3-container w3-half marginform">
+                  <div class="w3-row">
+                    <div class="w3-half">
+                      <div>
+                        <label>Address Line 1</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                    <div class="w3-half w3-padding-left-10">
+                      <div>
+                        <label>Address Line 2</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-row">
+                    <div class="w3-half">
+                      <div>
+                        <label>City</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                    <div class="w3-half w3-padding-left-10">
+                      <div>
+                        <label>State</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-row">
+                    <div class="w3-half">
+                      <div>
+                        <label>Zip Code</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                    <div class="w3-half w3-padding-left-10">
+                      <div>
+                        <label>Website</label>
+                        <input class="w3-input w3-border" type="text" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-full">
+                    <div>
+                      <label>Notes</label>
+                      <textarea class="w3-input w3-border" type="text"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="w3-margin-right w3-margin-bottom w3-margin-top-medium w3-right">
+          <button class="w3-button w3-border w3-round-large w3-margin-right-small" (click)="cancel()">Cancel</button>
+          <!--[disabled]="checkReqValidation(name)||checkReqValidation(number)"-->
+          <button class="w3-button w3-secondary w3-border w3-round-large" [disabled]="isSaveDisabled" (click)="saveLead()">Save</button>
+          <!--[disabled]="checkReqValidation(leadprovider)||checkReqValidation(leadcost)"-->
+        </div>
+        <br>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div *ngIf="addCustomToggle" class="w3-modal w3-show">
+    <div class="w3-modal-content w3-secondary w3-round-large w3-secondary-button">
+      <div class="w3-row">
+        <div class="w3-container w3-center">
+          <p>Add Field</p>
+          <span (click)="closeError()" class="w3-button w3-display-topright">&times;</span>
+        </div>
+        <app-addnewfield [addCustomToggle]="addCustomToggle" [entityTypeId]="entityTypeId" (dataExist)="dataExist($event)" (saveSuccess)="saveSuccess($event)"></app-addnewfield>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="contactModal" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large w3-animate-zoom w3-secondary-button">
+    <span (click)="closeContactModal()" class="w3-button w3-round-top-right w3-display-topright">&times;</span>
+    <div class="w3-small sfcenter">
+      <div class="w3-animate-opacity marginform">
+        <div class="w3-row w3-round-large w3-secondary-button w3-container">
+          <h5 class="w3-left">Contact Information</h5>
+          <button type="button" (click)="addNetworkContact()" class="w3-button w3-margin-top-medium w3-round-large w3-right w3-border w3-secondary mr30">Add New Contact</button>
+        </div>
+        <div class="w3-row w3-round-bottom-left w3-round-bottom-right w3-padding w3-primary-l4">
+          <div class="w3-animate-opacity">
+            <table class="w3-table-all">
+              <thead>
+                <tr>
+                  <th>
+                    Action
+                  </th>
+                  <th>Contact Name</th>
+                  <th>Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of listNetworkContact">
+                  <td><button class="w3-button w3-padding-small w3-secondary w3-round-xxlarge" (click)="selectContact(data.Id)">Select</button></td>
+                  <td>{{data.ContactName}}</td>
+                  <td>{{data.Email}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="newContactToggle" class="w3-modal" style="display:block;" permissionCheck="{{basePermission}}.61">
+  <div class="w3-modal-content w3-round-large w3-secondary-button">
+    <span (click)="closeToggle()" class="w3-button w3-round-top-right w3-margin-right-small w3-display-topright">&times;</span>
+    <div class="w3-small sfcenter w3-margin-top">
+      <div class="w3-animate-opacity marginform">
+        <div class="w3-row w3-round-large w3-secondary-button w3-container w3-padding">
+          <h5 class="w3-left">Contact Information</h5>
+        </div>
+        <div class="w3-row w3-padding w3-primary-l4">
+          <div class="w3-full">
+            <div class="w3-full w3-container" permissionCheck="{{basePermission}}.60">
+              <label><input permissionCheck="{{basePermission}}.60" type="radio" class="w3-radio" [(ngModel)]="contactInfo.IsMember" [value]="true" name="networktype" />&nbsp;Member</label> &nbsp;&nbsp;
+              <label><input permissionCheck="{{basePermission}}.60" type="radio" class="w3-radio" [(ngModel)]="contactInfo.IsGuest" [value]="false" name="networktype" />&nbsp;Guest</label>
+            </div>
+            <div class="w3-full w3-container" permissionCheck="{{basePermission}}.49">
+              <div permissionCheck="{{basePermission}}.49">
+                <input permissionCheck="{{basePermission}}.49" id="contactInfoActive" type="checkbox" [(ngModel)]="contactInfo.Inactive" />
+                <label permissionCheck="{{basePermission}}.49" for="contactInfoActive">&nbsp;Inactive</label>
+              </div>
+            </div>
+            <div class="w3-container w3-half">
+              <div class="w3-full" permissionCheck="{{basePermission}}.50">
+                <label>First Name *</label>
+                <input permissionCheck="{{basePermission}}.50" class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.FirstName" [class.w3-border-red]="checkValidation(firstName)" #firstName="ngModel" required />
+              </div>
+              <div class="w3-full" permissionCheck="{{basePermission}}.51">
+                <label>Last Name *</label>
+                <input permissionCheck="{{basePermission}}.51" class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.LastName" [class.w3-border-red]="checkValidation(lastName)" #lastName="ngModel" required />
+              </div>
+              <div class="w3-full" permissionCheck="{{basePermission}}.52">
+                <label>Contact Title *</label>
+                <app-customstringdropdown [getApiPath]="'CustomDropDown/GetContactTitle'" [isAddEnabled]="true" [selectedValue]="contactInfo.ContactTitle" (saveSelectedValue)="contactInfo.ContactTitle=$event" [saveApiPath]="'CustomDropDown/SaveContactTitle'"></app-customstringdropdown>
+                do
+                <!--<input permissionCheck="{{basePermission}}.52" class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.ContactTitle" [class.w3-border-red]="checkValidation(title)" #title="ngModel" required />-->
+              </div>
+              <div class="w3-full" permissionCheck="{{basePermission}}.53">
+                <label>Gender</label>
+                <app-customdropdown [getApiPath]="'CustomDropDown/GetGender'" [selectedValue]="contactInfo.Gender" (saveSelectedValue)="contactInfo.Gender = $event" [saveApiPath]="'CustomDropDown/SaveGender'"></app-customdropdown>
+              </div>
+              <div class="w3-full" permissionCheck="{{basePermission}}.54">
+                <label>LinkedIn Profile</label>
+                <input permissionCheck="{{basePermission}}.54" class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.LinkedInProfile" />
+              </div>
+            </div>
+            <div class="w3-container w3-half">
+              <div class="w3-full" permissionCheck="{{basePermission}}.55">
+                <label>Extension</label>
+                <input permissionCheck="{{basePermission}}.55" class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.Extension" />
+              </div>
+              <div class="w3-full" permissionCheck="{{basePermission}}.56">
+                <label>Office Number</label>
+                <input permissionCheck="{{basePermission}}.56" class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.OfficeNumber" />
+              </div>
+              <div class="w3-full" permissionCheck="{{basePermission}}.57">
+                <label>Fax Number</label>
+                <input permissionCheck="{{basePermission}}.57" class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.FaxNumber" />
+              </div>
+              <div class="w3-full" permissionCheck="{{basePermission}}.58">
+                <label>Cell Number</label>
+                <input permissionCheck="{{basePermission}}.58" class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.CellNumber" />
+              </div>
+              <div class="w3-full" permissionCheck="{{basePermission}}.59">
+                <label>Email</label>
+                <input permissionCheck="{{basePermission}}.59" class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.Email" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w3-row w3-round-bottom-left w3-round-bottom-right w3-secondary-button">
+          <div class="w3-margin w3-right">
+            <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeToggle()" permissionCheck="{{basePermission}}.62">Cancel</button>
+            <button class="w3-button w3-border w3-round-large w3-secondary" (click)="saveContactInfo(contactInfo)" [disabled]="checkReqValidation(title) || checkReqValidation(firstName) || checkReqValidation(lastName)" permissionCheck="{{basePermission}}.63">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

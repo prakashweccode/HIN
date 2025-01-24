@@ -1,0 +1,684 @@
+<div class="w3-row">
+  <div class="w3-card-2 w3-white w3-small sfcenter w3-round-large w3-animate-zoom">
+    <br />
+    <div class="w3-row w3-padding w3-animate-opacity w3-secondary-l5 w3-border-top w3-border-bottom">
+      <div class="w3-left w3-xlarge">
+        <b>Partner</b>
+      </div>
+      <button class="w3-button w3-secondary w3-right w3-round-large w3-margin-right" (click)="cancel()">
+        <i class="fa fa-reply"></i>
+      </button>
+      <button class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="createNewField()">+ Add New Field</button>
+      <button *ngIf="partners.PartnerId" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="addNewPartner()">+ Add New Partner</button>
+      <button *ngIf="partners.PartnerId" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="addNewOpportunity()">+ Add Opportunity</button>
+      <button *ngIf="partners.PartnerId" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="addNewLead()"> Add Lead</button>
+    </div>
+    <div class="w3-panel w3-margin-top-small">
+      <div class="w3-row">
+        <div class="marginform">
+
+          <div class="w3-row">
+            <div class="w3-full" *ngIf="partners?.PartnerId && partners?.PartnerId > 0 && partners?.CreatedOn">
+              <label class="w3-right"><span class="w3-margin-right">Created On : {{partners.CreatedOn | date : 'MM/dd/yyyy'}}</span></label>
+            </div>
+          </div>
+
+          <div class="w3-row">
+            <div class="w3-half w3-container">
+              <div class="w3-half">
+                <input id="inactive" type="checkbox" [(ngModel)]="partners.Inactive" name="vendorinactive" />
+                <label for="inactive">&nbsp;Inactive</label>
+              </div>
+              <div class="w3-half">
+                <!--<input id="isReferral" type="checkbox" [(ngModel)]="partners.IsReferral" />
+        <label for="isReferral">&nbsp;Referral</label>-->
+              </div>
+            </div>
+            <div class="w3-half w3-container">
+              <!--<div class="w3-half w3-container">
+        <label>Referral Type</label>
+        <app-customdropdown [getApiPath]="'CustomDropDown/GetReferralDropdown'" [selectedValue]="partners.ReferralDropdownId" (saveSelectedValue)="partners.ReferralDropdownId=$event" [saveApiPath]="'CustomDropDown/SaveReferralDrpodown'"></app-customdropdown>
+      </div>-->
+
+            </div>
+          </div>
+          <div class="w3-half w3-container">
+
+            <div class="w3-row">
+              <div class="w3-half">
+                <label>Partner Number *</label>
+                <input class="w3-input w3-border" type="text" disabled="disabled" [(ngModel)]="partners.PartnerNumber" />
+              </div>
+
+              <div class="w3-half w3-padding-left-10">
+                <label>Partner Name *</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="partners.Name" [class.w3-border-red]="checkValidation(name)" #name="ngModel" required />
+              </div>
+            </div>
+
+            <div class="w3-row">
+              <div class="w3-half">
+                <label>Company Name</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="partners.CompanyName" />
+              </div>
+              <div class="w3-half w3-padding-left-10">
+                <label>Funnel *</label>
+                <select class="w3-input w3-border" [(ngModel)]="partners.PipelineGroupId" (change)="getPipeLineByPipeLineGroupId(partners.PipelineGroupId)">
+                  <option [ngValue]="0" disabled>--Select Pipeline--</option>
+                  <option [ngValue]="-1">+ New Funnel</option>
+                  <option *ngFor="let pipeLineGroup of listPipeLineGroup" [ngValue]="pipeLineGroup.PipelineGroupId">{{pipeLineGroup.Name}}</option>
+                </select>
+              </div>
+            </div>
+
+
+            <!--<div class="w3-full">
+      <div>
+        <label>Partner Status</label>
+        <app-customdropdown [getApiPath]="'CustomDropDown/GetStatus'" [selectedValue]="partners.PartnerStatus" (saveSelectedValue)="partners.PartnerStatus = ($event)" [saveApiPath]="'CustomDropDown/SaveStatus'"></app-customdropdown>
+      </div>
+    </div>-->
+            <!--<div class="w3-full">
+      <label>Industry *</label>
+      <app-customdropdown [getApiPath]="'CustomDropDown/GetIndustryType'" [isAddEnabled]="true" [selectedValue]="partners.Industry" (saveSelectedValue)="partners.Industry=$event" [saveApiPath]="'CustomDropDown/SaveIndustryType'"></app-customdropdown>
+    </div>-->
+
+            <div class="w3-full">
+              <label>Funnel stage</label>
+              <div class="sf-stage-selector">
+                <label class="{{selectedPipeIndex==i?'w3-display-container sf-stage-selector__stage sf-stage-selector__stage--current':'w3-display-container sf-stage-selector__stage'}} tooltip" (click)="selectedPipeIndex=i;partners.PipelineId=pipeline.PipelineId" *ngFor="let pipeline of sortBy('DisplayOrder');let i = index">
+                  <span class="bottomtooltiptext">{{pipeline.Name}}</span>
+                  <i class="fa fa-angle-right w3-text-white fa-3x w3-display-right" style="margin-right: 6px;margin-top: -1px;"></i>
+                </label>
+              </div>
+            </div>
+
+            <div class="w3-full">
+              <app-primarycontact [entityId]="entityId" [entityType]="entityType"></app-primarycontact>
+            </div>
+
+            <app-customsection [entityType]="entityType" [customFields]="customFields" [alignment]="'left'" [entityId]="entityId" [customFieldValues]="partnerLeftCustomFieldValues"></app-customsection>
+          </div>
+          <div class="w3-half w3-container">
+
+            <div class="w3-row">
+              <div class="w3-half">
+                <label>Provider Type *</label>
+                <app-customdropdown [getApiPath]="'CustomDropDown/GetProvider'" [isAddEnabled]="true" [selectedValue]="partners.ProviderTypeId" (saveSelectedValue)="partners.ProviderTypeId=$event" [saveApiPath]="'CustomDropDown/SaveProviderType'"></app-customdropdown>
+              </div>
+
+              <div class="w3-half w3-padding-left-10">
+                <label>Security Group *</label>
+                <select class="w3-input w3-border" [(ngModel)]="partners.SecurityGroupId" [class.w3-border-red]="checkValidation(securityGroupId)" #securityGroupId="ngModel" required>
+                  <option value="0" disabled>-select-</option>
+                  <option *ngFor="let data of lstGroups;" value="{{data.UserGroupId}}">{{data.Name}}</option>
+                </select>
+              </div>
+
+            </div>
+
+            <div class="w3-row">
+              <div class="w3-half">
+                <label>Industry *</label>
+                <app-customdropdown [getApiPath]="'CustomDropDown/GetIndustryType'" [isAddEnabled]="true" [selectedValue]="partners.Industry" (saveSelectedValue)="partners.Industry=$event" [saveApiPath]="'CustomDropDown/SaveIndustryType'"></app-customdropdown>
+              </div>
+            </div>
+
+
+
+            <div class="w3-row">
+              <div class="w3-half">
+                <div>
+                  <label>Assigned To</label>
+                  <app-assignedto (sendAssignedId)="partners.AssignedTo=$event" [assignedTo]="partners.AssignedTo"></app-assignedto>
+                </div>
+              </div>
+
+              <div class="w3-half w3-padding-left-10">
+                <div>
+                  <label>Created By</label>
+                  <app-createdby [createdby]="partners.CreatedBy"></app-createdby>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="w3-full">
+              <label>Address</label>
+              <input class="w3-input w3-border" type="text" [(ngModel)]="partners.Address" />
+            </div>
+            <div class="w3-row">
+              <div class="w3-half">
+                <label>City</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="partners.City" />
+              </div>
+              <div class="w3-half w3-padding-left-10">
+                <label>State</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="partners.State" />
+              </div>
+            </div>
+
+            <div class="w3-row">
+              <div class="w3-half">
+                <label>Zip Code</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="partners.ZipCode" />
+              </div>
+
+              <div class="w3-half w3-padding-left-10">
+                <label>Country</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="partners.Country" />
+              </div>
+            </div>
+
+            <div class="w3-row">
+              <div class="w3-half">
+                <label>Office Number</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="partners.Telephone" />
+              </div>
+
+              <div class="w3-half w3-padding-left-10">
+                <label>Website</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="partners.Website" />
+              </div>
+            </div>
+
+
+            <div class="w3-full">
+              <label>Remarks</label>
+              <textarea class="w3-input w3-border" type="text" [(ngModel)]="partners.Reason"> </textarea>
+            </div>
+
+            <app-customsection [entityType]="entityType" [customFields]="customFields" [alignment]="'right'" [entityId]="entityId" [customFieldValues]="partnerRightCustomFieldValues"></app-customsection>
+          </div>
+        </div>
+      </div>
+      <div class="w3-bar w3-center w3-margin-top w3-border-secondary">
+        <div class="w3-left">
+          <button [class]="activeContainer == 'tab8'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab8'">Partner Origin</button>
+          <!--<button [class]="activeContainer == 'tab3'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab3'">Partner Fee</button>-->
+          <button [disabled]="!partners.PartnerId" [class]="activeContainer == 'tab1'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab1'">Contacts ({{contactInformations.length}})</button>
+          <button [disabled]="!partners.PartnerId" [class]="activeContainer == 'tab2'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab2'">Notes ({{notesInfos.length}})</button>
+          <button [disabled]="!partners.PartnerId" [class]="activeContainer == 'tab6'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab6'">Files</button>
+          <button [disabled]="!partners.PartnerId" [class]="activeContainer == 'tab7'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab7'">Affiliate</button>
+          <button [disabled]="!partners.PartnerId" [class]="activeContainer == 'tab9'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab9'">Skills</button>
+          <button [disabled]="!partners.PartnerId" [class]="activeContainer == 'tab5'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab5'">Leads or Customers ({{listOfLeads.length}})</button>
+          <button [disabled]="!partners.PartnerId" *ngIf="partners.PartnerId" [class]="activeContainer == 'tab4'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab4'">Events ({{listVendorEvents.length}})</button>
+          <button [disabled]="!partners.PartnerId" [class]="activeContainer == 'tab10'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab10'">Opportunity to Partner ({{listOfOpportunities.length}})</button>
+          <button [disabled]="!partners.PartnerId" [class]="activeContainer == 'email'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'email'">Email</button>
+          <!--<a *ngIf="partners.ProviderTypeId==2" [class]="activeContainer == 'tab8'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab8'">Vendor Origin</a>
+          <a *ngIf="partners.ProviderTypeId==3" [class]="activeContainer == 'tab8'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab8'">Referral Origin</a>-->
+        </div>
+      </div>
+
+      <div *ngIf="activeContainer == 'email'" class="w3-white ">
+        <div class="w3-margin w3-animate-opacity">
+          <div class="w3-row">
+            <app-email [entityType]="entityType" [emailDataSource]="emailInfos" [entityId]="entityId"></app-email>
+          </div>
+        </div>
+      </div>
+
+
+      <div *ngIf="activeContainer == 'tab9'" class="w3-white ">
+        <div class="w3-margin w3-animate-opacity">
+          <h6 class="w3-left">User Skills</h6>
+          <div class="w3-row">
+            <app-categorylist [entity]="entityType" [categoryType]="2" title="Skill" [selectedValues]="selectedSkillsCategories" [entityId]="entityId" (categoryEmitter)="MapSkillsCategoryValues($event)" (dataEmitter)="SkillData($event)"></app-categorylist>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="activeContainer == 'tab8'" class="w3-white ">
+        <div class="w3-margin w3-animate-opacity">
+          <h6 class="w3-left w3-margin-bottom-small w3-margin-top-small" *ngIf="partners.ProviderTypeId==1">Partner Origins</h6>
+          <h6 class="w3-left w3-margin-bottom-small w3-margin-top-small" *ngIf="partners.ProviderTypeId==2">Vendor Origins</h6>
+          <h6 class="w3-left w3-margin-bottom-small w3-margin-top-small" *ngIf="partners.ProviderTypeId==3">Referral Origins</h6>
+          <div class="w3-row">
+            <div class="w3-full">
+              <div class="w3-half w3-container marginform">
+                <div class="w3-full">
+                  <div>
+                    <label>Origin</label>
+                    <app-customdropdown [notFilter]="['Partner', 'Referral']" [isAddEnabled]="true" [getApiPath]="'CustomDropDown/GetLeadOriginType'" [selectedValue]="partners.OriginId" (saveSelectedValue)="partners.OriginId = $event" [saveApiPath]="'CustomDropDown/SaveLeadOriginType'"></app-customdropdown>
+                  </div>
+                </div>
+                <div class="w3-full">
+                  <div *ngIf="partners.OriginId == 2">
+                    <label>Social Media</label>
+                    <select class="w3-input w3-border" [(ngModel)]="partners.SocialMediaId">
+                      <option value="0" disabled>--Select Social Media--</option>
+                      <option *ngFor="let socialMediaType of socialMediaTypes" [ngValue]="socialMediaType.Id">{{socialMediaType.Name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="w3-full">
+                  <div *ngIf="partners.OriginId == 2 && partners.SocialMediaId > 0">
+                    <label>{{getSocialMediaTypeNameById(partners.SocialMediaId) + " Id"}}</label>
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="partners.SocialMediaLink" />
+                  </div>
+                </div>
+                <div class="w3-full">
+                  <div *ngIf="partners.OriginId == 1">
+                    <label>Trade Show Name</label>
+                    <select class="w3-input w3-border" [(ngModel)]="partners.EventId">
+                      <option value="0" disabled>--Select Event Show--</option>
+                      <option *ngFor="let eventShow of listEventShow" [ngValue]="eventShow.Id">{{eventShow.Name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="w3-full">
+                  <div *ngIf="partners.OriginId == 5">
+                    <label>Website</label>
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="partners.OriginsWebsite" />
+                  </div>
+                </div>
+                <div class="w3-full">
+                  <div *ngIf="partners.OriginId == 6">
+                    <label>Networking</label>
+                    <select class="w3-input w3-border" (change)="changeNetWorkContact(partners.NetworkingId)" [(ngModel)]="partners.NetworkingId">
+                      <option value="0" disabled>--select--</option>
+                      <option *ngFor="let networking of listNetworking" [ngValue]="networking.NetworkingId">{{networking.NetworkingName}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="w3-full" *ngIf="partners.NetworkingId>0">
+                  <div *ngIf="partners.OriginId == 6">
+                    <label>Contact</label>
+                    <div class="w3-row" *ngIf="partners.NetworkContactId">
+                      <button class="w3-col s11 w3-input w3-border w3-secondary-theme2 w3-button w3-round-bottom-right-0 w3-round-top-right-0" (click)="viewContactModal(partners.NetworkingId)">{{getNetWorkContactName(partners.NetworkContactId)}}</button>
+                      <i class="w3-col s1 w3-input w3-border w3-secondary-theme2 w3-button w3-round-bottom-left-0 w3-round-top-left-0" (click)="clearData()">X</i>
+                    </div>
+                    <button *ngIf="!partners.NetworkContactId" class="w3-input w3-border w3-secondary-theme2 w3-button" (click)="viewContactModal(partners.NetworkingId)">--Select Contact--</button>
+                  </div>
+                </div>
+                <div>
+                  <div *ngIf="partners.OriginId == 4">
+                    <div class="w3-full">
+                      <label>Vendor</label>
+                      <select class="w3-input w3-border" [(ngModel)]="partners.VendorId">
+                        <option value="0" disabled>--Select Vendor Show--</option>
+                        <option *ngFor="let vendor of listVendor" [ngValue]="vendor.VendorId">{{vendor.Name}}</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div *ngIf="partners.OriginId == 9">
+                    <div class="w3-full">
+                      <label>Lead</label>
+                      <select class="w3-input w3-border" [(ngModel)]="partners.LeadId">
+                        <option value="0" disabled>--Select Lead--</option>
+                        <option *ngFor="let allLeads of listAllLeads" [ngValue]="allLeads.LeadId">{{allLeads.LeadName}}</option>
+                      </select>
+                    </div>
+                  </div>
+
+
+                </div>
+                <div>
+                  <div class="w3-full">
+                    <div *ngIf="partners.OriginId == 3">
+                      <label>Not Pay Referral Vendor</label>
+                      <select class="w3-input w3-border" [(ngModel)]="partners.NotPayReferralId">
+                        <option value="0" disabled>--Select Vendor--</option>
+                        <option *ngFor="let notPayReferral of listOfNotPayRefferalVendor" [ngValue]="notPayReferral.VendorId">{{notPayReferral.Name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <app-customsection [entityType]="leadOriginsEntityType" [alignment]="'left'" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="partnerOriginLeftCustomFieldValues"></app-customsection>
+              </div>
+              <div class="w3-container w3-half marginform">
+                <div class="w3-full">
+                  <div *ngIf="partners.OriginId == 1">
+                    <label>Trade Show Date</label>
+                    <input class="w3-input w3-border" placeholder="MM/DD/YYYY" type="datetime-local" [ngModel]="changeFormatDate(partners.OriginsDate)" (ngModelChange)="partners.OriginsDate = $event" />
+                  </div>
+                </div>
+                <div class="w3-full">
+                  <div>
+                    <label>Remarks</label>
+                    <div><textarea class="w3-input w3-border" [(ngModel)]="partners.OriginNotes"></textarea></div>
+                  </div>
+                </div>
+                <app-customsection [entityType]="leadOriginsEntityType" [alignment]="'right'" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="partnerOriginRightCustomFieldValues"></app-customsection>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="activeContainer == 'tab1'" class="w3-white ">
+        <div class="w3-margin w3-animate-opacity">
+          <h6 class="w3-left w3-margin-bottom-small w3-margin-top-small">Contacts</h6>
+          <div class="w3-full">
+            <app-contactinformation [dataSource]="contactInformations" [additionalInfo]="false" [entityType]="entityType" [entityId]="entityId"></app-contactinformation>
+          </div>
+        </div>
+
+      </div>
+      <div class="w3-white" *ngIf="activeContainer == 'tab2'">
+        <div class="w3-margin w3-animate-opacity">
+          <h6 class="w3-left w3-margin-bottom-small w3-margin-top-small">Notes</h6>
+          <div class="w3-full">
+            <app-notesinfo [entityType]="entityType" [notesDataSource]="notesInfos" [entityId]="entityId"></app-notesinfo>
+          </div>
+        </div>
+      </div>
+      <div class="w3-white" *ngIf="activeContainer == 'tab7'">
+        <div class="w3-margin w3-animate-opacity">
+          <h6 class="w3-left w3-margin-bottom-small w3-margin-top-small">Affiliate</h6>
+          <div class="w3-row">
+            <app-categorylist [entity]="entityType" [categoryType]="1" title="Vendor" [selectedValues]="selectedAffiliateCategories" (categoryEmitter)="MapAffiliateCategoryValues($event)" (dataEmitter)="AffliateData($event)" [entityId]="entityId"></app-categorylist>
+          </div>
+        </div>
+      </div>
+
+      <div class="w3-white" *ngIf="activeContainer == 'tab4'">
+        <div class="w3-margin w3-animate-opacity">
+          <div class="w3-full">
+            <h6 class="w3-left w3-margin-bottom-small w3-margin-top-small">Events</h6>
+            <button type="button" (click)="addNewEvent()" class="w3-button w3-secondary w3-border w3-round-large w3-right">New Event</button>
+          </div>
+          <div class="w3-full">
+            <table class="w3-table w3-bordered">
+              <thead>
+                <tr>
+                  <th>Event Number</th>
+                  <th>Event Name</th>
+                  <th>City</th>
+                  <th>Website</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let event of listVendorEvents" style="cursor:pointer" (click)="viewEvent(event);">
+                  <td>{{event.EventNumber}}</td>
+                  <td>{{event.Name}}</td>
+                  <td>{{event.City}}</td>
+                  <td>{{event.Website}}</td>
+                </tr>
+                <tr *ngIf="listVendorEvents.length == 0">
+                  <td>No Records Found.</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="w3-white" *ngIf="activeContainer == 'tab5'">
+        <div class="w3-margin w3-animate-opacity">
+          <div class="w3-full">
+            <h6 class="w3-left w3-margin-bottom-small w3-margin-top-small">Leads / Customers</h6>
+            <div class="w3-full">
+              <button type="button" (click)="addNewLead()" class="w3-button w3-secondary w3-border w3-round-large w3-right"> Add Lead</button>
+            </div>
+          </div>
+          <div class="w3-full">
+            <table class="w3-table w3-bordered">
+              <thead>
+                <tr>
+                  <th>Lead Name</th>
+                  <th>City</th>
+                  <th>Company Name</th>
+                  <th>Annual Revenue</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let lead of listOfLeads" style="cursor:pointer" (click)="viewLead(lead);">
+                  <td>{{lead.LeadName}}</td>
+                  <td>{{lead.City}}</td>
+                  <td>{{lead.CompanyName}}</td>
+                  <td>{{lead.AnnualRevenue}}</td>
+                </tr>
+                <tr *ngIf="listOfLeads.length == 0">
+                  <td>No Records Found.</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="w3-white" *ngIf="activeContainer == 'tab10'">
+        <div class="w3-margin w3-animate-opacity">
+          <div class="w3-full">
+            <h6 class="w3-left w3-margin-bottom-small w3-margin-top-small">Opportunity to Partner</h6>
+          </div>
+          <div class="w3-full">
+            <table class="w3-table w3-bordered">
+              <thead>
+                <tr>
+                  <th>Opportunity Status</th>
+                  <th>Opportunity Name</th>
+                  <th>Customer - Leads</th>
+                  <th>Expected Revenue</th>
+                  <th>Estimate Date</th>
+                  <th>Funnel Stage</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let deal of listOfOpportunities" style="cursor:pointer" (click)="viewOpportunity(deal)">
+                  <td>{{(deal.StatusId == null)?'Inprogress':getStatusById(deal.StatusId)}}</td>
+                  <td>{{deal.DealName}}</td>
+                  <td>{{getLeadName(deal.LeadId)}}</td>
+                  <td>{{deal.ExpectedRevenue}}</td>
+                  <td>{{deal.EstimationDate}}</td>
+                  <td>{{getFunnelStage(deal.PipelineId)}}</td>
+                </tr>
+                <tr *ngIf="listOfOpportunities.length == 0">
+                  <td>No Records Found.</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!--<div class="w3-white" *ngIf="activeContainer == 'tab3' && !partners.IsNotPayReferral">
+      <div class="w3-margin w3-animate-opacity marginform">-->
+      <!--<h6 class="w3-left">Referral</h6>-->
+      <!--<div class="w3-row w3-half w3-container">
+            <div class="w3-full w3-half">
+              <div class="w3-margin-bottom-small">
+                <input type="radio" class="w3-radio" name="costGroup" (click)="partners.IsPerReferralFee=true" [checked]="partners.IsPerReferralFee ?partners.IsPerReferralFee:false" />
+                <label>&nbsp;Per&nbsp;referral&nbsp;fee</label>
+              </div>
+              <div class="w3-full w3-margin-right w3-margin-top-small">
+                <select class="w3-input w3-border" [(ngModel)]="partners.ReferralFeeId">
+                  <option *ngFor="let referralFee of listReferralFee" [ngValue]="referralFee.Id">{{referralFee.Name}}</option>
+                </select>
+              </div>
+              <div class="w3-full w3-margin-right w3-margin-bottom-small">
+                <label>Payment Mode</label>
+                <select class="w3-input w3-border" [(ngModel)]="partners.PaymentModelId">
+                  <option *ngFor="let paymentModel of listPaymentModel" [ngValue]="paymentModel.Id">{{paymentModel.Name}}</option>
+                </select>
+              </div>
+              <div class="w3-full w3-margin-right w3-margin-bottom">
+                <label>Fee</label>
+                <input class="w3-input w3-border" type="text" />
+              </div>
+            </div>
+
+            <div class="w3-full w3-half">
+              <div class="w3-margin-bottom-small">
+                <input type="radio" class="w3-radio" name="costGroup" (click)="userCost.IsPerMonth=true" [checked]="userCost.IsPerMonth ?userCost.IsPerMonth:false" />
+                <label>&nbsp;Per&nbsp;month</label>
+              </div>
+              <div class="w3-margin-right w3-margin-bottom-small">
+                <input type="text" class="w3-input w3-border" placeholder="$" [(ngModel)]="userCost.PerMonthCost" />
+              </div>
+              <div class="w3-margin-right">
+                <label></label>
+                <input type="text" class="w3-input w3-border" placeholder="Time" [(ngModel)]="userCost.PerMonthTotalHours" />
+              </div>
+            </div>
+          </div>
+
+          <div class="w3-row w3-half w3-container">
+            <div class="w3-full w3-half">
+              <div class="w3-margin-bottom-small">
+                <input type="radio" class="w3-radio" name="costGroup" (click)="userCost.IsPerLead=true" [checked]="userCost.IsPerLead ?userCost.IsPerLead:false" />
+                <label for="perlead">&nbsp;Per&nbsp;lead</label>
+              </div>
+              <div class="w3-margin-right w3-margin-bottom-small">
+                <input type="text" class="w3-input w3-border" placeholder="$" [(ngModel)]="userCost.PerLeadCost" />
+              </div>
+            </div>
+
+            <div class="w3-full w3-half">
+              <div class="w3-full w3-margin-right w3-margin-bottom">
+                <label>End of Contract</label>
+                <input class="w3-input w3-border" type="datetime-local" [ngModel]="changeFormatDate(partners.EndOfContract)" (ngModelChange)="partners.EndOfContract = $event" />
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>-->
+      <div class="w3-margin w3-right">
+        <button class="w3-button w3-border w3-round-large w3-margin-right-small" (click)="cancel()">Done</button>
+        <button class="w3-button w3-secondary w3-border w3-round-large" (click)="savePartner(partners)" [disabled]="checkReqValidation(name)||checkReqValidation(securityGroupId)">Save</button>
+      </div>
+      <br>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div *ngIf="addCustomToggle" class="w3-modal w3-show">
+    <div class="w3-modal-content w3-secondary-button w3-round-large">
+      <div class="w3-row">
+        <div class="w3-container w3-center">
+          <p>Add Field</p>
+          <span (click)="closeError()" class="w3-button w3-display-topright">&times;</span>
+        </div>
+        <app-addnewfield [addCustomToggle]="addCustomToggle" [entityTypeId]="entityTypeId" (dataExist)="dataExist($event)" (saveSuccess)="saveSuccess($event)"></app-addnewfield>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="contactModal" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large w3-animate-zoom w3-secondary-button">
+    <span (click)="closeContactModal()" class="w3-button w3-round-top-right w3-display-topright">&times;</span>
+    <div class="w3-small sfcenter">
+      <div class="w3-animate-opacity marginform">
+        <div class="w3-row w3-round-large w3-secondary-button w3-container">
+          <h5 class="w3-left">Contact Information</h5>
+          <button type="button" (click)="addNetworkContact()" class="w3-button w3-margin-top-medium w3-round-large w3-right w3-border w3-secondary mr30">Add New Contact</button>
+        </div>
+        <div class="w3-row w3-round-bottom-left w3-round-bottom-right w3-padding w3-primary-l4">
+          <div class="w3-animate-opacity">
+            <table class="w3-table-all">
+              <thead>
+                <tr>
+                  <th>
+                    Action
+                  </th>
+                  <th>Contact Name</th>
+                  <th>Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of listNetworkContact">
+                  <td><button class="w3-button w3-padding-small w3-secondary w3-round-xxlarge" (click)="selectContact(data.Id)">Select</button></td>
+                  <td>{{data.ContactName}}</td>
+                  <td>{{data.Email}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="newContactToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large w3-secondary-button">
+    <span (click)="closeToggle()" class="w3-button w3-round-top-right w3-margin-right-small w3-display-topright">&times;</span>
+    <div class="w3-small sfcenter w3-margin-top">
+      <div class="w3-animate-opacity marginform">
+        <div class="w3-row w3-round-large w3-secondary-button w3-container w3-padding">
+          <h5 class="w3-left">Contact Information</h5>
+        </div>
+        <div class="w3-row w3-padding w3-primary-l4">
+          <div class="w3-full">
+            <div class="w3-full w3-container">
+              <label><input type="radio" class="w3-radio" [(ngModel)]="contactInfo.IsMember" [value]="true" name="networktype" />&nbsp;Member</label> &nbsp;&nbsp;
+              <label><input type="radio" class="w3-radio" [(ngModel)]="contactInfo.IsGuest" [value]="false" name="networktype" />&nbsp;Guest</label>
+            </div>
+            <div class="w3-full w3-container">
+              <div>
+                <input id="contactInfoActive" type="checkbox" [(ngModel)]="contactInfo.Inactive" />
+                <label for="contactInfoActive">&nbsp;Inactive</label>
+              </div>
+            </div>
+            <div class="w3-container w3-half">
+              <div class="w3-full">
+                <label>First Name *</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.FirstName" [class.w3-border-red]="checkValidation(firstName)" #firstName="ngModel" required />
+              </div>
+              <div class="w3-full">
+                <label>Last Name *</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.LastName" [class.w3-border-red]="checkValidation(lastName)" #lastName="ngModel" required />
+              </div>
+              <div class="w3-full">
+                <label>Contact Title *</label>
+                <app-customstringdropdown [getApiPath]="'CustomDropDown/GetContactTitle'" [isAddEnabled]="true" [selectedValue]="contactInfo.ContactTitle" (saveSelectedValue)="contactInfo.ContactTitle=$event" [saveApiPath]="'CustomDropDown/SaveContactTitle'"></app-customstringdropdown>
+              </div>
+              <div class="w3-full">
+                <label>Gender</label>
+                <app-customdropdown [getApiPath]="'CustomDropDown/GetGender'" [selectedValue]="contactInfo.Gender" (saveSelectedValue)="contactInfo.Gender = $event" [saveApiPath]="'CustomDropDown/SaveGender'"></app-customdropdown>
+              </div>
+              <div class="w3-full">
+                <label>LinkedIn Profile</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.LinkedInProfile" />
+              </div>
+            </div>
+            <div class="w3-container w3-half">
+              <div class="w3-full">
+                <label>Extension</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.Extension" />
+              </div>
+              <div class="w3-full">
+                <label>Office Number</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.OfficeNumber" />
+              </div>
+              <div class="w3-full">
+                <label>Fax Number</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.FaxNumber" />
+              </div>
+              <div class="w3-full">
+                <label>Cell Number</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.CellNumber" />
+              </div>
+              <div class="w3-full">
+                <label>Email</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.Email" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w3-row w3-round-bottom-left w3-round-bottom-right w3-secondary-button">
+          <div class="w3-margin w3-right">
+            <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeToggle()">Cancel</button>
+            <button class="w3-button w3-border w3-round-large w3-secondary" (click)="saveContactInfo(contactInfo)" [disabled]="checkReqValidation(title) || checkReqValidation(firstName) || checkReqValidation(lastName)">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

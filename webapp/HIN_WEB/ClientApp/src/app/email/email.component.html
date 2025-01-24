@@ -1,0 +1,220 @@
+<div class="w3-row">
+  <div class="w3-card-2 w3-white w3-small w3-margin-right w3-margin-left w3-round-large w3-animate-zoom">
+    <div class="w3-col w3-border" style="width:250px;min-height:60vh">
+      <div class="w3-row-padding w3-margin-top-small" style="min-height:55vh">
+        <button class="w3-bar-item w3-button w3-block w3-left-align w3-secondary" (click)="addEmail()" permissionCheck="6.5.12.1"><i class="fa fa-pencil w3-margin-right"></i> Compose</button>
+        <!--<button class="w3-bar-item w3-button w3-block w3-left-align" permissionCheck="6.5.12.2"><i class="fa fa-inbox w3-margin-right"></i> Inbox</button>-->
+        <!--<button class="w3-bar-item w3-button w3-block w3-left-align" permissionCheck="6.5.12.3"><i class="fa fa-paper-plane w3-margin-right"></i>History</button>-->
+        <!--<button class="w3-bar-item w3-button w3-block w3-left-align" permissionCheck="6.5.12.4"><i class="fa fa-hourglass-end w3-margin-right"></i>Drafts</button>
+        <button class="w3-bar-item w3-button w3-block w3-left-align" permissionCheck="6.5.12.5"><i class="fa fa-trash w3-margin-right"></i>Trash</button>-->
+      </div>
+
+    </div>
+
+    <div class="w3-rest w3-container">
+      <div class="w3-full" style="min-height:60vh" >
+        <div class="w3-row">
+          <h4>Email History</h4> <div class="w3-right">
+            <div class="w3-right w3-margin-right-small">
+              <div class="w3-full" *ngIf="!authenticated">
+                <button class="w3-button w3-round-large w3-secondary" (click)="signIn()">Connect Office 365</button>
+              </div>
+              <div class="w3-full" *ngIf="authenticated">
+                <span class="w3-tag w3-orange w3-text-white w3-round-large w3-padding w3-margin-right-small" (click)="getCalendars()">Connected to office 365</span>
+                <button class="w3-button w3-round-large w3-secondary" (click)="signOut()">Disconnect</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <app-data-grid [gridHeaders]="gridHeaders" [actions]="actions" [dataSource]="dataSource" [filterColumns]="filterColumns" [apiUrl]="'/api/EmailHistory/GetODataEmailHistory'" [pageSize]="25"
+                         [isResponsive]="false" [isSearchEnabled]="true" [isPaginationEnabled]="true" [pageLengthOptions]="pageLengthOptions" (rowClick)="editEmailHistory($event);">
+          </app-data-grid>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div *ngIf="historyToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large">
+    <div class="w3-container">
+      <span (click)="closeToggle()" class="w3-button w3-display-topright">&times;</span>
+      <div class="w3-white w3-small sfcenter w3-margin-top">
+        <div class="w3-margin w3-animate-opacity">
+          <div class="w3-row w3-full">
+            <h5 class="w3-left">Email History</h5>
+          </div>
+          <div class="w3-row">
+            <div class="w3-full">
+              <b>To :</b>{{emailHistory.EmailTo}}
+              <div class="w3-right">
+                <b>Sent On :</b>{{emailHistory.CreatedOn}}
+              </div>
+            </div>
+            <div class="w3-full w3-margin-top">
+              <b>CC :</b>{{emailHistory.EmailCc}}
+            </div>
+            <div class="w3-full w3-margin-top">
+              <b>Subject :</b>{{emailHistory.EmailSubject}}
+            </div>
+            <div class="w3-full w3-margin-top">
+              <b>Body :</b>{{emailHistory.EmailBody}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div *ngIf="toggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large">
+    <div class="w3-container">
+      <span (click)="closeToggle()" class="w3-button w3-display-topright">&times;</span>
+      <div class="w3-white w3-small sfcenter w3-margin-top">
+        <div class="w3-margin w3-animate-opacity">
+
+          <div class="w3-row">
+            <div class="w3-left w3-large">Compose</div>
+            <div class="w3-right">
+              <div class="w3-padding w3-medium">
+                <label class="w3-margin-right-xxlarge">
+                  <input class="w3-radio" type="radio" name="send" value="office" (change)="setMailType($event)">
+                  MS Office
+                </label>
+                <label>
+                  <input class="w3-radio" type="radio" name="send" value="gmail" (change)="setMailType($event)">
+                  Gmail
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="w3-full w3-container">
+            <label>To</label>
+            <div class="w3-row">
+              <div class="w3-col s1">
+                <button class="w3-button w3-white w3-border w3-border-light-gray" (click)="chooseContacts()"><i aria-hidden="true" class="fa fa-address-book-o"></i></button>
+              </div>
+              <div class="w3-col s11">
+                <ul class="sf-multiselect-ul">
+                  <ng-container *ngFor="let toRecipient of officeemails.message.toRecipients">
+                    <span class="w3-tag w3-teal sf-multiselect-span" *ngIf="officeemails.message.toRecipients.length > 0">{{toRecipient.emailAddress.address}} <i class="fa fa-close" (click)="removeRecipient(toRecipient.emailAddress.address)"></i></span>
+                  </ng-container>
+                  <li class="sf-multiselect-li">
+                    <input class="w3-border-0 w3-round-large sf-multiselect-textbox" type="text" (keypress)="enterContact($event)" (focusout)="chooseContactBlur($event)" />
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="w3-full w3-container">
+            <label>Cc</label>
+            <div class="w3-row">
+              <div class="w3-col s1">
+                <button class="w3-button w3-white w3-border w3-border-light-gray" (click)="chooseCcContacts()"><i aria-hidden="true" class="fa fa-address-book-o"></i></button>
+              </div>
+              <div class="w3-col s11">
+                <ul class="sf-multiselect-ul">
+                  <ng-container *ngFor="let ccRecipient of officeemails.message.ccRecipients">
+                    <span class="w3-tag w3-teal sf-multiselect-span" *ngIf="officeemails.message.ccRecipients.length > 0">{{ccRecipient.emailAddress.address}} <i class="fa fa-close" (click)="removeCcRecipient(ccRecipient.emailAddress.address)"></i></span>
+                  </ng-container>
+                  <li class="sf-multiselect-li">
+                    <input class="w3-border-0 w3-round-large sf-multiselect-textbox" type="text" (keypress)="enterCcContact($event)" (focusout)="chooseCcContactBlur($event)" />
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="w3-row marginform w3-container w3-margin-top">
+            <div class="w3-col s2">
+              <label>Subject :</label>
+            </div>
+            <div class="w3-col s10">
+              <input class="w3-input w3-border" type="text" [(ngModel)]="officeemails.message.subject" />
+            </div>
+          </div>
+
+
+          <div class="w3-row marginform w3-container w3-margin-top">
+            <div class="w3-col s2">
+              <label>Select Template :</label>
+            </div>
+            <div class="w3-col s10">
+              <select class="w3-input w3-border" [ngModel]="emailHistory.EmailTemplateId" (ngModelChange)="selectedEmailTemplate($event)">
+                <option value="0" disabled>select</option>
+                <option *ngFor="let emailTemplate of lstOfEmailTemplate" [ngValue]="emailTemplate.TemplateId">{{emailTemplate.TemplateName}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="w3-full w3-container w3-margin-top" *ngIf="!showEmailTemplate">
+            <label></label>
+            <!--<textarea class="w3-input w3-border" [(ngModel)]="officeemails.message.body.content"></textarea>-->
+            <!--<app-ngx-editor [height]="'150px'" [minHeight]="'100px'" [placeholder]="'Enter text here...'" [spellcheck]="true" [(ngModel)]="officeemails.message.body.content"></app-ngx-editor>-->
+            <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="officeemails.message.body.content"></angular-editor>
+          </div>
+
+          <div class="w3-full w3-container w3-margin-top" *ngIf="showEmailTemplate">
+            <div [innerHTML]="bindPreviewHTML(officeemails.message.body.content)">
+            </div>
+          </div>
+
+          <div class="w3-margin w3-right">
+            <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeToggle()"><i class="fa fa-times"></i> Cancel</button>
+            <button class="w3-button w3-secondary w3-border w3-round-large" (click)="sendEmail(officeemails)"><i class="fa fa-paper-plane"></i> Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="contactToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large">
+    <div class="w3-container">
+      <span (click)="closeContacts()" class="w3-button w3-display-topright">&times;</span>
+      <div class="w3-white w3-small sfcenter w3-margin-top">
+        <div class="w3-margin w3-animate-opacity">
+          <div class="w3-row">
+            <h5>Contacts</h5>
+          </div>
+          <table class="w3-table-all">
+            <thead>
+              <tr>
+                <th>
+                  <input type="checkbox" class="w3-check" (change)="selectAllContact($event)" />
+                </th>
+                <th>Contact Name</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of contactInformations">
+                <td><input type="checkbox" class="w3-check" [checked]="isAllChecked" (change)="selectContact($event, data)" /></td>
+                <td>{{data.ContactName}}</td>
+                <td>{{data.Email}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="w3-margin w3-right">
+            <button class="w3-button w3-border w3-secondary w3-round-large w3-margin-right" (click)="saveSelectedContacts()">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

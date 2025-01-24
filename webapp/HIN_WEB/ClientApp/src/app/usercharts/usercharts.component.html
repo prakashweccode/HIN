@@ -1,0 +1,11 @@
+
+<h3 class="w3-container">User Quota</h3>
+<div *ngFor="let user of users" class="w3-row w3-card-2 w3-white w3-margin w3-round-large" >
+  <div>
+    <h3 class="w3-container">{{user.Name}}<span class="w3-right"><i [ngClass]="user.QuoteToggle?'fa fa-minus':'fa fa-plus'" (click)="userQuoteToggle(user)"></i></span></h3>
+  </div>
+  <div *ngIf="user.QuoteToggle">
+    <app-chart [isChangeWidth]="false" [type]="'UserQuote'" [userId]="user.UserId" [chartWidth]="225"></app-chart>
+  </div>
+  
+</div>

@@ -1,0 +1,222 @@
+.w3-primary-l5 {
+  color: #000 !important;
+  background-color: #e9f5ff !important
+}
+
+.w3-primary-l4 {
+  color: #000 !important;
+  background-color: #c3cdfe !important
+}
+
+.w3-primary-l3 {
+  color: #000 !important;
+  background-color: #6bc0fc !important
+}
+
+.w3-primary-l2 {
+  color: #fff !important;
+  background-color: #21a0fa !important
+}
+
+.w3-primary-l1 {
+  color: #fff !important;
+  background-color: #0479cc !important
+}
+
+.w3-primary-d1 {
+  color: #fff !important;
+  background-color: #024575 !important
+}
+
+.w3-primary-d2 {
+  color: #fff !important;
+  background-color: #023e68 !important
+}
+
+.w3-primary-d3 {
+  color: #fff !important;
+  background-color: #02365b !important
+}
+
+.w3-primary-d4 {
+  color: #fff !important;
+  background-color: #022e4e !important
+}
+
+.w3-primary-d5 {
+  color: #fff !important;
+  background-color: #012641 !important
+}
+
+.w3-primary-light {
+  color: #000 !important;
+  background-color: #e9f5ff !important
+}
+
+.w3-primary-dark {
+  color: #fff !important;
+  background-color: #012641 !important
+}
+
+.w3-primary-action {
+  color: #fff !important;
+  background-color: #012641 !important
+}
+
+.w3-primary {
+  color: #fff !important;
+  background-color: #0B2559 !important
+}
+
+.w3-text-primary {
+  color: #034f84 !important
+}
+
+.w3-border-primary {
+  border-color: #034f84 !important
+}
+
+.w3-hover-primary:hover {
+  color: #fff !important;
+  background-color: #034f84 !important
+}
+
+.w3-hover-text-primary:hover {
+  color: #034f84 !important
+}
+
+.w3-hover-border-primary:hover {
+  border-color: #034f84 !important
+}
+
+.w3-secondary-l5, .w3-input {
+  color: #000 !important;
+  background-color: #eff1fe !important
+}
+
+.w3-secondary-l4 {
+  color: #000 !important;
+  background-color: #b5dffd !important
+}
+
+.w3-secondary-l3 {
+  color: #000 !important;
+  background-color: #B3B5D8 !important;
+}
+
+.w3-text-secondary-l3 {
+  color: #6bc0fc !important;
+}
+
+.w3-secondary-l2 {
+  color: #fff !important;
+  background-color: #21a0fa !important
+}
+
+.w3-secondary-l1 {
+  color: #fff !important;
+  background-color: #0479cc !important
+}
+
+.w3-secondary-d1 {
+  color: #fff !important;
+  background-color: #024575 !important
+}
+
+.w3-secondary-d2 {
+  color: #fff !important;
+  background-color: #023e68 !important
+}
+
+.w3-secondary-d3 {
+  color: #fff !important;
+  background-color: #02365b !important
+}
+
+.w3-secondary-d4 {
+  color: #fff !important;
+  background-color: #022e4e !important
+}
+
+.w3-secondary-d5 {
+  color: #fff !important;
+  background-color: #012641 !important
+}
+
+.w3-secondary-light {
+  color: #000 !important;
+  background-color: #e9f5ff !important
+}
+
+.w3-secondary-dark {
+  color: #fff !important;
+  background-color: #012641 !important
+}
+
+.w3-secondary-action {
+  color: #fff !important;
+  background-color: #012641 !important
+}
+
+.w3-secondary {
+  color: #fff !important;
+  background-color: #034f84 !important
+}
+
+.w3-text-secondary {
+  color: #034f84 !important
+}
+
+.w3-border-secondary {
+  border-color: #034f84 !important
+}
+
+.w3-hover-secondary:hover {
+  color: #fff !important;
+  background-color: #034f84 !important
+}
+
+.w3-hover-text-secondary:hover {
+  color: #034f84 !important
+}
+
+.w3-hover-border-secondary:hover {
+  border-color: #034f84 !important
+}
+
+.loader {
+  border-top-color: #034f84 !important;
+}
+
+.pagination a.active {
+  background-color: #8497E3 !important;
+  color: white;
+}
+
+.sf-stage-selector__stage {
+  background-color: #034f84 !important;
+}
+
+.sf-stage-selector__stage--current ~ .sf-stage-selector__stage {
+  background-color: #dcdddd !important;
+  color: #747678 !important;
+}
+
+.w3-button.w3-secondary {
+  background-color: #627bf8 !important;
+}
+
+.w3-secondary-button {
+  background-color: #627bf8 !important;
+  color:white;
+}
+
+.w3-button.w3-secondary-theme2 {
+  background-color: #c5cfdb !important;
+  color:#fff;
+}
+
+[type="checkbox"]:not(:checked) + label:after,
+[type="checkbox"]:checked + label:after {
+  color: #627bf8 !important;
+}

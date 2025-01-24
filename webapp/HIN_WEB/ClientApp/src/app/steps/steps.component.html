@@ -1,0 +1,581 @@
+<!--<app-dropdown-options [config]="loConfig" [selectedId]="" [entityType]="loEntity" [getApi]="" [postApi]=""></app-dropdown-options>-->
+<div class="w3-container">
+  <button class="w3-button w3-secondary w3-round-large w3-right" (click)="editSteps()">Edit</button>
+</div>
+<div class="w3-responsive" style="min-height:55vh;">
+  <table class="w3-table w3-bordered" style="width:160%;" permissionCheck="6.5.14">
+    <thead>
+      <tr>
+        <td style="width:2.8%; padding:0;">
+          <button class="w3-button w3-secondary w3-padding-top-xsmall w3-padding-right-medium w3-padding-left-medium w3-padding-bottom-xsmall" (click)="toggleAllNextSteps(iconToggle);">
+            <span *ngIf="iconToggle">
+              <i class="fa fa-minus"></i>
+            </span>
+            <span *ngIf="!iconToggle">
+              <i class="fa fa-plus"></i>
+            </span>
+          </button>
+
+        </td>
+        <td permissionCheck="6.5.14.7"><strong>Calendar</strong></td>
+        <td permissionCheck="6.5.14.1"><strong>Action</strong></td>
+        <td permissionCheck="6.5.14.2"><strong>Contact&nbsp;Name</strong></td>
+        <td permissionCheck="6.5.14.3"><strong>Contact&nbsp;Method</strong></td>
+        <td permissionCheck="6.5.14.4"><strong>Contact&nbsp;Method&nbsp;Detail</strong></td>
+        
+        <td permissionCheck="6.5.14.5" *ngIf="disableSalesMan"><strong>&nbsp;</strong></td>
+        <td permissionCheck="6.5.14.5" *ngIf="!disableSalesMan"><strong>Salesman</strong></td>
+        <td permissionCheck="6.5.14.9"><strong>Assigned&nbsp;To</strong></td>
+        <td permissionCheck="6.5.14.10"><strong>Status</strong></td>
+        <td><strong>Quick Notes</strong></td>
+        <td permissionCheck="6.5.14.8"><strong>Notes</strong></td>
+        <td permissionCheck="6.5.14.6"><strong>&nbsp;</strong></td>
+        <td>&nbsp;</td>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let dealContact of dealContacts; let i = index">
+        <tr>
+          <td style="width:2.8%; padding:0;">
+            <button class="w3-button w3-secondary w3-padding-top-xsmall w3-padding-right-medium w3-padding-left-medium w3-padding-bottom-xsmall" (click)="openNextStep(dealContact);">
+              <span *ngIf="dealContact.nextStepToggle">
+                <i class="fa fa-minus"></i>
+              </span>
+              <span *ngIf="!dealContact.nextStepToggle">
+                <i class="fa fa-plus"></i>
+              </span>
+            </button>
+          </td>
+          <td style="width: 10%;" [class]="dealContact.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.7">
+            <div class="w3-row">
+              <button [disabled]="dealContact.IsSaved" title="Calendar" class="w3-button w3-border w3-col w3-white" (click)="OpenCalendarPopup(dealContact, 'contact');calendarFor='contact'" style="width:15%;padding:2px 2px;">
+                <i class="fa fa-calendar-plus-o"></i>
+              </button>
+              <div class="w3-rest">
+                <input type="datetime-local" class="w3-input w3-border" disabled="disabled" [ngModel]="changeFormatDate(dealContact.StartDate)"
+                       (ngModelChange)="dealContact.StartDate = $event" />
+              </div>
+            </div>
+          </td>
+
+          <td *ngIf="useCustomApi" style="width: 7%;" [class]="dealContact.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.1">
+            <app-customdropdown [getApiPath]="getApi" [isAddEnabled]="true" [selectedValue]="dealContact.StepTypeId" (saveSelectedValue)="dealContact.StepTypeId=$event" [saveApiPath]="PostApi"></app-customdropdown>
+          </td>
+          <td *ngIf="!useCustomApi" style="width: 7%;" [class]="dealContact.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.1">
+            <app-customdropdown [getApiPath]="'CustomDropDown/GetStepTypes'" [isAddEnabled]="true" [selectedValue]="dealContact.StepTypeId" (saveSelectedValue)="dealContact.StepTypeId=$event" [saveApiPath]="'CustomDropDown/SaveStepTypes'"></app-customdropdown>
+          </td>
+          <td style="width: 8%;" [class]="dealContact.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.2">
+            <select [class]="dealContact.IsSaved ? 'w3-input w3-border w3-disabled':'w3-input w3-border'" (change)="getContactInfoById(dealContact.ContactId, dealContact)" [(ngModel)]="dealContact.ContactId">
+              <option [ngValue]="0" disabled="disabled">-select--</option>
+              <option *ngFor="let data of contactInformations" [ngValue]="data.Id">{{data.ContactName}}</option>
+            </select>
+            <div class="w3-row">
+              <div class="w3-half w3-center" [ngClass]="dealContact.Id?'w3-hide':''"><a class="hyper-link" (click)="addNewContact()">Add</a></div>
+              <div class="w3-half w3-center" [ngClass]="dealContact.Id?'w3-hide':''"><a class="hyper-link" (click)="editContactInfoPopup()">Edit</a></div>
+            </div>
+          </td>
+          <td style="width: 7%;" [class]="dealContact.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.3">
+            <app-customdropdown [getApiPath]="'CustomDropDown/GetChooseMethod'" [selectedValue]="dealContact.CalendarInviteType" (saveSelectedValue)="dealContact.CalendarInviteType = $event" [saveApiPath]="'CustomDropDown/SaveChooseMethod'"></app-customdropdown>
+          </td>
+          <td style="width: 9%;" [class]="dealContact.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.4">
+            <input type="text" *ngIf="dealContact.CalendarInviteType==1" [class]="dealContact.IsSaved ? 'w3-input w3-border w3-disabled':'w3-input w3-border'" placeholder="Zoom Id" [(ngModel)]="dealContact.ZoomId" />
+            <input type="text" *ngIf="dealContact.CalendarInviteType==2" [class]="dealContact.IsSaved ? 'w3-input w3-border w3-disabled':'w3-input w3-border'" placeholder="Cell Number" [(ngModel)]="dealContact.CellNumber" />
+            <input type="text" *ngIf="dealContact.CalendarInviteType==3" [class]="dealContact.IsSaved ? 'w3-input w3-border w3-disabled':'w3-input w3-border'" placeholder="Email Id" [(ngModel)]="dealContact.Email" />
+            <input type="text" *ngIf="dealContact.CalendarInviteType==4" [class]="dealContact.IsSaved ? 'w3-input w3-border w3-disabled':'w3-input w3-border'" placeholder="Office Number" [(ngModel)]="dealContact.OfficeNumber" />
+            <input type="text" *ngIf="dealContact.CalendarInviteType==5" [class]="dealContact.IsSaved ? 'w3-input w3-border w3-disabled':'w3-input w3-border'" placeholder="Other" [(ngModel)]="dealContact.Other" />
+          </td>
+          <td style="width: 1%;" *ngIf="disableSalesMan" [class]="dealContact.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.5">
+            <!--<select [class]="dealContact.IsSaved ? 'w3-input w3-border w3-disabled':'w3-input w3-border'" [(ngModel)]="dealContact.SalesMan"><option *ngFor="let userDetail of Users" [ngValue]="userDetail.UserId">{{userDetail.FirstName}}</option></select>-->
+          </td>
+          <td style="width: 7%;" *ngIf="!disableSalesMan" [class]="dealContact.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.5">
+            <select [class]="dealContact.IsSaved ? 'w3-input w3-border w3-disabled':'w3-input w3-border'" [(ngModel)]="dealContact.SalesMan"><option *ngFor="let userDetail of Users" [ngValue]="userDetail.UserId">{{userDetail.FirstName}}</option></select>
+          </td>
+          <td style="width: 7%;" [class]="dealContact.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.9">
+            <select [class]="dealContact.IsSaved ? 'w3-input w3-border w3-disabled':'w3-input w3-border'" [(ngModel)]="dealContact.AssignedTo"><option *ngFor="let userDetail of Users" [ngValue]="userDetail.UserId">{{userDetail.FirstName}}</option></select>
+          </td>
+          <td style="width: 7%;" [class]="dealContact.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.10">
+            <app-customdropdown [getApiPath]="'CustomDropDown/GetCompletedStatus'" [isAddEnabled]="true" [selectedValue]="dealContact.CompletedStatusId" (saveSelectedValue)="dealContact.CompletedStatusId = $event" [saveApiPath]="'CustomDropDown/SaveCompletedStatus'"></app-customdropdown>
+          </td>
+          <td style="width: 12%;" [class]="dealContact.IsSaved ? 'w3-disabled':''">
+            <app-dropdown-options [config]="loConfig" [selectedId]="dealContact.QuickNotes" [entityType]="loEntity" [getApi]="" [postApi]="" (selectedNoteId)="selectedPreActionNote($event, dealContact)"></app-dropdown-options>
+          </td>
+          <td style="width:12%" [class]="dealContact.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.8">
+            <textarea [class]="dealContact.IsSaved ? 'w3-input w3-border w3-disabled':'w3-input w3-border'" rows="1" [ngModel]="bindNotes(dealContact.Notes, dealContact, i)" (ngModelChange)="dealContact.Notes = $event"></textarea>
+          </td>
+          <td style="width: 15%;" permissionCheck="6.5.14.6">
+            <button [ngClass]="dealContact.Notes ? 'w3-teal' : 'w3-secondary'" class="w3-button w3-round-large w3-padding-top-xsmall w3-padding-right-medium w3-padding-left-medium w3-padding-bottom-xsmall" (click)="viewNotes(dealContact)" permissionCheck="6.5.14.6.1">View Notes</button>&nbsp;
+            <button class="w3-button w3-secondary w3-round-large w3-padding-top-xsmall w3-padding-right-medium w3-padding-left-medium w3-padding-bottom-xsmall" (click)="addNewNote(dealContact.Id)" permissionCheck="6.5.14.6.2">Add Note</button>&nbsp;
+            <button [disabled]="dealContact.IsSaved" (click)="UpdateDealContact(dealContact)" class="w3-button w3-secondary w3-round-large w3-padding-top-xsmall w3-padding-right-medium w3-padding-left-medium w3-padding-bottom-xsmall" permissionCheck="6.5.14.6.3">Save</button>
+          </td>
+          <td>
+            <button class="w3-button w3-secondary w3-padding-top-xsmall w3-padding-right-medium w3-padding-left-medium w3-padding-bottom-xsmall" (click)="openNextStep(dealContact);" permissionCheck="6.5.14.6.4"><i class="fa fa-plus"></i></button>
+            <!--<button class="w3-button w3-secondary w3-padding-top-xsmall w3-padding-right-medium w3-padding-left-medium w3-padding-bottom-xsmall" (click)="editStpes(dealContact);">
+        <i class="fa fa-pencil"></i>
+    </button>-->
+          </td>
+
+        </tr>
+        <tr>
+          <td colspan="12" style="padding:0;">
+            <div *ngIf="dealContact.nextStepToggle">
+              <div class="w3-bar w3-center w3-border-bottom w3-border-secondary">
+                <a [class]="costContainer == 'tab2'?'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-secondary':'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-white'" (click)="costContainer = 'tab2'; getTimeCost(dealContact)" permissionCheck="6.5.14.6.4.2">Time Cost</a>
+                <a [class]="costContainer == 'tab3'?'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-secondary':'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-white'" (click)="costContainer = 'tab3'; getMaterialCost(dealContact)" permissionCheck="6.5.14.6.4.3">Material Cost</a>
+                <!--<a [class]="costContainer == 'tab1'?'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-secondary':'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-white'" (click)="costContainer = 'tab1';" permissionCheck="6.5.14.6.4.1">Next Step</a>-->
+              </div>
+              <div *ngIf="costContainer == 'tab2'" class="w3-border" permissionCheck="6.5.14.6.4.2">
+                <!--<div style="display:flex" class="w3-margin-bottom">
+                </div>-->
+                <table class="w3-table" style="width:60%;">
+                  <thead>
+                    <tr>
+                      <td><strong>Name</strong></td>
+                      <td><strong>Skill</strong></td>
+                      <td><strong>Cost</strong></td>
+                      <td><strong>Total&nbsp;Time(In&nbsp;Minutes)</strong></td>
+                      <td><strong>Total&nbsp;Cost</strong></td>
+                      <td><strong>Notes</strong></td>
+                      <td><strong>Action</strong></td>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let timecost of dealContact.timecosts">
+                      <td>
+                        <div class="" permissionCheck="6.5.14.6.4.2.1">
+
+                          <select class="w3-input w3-border" [(ngModel)]="timecost.Name" (change)="timeCostUserChange(timecost, $event);" #timeCostUser permissionCheck="6.5.14.6.4.2.1">
+                            <option value="0" disabled="disabled">-select-</option>
+                            <option *ngFor="let data of Users" value="{{data.UserId}}">{{data.UserName }}</option>
+                          </select>
+
+                        </div>
+                      </td>
+                      <td>
+                        <div class="" permissionCheck="6.5.14.6.4.2.2">
+                          <input type="text" class="w3-bar-item w3-input w3-border" [(ngModel)]="timecost.Skill" permissionCheck="6.5.14.6.4.2.2" />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="" permissionCheck="6.5.14.6.4.2.3">
+                          <input type="text" placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" class="w3-bar-item w3-input w3-border" [(ngModel)]="timecost.Cost" permissionCheck="6.5.14.6.4.2.3" />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="" permissionCheck="6.5.14.6.4.2.6">
+                          <input type="text" class="w3-bar-item w3-input w3-border" [(ngModel)]="timecost.TotalTime" permissionCheck="6.5.14.6.4.2.6" />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="">
+                          <input type="text" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" class="w3-bar-item w3-input w3-border" disabled="disabled" [ngModel]="calculateTotalTimeCost(timecost.TotalTime, timecost.Cost)" />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="" permissionCheck="6.5.14.6.4.2.7">
+                          <input type="text" class="w3-bar-item w3-input w3-border" [(ngModel)]="timecost.Notes" permissionCheck="6.5.14.6.4.2.7" />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="" permissionCheck="6.5.14.6.4.2.8">
+                          <button class="w3-bar-item w3-input w3-button w3-round-medium w3-secondary" (click)="SaveTimeCost(timecost, dealContact.Id, dealContact.timecosts)" permissionCheck="6.5.14.6.4.2.9">Save</button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div *ngIf="costContainer == 'tab3'" class="w3-border" permissionCheck="6.5.14.6.4.3">
+                <table class="w3-table" style="width:60%;">
+                  <thead>
+                    <tr>
+                      <td><strong>Product</strong></td>
+                      <td><strong>Quantity</strong></td>
+                      <td><strong>Price</strong></td>
+                      <td><strong>Total&nbsp;Price</strong></td>
+                      <td><strong>Notes</strong></td>
+                      <td><strong>Action</strong></td>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let materialcost of dealContact.materialcosts">
+                      <td>
+                        <div class="" permissionCheck="6.5.14.6.4.3.1">
+                          <select class="w3-input w3-border" [(ngModel)]="materialcost.ProductId" permissionCheck="6.5.14.6.4.3.1" (change)="populatePrice($event, materialcost)">
+                            <option value="0" disabled>select</option>
+                            <option *ngFor="let data of products" value="{{data.Id}}">{{data.PartDescription}}</option>
+                          </select>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="" permissionCheck="6.5.14.6.4.3.2">
+                          <input type="number" class="w3-bar-item w3-input w3-border" [(ngModel)]="materialcost.Quantity" permissionCheck="6.5.14.6.4.3.2" />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="" permissionCheck="6.5.14.6.4.3.3">
+                          <input type="text" placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" class="w3-bar-item w3-input w3-border" [(ngModel)]="materialcost.Price" permissionCheck="6.5.14.6.4.3.3" />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="" permissionCheck="6.5.14.6.4.3.4">
+                          <input type="text" disabled placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" class="w3-bar-item w3-input w3-border" [ngModel]="materialcost.Quantity * materialcost.Price" permissionCheck="6.5.14.6.4.3.4" />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="" permissionCheck="6.5.14.6.4.3.5">
+                          <input type="text" class="w3-bar-item w3-input w3-border" [(ngModel)]="materialcost.Notes" permissionCheck="6.5.14.6.4.3.5" />
+                        </div>
+                      </td>
+                      <td>
+                        <div class="" permissionCheck="6.5.14.6.4.3.6">
+                          <button class="w3-bar-item w3-input w3-button w3-round-medium w3-secondary" (click)="SaveMaterialCost(materialcost, dealContact.Id, dealContact.materialcosts)" permissionCheck="6.5.14.6.4.3.7">Save</button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="w3-row" *ngIf="dealContact.Id">
+              <!--<div class="w3-row">
+                <label><strong>Next Step</strong></label>
+              </div>-->
+              <div class="" permissionCheck="6.5.14.6.4.1">
+                <table class="w3-table">
+                  <!--<thead>
+                    <tr>
+                      <td permissionCheck="6.5.14.6.4.4"><strong>Calendar</strong></td>
+                      <td permissionCheck="6.5.14.6.4.5"><strong>Action</strong></td>
+                      <td permissionCheck="6.5.14.6.4.6"><strong>Contact&nbsp;Name</strong></td>
+                      <td permissionCheck="6.5.14.6.4.7"><strong>Method</strong></td>
+                      <td permissionCheck="6.5.14.6.4.8"><strong>Contact&nbsp;Method&nbsp;Detail</strong></td>
+                      <td permissionCheck="6.5.14.6.4.9"><strong>Salesman</strong></td>
+                      <td permissionCheck="6.5.14.6.4.10"><strong>Assigned&nbsp;To</strong></td>
+                      <td permissionCheck="6.5.14.6.4.12"><strong>Notes</strong></td>
+                      <td permissionCheck="6.5.14.6.4.13"><strong>&nbsp;</strong></td>
+                    </tr>
+                  </thead>-->
+                  <tbody>
+                    <tr class="w3-border-0">
+                      <td style="width:2.8%; padding:0;">Next&nbsp;Step</td>
+                      <td style="width: 10%;" [class]="dealContact.nextStep.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.6.4.4">
+                        <div class="w3-row">
+                          <button [disabled]="dealContact.nextStep.IsSaved" title="Calendar" class="w3-button w3-border w3-col w3-white" (click)="OpenCalendarPopup(dealContact.nextStep,'nextstep');calendarFor='nextstep'" style="width:15%;padding:1px 0px;">
+                            <i class="fa fa-calendar-plus-o"></i>
+                          </button>
+                          <div class="w3-rest">
+                            <input type="datetime-local" class="w3-input w3-border" disabled="disabled" [ngModel]="changeFormatDate(dealContact.nextStep.StartDate)"
+                                   (ngModelChange)="dealContact.nextStep.StartDate = $event" />
+                          </div>
+                        </div>
+                      </td>
+                      <!--<td style="width: 7%;" [class]="dealContact.nextStep.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.6.4.5">
+    <app-customdropdown [getApiPath]="'CustomDropDown/GetStepTypes'" [isAddEnabled]="true" [selectedValue]="dealContact.nextStep.StepTypeId" (saveSelectedValue)="dealContact.nextStep.StepTypeId=$event" [saveApiPath]="'CustomDropDown/SaveStepTypes'"></app-customdropdown>
+  </td>-->
+                      <td *ngIf="useCustomApi" style="width: 7%;" [class]="dealContact.nextStep.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.6.4.5">
+                        <app-customdropdown [getApiPath]="getApi" [isAddEnabled]="true" [selectedValue]="dealContact.StepTypeId" (saveSelectedValue)="dealContact.StepTypeId=$event" [saveApiPath]="PostApi"></app-customdropdown>
+                      </td>
+                      <td *ngIf="!useCustomApi" style="width: 7%;" [class]="dealContact.nextStep.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.6.4.5">
+                        <app-customdropdown [getApiPath]="'CustomDropDown/GetStepTypes'" [isAddEnabled]="true" [selectedValue]="dealContact.StepTypeId" (saveSelectedValue)="dealContact.StepTypeId=$event" [saveApiPath]="'CustomDropDown/SaveStepTypes'"></app-customdropdown>
+                      </td>
+                      <td style="width: 8%;" [class]="dealContact.nextStep.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.6.4.6">
+                        <select class="w3-input w3-border" #nextStepContact (change)="getNextStepInfoById(nextStepContact.value, dealContact.nextStep)" [(ngModel)]="dealContact.nextStep.ContactId">
+                          <option value="0" disabled="disabled">-select-</option>
+                          <option *ngFor="let data of contactInformations" value="{{data.Id}}">{{data.ContactName}}</option>
+                        </select>
+                        <div class="w3-row" *ngIf="i+1 == dealContact.length">
+                          <div class="w3-half w3-center" [ngClass]="dealContact.nextStep.Id?'w3-hide':''"><a class="hyper-link" (click)="addNewContact()" permissionCheck="6.5.14.6.4.15">Add</a></div>
+                          <div class="w3-half w3-center" [ngClass]="dealContact.nextStep.Id?'w3-hide':''"><a class="hyper-link" (click)="editContactInfoPopup()" permissionCheck="6.5.14.6.4.16">Edit</a></div>
+                        </div>
+                      </td>
+                      <td style="width: 7%;" [class]="dealContact.nextStep.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.6.4.7">
+                        <app-customdropdown [getApiPath]="'CustomDropDown/GetChooseMethod'" [selectedValue]="dealContact.nextStep.CalendarInviteType" (saveSelectedValue)="dealContact.nextStep.CalendarInviteType = $event" [saveApiPath]="'CustomDropDown/SaveChooseMethod'"></app-customdropdown>
+                      </td>
+                      <td style="width: 9.2%;" [class]="dealContact.nextStep.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.6.4.8">
+                        <input type="text" *ngIf="dealContact.nextStep.CalendarInviteType==1" placeholder="Zoom Id" class="w3-input w3-border" [(ngModel)]="dealContact.nextStep.ZoomId" />
+                        <input type="text" *ngIf="dealContact.nextStep.CalendarInviteType==2" placeholder="Cell Number" class="w3-input w3-border" [(ngModel)]="dealContact.nextStep.CellNumber" />
+                        <input type="text" *ngIf="dealContact.nextStep.CalendarInviteType==3" placeholder="Email Id" class="w3-input w3-border" [(ngModel)]="dealContact.nextStep.Email" />
+                        <input type="text" *ngIf="dealContact.nextStep.CalendarInviteType==4" placeholder="Office Number" class="w3-input w3-border" [(ngModel)]="dealContact.nextStep.OfficeNumber" />
+                        <input type="text" *ngIf="dealContact.nextStep.CalendarInviteType==5" placeholder="Other" class="w3-input w3-border" [(ngModel)]="dealContact.nextStep.Other" />
+                      </td>
+                      <td style="width: 1%;" *ngIf="disableSalesMan" [class]="dealContact.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.6.4.9">
+                        <!--<select [class]="dealContact.IsSaved ? 'w3-input w3-border w3-disabled':'w3-input w3-border'" [(ngModel)]="dealContact.SalesMan"><option *ngFor="let userDetail of Users" [ngValue]="userDetail.UserId">{{userDetail.FirstName}}</option></select>-->
+                      </td>
+                      <td style="width: 7%;" *ngIf="!disableSalesMan" [class]="dealContact.nextStep.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.6.4.9">
+                        <select class="w3-input w3-border" [(ngModel)]="dealContact.nextStep.Salesman">
+                          <option *ngFor="let userDetail of Users" [ngValue]="userDetail.UserId">{{userDetail.FirstName}}</option>
+                        </select>
+                      </td>
+                      <td style="width: 7%;" [class]="dealContact.nextStep.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.6.4.10">
+                        <select class="w3-input w3-border" [(ngModel)]="dealContact.nextStep.AssignedTo">
+                          <option *ngFor="let userDetail of Users" [ngValue]="userDetail.UserId">{{userDetail.FirstName}}</option>
+                        </select>
+                      </td>
+                      <td style="width: 7%;" [class]="dealContact.nextStep.IsSaved ? 'w3-disabled':''">
+                        <app-customdropdown [getApiPath]="'CustomDropDown/GetCompletedStatus'" [isAddEnabled]="true" [selectedValue]="dealContact.nextStep.StatusId" (saveSelectedValue)="dealContact.nextStep.StatusId = $event" [saveApiPath]="'CustomDropDown/SaveCompletedStatus'"></app-customdropdown>
+                      </td>
+                      <td style="width: 12%;" [class]="dealContact.nextStep.IsSaved ? 'w3-disabled':''">
+                        <app-dropdown-options [config]="loConfig" [selectedId]="dealContact.nextStep.QuickNotes" [entityType]="loEntity" [getApi]="" [postApi]="" (selectedNoteId)="selectedPreActionNote($event, dealContact.nextStep)"></app-dropdown-options>
+                      </td>
+                      <td style="width: 12%;" [class]="dealContact.nextStep.IsSaved ? 'w3-disabled':''" permissionCheck="6.5.14.6.4.12">
+                        <textarea class="w3-input w3-border" rows="1" [ngModel]="bindNextStepNotes(dealContact.nextStep.Notes)" (ngModelChange)="dealContact.nextStep.Notes = $event"></textarea>
+                      </td>
+                      <!--<td permissionCheck="6.5.14.6.4.13">
+    <button (click)="UpdateContactNextStep(dealContact.nextStep)" [disabled]="dealContact.nextStep.IsSaved?'disabled':''" class="w3-button w3-secondary w3-round-large w3-padding-top-xsmall w3-padding-right-medium w3-padding-left-medium w3-padding-bottom-xsmall" permissionCheck="6.5.14.6.4.14">Save</button>
+  </td>-->
+                      <td style="width: 15%;" permissionCheck="6.5.14.6.4.13">
+                        <button [ngClass]="dealContact.nextStep.Notes ? 'w3-teal' : 'w3-secondary'" class="w3-button w3-round-large w3-padding-top-xsmall w3-padding-right-medium w3-padding-left-medium w3-padding-bottom-xsmall" (click)="viewNotes(dealContact.nextStep)">View Notes</button>&nbsp;
+                        <button (click)="UpdateContactNextStep(dealContact.nextStep)" [disabled]="dealContact.nextStep.IsSaved" class="w3-button w3-secondary w3-round-large w3-padding-top-xsmall w3-padding-right-medium w3-padding-left-medium w3-padding-bottom-xsmall" permissionCheck="6.5.14.6.4.14">Save</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+
+    </tbody>
+  </table>
+
+  <div class="w3-row w3-margin-top w3-margin-bottom">
+    <button [disabled]="addDisabled" class="w3-button w3-secondary w3-round-large" (click)="addDealContect()" permissionCheck="6.5.14.6.4.17">+ Add New</button>
+  </div>
+</div>
+
+
+<div *ngIf="toggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large w3-secondary-button">
+    <span (click)="closeToggle()" class="w3-button w3-margin-right-small w3-display-topright">&times;</span>
+    <div class="w3-small sfcenter w3-margin-top">
+      <div class="w3-animate-opacity marginform">
+        <div class="w3-row">
+          <h5 class="w3-container">Contact Information</h5>
+        </div>
+        <div class="w3-row w3-padding w3-primary-l4">
+          <div class="w3-full">
+            <div class="w3-container w3-half">
+              <div class="w3-full">
+                <label>First Name *</label>
+                <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.FirstName" [class.w3-border-red]="checkValidation(firstName)" #firstName="ngModel" required />
+              </div>
+              <div class="w3-full">
+                <label>Last Name *</label>
+                <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.LastName" [class.w3-border-red]="checkValidation(lastName)" #lastName="ngModel" required />
+              </div>
+              <div class="w3-full">
+                <label>Contact Title *</label>
+                <app-customstringdropdown [getApiPath]="'CustomDropDown/GetContactTitle'" [isAddEnabled]="true" [selectedValue]="contactInfo.ContactTitle" (saveSelectedValue)="contactInfo.ContactTitle=$event" [saveApiPath]="'CustomDropDown/SaveContactTitle'"></app-customstringdropdown>
+                <!--<input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.ContactTitle" [class.w3-border-red]="checkValidation(title)" #title="ngModel" required />-->
+              </div>
+              <div class="w3-full">
+                <label>Gender</label>
+                <select class="w3-input w3-border" [(ngModel)]="contactInfo.Gender">
+                  <option value="0" disabled="disabled">--select--</option>
+                  <option *ngFor="let gender of listGender" [ngValue]="gender.GenderId">{{gender.GenderName}}</option>
+                </select>
+              </div>
+              <div class="w3-full">
+                <label>LinkedIn Profile</label>
+                <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.LinkedInProfile" />
+              </div>
+            </div>
+            <div class="w3-container w3-half">
+              <div class="w3-full">
+                <label>Extension</label>
+                <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.Extension" />
+              </div>
+              <div class="w3-full">
+                <label>Office Number</label>
+                <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.OfficeNumber" />
+              </div>
+              <div class="w3-full">
+                <label>Fax Number</label>
+                <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.FaxNumber" />
+              </div>
+              <div class="w3-full">
+                <label>Cell Number</label>
+                <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.CellNumber" />
+              </div>
+              <div class="w3-full">
+                <label>Email</label>
+                <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.Email" />
+              </div>
+            </div>
+            <div class="w3-margin w3-right">
+              <button class="w3-button w3-border w3-round-large w3-margin-right-small" (click)="closeToggle()">Cancel</button>
+              <button class="w3-button w3-secondary w3-border w3-round-large" [disabled]="checkReqValidation(title) || checkReqValidation(firstName) || checkReqValidation(lastName)" (click)="saveContactInfo(contactInfo)">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="calendarToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large">
+    <div class="w3-container">
+      <span (click)="closeCalendarToggle()" class="w3-button w3-display-topright">&times;</span>
+      <div class="w3-white w3-small sfcenter w3-margin-top">
+        <div class="w3-margin w3-animate-opacity">
+          <div class="w3-row">
+            <h5 class="w3-container">Calendar</h5>
+          </div>
+          <div class="w3-full">
+            <div class="w3-quarter w3-margin-right">
+              <label>Start</label>
+              <input type="datetime-local" class="w3-input w3-border" [ngModel]="changeFormatDate(chooseStartDate)"
+                     (ngModelChange)="chooseStartDate = $event" />
+            </div>
+            <div class="w3-quarter w3-margin-right">
+              <label>End</label>
+              <input type="datetime-local" class="w3-input w3-border" [ngModel]="changeFormatDate(chooseEndDate)"
+                     (ngModelChange)="chooseEndDate = $event" />
+            </div>
+            <div class="w3-quarter w3-margin-top">
+              <div class="w3-left">
+                <button class="w3-button w3-secondary w3-round-large" (click)="chooseDate()">Select</button>
+              </div>
+            </div>
+            <div class="w3-right w3-margin-top-small">
+              <div class="w3-full" *ngIf="!authenticated" permissionCheck="10.5.2.1">
+                <button class="w3-button w3-round-large w3-secondary" permissionCheck="10.5.2.1" (click)="signIn()">Connect Office 365</button>
+              </div>
+              <div class="w3-full" *ngIf="authenticated" permissionCheck="10.5.2.1">
+                <span class="w3-tag w3-orange w3-text-white w3-round-large w3-padding w3-margin-right-small" permissionCheck="10.5.2.1" (click)="getCalendars()">Connected to office 365</span>
+                <button class="w3-button w3-round-large w3-secondary" (click)="signOut()">Disconnect</button>
+              </div>
+            </div>
+          </div>
+          <div class="w3-row w3-padding">
+            <div class="marginform">
+              <calendar-header [(view)]="view" [(viewDate)]="viewDate">
+              </calendar-header>
+              <div [ngSwitch]="view">
+                <mwl-calendar-month-view *ngSwitchCase="'month'"
+                                         [viewDate]="viewDate"
+                                         [events]="events"
+                                         [refresh]="refresh"
+                                         [activeDayIsOpen]="activeDayIsOpen"
+                                         (dayClicked)="chooseStartDate = $event.day.date;dayClicked($event.day);"
+                                         (eventClicked)="handleEvent('Clicked', $event.event)"
+                                         (eventTimesChanged)="eventTimesChanged($event)"
+                                         (beforeViewRender)="updateCalendarEvents($event)">
+                </mwl-calendar-month-view>
+                <ng-template #weekViewHourSegmentTemplate
+                             let-segment="segment"
+                             let-locale="locale"
+                             let-segmentHeight="segmentHeight"
+                             let-isTimeLabel="isTimeLabel">
+                  <div #segmentElement
+                       class="cal-hour-segment"
+                       [style.height.px]="segmentHeight"
+                       [class.cal-hour-start]="segment.isStart"
+                       [class.cal-after-hour-start]="!segment.isStart"
+                       [ngClass]="segment.cssClass"
+                       (mousedown)="startDragToCreate(segment, $event, segmentElement)">
+                    <div class="cal-time" *ngIf="isTimeLabel">
+                      {{ segment.date | calendarDate:'weekViewHour':locale }}
+                    </div>
+                  </div>
+                </ng-template>
+                <mwl-calendar-week-view *ngSwitchCase="'week'"
+                                        [viewDate]="viewDate"
+                                        [events]="events"
+                                        [refresh]="refresh"
+                                        [hourSegmentTemplate]="weekViewHourSegmentTemplate"
+                                        (hourSegmentClicked)="chooseStartDate = $event.date;hourSegmentClicked($event);"
+                                        (eventClicked)="handleEvent('Clicked', $event.event)"
+                                        (eventTimesChanged)="eventTimesChanged($event)"
+                                        (beforeViewRender)="updateCalendarEvents($event)">
+                </mwl-calendar-week-view>
+                <mwl-calendar-day-view *ngSwitchCase="'day'"
+                                       [viewDate]="viewDate"
+                                       [events]="events"
+                                       [refresh]="refresh"
+                                       (hourSegmentClicked)="chooseStartDate = $event.date;hourSegmentClicked($event);"
+                                       (eventClicked)="handleEvent('Clicked', $event.event)"
+                                       (eventTimesChanged)="eventTimesChanged($event)"
+                                       (beforeViewRender)="updateCalendarEvents($event)">
+                </mwl-calendar-day-view>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="addNoteToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-secondary-button w3-round-large">
+
+    <span (click)="closeNewNote()" class="w3-button w3-display-topright">&times;</span>
+
+
+    <div class="w3-row">
+      <div class="w3-container w3-center">
+        <p class="w3-container">Add Note</p>
+      </div>
+      <div class="w3-row w3-padding w3-tiny w3-primary-l4">
+        <div class="marginform">
+          <div class="w3-full">
+            <label>Note:</label>
+            <textarea class="w3-input w3-border" [(ngModel)]="newNote"></textarea>
+          </div>
+
+        </div>
+      </div>
+      <div class="w3-container w3-padding w3-center">
+        <button class="w3-button w3-block w3-secondary" [disabled]="!newNote" (click)="SaveNewNote()">Save</button>
+        <!--<button class="w3-button w3-secondary w3-round-large w3-right w3-margin-right" (click)="closeNewNote()">Cancel</button>-->
+      </div>
+
+    </div>
+  </div>
+</div>
+<div *ngIf="notesToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large">
+    <div class="w3-container">
+      <span (click)="closenotesToggle()" class="w3-button w3-display-topright">&times;</span>
+      <div class="w3-white w3-small sfcenter w3-margin-top">
+        <div class="w3-margin w3-animate-opacity">
+          <div class="w3-row">
+            <h5 class="w3-container">Notes</h5>
+          </div>
+          <div class="w3-row w3-padding">
+            <div class="marginform">
+              <div class="w3-full">
+                <table class="w3-table w3-bordered">
+                  <thead>
+                    <tr>
+                      <th>Created By</th>
+                      <th>Created On</th>
+                      <th>Note</th>
+                    </tr>
+                  </thead>
+                  <tbody *ngIf="listViewNotes.length == 0">
+                    <tr>
+                      <td>No Records</td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                  <tbody *ngIf="listViewNotes.length > 0">
+                    <tr *ngFor="let data of listViewNotes">
+                      <td>{{data.split('|~data~|')[0]}}</td>
+                      <td>{{data.split('|~data~|')[1]}}</td>
+                      <td>{{data.split('|~data~|')[2]}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

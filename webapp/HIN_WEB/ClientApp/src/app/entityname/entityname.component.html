@@ -1,0 +1,16 @@
+<div class="w3-full">
+  <label>{{getTextName(entityTypeId)}}</label>
+  <select class="w3-input w3-border" [(ngModel)]="entityTypeId" (change)="getEntityName($event)">
+    <option value="0" disabled>Select</option>
+    <option *ngFor="let data of listLeadGenType" value="{{data.Id}}">{{data.EntityType}}</option>
+  </select>
+</div>
+
+<div class="w3-full">
+  <label>{{getTextName(entityTypeId)}} Name</label>
+  <select class="w3-input w3-border" [(ngModel)]="entityId" (change)="sendEntityType($event)">
+    <option value="0" disabled>Select</option>
+    <option value="-1">+ Add New</option>
+    <option *ngFor="let data of listEntityName" value="{{data.Id}}">{{data.Name}}</option>
+  </select>
+</div>

@@ -1,0 +1,36 @@
+<div [hidden]="!toggleSide" [ngClass]="toggleSide ? 'w3-display-container w3-card w3-sidebar w3-bar-block w3-animate-right' : 'w3-display-container w3-card w3-sidebar w3-bar-block w3-animate-left'" style="width:60%;right:0px">
+  <div class="fa fa-delete w3-display-topright w3-red w3-padding" (click)="toggleSide=false;closeOutlet();">X</div>
+  <div class="w3-container w3-margin">
+    <router-outlet (activate)='onActivate($event)'
+                   (deactivate)='onDeactivate($event)'
+                   (attach)='onAttach($event)'
+                   (detach)='onDetach($event)' name="sidenav"></router-outlet>
+  </div>
+</div>
+<div class="w3-row minfullheight">
+  <div class="w3-col" style="width:150px;">
+    <div class="w3-bar-block w3-theme-gradient w3-text-white minfullheight">
+      <a href="#" class="w3-bar-item w3-button" style="height: 60px;">Admin</a>
+      <a [routerLink]="'dashboard'" routerLinkActive="active" class="w3-bar-item w3-button">Dashboard</a>
+      <a [routerLink]="'company'" routerLinkActive="active" class="w3-bar-item w3-button">Company</a>
+      <!--<a [routerLink]="'tenantuser'" routerLinkActive="active" class="w3-bar-item w3-button">Tenant User</a>
+      <a [routerLink]="'companyuser'" routerLinkActive="active" class="w3-bar-item w3-button">User</a>-->
+      <!-- <a href="#" class="w3-bar-item w3-button">Profile</a> -->
+    </div>
+  </div>
+  <div class="w3-rest">
+    <div class="w3-row w3-theme-gradient1 w3-text-white">
+      <div class="w3-right"><a routerLink="/login" class="w3-button">Log Out</a></div>
+    </div>
+    <div class="w3-row">
+      <div>
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</div>
+<!--<router-outlet (activate)='onActivate($event)'
+               (deactivate)='onDeactivate($event)'
+               (attach)='onAttach($event)'
+               (detach)='onDetach($event)' name="sidenav"></router-outlet>
+<button (click)="closeOutlet()">close</button>-->

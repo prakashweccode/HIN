@@ -1,0 +1,9 @@
+<div class="w3-container w3-margin">
+  <div class="w3-row">
+    <div class="w3-half">  <h3>Company Emails</h3></div>
+  </div>
+  <div class="w3-row">
+    <button class="w3-button w3-theme-gradient w3-round-large w3-text-white w3-left w3-margin-bottom" (click)="SyncCompany()">Sync</button>
+    <app-paginationgrid [gridConfig]="gridConfig" [isFilterEnabled]="true" [action]="'GetTenantUserList'" [pageSize]="10" [isPaginationEnabled]="true" [pageLengths]="pageLengths" [isGlobalSearchEnabled]="false" [filterOptions]="filterOptions" (rowClick)="navigateAction($event);"></app-paginationgrid>
+  </div>
+</div>

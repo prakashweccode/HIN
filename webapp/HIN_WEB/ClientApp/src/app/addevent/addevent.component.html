@@ -1,0 +1,511 @@
+<div class="w3-row">
+  <div class="w3-card w3-white w3-small w3-margin-right w3-margin-left w3-round-large w3-animate-zoom">
+    <br />
+    <div class="w3-row w3-padding w3-animate-opacity w3-secondary-l5 w3-border-top w3-border-bottom">
+      <div class="w3-left w3-xlarge">
+        <b>Event</b>
+      </div>
+      <div class="w3-row w3-left w3-container">
+        <div class="w3-row">
+          <label class="">
+            <b>Patient Name</b>
+          </label>
+        </div>
+        <div class="w3-row">
+          <label class="w3-small" style="cursor:pointer" (click)="editPatientModal()">
+            {{getPatientName(events.PatientBatchNumber)}} &nbsp;<i class="fa fa-link" style="color:red;"></i>
+          </label>
+        </div>
+      </div>
+      <!--<div class="w3-row w3-left w3-margin-left w3-container">
+        <div class="w3-row">
+          <label class="">
+            <b>Patient Number</b>
+          </label>
+        </div>
+        <div class="w3-row">
+          <label class="w3-small" style="cursor:pointer" (click)="editPatientNumberModal()">
+            {{getPatientNumber(events.PatientBatchNumber)}} &nbsp;<i class="fa fa-link" style="color:red;"></i>
+          </label>
+        </div>
+      </div>-->
+      <button class="w3-button w3-secondary w3-right w3-round-large w3-margin-right" (click)="cancel()">
+        <i class="fa fa-reply"></i>
+      </button>
+      <button class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="addEventCustomField()" permissionCheck="9.2.1">+ Add New Field</button>
+      <button class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="addEvent()" permissionCheck="9.2.2">+ Add new Event</button>
+    </div>
+    <div class="w3-panel w3-margin-top-small">
+      <div class="w3-row">
+        <div class="marginform">
+          <!--<div class="w3-row">
+        <div class="w3-full">
+          <label class="w3-right"><span class="w3-margin-right">Created On : </span></label>
+        </div>
+      </div>-->
+          <div class="w3-half w3-container">
+            <div class="w3-row">
+              <div class="w3-half" permissionCheck="9.2.3">
+                <label>Event Number</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="events.EventNumber" disabled="disabled" [class.w3-border-red]="checkValidation(number)" #number="ngModel" required />
+              </div>
+
+              <div class="w3-half w3-padding-left-10" permissionCheck="9.2.4">
+                <label>Event Name</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="events.EventName" [class.w3-border-red]="checkValidation(number)" #number="ngModel" required />
+              </div>
+            </div>
+
+            <div class="w3-row">
+
+              <div class="w3-half" permissionCheck="9.2.5">
+                <label>Funnel *</label>
+                <select class="w3-input w3-border" [(ngModel)]="events.PipelineGroupId" (change)="getPipeLineByPipeLineGroupId(events.PipelineGroupId)" [class.w3-border-red]="checkValidation(number)" #number="ngModel" required>
+                  <option [ngValue]="0" disabled>--Select Pipeline--</option>
+                  <option [ngValue]="-1">+ New Funnel</option>
+                  <option *ngFor="let pipeLineGroup of listPipeLineGroup" [ngValue]="pipeLineGroup.PipelineGroupId">{{pipeLineGroup.Name}}</option>
+                </select>
+              </div>
+              <div class="w3-half w3-padding-left-10" permissionCheck="9.2.6">
+                <label>Practice Name</label>
+                <select class="w3-input w3-border" [(ngModel)]="events.PracticeId">
+                  <option value="0" disabled>-select-</option>
+                  <option *ngFor="let data of lstOpportunities;" value="{{data.DealId}}">{{data.DealName}}</option>
+                </select>
+              </div>
+
+            </div>
+
+            <div class="w3-full" permissionCheck="9.2.5">
+              <label>Funnel stage</label>
+              <div class="sf-stage-selector">
+                <label class="{{selectedPipeIndex==i?'w3-display-container sf-stage-selector__stage sf-stage-selector__stage--current':'w3-display-container sf-stage-selector__stage'}} tooltip" (click)="selectedPipeIndex=i;events.PipelineId=pipeline.PipelineId" *ngFor="let pipeline of sortBy('DisplayOrder');let i = index">
+                  <span class="bottomtooltiptext">{{pipeline.Name}}</span>
+                  <i class="fa fa-angle-right w3-text-white fa-3x w3-display-right" style="margin-right: 6px;margin-top: -1px;"></i>
+                </label>
+              </div>
+            </div>
+
+            <div class="w3-row">
+              <div class="w3-half" permissionCheck="9.2.7">
+                <label>Patient Number</label>
+                <select class="w3-input w3-border" (dragover)="noAllowDrop($event)" [(ngModel)]="events.PatientBatchNumber">
+                  <option value="0" disabled>
+                    --select lead--
+                  </option>
+                  <option *ngFor="let data of lstLeads" value="{{data.LeadId}}">{{data.LeadNumber}}</option>
+                </select>
+              </div>
+              <div class="w3-half w3-padding-left-10" permissionCheck="9.2.8">
+                <label>Patient Number From EMR</label>
+                <select class="w3-input w3-border" (dragover)="noAllowDrop($event)" [(ngModel)]="events.PatientBatchNumber">
+                  <option value="0" disabled>
+                    --select lead--
+                  </option>
+                  <option *ngFor="let data of lstLeads" value="{{data.LeadId}}">{{data.BatchNumber}}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="w3-row">
+              <div class="w3-half" permissionCheck="9.2.9">
+                <label>Patient Name</label>
+                <select class="w3-input w3-border" (dragover)="noAllowDrop($event)" [(ngModel)]="events.PatientBatchNumber">
+                  <option value="0" disabled>
+                    --select lead--
+                  </option>
+                  <option *ngFor="let data of lstLeads" value="{{data.LeadId}}">{{data.LeadName}}</option>
+                </select>
+              </div>
+              <div class="w3-half w3-padding-left-10" (change)="colorChange($event.target.value)" permissionCheck="9.2.10">
+                <label>Paperwork Completion </label>
+                <app-customdropdown [getApiPath]="'CustomDropDown/GetEventPaperwork'" [isAddEnabled]="false" [selectedValue]="events.PaperworkCompletion" (saveSelectedValue)="chageEventPaperwork($event)" [saveApiPath]="'CustomDropDown/SaveEventPaperwork'"></app-customdropdown>
+              </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-half" permissionCheck="9.2.11">
+                <label>Case Number Lawyer</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="events.CaseNumber" />
+              </div>
+            </div>
+            <app-customsection [entityType]="eventType" [alignment]="'left'" [customFields]="customFields" [entityId]="events.Id" [customFieldValues]="leftEventCustomFieldValues"></app-customsection>
+
+          </div>
+          <div class="w3-half w3-container">
+
+            <div class="w3-row">
+              <div class="w3-half" permissionCheck="9.2.12">
+                <label>Event Type </label>
+                <app-customdropdown [getApiPath]="'CustomDropDown/GetEventType'" [isAddEnabled]="true" [selectedValue]="events.EventType" (saveSelectedValue)="chageEventType($event)" [saveApiPath]="'CustomDropDown/SaveEventType'"></app-customdropdown>
+              </div>
+
+              <div class="w3-half w3-padding-left-10" permissionCheck="9.2.13">
+                <label>Security Group *</label>
+                <select class="w3-input w3-border" [(ngModel)]="events.SecurityGroupId" [class.w3-border-red]="checkValidation(number)" #number="ngModel" required>
+                  <option value="0" disabled>-select-</option>
+                  <option *ngFor="let data of lstGroups;" value="{{data.UserGroupId}}">{{data.Name}}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="w3-row">
+              <div class="w3-half" permissionCheck="9.2.14">
+                <div>
+                  <label>Assigned To</label>
+                  <app-assignedtogrid [assignedToGrid]="assignedToGrid" (sendAssignedId)="selectAssignedValue($event)"></app-assignedtogrid>
+                </div>
+              </div>
+
+              <div class="w3-half w3-padding-left-10" permissionCheck="9.2.15">
+                <div>
+                  <div>
+                    <label>Created By</label>
+                    <app-createdby [createdby]="events.CreatedBy"></app-createdby>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="w3-row">
+              <div class="w3-half" permissionCheck="9.2.16">
+                <label>Status</label>
+                <app-customdropdown [getApiPath]="'CustomDropDown/GetServiceStatus'" [selectedValue]="events.StatusId" (saveSelectedValue)="selectedOpportunityStatus($event)" [saveApiPath]="'CustomDropDown/SaveServiceStatus'"></app-customdropdown>
+              </div>
+
+              <div class="w3-half w3-padding-left-10" permissionCheck="9.2.17">
+                <div>
+                  <label>Color</label>
+                  <div class="w3-row">
+                    <div class="w3-col s10"><input type="text" (dragover)="noAllowDrop($event)" class="w3-disabled w3-input w3-border" [(ngModel)]="events.Color" /></div>
+                    <div class="w3-col s2"><input class="color-picker" (dragover)="noAllowDrop($event)" value="{{events.Color ? events.Color : '#ffffff'}}" type="color" (change)="colorChange($event.target.value)" /></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="w3-row">
+              <div class="w3-half" permissionCheck="9.2.18">
+                <label>Event Started</label>
+                <input class="w3-input w3-border" placeholder="MM/DD/YYYY" type="date" [ngModel]="changeEstimateDateFormat(events.EventCreated)"
+                       (ngModelChange)="events.EventCreated = $event" />
+              </div>
+
+              <div class="w3-half w3-padding-left-10" permissionCheck="9.2.19">
+                <div>
+                  <label>Event Closed Date</label>
+                  <input class="w3-input w3-border" placeholder="MM/DD/YYYY" type="date" [ngModel]="changeEstimateDateFormat(events.EventClosedDate)"
+                         (ngModelChange)="events.EventClosedDate = $event" />
+                </div>
+              </div>
+            </div>
+
+
+            <div class="w3-full" permissionCheck="9.2.20">
+              <label>Remarks</label>
+              <textarea class="w3-input w3-border" rows="3" type="text" [(ngModel)]="events.Remarks"></textarea>
+            </div>
+            <app-customsection [entityType]="eventType" [alignment]="'right'" [customFields]="customFields" [entityId]="events.Id" [customFieldValues]="rightEventCustomFieldValues"></app-customsection>
+
+          </div>
+        </div>
+
+      </div>
+      <div>
+        <div class="w3-bar w3-container w3-center w3-margin-top w3-border-secondary">
+          <div class="w3-left">
+            <a [class]="activeContainer == 'tab1'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab1'" permissionCheck="9.2.21">Contact Information</a>
+            <a *ngIf="events.Id" [class]="activeContainer == 'tab2'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab2'"> Office Notes </a>
+            <a *ngIf="events.Id" [class]="activeContainer == 'tab4'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab4'"> Appointment({{lstAppointment.length}}) </a>
+            <a *ngIf="events.Id" [class]="activeContainer == 'tab5'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab5'"> Insurance </a>
+            <a *ngIf="events.Id" [class]="activeContainer == 'tab6'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab6'"> Referral({{lstReferral.length}}) </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="w3-white" *ngIf="activeContainer == 'tab6'">
+        <div class="w3-margin w3-animate-opacity">
+          <div class="w3-full">
+            <div class="w3-full">
+              <button type="button" (click)="addNewReferral()" class="w3-button w3-secondary w3-border w3-round-large w3-right"> Add Referral</button>
+            </div>
+          </div>
+          <div class="w3-full">
+            <table class="w3-table w3-bordered">
+              <thead>
+                <tr>
+                  <th>Number</th>
+                  <th>Referral Name</th>
+                  <th>Assignee</th>
+                  <th>Office Number</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of lstReferral">
+                  <td>{{data.ReferralNumber}}</td>
+                  <td>{{data.Name}}</td>
+                  <td>{{data.AssignedTo}}</td>
+                  <td>{{data.Telephone}}</td>
+                </tr>
+                <tr *ngIf="lstAppointment.length == 0">
+                  <td>No records</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="w3-container w3-white" *ngIf="activeContainer == 'tab5'">
+        <div class="w3-animate-opacity">
+          <!--<h6 class="w3-margin-0">Insurance Information</h6>-->
+          <div class="w3-row">
+            <div class="w3-half">
+              <div>
+                <label>Start Date</label>
+                <input class="w3-input w3-border" placeholder="MM/DD/YYYY" type="date" />
+              </div>
+            </div>
+            <div class="w3-half w3-padding-left-10">
+              <div>
+                <label>End Date</label>
+                <input class="w3-input w3-border" placeholder="MM/DD/YYYY" type="date" />
+              </div>
+            </div>
+          </div>
+          <div class="w3-row">
+            <div class="w3-full">
+              <div class="w3-half marginform">
+                <div class="w3-row">
+                  <div class="w3-full">
+                    <label>Primary:</label>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-half">
+                    <div>
+                      <label>Ins Co Addr</label>
+                      <input class="w3-input w3-border" type="text" />
+                    </div>
+                  </div>
+                  <div class="w3-half w3-padding-left-10">
+                    <div>
+                      <label>Subscriber ID</label>
+                      <input class="w3-input w3-border" type="text" />
+                    </div>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-half">
+                    <div>
+                      <label>Group</label>
+                      <input class="w3-input w3-border" type="text" />
+                    </div>
+                  </div>
+                  <div class="w3-half w3-padding-left-10">
+                    <div>
+                      <label>Policy</label>
+                      <input class="w3-input w3-border" type="text" />
+                    </div>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-half">
+                    <div>
+                      <label>Insured Name</label>
+                      <input class="w3-input w3-border" type="text" />
+                    </div>
+                  </div>
+                  <div class="w3-half w3-padding-left-10">
+                    <div>
+                      <label>Rel to Insured</label>
+                      <input class="w3-input w3-border" type="text" />
+                    </div>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-half">
+                    <div>
+                      <label>Insured Addr</label>
+                      <input class="w3-input w3-border" type="text" />
+                    </div>
+                  </div>
+                  <div class="w3-half w3-padding-left-10">
+                    <div>
+                      <label>Employer</label>
+                      <input class="w3-input w3-border" type="text" />
+                    </div>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-full">
+                    <label>Employer ID</label>
+                    <input class="w3-input w3-border" type="text" />
+                  </div>
+                </div>
+              </div>
+              <div class="w3-container w3-half marginform">
+                <div class="w3-row">
+                  <div class="w3-full">
+                    <label>Secondary:</label>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-half">
+                    <div>
+                      <label>Ins Co Addr</label>
+                      <input class="w3-input w3-border" type="text" />
+                    </div>
+                  </div>
+                  <div class="w3-half w3-padding-left-10">
+                    <div>
+                      <label>Subscriber ID</label>
+                      <input class="w3-input w3-border" type="text" />
+                    </div>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-half">
+                    <div>
+                      <label>Group</label>
+                      <input class="w3-input w3-border" type="text" />
+                    </div>
+                  </div>
+                  <div class="w3-half w3-padding-left-10">
+                    <div>
+                      <label>Policy</label>
+                      <input class="w3-input w3-border" type="text" />
+                    </div>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-half">
+                    <div>
+                      <label>Insured Name</label>
+                      <input class="w3-input w3-border" type="text" />
+                    </div>
+                  </div>
+                  <div class="w3-half w3-padding-left-10">
+                    <div>
+                      <label>Rel to Insured</label>
+                      <input class="w3-input w3-border" type="text" />
+                    </div>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-half">
+                    <div>
+                      <label>Insured Addr</label>
+                      <input class="w3-input w3-border" type="text" />
+                    </div>
+                  </div>
+                  <div class="w3-half w3-padding-left-10">
+                    <div>
+                      <label>Employer</label>
+                      <input class="w3-input w3-border" type="text" />
+                    </div>
+                  </div>
+                </div>
+                <div class="w3-row">
+                  <div class="w3-full">
+                    <label>Employer ID</label>
+                    <input class="w3-input w3-border" type="text" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="w3-white" *ngIf="activeContainer == 'tab4'">
+        <div class="w3-margin w3-animate-opacity">
+          <div class="w3-full">
+            <!--<h6 class="w3-left w3-margin-bottom-small w3-margin-top-small">Appointment</h6>-->
+            <div class="w3-full">
+              <button type="button" (click)="addNewAppointment(events)" class="w3-button w3-secondary w3-border w3-round-large w3-right"> Add Appointment</button>
+            </div>
+          </div>
+          <div class="w3-full">
+            <table class="w3-table w3-bordered">
+              <thead>
+                <tr>
+                  <th>Number</th>
+                  <th>Appointment Name</th>
+                  <th>Status</th>
+                  <th>Assignee</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of lstAppointment">
+                  <td><a class="hyper-link">{{data.ServiceNumber}}</a></td>
+                  <td><a class="hyper-link">{{data.ServiceName}}</a></td>
+                  <td>{{data.StatusId == null?'Inprogress':getServiceStatusById(data.StatusId)}}</td>
+                  <td>{{getAssignedNameById(data.AssignedTo)}}</td>
+                </tr>
+                <tr *ngIf="lstAppointment.length == 0">
+                  <td>No records</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="activeContainer == 'tab1'" class="w3-container w3-white" permissionCheck="9.2.21">
+        <div class="w3-row w3-padding ">
+          <div class="w3-full">
+            <app-contactinformation [dataSource]="contactInformations" [additionalInfo]="false" [entityType]="entityType" [entityId]="events.Id"></app-contactinformation>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="activeContainer == 'tab2'" class="w3-container w3-white">
+        <div class="w3-row w3-padding ">
+          <div class="w3-full">
+            <app-notesinfo [entityType]="entityType" [notesDataSource]="notesInfos" [entityId]="events.Id"></app-notesinfo>
+          </div>
+        </div>
+      </div>
+
+      <!--<div *ngIf="activeContainer == 'tab3'" class="w3-white ">
+  <div class="w3-margin w3-animate-opacity">-->
+      <!--<h6 class="w3-left w3-margin-0">One Drive</h6>-->
+      <!--<div class="w3-row" *ngIf="events.Id">
+        <app-onedrive-explorer [EmrNo]="events.BatchNumber"></app-onedrive-explorer>
+      </div>
+    </div>
+  </div>-->
+
+      <div class="w3-margin w3-right">
+        <button class="w3-button w3-border w3-round-large w3-margin-right-small" (click)="cancel()">Cancel</button>
+        <button class="w3-button w3-secondary w3-border w3-round-large" [disabled]="isSaveDisabled" (click)="saveEvent(events)">Save</button>
+      </div>
+      <br>
+    </div>
+
+
+  </div>
+</div>
+
+<div class="row">
+  <div *ngIf="addCustomToggle" class="w3-modal w3-show">
+    <div class="w3-modal-content w3-secondary w3-round-large w3-secondary-button">
+      <div class="w3-row">
+        <div class="w3-container w3-center">
+          <p>Add Field</p>
+          <span (click)="closeError()" class="w3-button w3-display-topright">&times;</span>
+        </div>
+        <app-addnewfield [addCustomToggle]="addCustomToggle" [entityTypeId]="entityType" (dataExist)="dataExist($event)" (saveSuccess)="saveSuccess($event)"></app-addnewfield>
+      </div>
+    </div>
+  </div>
+</div>

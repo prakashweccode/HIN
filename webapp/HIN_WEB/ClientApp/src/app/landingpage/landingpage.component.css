@@ -1,0 +1,166 @@
+.main-banner {
+  background: url(../../assets/images/Weccode-Banner-2.jpg) no-repeat;
+  height: 94vh;
+  width: 100vw;
+  background-size: cover;
+}
+#home {
+  width: 1240px;
+  margin: 0 auto;
+}
+
+.heading h3 {
+  color: #2da5be;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 1.1;
+}
+
+.forgot-password {
+  font-size: 63px;
+  font-weight: 900;
+  color: #141a4a;
+  line-height: 1.1;
+  margin-bottom: 0px;
+  margin-top: 20px;
+}
+
+.forgot-pwd-box-1 {
+  width: 50%;
+  float: left;
+}
+
+.forgot-pwd-box-2 {
+  width: 48%;
+  float: left;
+  margin-left: 2%;
+}
+
+.learmore-button {
+  float: left;
+  clear: both;
+  display: block;
+  margin-top: 50px;
+}
+
+.email-box {
+  margin-left: 20px;
+  margin-right: 40px;
+  background-color: rgba(20,26,74,0.2);
+  padding: 45px 40px;
+  border-radius: 35px;
+}
+
+  .email-box label {
+    display: block;
+    text-transform: uppercase;
+    color: #141a4a;
+    font-weight: 600;
+    padding-left: 17px;
+    padding-bottom: 5px;
+  }
+
+  .email-box input {
+    width: 95%;
+    border: none;
+    border-radius: 100px;
+    background-color: rgba(0,0,0,0.3);
+    padding: 13px;
+    color: #fff;
+  }
+
+.button-submit {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+  .button-submit button {
+    background-color: #96d3df;
+    border: none;
+    color: #181e52;
+    padding: 10px 55px;
+    border-radius: 100px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+.border-left {
+  display: block;
+  border: 2px solid #141a4a;
+  width: 60px;
+  margin-bottom: 30px;
+}
+
+.learmore-button a {
+  background-color: #96d3df;
+  color: #181e52;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 8px 30px;
+  border-radius: 100px;
+}
+
+.spacer {
+  height: 100px;
+}
+
+.footer {
+  float: left;
+  display: block;
+  clear: both;
+  margin-top: 30px;
+  width: 100%;
+}
+
+.footer-right img {
+  width: 230px;
+  text-align: right;
+}
+
+.footer-right {
+  text-align: right;
+  margin-right: 30px;
+}
+
+span.created-by {
+  position: relative;
+  top: -20px;
+  margin-right: 14px;
+  font-weight: 600;
+  color: #141a4a;
+}
+
+.sign-box h2 {
+  color: #141a4a;
+  text-align: center;
+  font-weight: 800;
+  font-size: 34px;
+  margin-top: 0px;
+}
+
+.sign-box input {
+  margin-bottom: 10px;
+  background-color: rgba(0,0,0,0.1);
+}
+
+.sign-box {
+  padding: 40px 60px;
+  margin: 0px 60px;
+}
+
+.login {
+  margin-bottom: 3px;
+}
+
+span.continue {
+  font-weight: 600;
+  color: #181e52;
+  font-size: 18px;
+}
+
+.text p {
+  color: #181e52;
+  line-height: 1.4;
+}

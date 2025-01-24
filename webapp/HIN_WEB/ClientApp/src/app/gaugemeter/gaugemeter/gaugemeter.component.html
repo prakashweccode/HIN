@@ -1,0 +1,10 @@
+<div class="w3-margin-right">
+  <rg-gauge-chart [canvasWidth]="canvasWidth"
+                  [needleValue]="needleValue"
+                  [centralLabel]="centralLabel"
+                  [options]="options"
+                  [name]="name"
+                  [bottomLabel]="''" >
+  </rg-gauge-chart>
+  <div class="gauge-chart-span w3-center" [style.width.px]='canvasWidth' *ngIf="canvasWidth > 100" >{{bottomLabel}}</div>
+</div>

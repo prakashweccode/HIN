@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: $NAMESPACE
+  name: ${CI_PROJECT_PATH_SLUG}-svc
+  annotations:
+    app.gitlab.com/app: ${CI_PROJECT_PATH_SLUG}
+    app.gitlab.com/env: ${CI_ENVIRONMENT_SLUG}
+  labels:
+    application: ${CI_ENVIRONMENT_SLUG}
+    release: ${CI_ENVIRONMENT_SLUG}
+spec:
+  selector:
+    app: ${CI_PROJECT_PATH_SLUG}
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      name: http
+    - protocol: TCP
+      port: 443
+      targetPort: 443
+      name: https
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: "synergy-issuer"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/whitelist-source-range: 0.0.0.0/0,::/0
+  name: ${CI_PROJECT_PATH_SLUG}-ingress
+  namespace: ${NAMESPACE}
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: ${HostDomain}
+    http:
+      paths:
+      - backend:
+          service:
+            name: ${CI_PROJECT_PATH_SLUG}-svc
+            port:
+              number: 80
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - ${HostDomain}
+    secretName: synergy-companyapi-tls
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: $NAMESPACE
+  name: ${CI_PROJECT_PATH_SLUG}
+  annotations:
+    app.gitlab.com/app: ${CI_PROJECT_PATH_SLUG}
+    app.gitlab.com/env: ${CI_ENVIRONMENT_SLUG}
+  labels:
+    app.kubernetes.io/name: ${CI_PROJECT_PATH_SLUG}
+    app.kubernetes.io/version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ${CI_PROJECT_PATH_SLUG}
+      version: v1
+  template:
+    metadata:
+      namespace: $NAMESPACE
+      labels:
+        app: ${CI_PROJECT_PATH_SLUG}
+        version: v1
+      annotations:
+        app.gitlab.com/app: ${CI_PROJECT_PATH_SLUG}
+        app.gitlab.com/env: ${CI_ENVIRONMENT_SLUG}
+    spec:
+      imagePullSecrets:
+        - name: gitlab-registry
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+      restartPolicy: Always
+      containers:
+        - name: ${CI_PROJECT_PATH_SLUG}
+          image: >-
+            $REGISTRY_IMAGE
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+     

@@ -1,0 +1,205 @@
+.w3-primary-l5 {
+  color: #000 !important;
+  background-color: #faf0fc !important
+}
+
+.w3-primary-l4 {
+  color: #000 !important;
+  background-color: #efcef4 !important
+}
+
+.w3-primary-l3 {
+  color: #000 !important;
+  background-color: #de9eea !important
+}
+
+.w3-primary-l2 {
+  color: #fff !important;
+  background-color: #ce6ddf !important
+}
+
+.w3-primary-l1 {
+  color: #fff !important;
+  background-color: #be3dd4 !important
+}
+
+.w3-primary-d1 {
+  color: #fff !important;
+  background-color: #8c239e !important
+}
+
+.w3-primary-d2 {
+  color: #fff !important;
+  background-color: #7c1f8d !important
+}
+
+.w3-primary-d3 {
+  color: #fff !important;
+  background-color: #6d1b7b !important
+}
+
+.w3-primary-d4 {
+  color: #fff !important;
+  background-color: #5d1769 !important
+}
+
+.w3-primary-d5 {
+  color: #fff !important;
+  background-color: #4e1358 !important
+}
+
+.w3-primary-light {
+  color: #000 !important;
+  background-color: #faf0fc !important
+}
+
+.w3-primary-dark {
+  color: #fff !important;
+  background-color: #4e1358 !important
+}
+
+.w3-primary-action {
+  color: #fff !important;
+  background-color: #4e1358 !important
+}
+
+.w3-primary {
+  color: #fff !important;
+  background-color: #9c27b0 !important
+}
+
+.w3-text-primary {
+  color: #9c27b0 !important
+}
+
+.w3-border-primary {
+  border-color: #9c27b0 !important
+}
+
+.w3-hover-primary:hover {
+  color: #fff !important;
+  background-color: #9c27b0 !important
+}
+
+.w3-hover-text-primary:hover {
+  color: #9c27b0 !important
+}
+
+.w3-hover-border-primary:hover {
+  border-color: #9c27b0 !important
+}
+
+
+.w3-secondary-l5, .w3-input {
+  color: #000 !important;
+  background-color: #faf0fc !important
+}
+
+.w3-secondary-l4 {
+  color: #000 !important;
+  background-color: #efcef4 !important
+}
+
+.w3-secondary-l3 {
+  color: #000 !important;
+  background-color: #de9eea !important
+}
+
+.w3-text-secondary-l3 {
+  color: #de9eea !important;
+}
+
+.w3-secondary-l2 {
+  color: #fff !important;
+  background-color: #ce6ddf !important
+}
+
+.w3-secondary-l1 {
+  color: #fff !important;
+  background-color: #be3dd4 !important
+}
+
+.w3-secondary-d1 {
+  color: #fff !important;
+  background-color: #8c239e !important
+}
+
+.w3-secondary-d2 {
+  color: #fff !important;
+  background-color: #7c1f8d !important
+}
+
+.w3-secondary-d3 {
+  color: #fff !important;
+  background-color: #6d1b7b !important
+}
+
+.w3-secondary-d4 {
+  color: #fff !important;
+  background-color: #5d1769 !important
+}
+
+.w3-secondary-d5 {
+  color: #fff !important;
+  background-color: #4e1358 !important
+}
+
+.w3-secondary-light {
+  color: #000 !important;
+  background-color: #faf0fc !important
+}
+
+.w3-secondary-dark {
+  color: #fff !important;
+  background-color: #4e1358 !important
+}
+
+.w3-secondary-action {
+  color: #fff !important;
+  background-color: #4e1358 !important
+}
+
+.w3-secondary {
+  color: #fff !important;
+  background-color: #9c27b0 !important
+}
+
+.w3-text-secondary {
+  color: #9c27b0 !important
+}
+
+.w3-border-secondary {
+  border-color: #9c27b0 !important
+}
+
+.w3-hover-secondary:hover {
+  color: #fff !important;
+  background-color: #9c27b0 !important
+}
+
+.w3-hover-text-secondary:hover {
+  color: #9c27b0 !important
+}
+
+.w3-hover-border-secondary:hover {
+  border-color: #9c27b0 !important
+}
+
+
+.loader {
+  border-top-color: #9c27b0 !important;
+}
+
+.pagination a.active {
+  background-color: #9c27b0 !important;
+  color: white;
+}
+
+.sf-stage-selector__stage {
+  background-color: #9c27b0 !important;
+}
+
+.sf-stage-selector__stage--current ~ .sf-stage-selector__stage {
+  background-color: #dcdddd !important;
+  color: #747678 !important;
+}

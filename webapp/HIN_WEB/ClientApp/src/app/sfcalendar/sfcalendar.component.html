@@ -1,0 +1,293 @@
+<div class="w3-row">
+  <div class="w3-card w3-white w3-small w3-margin w3-round-large w3-animate-zoom">
+    <div class="w3-container">
+      <div class="w3-full w3-margin-top">
+        <button *ngIf="modalEmpty" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="reloadCurrentRoute()"><i class="fa fa-refresh"></i></button>
+        <button *ngIf="modalEmpty" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="addDeal()" permissionCheck="6.3">+ Add Appointment</button>
+        <button *ngIf="modalEmpty" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="addNewTodo()" permissionCheck="6.2">+ Add To Do</button>
+
+
+
+        <div class="w3-dropdown-hover w3-round-large w3-right w3-secondary w3-margin-right-small">
+          <button class="w3-button w3-secondary w3-round-large">Office 365 Calendars</button>
+          <div class="w3-dropdown-content w3-bar-block w3-border w3-card">
+            <div class="w3-row w3-container w3-margin-top" *ngFor="let calendar of calendars?.value"><input type="checkbox" (change)="eventUpdate()" [(ngModel)]="calendar.isDefaultCalendar" /> {{calendar.name}}</div>
+          </div>
+        </div>
+
+        <div class="w3-right w3-margin-right-small">
+          <div class="w3-full" *ngIf="!authenticated" permissionCheck="10.5.2.1">
+            <button class="w3-button w3-round-large w3-secondary" permissionCheck="10.5.2.1" (click)="signIn()">Connect Office 365</button>
+          </div>
+          <div class="w3-full" *ngIf="authenticated" permissionCheck="10.5.2.1">
+            <span class="w3-tag w3-orange w3-text-white w3-round-large w3-padding w3-margin-right-small" permissionCheck="10.5.2.1" (click)="getCalendars()">Connected to office 365</span>
+            <button class="w3-button w3-round-large w3-secondary" (click)="signOut()">Disconnect</button>
+          </div>
+        </div>
+
+      </div>
+      <div class=" w3-row">
+        <calendar-header [(view)]="view" [(viewDate)]="viewDate" permissionCheck="6.1">
+        </calendar-header>
+      </div>
+     
+      <div>
+        <div *ngIf="addEvent && modalEmpty">
+          <div [style.left]="menuTopLeftPosition.x"
+               [style.top]="menuTopLeftPosition.y" class="dropdown-content">
+            <div><h5 class="w3-margin-left">Add Event</h5><a (click)="closeEventAdd()" class="w3-display-topright w3-button">x</a></div>
+            <a  permissionCheck="6.3" (click)="addNewTodo()">To Do</a>
+            <a (click)="addDeal()">Appointment</a>
+          </div>
+        </div>
+        
+        <div permissionCheck="6.1" (contextmenu)="hoursRightClick($event)" [ngSwitch]="view">
+          <mwl-calendar-month-view *ngSwitchCase="'month'"
+                                   class="custom-cal-month-view"
+                                   [viewDate]="viewDate"
+                                   [events]="events"
+                                   [refresh]="refresh"
+                                   [activeDayIsOpen]="activeDayIsOpen"
+                                   (dayClicked)="dayClicked($event.day)"
+                                   (eventClicked)="handleEvent('Clicked', $event.event)"
+                                   (eventTimesChanged)="eventTimesChanged($event)">
+          </mwl-calendar-month-view>
+          <mwl-calendar-week-view *ngSwitchCase="'week'"
+                                  [viewDate]="viewDate"
+                                  class="custom-cal-week-view"
+                                  [events]="events"
+                                  [refresh]="refresh"
+                                  (hourSegmentClicked)="hourSegmentClicked($event)"
+                                  (eventClicked)="handleEvent('Clicked', $event.event)"
+                                  (eventTimesChanged)="eventTimesChanged($event)">
+          </mwl-calendar-week-view>
+          <mwl-calendar-day-view *ngSwitchCase="'day'"
+                                 class="custom-cal-day-view"
+                                 [viewDate]="viewDate"
+                                 [events]="events"
+                                 [refresh]="refresh"
+                                 (hourSegmentClicked)="hourSegmentClicked($event)"
+                                 (eventClicked)="handleEvent('Clicked', $event.event)"
+                                 (eventTimesChanged)="eventTimesChanged($event)">
+          </mwl-calendar-day-view>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="toggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large w3-secondary-button">
+    <div class="w3-row">
+      <span (click)="closeToggle()" class="w3-button w3-display-topright">&times;</span>
+      <div class="w3-container w3-center">
+        <p>To Do</p>
+      </div>
+      <div class="w3-row w3-padding w3-tiny w3-primary-l4">
+        <div class="marginform">
+          <div class="w3-half w3-container">
+            <div class="w3-full" permissionCheck="6.2.1">
+              <label>To Do Name *</label>
+              <input class="w3-input w3-border" type="text" [(ngModel)]="todo.TodoName" [class.w3-border-red]="checkValidation(name)" #name="ngModel" required permissionCheck="6.2.1" />
+            </div>
+            <div class="w3-full" permissionCheck="6.2.2">
+              <label>To Do Subject *</label>
+              <input class="w3-input w3-border" type="text" [(ngModel)]="todo.Subject" [class.w3-border-red]="checkValidation(subject)" #subject="ngModel" required permissionCheck="6.2.2" />
+            </div>
+            <div class="w3-full" permissionCheck="6.2.3">
+              <label>Start Date</label>
+              <input class="w3-input w3-border" type="datetime-local" [ngModel]="changeFormatDate(todo.StartDate)"
+                     (ngModelChange)="todo.StartDate = $event" permissionCheck="6.2.3" />
+            </div>
+            <div class="w3-full" permissionCheck="6.2.4">
+              <label>End Date</label>
+              <input class="w3-input w3-border" type="datetime-local" [ngModel]="changeFormatDate(todo.EndDate)"
+                     (ngModelChange)="todo.EndDate = $event" permissionCheck="6.2.4" />
+            </div>
+            <div class="w3-full" permissionCheck="6.2.5">
+              <label>Funnel</label>
+              <select class="w3-input w3-border" [(ngModel)]="todo.PipelineGroupId" (change)="getPipeLineByPipeLineGroupId(todo.PipelineGroupId)" permissionCheck="6.2.5">
+                <option [ngValue]="0">--Select Pipeline--</option>
+                <option *ngFor="let pipeLineGroup of listPipeLineGroup" [ngValue]="pipeLineGroup.PipelineGroupId">{{pipeLineGroup.Name}}</option>
+              </select>
+            </div>
+            <div class="w3-full" permissionCheck="6.2.9">
+              <label>Funnel stage</label>
+              <div class="sf-stage-selector">
+                <label class="{{selectedPipeIndex==i?'w3-display-container sf-stage-selector__stage sf-stage-selector__stage--current':'w3-display-container sf-stage-selector__stage'}} tooltip" (click)="selectedPipeIndex=i;todo.PipelineId=pipeline.PipelineId" *ngFor="let pipeline of sortBy('DisplayOrder');let i = index">
+                  <span class="bottomtooltiptext">{{pipeline.Name}}</span>
+                  <i class="fa fa-angle-right w3-text-white fa-3x w3-display-right" style="margin-right: 6px;margin-top: -1px;"></i>
+                </label>
+              </div>
+            </div>
+
+            <div class="w3-full" permissionCheck="6.2.6">
+              <div class="w3-full"><label>Color</label></div>
+              <div class="w3-threequarter">
+                <input type="text" class="w3-disabled w3-input w3-border" [(ngModel)]="todo.Color"  permissionCheck="6.2.6"/>
+              </div>
+              <div class="w3-quarter">
+                <input class="color-picker" value="{{todo.Color ? todo.Color : '#ffffff'}}" type="color" (change)="colorChange($event.target.value)"  permissionCheck="6.2.6"/>
+              </div>
+            </div>
+          </div>
+          <div class="w3-half w3-container">
+            <div class="w3-full" permissionCheck="6.2.7">
+              <label>Assigned To</label>
+              <select class="w3-input w3-border" [(ngModel)]="todo.AssignedTo" permissionCheck="6.2.7">
+                <option *ngFor="let data of Users" value="{{data.UserId}}">{{data.FirstName}}</option>
+              </select>
+            </div>
+            <div class="w3-full" permissionCheck="6.2.8">
+              <label>Completed</label>
+              <select class="w3-input w3-border" [(ngModel)]="todo.CompletedBy" permissionCheck="6.2.8">
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+                <option value="3">In-Progress</option>
+              </select>
+            </div>
+            <div class="w3-full" permissionCheck="6.2.9">
+              <label>Notes</label>
+              <textarea class="w3-input w3-border" [(ngModel)]="todo.Notes" permissionCheck="6.2.9"></textarea>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="w3-container w3-padding w3-center">
+        <!--<button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeToggle()">Cancel</button>-->
+        <button class="w3-button w3-block w3-secondary" (click)="saveTodo(todo)" [disabled]="checkReqValidation(subject)||checkReqValidation(name)">Save</button>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="dealToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large w3-secondary-button">
+    <div class="w3-row">
+      <span (click)="closeDealToggle()" class="w3-button w3-display-topright">&times;</span>
+      <div class="w3-container w3-center">
+        <p>Opportunity Event</p>
+      </div>
+      <div class="w3-row w3-padding w3-tiny w3-primary-l4">
+        <div class="marginform">
+          <div class="w3-half w3-container">
+            <div class="w3-full" permissionCheck="6.3.1">
+              <label>Opportunity</label>
+              <select class="w3-input w3-border" [(ngModel)]="newDealContact.DealId" #selectedcontact (change)="getDealContacts(selectedcontact.value)" permissionCheck="6.3.1">
+                <option value="0" disabled="disabled">-select-</option>
+                <option *ngFor="let item of listOpportunities" value="{{item.DealId}}">{{item.DealName}}</option>
+              </select>
+            </div>
+            <div class="w3-full" permissionCheck="6.3.2">
+              <label>Contact</label>
+              <select class="w3-input w3-border" [(ngModel)]="newDealContact.ContactId" permissionCheck="6.3.2">
+                <option value="0" disabled="disabled">-select-</option>
+                <option *ngFor="let item of listContacts" value="{{item.Id}}">{{item.ContactName}}</option>
+              </select>
+            </div>
+            <div class="w3-full" permissionCheck="6.3.3">
+              <label>Event Name</label>
+              <input class="w3-input w3-border" [(ngModel)]="newDealContact.ContactName" type="text" permissionCheck="6.3.3" />
+            </div>
+            <!--<div class="w3-full">
+              <label>Subject *</label>
+              <input class="w3-input w3-border" type="text" />
+            </div>-->
+            <div class="w3-full" permissionCheck="6.3.4">
+              <label>Start Date</label>
+              <input class="w3-input w3-border" type="datetime-local" [ngModel]="changeFormatDate(newDealContact.StartDate)"
+                     (ngModelChange)="newDealContact.StartDate = $event" permissionCheck="6.3.4" />
+            </div>
+            <div class="w3-full" permissionCheck="6.3.5">
+              <label>End Date</label>
+              <input class="w3-input w3-border" type="datetime-local" [ngModel]="changeFormatDate(newDealContact.EndDate)"
+                     (ngModelChange)="newDealContact.EndDate = $event" permissionCheck="6.3.5" />
+            </div>
+
+            <div class="w3-full" permissionCheck="6.3.6">
+              <div class="w3-full"><label>Color</label></div>
+              <div class="w3-threequarter">
+                <input type="text" class="w3-disabled w3-input w3-border" [(ngModel)]="newDealContact.Color" permissionCheck="6.3.6" />
+              </div>
+              <div class="w3-quarter">
+                <input class="color-picker" type="color" value="{{newDealContact.Color ? newDealContact.Color : '#ffffff'}}" (change)="dealColorChange($event.target.value)" permissionCheck="6.3.6" />
+              </div>
+            </div>
+          </div>
+          <div class="w3-half w3-container">
+            <div class="w3-full" permissionCheck="6.3.7">
+              <label>Assigned To</label>
+              <select class="w3-input w3-border" [(ngModel)]="newDealContact.AssignedTo" permissionCheck="6.3.7">
+                <option *ngFor="let data of Users" value="{{data.UserId}}">{{data.FirstName}}</option>
+              </select>
+            </div>
+            <div class="w3-full" permissionCheck="6.3.8">
+              <label>Completed</label>
+              <select class="w3-input w3-border" [(ngModel)]="newDealContact.CompletedStatusId" permissionCheck="6.3.8">
+                <option value="1">Yes</option>
+                <option value="2">No</option>
+                <option value="3">In-Progress</option>
+              </select>
+            </div>
+            <div class="w3-full" permissionCheck="6.3.9">
+              <label>Notes</label>
+              <textarea class="w3-input w3-border" [(ngModel)]="newDealContact.Notes" permissionCheck="6.3.9"></textarea>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="w3-container w3-padding w3-center">
+        <!--<button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeDealToggle()">Cancel</button>-->
+        <button class="w3-button w3-block w3-secondary" (click)="saveDealEvent(newDealContact)">Save</button>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+
+<div *ngIf="officeToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large">
+    <div class="w3-container">
+      <span (click)="closeOfficeToggle()" class="w3-button w3-display-topright">&times;</span>
+      <div class="w3-white w3-small sfcenter w3-margin-top">
+        <div class="w3-margin w3-animate-opacity">
+          <div class="w3-row">
+            <h3 class="w3-container">Meeting Info</h3>
+          </div>
+          <div class="w3-row w3-padding">
+            <div class="marginform">
+              <h5>Meeting: (Priority:{{officeInfo?.officeData?.importance}})</h5>
+              <p><b>Start:</b> {{officeInfo?.officeData?.start?.dateTime | date: 'full'}} <b>End:</b> {{officeInfo?.officeData?.end?.dateTime | date: 'full'}}</p>
+              <p><b>Subject:</b> {{officeInfo?.officeData?.subject}}</p>
+              <p><b>Body:</b></p>
+              <div [innerHTML]="officeInfo?.officeData?.body.content"></div>
+              <p><span>Location:</span></p>
+              <div [innerHTML]="officeInfo?.officeData?.location?.displayName"></div>
+              <div *ngIf="officeInfo?.officeData?.attendees?.length>0">
+                <p><b>Attendees</b></p>
+                <ng-container *ngFor="let attendee of officeInfo?.officeData?.attendees">
+                  <p>
+                    {{attendee.emailAddress.name}} ({{attendee.emailAddress.address}})
+                  </p>
+                  <p>
+                    <b>Status:</b> ({{attendee.type}}) | <b>Response:</b> ({{attendee.status.response}} at {{attendee.status.time  | date: 'full' }})
+                  </p>
+                </ng-container>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

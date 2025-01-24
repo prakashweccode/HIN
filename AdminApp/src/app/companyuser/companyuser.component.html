@@ -1,0 +1,6 @@
+<div class="w3-container w3-margin">
+  <div class="w3-row">
+    <h3>Users</h3>
+  </div>
+  <app-paginationgrid [gridConfig]="gridConfig" [isFilterEnabled]="false" [action]="'GetCompanyUser'" [pageSize]="10" [isPaginationEnabled]="true" [pageLengths]="pageLengths" [isGlobalSearchEnabled]="false" (rowClick)="navigateAction($event);"></app-paginationgrid>
+</div>

@@ -1,0 +1,70 @@
+<div class="w3-full w3-border w3-border-secondary-l5 w3-margin-top">
+  <div class="w3-row w3-secondary-l5 w3-padding-medium w3-cursor"><div (click)="showPrimaryContact = !showPrimaryContact"><i [ngClass]="showPrimaryContact?'fa fa-angle-down' : 'fa fa-angle-right'"></i> <label class="w3-center"> Primary Contact</label></div></div>
+  <div class="w3-row w3-margin-medium" *ngIf="showPrimaryContact">
+    <div class="w3-row">
+      <div class="w3-half">
+        <label>Email *</label>
+        <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.Email" />
+      </div>
+      <div class="w3-half w3-padding-left-10">
+        <label>First Name *</label>
+        <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.FirstName" />
+      </div>
+    </div>
+
+    <div class="w3-row">
+      <div class="w3-half ">
+        <label>Middle Name</label>
+        <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.MiddleName" />
+      </div>
+      <div class="w3-half w3-padding-left-10">
+        <label>Second Middle Name</label>
+        <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.SecondMiddleName" />
+      </div>
+    </div>
+
+    <div class="w3-row">
+      <div class="w3-half ">
+        <label>Last Name</label>
+        <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.LastName" />
+      </div>
+      <div class="w3-half w3-padding-left-10">
+        <label>Second Last Name</label>
+        <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.SecondLastName" />
+      </div>
+    </div>
+
+    <div class="w3-row">
+      <div class="w3-half">
+        <label>Contact Title</label>
+        <div>
+          <app-customstringdropdown [getApiPath]="'CustomDropDown/GetContactTitle'" [selectedValue]="contactInfo.ContactTitle" (saveSelectedValue)="contactInfo.ContactTitle=$event" [saveApiPath]="'CustomDropDown/SaveContactTitle'"></app-customstringdropdown>
+        </div>
+      </div>
+      <div class="w3-half w3-padding-left-10">
+        <label>Cell Number *</label>
+        <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.CellNumber" />
+      </div>
+    </div>
+
+    <div class="w3-row">
+      <div class="w3-half">
+        <label>Extension</label>
+        <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.Extension" />
+      </div>
+      <div class="w3-half w3-padding-left-10">
+        <label>Office Number</label>
+        <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.OfficeNumber" />
+      </div>
+    </div>
+
+
+
+    <!--<div class="w3-half w3-padding-left-10">
+    <div>
+      <label>Website</label>
+      <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.Website" />
+    </div>
+  </div>-->
+  </div>
+</div>

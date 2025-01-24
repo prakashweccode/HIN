@@ -1,0 +1,172 @@
+
+<div class="w3-row w3-margin-bottom">
+  <div class="">
+    <div class="w3-display-middle">
+      <!--<div class="loader" *ngIf="isLoading">
+      </div>-->
+    </div>
+    <!--<div class="w3-padding w3-text-indigo" *ngIf="isLoading">Loading information, Please wait...</div>-->
+    <!--<div *ngIf="isSearchEnabled"><button type="button" (click)="filterData()">Search</button></div>-->
+    
+    <div style="overflow-x:auto">
+      <div class="w3-left">
+        <button class="w3-button w3-round-large w3-border w3-border-grey w3-tiny" (click)="clearAllFilter();"><!--<i class="fa fa-remove"></i>--> Clear All <i class="fa fa-filter" aria-hidden="true"></i></button>
+      </div>
+      <div *ngIf="allLead" class="w3-right marginform w3-margin-bottom-medium">
+        <input id="active" class="w3-check" type="checkbox" [ngModel]="" (ngModelChange)="checkAllLead($event)" name="leadinactive" />
+        <label for="active">&nbsp;All(Include Inactive)</label>
+      </div>
+      <div class="w3-right" *ngIf="enableSelectAll">
+        <button *ngIf="!selectAllToggle" class="w3-button w3-round-large w3-border w3-border-grey w3-tiny" (click)="selectAllData();"><i class="fa fa-check-circle-o" aria-hidden="true"></i> Select All</button>
+        <button *ngIf="selectAllToggle" class="w3-button w3-round-large w3-border w3-border-grey w3-tiny" (click)="unSelectAllData();"><i class="fa fa-times-circle-o" aria-hidden="true"></i> Unselect All</button>
+      </div>
+      <table *ngIf="!isResponsive" class="">
+        <thead>
+          <tr>
+            <th *ngIf="enableRowNumber">&nbsp;</th>
+            <th [gridPermissionCheck]="header.gridPermissionCheck" *ngFor="let header of gridHeaders; let i = index;">
+              <!--<ng-container *ngIf="header.isCheckBox">
+      <div class="w3-container w3-margin-bottom">
+        <input type="checkbox" />
+      </div>
+    </ng-container>-->
+              <div class="grid-header-column">
+                <div class="w3-input w3-border grid-filter-wrapper">
+                  <input type="date" placeholder="select" class="grid-filter-control w3-border-0 w3-input" [(ngModel)]="header.filter" *ngIf="header.serializeArray == null && header.dataType == 'date'" (change)="filterData()" />
+                  <input type="datetime" placeholder="select" class="grid-filter-control w3-border-0 w3-input" [(ngModel)]="header.filter" *ngIf="header.serializeArray == null && header.dataType == 'datetime'" (change)="filterData()" />
+                  <input type="text" placeholder="search" class="grid-filter-control w3-border-0 w3-input" [(ngModel)]="header.filter" *ngIf="header.serializeArray == null && (header.dataType == 'string' || header.dataType == 'time')" (keyup.enter)="filterData()" />
+                  <input type="number" placeholder="search" class="grid-filter-control w3-border-0 w3-input" [(ngModel)]="header.filter" *ngIf="header.serializeArray == null && header.dataType == 'number'" (keyup.enter)="filterData()" />
+                  <ng-container *ngIf="header.serializeArray != null">
+                    <select placeholder="select" class="grid-filter-control w3-border-0 w3-input" tabindex="18" [(ngModel)]="header.filter" (change)="filterData()">
+                      <option [ngValue]="0" disabled>select</option>
+                      <option *ngFor="let data of header.serializeArray" [ngValue]="data.id">{{data.Name}}</option>
+                    </select>
+                  </ng-container>
+                  <i class="fa fa-search gird-search-icon w3-text-secondary" *ngIf="header.serializeArray == null" (click)="filterData()"></i>
+                  <i class="fa fa-remove grid-clear-icon w3-text-secondary" *ngIf="!isSecurityEnabled" (click)="header.filter='';filterQuery=null;getData()"></i>
+                  <i class="fa fa-remove grid-clear-icon w3-text-secondary" *ngIf="isSecurityEnabled" (click)="header.filter='';filterQuery=null;getSecurityFilterQuery(userDetails.User.UserId)"></i>
+                </div>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <thead class="w3-text-secondary">
+          <tr>
+            <th *ngIf="enableRowNumber">S.No</th>
+            <ng-container *ngFor="let header of gridHeaders">
+              <th [gridPermissionCheck]="header.gridPermissionCheck" class="pointer cursor-p" (click)="sort(header.propertyName, reverse)">
+                {{header.displayName}}
+                <i class="fa" [ngClass]="{'fa-sort' : (order !== header.propertyName), 'fa-sort-asc' : (order === header.propertyName && reverse == true), 'fa-sort-desc' : (order === header.propertyName && reverse == false) }" aria-hidden="true"></i>
+              </th>
+            </ng-container>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of dataSource; let j = index;" #rowTemplate [ngClass]="(allLead && data.Inactive)?'w3-light-gray':''" [ngStyle]="data.isChecked ? {backgroundColor:'#c3cdfe'} : {backgroundColor:'#fff'}">
+            <td *ngIf="enableRowNumber">{{j+1}}</td>
+            <td [gridPermissionCheck]="header.gridPermissionCheck" *ngFor="let header of gridHeaders; let i = index;">
+              <div *ngIf="header.isCheckBox && i == 0">
+                <ng-container>
+                  <input class="w3-left w3-margin-right-small w3-margin-top-xsmall" type="checkbox" [checked]="selectDataRow(data.isChecked, rowTemplate)" (click)="selectChange(data, rowTemplate)" />
+                </ng-container>
+              </div>
+              <div *ngIf="header.displayName == 'Actions'" class="w3-text-indigo w3-opacity-min">
+                <ng-container *ngFor="let action of actions">
+                  <i class="fa {{action.icon}}" (click)="gridRowClick(data, action.name)" style='padding-right:10px;'></i>
+                </ng-container>
+              </div>
+              <ng-container *ngIf="header.displayName != 'Actions'">
+                <ng-container *ngIf="header.dataType == 'string'">
+                  <span [class]="header.className ? header.className : ''" *ngIf="header.secondPropertyName != '' && header.isLink">
+                    <a class="hyper-link" (click)="gridRowClick(data, 'navigation')"> {{(dataProcess(header.propertyName, data) == null ? '' :  dataProcess(header.propertyName, data)) + ' ' + (dataProcess(header.secondPropertyName, data) == null ? '' : dataProcess(header.secondPropertyName, data))}}</a>
+                  </span>
+                  <span [class]="header.className ? header.className : ''" *ngIf="header.secondPropertyName != '' && !header.isLink">
+                    {{(dataProcess(header.propertyName, data) == null ? '' :  dataProcess(header.propertyName, data)) + ' ' + (dataProcess(header.secondPropertyName, data) == null ? '' : dataProcess(header.secondPropertyName, data))}}
+                  </span>
+                  <span [class]="header.className ? header.className : ''" *ngIf="header.secondPropertyName == '' && header.isLink">
+                    <a class="hyper-link" (click)="gridRowClick(data, 'navigation')">{{dataProcess(header.propertyName, data)}}</a>
+                  </span>
+                  <span [class]="header.className ? header.className : ''" *ngIf="header.secondPropertyName == '' && !header.isLink">
+                    <span *ngIf="header.truncate">
+                      {{dataProcess(header.propertyName, data) | truncate : header.truncate}}
+                    </span>
+                    <span *ngIf="!(header.truncate)">
+                      {{dataProcess(header.propertyName, data)}}
+                    </span>
+                  </span>
+                </ng-container>
+                <span [class]="header.className ? header.className : ''" *ngIf="header.dataType == 'date'">
+                  {{ dataProcess(header.propertyName, data) ? (dataProcess(header.propertyName, data).split('T')[0] | date : 'MM/dd/yyyy') : (dataProcess(header.propertyName, data))}}
+                </span>
+                <span [class]="header.className ? header.className : ''" *ngIf="header.dataType == 'time'">
+                  {{ dataProcess(header.propertyName, data) ? (dataProcess(header.propertyName, data) | date : 'HH:mm') : (dataProcess(header.propertyName, data))}}
+                </span>
+                <span [class]="header.className ? header.className : ''" *ngIf="header.dataType == 'datetime'">
+                  {{ dataProcess(header.propertyName, data) ? (dataProcess(header.propertyName, data) | date : 'MM/dd/yyyy, HH:mm') : dataProcess(header.propertyName, data)}}
+                </span>
+                <span *ngIf="header.dataType == 'number'">
+                  <span [class]="header.className ? header.className : ''" [class.w3-yellow]="header.dataCondition == 'true' && dataProcess(header.propertyName, data) > 0" [class.w3-blue]="header.dataCondition == 'true' && dataProcess(header.propertyName, data) == 0" *ngIf="header.serializeArray == null">
+                    {{dataProcess(header.propertyName, data)}}
+                  </span>
+                  <span [class]="!header.className ? '' : (data.Status == 1 ? (header.className + ' w3-blue') : (header.className + ' w3-yellow'))" *ngIf="header.serializeArray != null">
+                    {{GetSerializedValue(header.serializeArray, dataProcess(header.propertyName, data))}}
+                  </span>
+                </span>
+              </ng-container>
+            </td>
+          </tr>
+          <tr *ngIf="!(dataSource) || dataSource.length == 0">
+            <td *ngIf="gridHeaders" [attr.colspan]="gridHeaders.length"><span class="w3-padding"> No Records Found.</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <br />
+    <div class="row" *ngIf="isPaginationEnabled">
+      <div *ngIf="totalCount>0" class="pagination">
+        <div class="border btn">Showing {{pager.startIndex + 1}} to {{pager.endIndex + 1}} of {{totalCount}} entries</div>
+      </div>
+      <div *ngIf="totalCount == 0">
+        <div class="border btn">Showing {{totalCount}} to {{totalCount}} of {{totalCount}} entries</div>
+      </div>
+    </div>
+    <br />
+    <div class="row" *ngIf="isPaginationEnabled && totalCount > 0">
+      <div class="column left">
+        <div class="pagination">
+          <div *ngFor="let pageOption of pageLengths">
+            <a [routerLink]="" (click)="pageLength(pageOption)" [ngClass]="{active:pageSize === pageOption}">{{pageOption}}</a>
+          </div>
+        </div>
+      </div>
+      <div class="column right">
+        <div class="pagination float-right">
+          <a [routerLink]="" (click)="setPage(1);startRange = 1;endRange = 10;">First</a>
+          <a [routerLink]="" (click)="setPage(pager.currentPage - 1)">Prev</a>
+          <ng-container *ngFor="let page of getPageNumber(startRange, endRange)">
+            <a [routerLink]="" *ngIf="page == startRange && startRange!=1 && page > 0" (click)="startRange = startRange - 10;endRange = endRange - 10;pager.currentPage=startRange;setPage(pager.currentPage)">...</a>
+            <a [routerLink]="" *ngIf="page >= startRange && page <= endRange && page > 0" (click)="setPage(page)" [ngClass]="{active:pager.currentPage === page}">{{page}}</a>
+            <a [routerLink]="" *ngIf="page == endRange && endRange!=pager.totalPages" (click)="startRange = startRange + 10;endRange = endRange + 10;pager.currentPage=startRange;setPage(pager.currentPage)">...</a>
+          </ng-container>
+          <a [routerLink]="" (click)="setPage(pager.currentPage + 1)">Next</a>
+          <a [routerLink]="" (click)="setPage(pager.totalPages);endRange = pager.totalPages; startRange= endRange -10;">Last</a>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="isPaginationEnabled && totalCount == 0">
+      <div class="column left">
+        &nbsp;
+      </div>
+      <div class="column right">
+        <div class="pagination float-right">
+          <a [routerLink]="">First</a>
+          <a [routerLink]="">Prev</a>
+          <a [routerLink]="" class="active">1</a>
+          <a [routerLink]="">Next</a>
+          <a [routerLink]="">Last</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="w3-margin-top">&nbsp;</div>
+</div>

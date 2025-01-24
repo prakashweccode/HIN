@@ -1,0 +1,81 @@
+<div class="w3-container w3-tiny w3-primary-l4">
+  <div class="w3-row w3-margin-bottom">
+    <div class="w3-half marginform">
+      <div class="w3-full">
+        <label>Name</label>
+        <input class="w3-input w3-border" [(ngModel)]="customField.PropertyName" type="text">
+      </div>
+      <div class="w3-full">
+        <label>Type</label>
+        <select class="w3-input w3-border" [(ngModel)]="customField.PropertyType" #selectedType (change)="typeChange(selectedType.value)">
+          <option *ngFor="let data of dbPropertyTypes" value="{{data.Id}}">{{data.Name}}</option>
+        </select>
+      </div>
+      <div class="w3-full">
+        <label>Column Size</label>
+        <select class="w3-input w3-border" [(ngModel)]="customField.ColumnSize">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+      </div>
+      <div class="w3-full w3-margin-top" *ngIf="showListItem">
+        <label>{{customField.PropertyType == 6 ? 'Dropdown Options':'Multi-Select Options'}}</label>
+        <div class="w3-padding w3-border w3-border-green">
+          <div class="w3-row w3-section" *ngFor="let listItem of lstCustomFieldListItems">
+            <div class="w3-col" style="width:10%;">
+              <button style="height:24px;" title="Remove" class="w3-button w3-padding-bottom-small w3-padding-top-small w3-round-medium w3-padding-left-xxlarge w3-padding-right-xxlarge w3-light-grey" (click)="deleteListItem(listItem);"><i class="fa fa-trash"></i></button>
+            </div>
+            <div class="w3-rest">
+              <input type="text" class="w3-input w3-border" [(ngModel)]="listItem.Description" />
+            </div>
+            <!--<div class="w3-col" style="width:10%;">
+          <button style="height:33px;" class="w3-button w3-light-grey"><i class="fa fa-check"></i></button>
+        </div>-->
+          </div>
+          <div><a class="hyper-link" (click)="addNewListItem()">+ Add New</a></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="w3-half marginform">
+      <div class="w3-half w3-container">
+        <div class="w3-full">
+          <label>Field properties</label>
+          <div class="w3-full w3-margin-top">
+            <!--<label><input class="w3-checkbox w3-border" [(ngModel)]="customField.IsVisible" type="checkbox" /> Visible</label>-->
+            <input id="isVisible" type="checkbox" [(ngModel)]="customField.IsVisible" />
+            <label for="isVisible">&nbsp;Visible</label>
+          </div>
+          <div class="w3-full w3-margin-top">
+            <!--<label><input class="w3-checkbox w3-border" [(ngModel)]="customField.IsRequired" type="checkbox" /> Required</label>-->
+            <input id="isRequired" type="checkbox" [(ngModel)]="customField.IsRequired" />
+            <label for="isRequired">&nbsp;Required</label>
+          </div>
+        </div>
+      </div>
+      <div class="w3-half w3-container">
+        <div class="w3-full">
+          <br />
+          <div class="w3-full w3-margin-top">
+            <!--<label><input class="w3-checkbox w3-border" [(ngModel)]="customField.IsImportant" type="checkbox" /> Important</label>-->
+            <input id="isImportant" type="checkbox" [(ngModel)]="customField.IsImportant" />
+            <label for="isImportant">&nbsp;Important</label>
+          </div>
+          <div class="w3-full w3-margin-top">
+            <!--<label><input class="w3-checkbox w3-border" [(ngModel)]="customField.IsRight" type="checkbox" /> Right</label>-->
+            <input id="isRight" type="checkbox" [(ngModel)]="customField.IsRight" />
+            <label for="isRight">&nbsp;Right</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="w3-container w3-padding w3-center">
+  <button type="button" (click)="saveCustomField(customField)" class="w3-button w3-block w3-secondary">Save</button>
+  <!--<button type="reset" (click)="cancelAddCustom()" class="w3-button w3-small w3-round-large w3-white w3-right w3-margin-right w3-border">Cancel</button>-->
+</div>
+

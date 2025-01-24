@@ -1,0 +1,7 @@
+<div *ngIf="!authenticated" permissionCheck="10.5.2.1">
+  <button class="w3-button w3-round-large w3-secondary" permissionCheck="10.5.2.1" (click)="signIn()">Connect Office 365</button>
+</div>
+<div *ngIf="authenticated" permissionCheck="10.5.2.1">
+  <span class="w3-tag w3-orange w3-text-white w3-round-large w3-padding w3-margin-right-small" permissionCheck="10.5.2.1" (click)="getCalendars()">Connected to office 365</span>
+  <button class="w3-button w3-round-large w3-secondary" (click)="signOut()">Disconnect</button>
+</div>

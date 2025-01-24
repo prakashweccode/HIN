@@ -1,0 +1,90 @@
+variables:
+  REGISTRY_IMAGE: $CI_REGISTRY_IMAGE:$CI_BUILD_REF
+stages:
+#  - cloneremote
+  - build
+  - deploy
+# cloneremote:
+#   stage: cloneremote
+#   image: google/cloud-sdk:latest
+#   services:
+#     - docker:dind
+#   script:
+#     - cat README.md
+#     - git clone $EXT_CI_URL
+#     - ls ComplianterApi/ComplianterAPI
+build:
+  only:
+    - main
+  stage: build
+  image: docker:stable
+  services:
+    - docker:dind
+  before_script:
+#    - apk add --update make ca-certificates openssl git
+    - apk add --update make ca-certificates openssl
+#    - git clone $EXT_CI_URL
+    - update-ca-certificates
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#    - cd ComplianterApi
+  script:
+    - >-
+      docker build -f DockerFile
+      --build-arg NUGET_REPOSITORY_URL=$CI_SERVER_URL/api/v4/groups/6870708/-/packages/nuget/index.json
+      --build-arg NUGET_USERNAME=gitlab-ci-token
+      --build-arg NUGET_PASSWORD=$CI_JOB_TOKEN
+      --tag $CI_REGISTRY_IMAGE:$CI_BUILD_REF
+      --tag $CI_REGISTRY_IMAGE:latest 
+      .
+    - docker push $REGISTRY_IMAGE
+    - docker push $CI_REGISTRY_IMAGE:latest
+  after_script:
+    - docker logout $CI_REGISTRY
+  artifacts:
+    paths:
+      - ${CI_PROJECT_PATH_SLUG}.tar
+.deploy:
+  variables:
+    #<project_name>-<project_id>-<environment>
+    NAMESPACE: ${CI_PROJECT_PATH_SLUG}-${CI_PROJECT_ID}-${CI_ENVIRONMENT_SLUG}
+  stage: deploy
+  image: google/cloud-sdk:latest
+  services:
+    - docker:dind
+  allow_failure: false
+  dependencies:
+    #- test
+    - build
+  before_script:
+    - apt-get update
+    - apt-get install kubectl gettext-base apt-transport-https gnupg2 curl --yes
+    - curl --insecure -o $HOME/.kube/config ${ConfigPath}
+    - cat $HOME/.kube/config
+    #- mkdir /mnt/disk/${CI_PROJECT_PATH_SLUG}
+    #- kubectl get ns --insecure-skip-tls-verify
+    - >-
+      envsubst < deploy/namespace.yaml 
+      | kubectl apply -f - ${SkipSecure}
+  script:
+    - echo "Deploy to ${CI_ENVIRONMENT_SLUG} server"
+    - curl --insecure -o $HOME/.kube/config ${ConfigPath}
+    #- kubectl get ns --insecure-skip-tls-verify
+    - >-
+      kubectl create secret docker-registry gitlab-registry --docker-server="$CI_REGISTRY" --docker-username="$CI_DEPLOY_USER" --docker-password="$CI_DEPLOY_PASSWORD" --docker-email="$GITLAB_USER_EMAIL" --dry-run=client -n $NAMESPACE -o yaml ${SkipSecure} | kubectl apply -f - ${SkipSecure}
+#    - >-
+    - kubectl delete deployment ${CI_PROJECT_PATH_SLUG} -n $NAMESPACE ${SkipSecure} || true
+    - >-
+      envsubst < manifest.yaml 
+      | kubectl apply -f - ${SkipSecure}
+  after_script:
+    - rm $HOME/.kube/config
+deploy_dev:
+  extends: .deploy
+  environment:
+    name: dev
+    url: https://dev.synergyframeworks.biz
+  only:
+    refs:
+      - main
+
+

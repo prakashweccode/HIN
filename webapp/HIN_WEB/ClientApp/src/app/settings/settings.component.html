@@ -1,0 +1,204 @@
+<div class="w3-row">
+  <div class="w3-card-2 w3-white w3-small w3-margin-right w3-margin-left w3-round-large">
+    <!--<div class="w3-margin w3-animate-opacity">
+    <h4 class=" w3-left w3-xlarge"><b>Settings</b></h4>
+    <div class="w3-right">
+      <button class="w3-button w3-right w3-secondary w3-round-large" (click)="cancel()"><i class="fa fa-reply"></i></button>
+    </div>
+  </div>-->
+    <br />
+    <div class="w3-container w3-margin-bottom  w3-animate-opacity w3-secondary-l5 w3-border-top w3-border-bottom">
+      <h4 class="w3-left w3-xlarge w3-margin-top-small w3-margin-bottom-small">
+        Settings
+      </h4>
+      <button class="w3-button w3-margin-top-small w3-margin-bottom-small w3-right w3-secondary w3-round-large" (click)="cancel()">
+        <i class="fa fa-reply"></i>
+      </button>
+    </div>
+    <div>
+      <div class="w3-bar w3-container w3-border-secondary">
+        <a permissionCheck="10.5.3" [class]="activeContainer == 'tab3'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab3'">User Profile</a>
+        <!--<a permissionCheck="10.5.1" [class]="activeContainer == 'tab1'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab1'">HIN</a>-->
+        <a permissionCheck="10.5.2" [class]="activeContainer == 'tab2'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab2'">Office 365</a>
+        <!--<a [class]="activeContainer == 'gmail'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'gmail'">Gmail Settings</a>-->
+      </div>
+    </div>
+
+
+    <div *ngIf="activeContainer == 'gmail'" class="w3-container w3-white">
+      <div class="w3-margin w3-animate-opacity">
+        <h6 class="w3-left">Gmail Settings </h6>
+        <div class="w3-row w3-padding ">
+          <div class="w3-full">
+            <div class="marginform">
+              <div class="w3-full">
+                <label>Gmail Id</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="user.GmailUserName" />
+              </div>
+              <div class="w3-full">
+                <label>Password</label>
+                <input class="w3-input w3-border" type="password" [(ngModel)]="user.GmailPassword" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w3-margin w3-right">
+          <button class="w3-button w3-secondary w3-border w3-round-large" (click)="updateUser(user)">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="activeContainer == 'tab1'" class="w3-container w3-white" permissionCheck="10.5.1">
+      <div class="w3-margin w3-animate-opacity">
+        <h6 class="w3-left">K9 ERP </h6>
+        <div class="w3-row w3-padding ">
+          <div class="w3-full">
+            <div class="marginform">
+              <div class="w3-full" permissionCheck="10.5.1.1">
+                <label>CompanyName*</label>
+                <input class="w3-input w3-border" type="text" permissionCheck="10.5.1.1" [(ngModel)]="k9erpsettings.ERPCompanyName" [class.w3-border-red]="checkValidation(companyname)" #companyname="ngModel" required />
+              </div>
+              <div class="w3-full" permissionCheck="10.5.1.2">
+                <label>Name*</label>
+                <input class="w3-input w3-border" type="text" permissionCheck="10.5.1.2" [(ngModel)]="k9erpsettings.ERPName" [class.w3-border-red]="checkValidation(erpname)" #erpname="ngModel" required />
+              </div>
+              <div class="w3-full" permissionCheck="10.5.1.3">
+                <label>Password*</label>
+                <input class="w3-input w3-border" type="password" permissionCheck="10.5.1.3" [(ngModel)]="k9erpsettings.ERPPassword" [class.w3-border-red]="checkValidation(erppassword)" #erppassword="ngModel" required />
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="w3-margin w3-right">
+          <button class="w3-button w3-border w3-round-large w3-margin-right-small" (click)="cancel()">Cancel</button>
+          <button class="w3-button w3-secondary w3-border w3-round-large" [disabled]="checkReqValidation(companyname)||checkReqValidation(erpname)||checkReqValidation(erppassword)" (click)="saveErpSetting(k9erpsettings)">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="activeContainer == 'tab2'" class="w3-container w3-white" permissionCheck="10.5.2">
+      <div class="w3-margin w3-animate-opacity">
+        <div class="w3-full">
+          <h6>Office 365 </h6>
+        </div>
+        <div class="w3-full" *ngIf="!authenticated" permissionCheck="10.5.2.1">
+          <button class="w3-button w3-round-large w3-secondary" permissionCheck="10.5.2.1" (click)="signIn()">Connect Office 365</button>
+        </div>
+        <div class="w3-full" *ngIf="authenticated" permissionCheck="10.5.2.1">
+          <span class="w3-tag w3-orange w3-text-white w3-round-large w3-padding w3-margin-right" permissionCheck="10.5.2.1" (click)="getCalendars()">Connected to office 365</span>
+          <button class="w3-button w3-round-large w3-secondary" (click)="signOut()">Disconnect</button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="activeContainer == 'tab3'" class="w3-white" permissionCheck="10.5.3">
+      <div class="w3-margin w3-animate-opacity">
+        <div class="w3-row w3-padding marginform">
+          <div class="w3-full">
+            <div class="w3-half">
+              <div class="w3-col s2">
+                <div class="container">
+                  <input type="file" style="display:none;" (change)="SelectFile(file);" accept="image/*" #file>
+                  <img src="assets\images\img_avatar3.png" class="w3-border image" style="height:100px;" />
+                  <div class="middle">
+                    <div class="text w3-primary w3-round-large w3-small w3-cursor" (click)="file.click();">Edit</div>
+                  </div>
+                </div>
+              </div>
+              <div class="w3-col s10">
+                <div class="w3-left w3-xlarge w3-margin-left-large w3-margin-top-3xlarge">
+                  <label>{{user.Name}}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="w3-row">
+            <div class="w3-full">
+              <label>A little about me..</label>
+              <textarea class="w3-input w3-border" [(ngModel)]="user.AboutMe"></textarea>
+            </div>
+          </div>
+
+          <div class="w3-row w3-margin-top-large">
+            <div class="w3-row">
+              <div class="w3-full w3-left w3-text-gray">
+                <h4>Basic Info </h4>
+              </div>
+            </div>
+
+            <div class="w3-row">
+              <div class="w3-half w3-margin-bottom-medium">
+                <div class="w3-full">
+                  <label>First Name</label>
+                  <input class="w3-input w3-border" type="text" [(ngModel)]="user.FirstName" />
+                </div>
+                <div class="w3-full">
+                  <label>User Name</label>
+                  <input class="w3-input w3-border" type="text" [(ngModel)]="user.UserName" />
+                </div>
+                <div class="w3-full">
+                  <label>Select Theme</label>
+                  <select class="w3-input w3-border" [(ngModel)]="themeId" permissionCheck="10.5.3.1">
+                    <option value="0">--Select Theme--</option>
+                    <option *ngFor="let theme of themes" [ngValue]="theme.Id">{{theme.Name}}</option>
+                  </select>
+                </div>
+                <!--<div class="w3-full">
+          <label>User Group</label>
+          <input class="w3-input w3-border" type="text" [(ngModel)]="user.GroupId" />
+        </div>-->
+                <div class="w3-full">
+                  <label>PhoneNumber</label>
+                  <input class="w3-input w3-border" type="text" [(ngModel)]="user.PhoneNumber" mask="(000) 000-0000" [showMaskTyped]="true" />
+                </div>
+              </div>
+              <div class="w3-half marginform w3-margin-bottom-medium w3-container">
+                <div class="w3-full">
+                  <label>Last Name</label>
+                  <input class="w3-input w3-border" type="text" [(ngModel)]="user.LastName" />
+                </div>
+                <div class="w3-full">
+                  <label>Password</label>
+                  <input class="w3-input w3-border" type="password" [(ngModel)]="user.Password" />
+                </div>
+
+                <div class="w3-full">
+                  <label>Email</label>
+                  <input class="w3-input w3-border" type="text" [(ngModel)]="user.Email" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="w3-row w3-margin-top-large">
+            <label>Edit Signature</label>
+            <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="user.EmailSignature"></angular-editor>
+          </div>
+          <div class="w3-half w3-margin-right">
+            <label>Digital signature</label>
+            <div *ngIf="!signPad()">
+              <app-signpad (image)="user.Signature = $event"></app-signpad>
+            </div>
+            <div *ngIf="signPad()">
+              <i class="fa fa-pencil-square w3-right w3-hover" style="height:20px; width:20px;" aria-hidden="true" (click)="toggleSignPad()"></i>
+              <img style="margin-left: 50px;" [src]="'data:image/jpg;base64,'+user.Signature" />
+            </div>
+
+          </div>
+        </div>
+
+
+        <div class="w3-row">
+          <div class="w3-full">
+            <div class="w3-margin w3-right">
+              <button class="w3-button w3-secondary w3-border w3-round-large" (click)="updateUser(user)">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br />
+  </div>
+</div>

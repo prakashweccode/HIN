@@ -1,0 +1,6 @@
+<div>
+  <select class="w3-input w3-border" [compareWith]="compareFn" [(ngModel)]="selectedAssignedName" (ngModelChange)="sendAssignedName(selectedAssignedName)">
+    <option [ngValue]="0" disabled>--Select--</option>
+    <option *ngFor="let assignedName of assignedNames" [ngValue]="assignedName">{{assignedName.Name}} ({{assignedName.Type}})</option>
+  </select>
+</div>

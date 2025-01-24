@@ -1,0 +1,59 @@
+
+<div class="w3-card-2 w3-white w3-small sfcenter marginform w3-round-large">
+  <div class="w3-container">
+
+    <h4 class="w3-xlarge w3-margin-top w3-margin-bottom w3-hover-primary w3-cursor" (click)="dropDownToggle=!dropDownToggle" [ngClass]="dropDownToggle?'w3-primary':''"><i class="w3-margin-bottom-xsmall w3-margin-left " [ngClass]="dropDownToggle?'fa fa-expand':'fa fa-compress'"></i> Lead Reports </h4>
+    <div *ngIf="dropDownToggle">
+
+      <ul class="w3-ul w3-border w3-margin-bottom w3-animate-zoom">
+        <li class="w3-hover-primary w3-cursor" (click)="gotoLeadReport()">Lead report by user</li>
+        <li class="w3-hover-primary w3-cursor" (click)="gotoLeadVendorReport()">Lead report by vendor</li>
+        <li class="w3-hover-primary w3-cursor" (click)="gotoLeadPartnerReport()">Lead report by partner</li>
+        <li class="w3-hover-primary w3-cursor" (click)="gotoLeadReferralReport()">Lead report by referral</li>
+        <li class="w3-hover-primary w3-cursor" (click)="gotoLeadEventReport()">Lead report by event</li>
+        <li class="w3-hover-primary w3-cursor" (click)="gotoLeadNetworkReport()">Lead report by network</li>
+
+      </ul>
+    </div>
+    <h4 class="w3-xlarge w3-margin-top w3-margin-bottom w3-hover-primary w3-cursor" (click)="dealDropDownToggle=!dealDropDownToggle" [ngClass]="dealDropDownToggle?'w3-primary':''"><i class="w3-margin-bottom-xsmall w3-margin-left " [ngClass]="dealDropDownToggle?'fa fa-expand':'fa fa-compress'"></i> Opportunity Reports </h4>
+    <div *ngIf="dealDropDownToggle">
+      <ul class="w3-ul w3-border w3-margin-bottom w3-animate-zoom">
+        <!--<li class="w3-hover-primary w3-cursor" (click)="gotoOpportunityrevenuereport()">Opportunity Actual Revenue</li>
+        <li class="w3-hover-primary w3-cursor" (click)="gotoOpportunitycostreport()">Opportunity Cost</li>-->
+        <li class="w3-hover-primary w3-cursor" (click)="gotoopportunitycostandcustomerreport()">Opportunity cost and customer acquisition cost</li>
+        <li class="w3-hover-primary w3-cursor" (click)="gotoopportunitydateprobability()">Opportunity date and probability</li>
+        <li class="w3-hover-primary w3-cursor" (click)="gotoOpportunityactualexpectedrevenue()">Opportunity actual revenue and expected sales</li>
+        <li class="w3-hover-primary w3-cursor" (click)="gotoOpportunityvariancereport()">Opportunity variance</li>
+        <li class="w3-hover-primary w3-cursor" (click)="gotoOpportunityclosingreport()">Opportunity closing date</li>
+        <!--<li class="w3-hover-primary w3-cursor" (click)="gotoLeadByOpportunity()">Opportunity Report By User</li>
+        <li class="w3-hover-primary w3-cursor" (click)="gotoDealByVendor()">Opportunity Report By Vendor</li>
+        <li class="w3-hover-primary w3-cursor" (click)="gotoDealByPartner()">Opportunity Report By Partner</li>
+        <li class="w3-hover-primary w3-cursor" (click)="gotoDealByReferral()">Opportunity Report By Referral</li>
+        <li class="w3-hover-primary w3-cursor" (click)="gotoDealByEvent()">Opportunity Report By Event</li>
+        <li class="w3-hover-primary w3-cursor" (click)="gotoDealByNetwork()">Opportunity Report By Network</li>
+        <li class="w3-hover-primary w3-cursor" (click)="gotoDealByStatus()">Opportunity Report By Status</li>-->
+      </ul>
+    </div>
+    <h4 class="w3-xlarge w3-margin-top w3-margin-bottom w3-hover-primary w3-cursor" (click)="userReportToggle=!userReportToggle" [ngClass]="userReportToggle?'w3-primary':''"><i class="w3-margin-bottom-xsmall w3-margin-left " [ngClass]="userReportToggle?'fa fa-expand':'fa fa-compress'"></i> User Reports </h4>
+    <div *ngIf="userReportToggle">
+      <ul class="w3-ul w3-border w3-margin-bottom w3-animate-zoom">
+        <li class="w3-hover-primary w3-cursor" (click)="goToClosedMomth()">% Of open opportunities closed by month</li>
+        <li class="w3-hover-primary w3-cursor" (click)="goToClosedQuarter()">% Of open Opportunities closed by quarter</li>
+        <li class="w3-hover-primary w3-cursor" (click)="goToFunnelProgress()">Funnel progress</li>
+        <li class="w3-hover-primary w3-cursor" (click)="goToWinLossBYRep()">Wins/losses by rep</li>
+        <li class="w3-hover-primary w3-cursor" (click)="goToWonDealsByRep()">Value of won opportunities by rep</li>
+        <li class="w3-hover-primary w3-cursor" (click)="goToDealsLostByReason()">Opportunities lost by reason</li>
+        <li class="w3-hover-primary w3-cursor" (click)="goToRevenueForecast()">Revenue forecast by rep</li>
+        <li class="w3-hover-primary w3-cursor" (click)="goToLeadConversion()">Lead conversion</li>
+        <li class="w3-hover-primary w3-cursor" (click)="goToWonOverTime()">Opportunities won over time</li>
+        <li class="w3-hover-primary w3-cursor" (click)="goToLostByReason()">Opportunities lost by reason</li>
+        <li class="w3-hover-primary w3-cursor" (click)="goToClosedByCustomer()">Proposals closed by customer</li>
+        <li class="w3-hover-primary w3-cursor" (click)="goToClosedByRep()">Proposals closed by rep</li>
+
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+

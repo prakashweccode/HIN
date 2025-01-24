@@ -1,0 +1,730 @@
+<!--<div class="w3-row w3-animate-zoom">
+  <div class="w3-card w3-margin-right w3-margin-left w3-margin-bottom w3-round-large w3-white">
+
+      <div #content></div>
+
+  </div>
+</div>-->
+<div class="w3-card w3-row w3-white w3-margin-right w3-margin-left w3-margin-bottom w3-round-large">
+  <br />
+  <div class="container-fluid">
+    <!----Top Bar Start---->
+    <div class="row">
+      <div class="template-head">
+        <div class="temp-name">
+          <h2>Template Name <span>*</span></h2>
+          <input type="text" [(ngModel)]="templateName" placeholder="Enter the name of Template Here...">
+        </div>
+        <div class="temp-control">
+          <p>
+            <button class="w3-button w3-round-large w3-border w3-margin-right-medium" (click)="SaveTemplate()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
+            <button class="w3-button w3-round-large w3-border w3-margin-right-medium" (click)="previewTemplate()"><i class="fa fa-eye" aria-hidden="true"></i>Preview</button>
+            <button class="w3-button w3-round-large w3-border" (click)="backToTemplates()">
+              <i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>
+              Back
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+    <!----Top Bar End---->
+    <!----Prebuilt Templates Start---->
+    <div class="row">
+      <div class="side-controls">
+        <h3>Builder Elements</h3>
+        <span draggable="true" (dragstart)="dragElement($event, 'image')"><i class="fa fa-file-image-o" aria-hidden="true"></i> Image</span>
+        <span draggable="true" (dragstart)="dragElement($event, 'header')"><i class="fa fa-header" aria-hidden="true"></i> Header</span>
+        <span draggable="true" (dragstart)="dragElement($event, 'text')"><i class="fa fa-font" aria-hidden="true"></i> Text Block</span>
+        <span draggable="true" (dragstart)="dragElement($event, 'button')"><i class="fa fa-hand-pointer-o" aria-hidden="true"></i> Button</span>
+        <span draggable="true" (dragstart)="dragElement($event, 'separator')"><i class="fa fa-arrows-h" aria-hidden="true"></i> Seperator</span>
+        <span draggable="true" (dragstart)="dragElement($event, 'list')"><i class="fa fa-list-ul" aria-hidden="true"></i> List</span>
+        <span draggable="true" (dragstart)="dragElement($event, 'video')"><i class="fa fa-file-video-o" aria-hidden="true"></i> Video</span>
+        <span draggable="true" (dragstart)="dragElement($event, 'links')"><i class="fa fa-share-alt" aria-hidden="true"></i> Social Links</span>
+        <span draggable="true" (dragstart)="dragElement($event, 'footer')"><i class="fa fa-facebook" aria-hidden="true"></i> Footer</span>
+        <h3 style="margin-top:20px;">Layouts</h3>
+        <div class="layout-wraps">
+          <span draggable="true" (dragstart)="dragElement($event, 'layout1')"><i class="fa fa-picture-o" style="float:left;" aria-hidden="true"></i><i class="fa fa-align-left" aria-hidden="true"></i></span>
+          <span draggable="true" (dragstart)="dragElement($event, 'layout2')"><i class="fa fa-align-left" style="float:left;" aria-hidden="true"></i><i class="fa fa-picture-o" aria-hidden="true"></i></span>
+          <span draggable="true" (dragstart)="dragElement($event, 'layout3')"><i class="fa fa-picture-o" style="float:left;" aria-hidden="true"></i><i class="fa fa-picture-o" aria-hidden="true"></i></span>
+          <span draggable="true" (dragstart)="dragElement($event, 'layout4')" style="padding: 10px 0px 25px 20px;">
+            <i class="fa fa-picture-o" style="float: left; font-size: 18px; margin-bottom: 2px;" aria-hidden="true"></i>
+            <i style="font-size: 18px; margin-bottom: 2px;" class="fa fa-picture-o" aria-hidden="true"></i>
+            <i class="fa fa-align-left" style=" float: left; font-size: 18px; margin-bottom: 2px;" aria-hidden="true"></i>
+            <i style="font-size: 18px; margin-bottom: 2px;" class="fa fa-align-left" aria-hidden="true"></i>
+            <!--<img src="\assets\images\layout4.png" alt="Template Designs">-->
+          </span>
+          <span draggable="true" (dragstart)="dragElement($event, 'layout5')"><i class="fa fa-align-left" style="float:left;" aria-hidden="true"></i><i class="fa fa-align-left" aria-hidden="true"></i></span>
+          <span draggable="true" (dragstart)="dragElement($event, 'layout6')"><i class="fa fa-object-group" aria-hidden="true"></i></span>
+        </div>
+      </div>
+
+      <div class="main-template-builder">
+        <div class="template-mid" id="template-mid" (drop)="dropElement($event)" (dragover)="allowDrop($event)">
+          <div *ngFor="let component of components; index as i" (drop)="changeElement($event, component)">
+            <div style="display:none;">{{assignIndex(component, i)}}</div>
+            <div *ngIf="component.name == 'layout1'">
+              <div class="w3-display-container" draggable="true" (dragstart)="moveElement($event, component)" #layout1 style="position:relative;display:block;border:1px dashed #ccc;margin-bottom:10px;">
+                <div class="w3-display-topleft w3-display-hover" style="opacity:0.5;">
+                  <button (click)="settings(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i style="font-size:20px;" class="fa fa-cog"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topmiddle w3-display-hover" style="opacity:0.5;">
+                  <button (click)="drag(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i class="fa fa-arrows" style="font-size:20px;" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                  <button type="button" (click)="deleteElement(i)" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;">
+                    <span style="font-size:15px;">x</span>
+                  </button>
+                </div>
+                <div style="width:100%;padding:0px 10px;display:inline-block;">
+                  <div *ngFor="let column of component.cols">
+                    <div *ngIf="column.name == 'image'">
+                      <div *ngIf="column.data == null" style="width: 47%;padding: 10px 10px;background: #f5f5f5;border-radius: 5px;margin: 10px;float:left;">
+                        <label style="display: block;cursor: pointer;">
+                          <i class="fa fa-file-image-o" aria-hidden="true" style="font-size: 80px;"></i>
+                          <p style="font-size: 12px;opacity: 0.5;">Click here to upload an image</p>
+                          <input #image style="display:none;" type="file" hidden="" accept="image/*" (change)="uploadPreview(image, column)">
+                        </label>
+                      </div>
+                      <div *ngIf="column.data" style="width: 47%;padding: 0px 10px;border-radius: 5px;margin: 10px;float:left;position:relative;">
+                        <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                          <button (click)="clearPreview(column)" style="cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;" type="button">x</button>
+                        </div>
+                        <img [src]="column.data" style="max-width:400px;max-height:140px;" alt="image" />
+                      </div>
+                    </div>
+                    <div *ngIf="column.name == 'editor'">
+                      <div style="width: 48%;padding: 0;border-radius: 5px;margin: 10px;float:left;">
+                        <div style="width:100%;height:140px;border:1px solid #ccc;padding-top:25px;cursor:pointer;" (click)="editTextBlock(column, component)" [innerHTML]="column.data">Click to edit</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="component.name == 'layout2'">
+              <div class="w3-display-container" draggable="true" (dragstart)="moveElement($event, component)" #layout2 style="position:relative;display:block;border:1px dashed #ccc;margin-bottom:10px;">
+                <!--<button type="button" (click)="deleteElement(i)" style="border-radius:50%;position:relative;top:-8px;right:-49.5%;border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;">X</button>-->
+                <div class="w3-display-topleft w3-display-hover" style="opacity:0.5;">
+                  <button (click)="settings(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i style="font-size:20px;" class="fa fa-cog"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topmiddle w3-display-hover" style="opacity:0.5;">
+                  <button (click)="drag(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i class="fa fa-arrows" style="font-size:20px;" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                  <button type="button" (click)="deleteElement(i)" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;">
+                    <span style="font-size:15px;">x</span>
+                  </button>
+                </div>
+                <div style="width:100%;padding:0px 10px;display:inline-block;">
+                  <div *ngFor="let column of component.cols">
+                    <div *ngIf="column.name == 'image'">
+                      <div *ngIf="column.data == null" style="width: 47%;padding: 10px 10px;background: #f5f5f5;border-radius: 5px;margin: 10px;float:left;">
+                        <label style="display: block;cursor: pointer;">
+                          <i class="fa fa-file-image-o" aria-hidden="true" style="font-size: 80px;"></i>
+                          <p style="font-size: 12px;opacity: 0.5;">Click here to upload an image</p>
+                          <input #image style="display:none;" type="file" hidden="" accept="image/*" (change)="uploadPreview(image, column)">
+                        </label>
+                      </div>
+                      <div *ngIf="column.data" style="width: 47%;padding: 0px 10px;border-radius: 5px;margin: 10px;float:left;position:relative;">
+                        <!--<button (click)="clearPreview(column)" style="border-radius: 50%; position: absolute; top: -10px; right: -4px;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;" type="button">x</button>-->
+                        <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                          <button (click)="clearPreview(column)" style="cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;" type="button">x</button>
+                        </div>
+                        <img [src]="column.data" style="max-width:400px;max-height:140px;" alt="image" />
+                      </div>
+                    </div>
+                    <div *ngIf="column.name == 'editor'">
+                      <div style="width: 48%;padding: 0;border-radius: 5px;margin: 10px;float:left;">
+                        <div style="width:100%;height:140px;border:1px solid #ccc;padding-top:25px;cursor:pointer;" (click)="editTextBlock(column, component)" [innerHTML]="column.data">Click to edit</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="component.name == 'layout3'">
+              <div class="w3-display-container" draggable="true" (dragstart)="moveElement($event, component)" #layout3 style="position:relative;display:block;border:1px dashed #ccc;margin-bottom:10px;">
+                <!--<button type="button" (click)="deleteElement(i)" style="border-radius:50%;position:relative;top:-8px;right:-49.5%;border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;">X</button>-->
+                <div class="w3-display-topleft w3-display-hover" style="opacity:0.5;">
+                  <button (click)="settings(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i style="font-size:20px;" class="fa fa-cog"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topmiddle w3-display-hover" style="opacity:0.5;">
+                  <button (click)="drag(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i class="fa fa-arrows" style="font-size:20px;" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                  <button type="button" (click)="deleteElement(i)" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;">
+                    <span style="font-size:15px;">x</span>
+                  </button>
+                </div>
+                <div style="width:100%;padding:0px 10px;display:inline-block;">
+                  <div *ngFor="let column of component.cols">
+                    <div *ngIf="column.name == 'image'">
+                      <div *ngIf="column.data == null" style="width: 47%;padding: 10px 10px;background: #f5f5f5;border-radius: 5px;margin: 10px;float:left;">
+                        <label style="display: block;cursor: pointer;">
+                          <i class="fa fa-file-image-o" aria-hidden="true" style="font-size: 80px;"></i>
+                          <p style="font-size: 12px;opacity: 0.5;">Click here to upload an image</p>
+                          <input #image style="display:none;" type="file" hidden="" accept="image/*" (change)="uploadPreview(image, column)">
+                        </label>
+                      </div>
+                      <div *ngIf="column.data" style="width: 47%;padding: 0px 10px;border-radius: 5px;margin: 10px;float:left;position:relative;">
+                        <!--<button (click)="clearPreview(column)" style="border-radius: 50%; position: absolute; top: -10px; right: -4px;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;" type="button">x</button>-->
+                        <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                          <button (click)="clearPreview(column)" style="cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;" type="button">x</button>
+                        </div>
+                        <img [src]="column.data" style="max-width:400px;max-height:140px;" alt="image" />
+                      </div>
+                    </div>
+                    <div *ngIf="column.name == 'editor'">
+                      <div style="width: 48%;padding: 0;border-radius: 5px;margin: 10px;float:left;">
+                        <div style="width:100%;height:140px;border:1px solid #ccc;padding-top:25px;cursor:pointer;" (click)="editTextBlock(column, component)" [innerHTML]="column.data">Click to edit</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="component.name == 'layout4'">
+              <div class="w3-display-container" draggable="true" (dragstart)="moveElement($event, component)" #layout4 style="position:relative;display:block;border:1px dashed #ccc;margin-bottom:10px;">
+                <!--<button type="button" (click)="deleteElement(i)" style="border-radius:50%;position:relative;top:-8px;right:-49.5%;border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;">X</button>-->
+                <div class="w3-display-topleft w3-display-hover" style="opacity:0.5;">
+                  <button (click)="settings(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i style="font-size:20px;" class="fa fa-cog"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topmiddle w3-display-hover" style="opacity:0.5;">
+                  <button (click)="drag(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i class="fa fa-arrows" style="font-size:20px;" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                  <button type="button" (click)="deleteElement(i)" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;">
+                    <span style="font-size:15px;">x</span>
+                  </button>
+                </div>
+                <div style="width:100%;padding:10px;display:inline-block">
+                  <div *ngFor="let column of component.cols">
+                    <div *ngIf="column.name == 'image'">
+                      <div *ngIf="column.data == null" style="width: 47%;padding: 10px 10px;background: #f5f5f5;border-radius: 5px;margin: 10px;float:left;">
+                        <label style="display: block;cursor: pointer;">
+                          <i class="fa fa-file-image-o" aria-hidden="true" style="font-size: 80px;"></i>
+                          <p style="font-size: 12px;opacity: 0.5;">Click here to upload an image</p>
+                          <input #image style="display:none;" type="file" hidden="" accept="image/*" (change)="uploadPreview(image, column)">
+                        </label>
+                      </div>
+                      <div *ngIf="column.data" style="width: 47%;padding: 0px 10px;border-radius: 5px;margin: 10px;float:left;position:relative;">
+                        <!--<button (click)="clearPreview(column)" style="border-radius: 50%; position: absolute; top: -10px; right: -4px;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;" type="button">x</button>-->
+                        <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                          <button (click)="clearPreview(column)" style="cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;" type="button">x</button>
+                        </div>
+                        <img [src]="column.data" style="max-width:400px;max-height:140px;" alt="image" />
+                      </div>
+                    </div>
+                    <div *ngIf="column.name == 'editor'">
+                      <div style="width: 47%;padding: 0;border-radius: 5px;margin: 10px;float:left;">
+                        <div style="width:100%;height:140px;border:1px solid #ccc;padding-top:25px;cursor:pointer;" (click)="editTextBlock(column, component)" [innerHTML]="column.data">Click to edit</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="component.name == 'layout5'">
+              <div class="w3-display-container" draggable="true" (dragstart)="moveElement($event, component)" #layout5 style="position:relative;display:block;border:1px dashed #ccc;margin-bottom:10px;">
+                <!--<button type="button" (click)="deleteElement(i)" style="border-radius:50%;position:relative;top:-8px;right:-49.5%;border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;">X</button>-->
+                <div class="w3-display-topleft w3-display-hover" style="opacity:0.5;">
+                  <button (click)="settings(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i style="font-size:20px;" class="fa fa-cog"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topmiddle w3-display-hover" style="opacity:0.5;">
+                  <button (click)="drag(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i class="fa fa-arrows" style="font-size:20px;" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                  <button type="button" (click)="deleteElement(i)" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;">
+                    <span style="font-size:15px;">x</span>
+                  </button>
+                </div>
+                <div style="width:100%;padding:0px 10px;display:inline-block;">
+                  <div *ngFor="let column of component.cols">
+                    <div *ngIf="column.name == 'image'">
+                      <div *ngIf="column.data == null" style="width: 47%;padding: 10px 10px;background: #f5f5f5;border-radius: 5px;margin: 10px;float:left;">
+                        <label style="display: block;cursor: pointer;">
+                          <i class="fa fa-file-image-o" aria-hidden="true" style="font-size: 80px;"></i>
+                          <p style="font-size: 12px;opacity: 0.5;">Click here to upload an image</p>
+                          <input #image style="display:none;" type="file" hidden="" accept="image/*" (change)="uploadPreview(image, column)">
+                        </label>
+                      </div>
+                      <div *ngIf="column.data" style="width: 47%;padding: 0px 10px;border-radius: 5px;margin: 10px;float:left;position:relative;">
+                        <!--<button (click)="clearPreview(column)" style="border-radius: 50%; position: absolute; top: -10px; right: -4px;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;" type="button">x</button>-->
+                        <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                          <button (click)="clearPreview(column)" style="cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;" type="button">x</button>
+                        </div>
+                        <img [src]="column.data" style="max-width:400px;max-height:140px;" alt="image" />
+                      </div>
+                    </div>
+                    <div *ngIf="column.name == 'editor'">
+                      <div style="width: 47%;padding: 0;border-radius: 5px;margin: 10px;float:left;">
+                        <div style="width:100%;height:140px;border:1px solid #ccc;padding-top:25px;cursor:pointer;" (click)="editTextBlock(column, component)" [innerHTML]="column.data">Click to edit</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="component.name == 'layout6'">
+              <div class="w3-display-container" draggable="true" (dragstart)="moveElement($event, component)" #layout6 style="position:relative;display:block;border:1px dashed #ccc;margin-bottom:10px;">
+                <!--<button type="button" (click)="deleteElement(i)" style="border-radius:50%;position:relative;top:-8px;right:-49.5%;border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;">X</button>-->
+                <div class="w3-display-topleft w3-display-hover" style="opacity:0.5;">
+                  <button (click)="settings(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i style="font-size:20px;" class="fa fa-cog"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topmiddle w3-display-hover" style="opacity:0.5;">
+                  <button (click)="drag(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i class="fa fa-arrows" style="font-size:20px;" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                  <button type="button" (click)="deleteElement(i)" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;">
+                    <span style="font-size:15px;">x</span>
+                  </button>
+                </div>
+                <div style="width:100%;padding:0px 10px;min-height:100px;">
+
+                </div>
+              </div>
+            </div>
+            <div *ngIf="component.name == 'image'">
+              <div class="w3-display-container" draggable="true" (dragstart)="moveElement($event, component)" #dvImage style="position: relative; display: inline-block;background: #f5f5f5; border: 1px dashed #ccc; margin-bottom: 10px; width: 100%; padding: 5px;">
+                <!--<button type="button" (click)="deleteElement(i)" style="border-radius:50%;position:absolute;top:-10px;right:-4px;border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;">X</button>-->
+                <div class="w3-display-topleft w3-display-hover" style="opacity:0.5;">
+                  <button (click)="settings(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i style="font-size:20px;" class="fa fa-cog"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topmiddle w3-display-hover" style="opacity:0.5;">
+                  <button (click)="drag(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i class="fa fa-arrows" style="font-size:20px;" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                  <button type="button" (click)="deleteElement(i)" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;">
+                    <span style="font-size:15px;">x</span>
+                  </button>
+                </div>
+                <div *ngIf="component.data == null" style="padding: 10px 10px;background: #f5f5f5;border-radius: 5px;margin: 10px;">
+                  <label style="display: block;cursor: pointer;">
+                    <i class="fa fa-file-image-o" aria-hidden="true" style="font-size: 80px;"></i>
+                    <p style="font-size: 12px;opacity: 0.5;">Click here to upload an image</p>
+                    <input #image style="display:none;" type="file" hidden="" accept="image/*" (change)="uploadPreview(image, component)">
+                  </label>
+                </div>
+                <div *ngIf="component.data" style="padding: 0px 10px;border-radius: 5px;margin: 10px;float:left;position:relative;">
+                  <!--<button (click)="clearPreview(component)" style="border-radius: 50%; position: absolute; top: -10px; right: -4px;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;" type="button">x</button>-->
+                  <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                    <button (click)="clearPreview(component)" style="cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;" type="button">x</button>
+                  </div>
+                  <img [src]="component.data" style="max-width:100%;max-height:175px;" alt="image" />
+                </div>
+
+                <!--<label style="display: block;cursor: pointer;">
+                  <i class="fa fa-file-image-o" aria-hidden="true" style="font-size: 80px;"></i>
+                  <p style="font-size: 12px;opacity: 0.5;">Click here to upload an image</p>
+                  <input style="display:none;" type="file" hidden="">
+                </label>-->
+              </div>
+            </div>
+            <div *ngIf="component.name == 'header'">
+              <div class="w3-display-container" draggable="true" (dragstart)="moveElement($event, component)" #dvHeaderWrapper style="position:relative;display:block;border:1px dashed #ccc;margin-bottom:10px;width:100%;">
+                <!--<button type="button" (click)="deleteElement(i)" style="border-radius:50%;position:absolute;top:-10px;right:-4px;border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;">X</button>-->
+                <div class="w3-display-topleft w3-display-hover" style="opacity:0.5;">
+                  <button (click)="settings(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i style="font-size:20px;" class="fa fa-cog"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topmiddle w3-display-hover" style="opacity:0.5;">
+                  <button (click)="drag(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i class="fa fa-arrows" style="font-size:20px;" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                  <button type="button" (click)="deleteElement(i)" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;">
+                    <span style="font-size:15px;">x</span>
+                  </button>
+                </div>
+                <div style="width:100%;">
+                  <!--<input type="text" style="display: block;border: none;border-bottom: 1px solid #ccc;padding: 10px;background: transparent;width: 100%;" placeholder="Enter heading here..." />-->
+                  <div style="width:100%;height:75px;border:1px solid #ccc;padding-top:25px;cursor:pointer;" (click)="editTextBlock(component, component)" [innerHTML]="component.data">Click to edit</div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="component.name == 'text'">
+              <div class="w3-display-container" draggable="true" (dragstart)="moveElement($event, component)" #dvText style="position:relative;display:block;border:1px dashed #ccc;margin-bottom:10px;width:100%;padding:5px;">
+                <!--<button type="button" (click)="deleteElement(i)" style="border-radius:50%;position:absolute;top:-10px;right:-4px;border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;">X</button>-->
+                <div class="w3-display-topleft w3-display-hover" style="opacity:0.5;">
+                  <button (click)="settings(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i style="font-size:20px;" class="fa fa-cog"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topmiddle w3-display-hover" style="opacity:0.5;">
+                  <button (click)="drag(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i class="fa fa-arrows" style="font-size:20px;" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                  <button type="button" (click)="deleteElement(i)" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;">
+                    <span style="font-size:15px;">x</span>
+                  </button>
+                </div>
+                <div style="width:100%;height:150px;border:1px solid #ccc;padding-top:25px;cursor:pointer;" (click)="editTextBlock(component, component)" [innerHTML]="component.data">Click to edit</div>
+              </div>
+            </div>
+            <div *ngIf="component.name == 'button'">
+              <div class="w3-display-container" draggable="true" (dragstart)="moveElement($event, component)" #dvButton style="position:relative;display:block;border:1px dashed #ccc;margin-bottom:10px;width:100%;">
+                <!--<button type="button" (click)="deleteElement(i)" style="border-radius:50%;position:absolute;top:-10px;right:-4px;border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;">X</button>-->
+                <div class="w3-display-topleft w3-display-hover" style="opacity:0.5;">
+                  <button (click)="settings(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i style="font-size:20px;" class="fa fa-cog"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topmiddle w3-display-hover" style="opacity:0.5;">
+                  <button (click)="drag(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i class="fa fa-arrows" style="font-size:20px;" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                  <button type="button" (click)="deleteElement(i)" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;">
+                    <span style="font-size:15px;">x</span>
+                  </button>
+                </div>
+                <div style="width:100%;">
+                  <input type="button" value="Button" style="background-color: #2196F3; border: none; padding: 10px; border-radius: 8px; color: #fff;" />
+                </div>
+              </div>
+            </div>
+            <div *ngIf="component.name == 'separator'">
+              <div class="w3-display-container" draggable="true" (dragstart)="moveElement($event, component)" #dvSeparator style="position:relative;display:block;border:1px dashed #ccc;margin-bottom:10px;width:100%;">
+                <!--<button type="button" (click)="deleteElement(i)" style="border-radius:50%;position:absolute;top:-10px;right:-4px;border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;">X</button>-->
+                <div class="w3-display-topleft w3-display-hover" style="opacity:0.5;">
+                  <button (click)="settings(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i style="font-size:20px;" class="fa fa-cog"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topmiddle w3-display-hover" style="opacity:0.5;">
+                  <button (click)="drag(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i class="fa fa-arrows" style="font-size:20px;" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                  <button type="button" (click)="deleteElement(i)" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;">
+                    <span style="font-size:15px;">x</span>
+                  </button>
+                </div>
+                <hr style="margin:15px 0px;" />
+              </div>
+            </div>
+            <div *ngIf="component.name == 'list'">
+              <div class="w3-display-container" draggable="true" (dragstart)="moveElement($event, component)" #dvList style="position:relative;display:block;border:1px dashed #ccc;margin-bottom:10px;width:100%;">
+                <!--<button type="button" (click)="deleteElement(i)" style="border-radius:50%;position:relative;top:-12px;right:-49.5%;border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;">X</button>-->
+                <div class="w3-display-topleft w3-display-hover" style="opacity:0.5;">
+                  <button (click)="settings(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i style="font-size:20px;" class="fa fa-cog"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topmiddle w3-display-hover" style="opacity:0.5;">
+                  <button (click)="drag(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i class="fa fa-arrows" style="font-size:20px;" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                  <button type="button" (click)="deleteElement(i)" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;">
+                    <span style="font-size:15px;">x</span>
+                  </button>
+                </div>
+                <ol style="color: #ccc;">
+                  <li>
+                    Click here
+                  </li>
+                  <li>
+                    to edit
+                  </li>
+                </ol>
+              </div>
+            </div>
+            <div *ngIf="component.name == 'video'">
+              <div class="w3-display-container" draggable="true" (dragstart)="moveElement($event, component)" #dvVideo style="position:relative;display:block;border:1px dashed #ccc;margin-bottom:10px;width:100%;">
+                <!--<button type="button" (click)="deleteElement(i)" style="border-radius:50%;position:relative;top:-12px;right:-49.5%;border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;">X</button>-->
+                <div class="w3-display-topleft w3-display-hover" style="opacity:0.5;">
+                  <button (click)="settings(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i style="font-size:20px;" class="fa fa-cog"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topmiddle w3-display-hover" style="opacity:0.5;">
+                  <button (click)="drag(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i class="fa fa-arrows" style="font-size:20px;" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                  <button type="button" (click)="deleteElement(i)" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;">
+                    <span style="font-size:15px;">x</span>
+                  </button>
+                </div>
+                <div style="width:100%;">
+                  <!--<input type="text" style="display: block;border: none;border-bottom: 1px solid #ccc;padding: 10px;background: transparent;width: 100%;" placeholder="Enter your video url link here..." />-->
+                  <div style="width:100%;height:75px;border:1px solid #ccc;padding-top:25px;cursor:pointer;" (click)="editTextBlock(component, component)" [innerHTML]="component.data">Click to edit</div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="component.name == 'links'">
+              <div class="w3-display-container" draggable="true" (dragstart)="moveElement($event, component)" #dvSocialLink style="position:relative;display:block;border:1px dashed #ccc;margin-bottom:10px;width:100%;">
+                <!--<button type="button" (click)="deleteElement(i)" style="border-radius:50%;position:absolute;top:-10px;right:-4px;border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;">X</button>-->
+                <div class="w3-display-topleft w3-display-hover" style="opacity:0.5;">
+                  <button (click)="settings(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i style="font-size:20px;" class="fa fa-cog"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topmiddle w3-display-hover" style="opacity:0.5;">
+                  <button (click)="drag(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i class="fa fa-arrows" style="font-size:20px;" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                  <button type="button" (click)="deleteElement(i)" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;">
+                    <span style="font-size:15px;">x</span>
+                  </button>
+                </div>
+                <div style="width:100%;">
+                  <!--<input type="text" style="display: block;border: none;border-bottom: 1px solid #ccc;padding: 10px;background: transparent;width: 100%;" placeholder="Enter your social link here..." />-->
+                  <div style="width:100%;height:75px;border:1px solid #ccc;padding-top:25px;cursor:pointer;" (click)="editTextBlock(component, component)" [innerHTML]="component.data">Click to edit</div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="component.name == 'footer'">
+              <div class="w3-display-container" draggable="true" (dragstart)="moveElement($event, component)" #dvFooterWrapper style="position:relative;display:block;border:1px dashed #ccc;margin-bottom:10px;width:100%;">
+                <!--<button type="button" (click)="deleteElement(i)" style="border-radius:50%;position:absolute;top:-10px;right:-4px;border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;">X</button>-->
+                <div class="w3-display-topleft w3-display-hover" style="opacity:0.5;">
+                  <button (click)="settings(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i style="font-size:20px;" class="fa fa-cog"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topmiddle w3-display-hover" style="opacity:0.5;">
+                  <button (click)="drag(component);" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:5px 10px;">
+                    <i class="fa fa-arrows" style="font-size:20px;" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="w3-display-topright w3-display-hover" style="opacity:0.5;">
+                  <button type="button" (click)="deleteElement(i)" style="border:0;cursor:pointer;opacity: 0.5;background-color: #000;color: #fff;padding:4px 12px;">
+                    <span style="font-size:15px;">x</span>
+                  </button>
+                </div>
+                <div style="width:100%;">
+                  <!--<input type="text" style="display: block;border: none;border-bottom: 1px solid #ccc;padding: 10px;background: transparent;width: 100%;" placeholder="Enter footer text here..." />-->
+                  <div style="width:100%;height:75px;border:1px solid #ccc;padding-top:25px;cursor:pointer;" (click)="editTextBlock(component, component)" [innerHTML]="component.data">Click to edit</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!----Prebuilt Templates End---->
+  </div>
+</div>
+
+<!--Editor popup starts-->
+<div *ngIf="editorToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large">
+    <span (click)="closeEditorToggle()" class="w3-button w3-round-large w3-display-topright">&times;</span>
+    <div class="w3-small sfcenter w3-margin-top">
+      <div class="marginform w3-animate-opacity">
+        <div class="w3-row w3-round-large w3-container w3-padding">
+          <h5 class="w3-left">Editor</h5>
+        </div>
+        <app-ngx-editor [height]="'200px'" [minHeight]="'100px'" [placeholder]="'Enter text here...'" [(ngModel)]="editorModel.editorText" [spellcheck]="true"></app-ngx-editor>
+        <!--<angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="editorModel.editorText"></angular-editor>-->
+        <div class="w3-row">
+          <button class="w3-right w3-button w3-secondary w3-round-large w3-margin" type="button" (click)="saveEditorModel()">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Editor popup Ends-->
+<!--Preview popup starts-->
+<div *ngIf="previewToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large">
+    <span (click)="closePreviewToggle()" class="w3-button w3-light-grey w3-round-large w3-display-topright">&times;</span>
+    <div class="w3-small sfcenter w3-margin-top">
+      <div class="marginform w3-animate-opacity">
+        <div class="w3-row w3-round-large w3-padding w3-light-grey">
+          <h5 class="w3-left">Template Preview</h5>
+        </div>
+        <div class="w3-row w3-padding">
+          <div style="width:100%;">
+            <div style="max-width:750px;margin:auto;border:1px solid #ccc;padding:10px;">
+              <div class="w3-container w3-margin-bottom" id="dvPreviewTemplate" [innerHTML]="bindPreviewHTML(previewHTML)">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w3-row w3-margin-small">
+          <button class="w3-button w3-right w3-secondary w3-round-large w3-margin" type="button" (click)="closePreviewToggle()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Preview popup Ends-->
+<!--Configuration popup starts-->
+<div *ngIf="configPopupToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large">
+    <span (click)="closeConfigPopupToggle()" class="w3-button w3-round-large w3-display-topright">&times;</span>
+    <div class="w3-small sfcenter w3-margin-top">
+      <div class="marginform w3-animate-opacity">
+        <div class="w3-row w3-round-large w3-container w3-padding">
+          <h5 class="w3-left">Configuration</h5>
+        </div>
+        <div class="w3-row marginform">
+          <div class="w3-row">
+            <div class="w3-half w3-container">
+              <div class="w3-full">
+                <label>Font Size</label>
+                <input class="w3-input w3-border" [(ngModel)]="tempSettings.fontSize" type="text" placeholder="Size in px" />
+              </div>
+              <div class="w3-full">
+                <label>Background Color</label>
+                <div class="w3-row w3-section w3-margin-0">
+                  <div class="w3-col" style="width:89%">
+                    <input class="w3-input w3-border" [(ngModel)]="tempSettings.backgroundColor" type="text" />
+                  </div>
+                  <div class="w3-rest">
+                    <input type="color" placeholder="Choose color" value="{{tempSettings.backgroundColor ? tempSettings.backgroundColor : '#ffffff'}}" style="height:28px;" />
+                  </div>
+                </div>
+              </div>
+              <div class="w3-full">
+                <label>Text Color</label>
+                <div class="w3-row w3-section w3-margin-0">
+                  <div class="w3-col" style="width:89%">
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="tempSettings.textColor"/>
+                  </div>
+                  <div class="w3-rest">
+                    <input type="color" placeholder="Choose color" value="{{tempSettings.textColor ? tempSettings.textColor : '#ffffff'}}" style="height:28px;" />
+                  </div>
+                </div>
+              </div>
+              <div class="w3-full">
+                <label>Margin <span class="w3-tiny">(in px)</span></label>
+                <div class="w3-row">
+                  <div class="w3-quarter w3-margin-0">
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="tempSettings.marginTop" placeholder="Top" />
+                  </div>
+                  <div class="w3-quarter w3-margin-0">
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="tempSettings.marginRight" placeholder="Right" />
+                  </div>
+                  <div class="w3-quarter w3-margin-0">
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="tempSettings.marginBottom" placeholder="Bottom" />
+                  </div>
+                  <div class="w3-quarter w3-margin-0">
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="tempSettings.marginLeft" placeholder="Left" />
+                  </div>
+                </div>
+              </div>
+              <div class="w3-full">
+                <label>Line Height</label>
+                <select class="w3-input w3-border" [(ngModel)]="tempSettings.lineHeight">
+                  <option value="0">-select-</option>
+                  <option value="1">1</option>
+                  <option value="2">1.8</option>
+                  <option value="3">2.5</option>
+                </select>
+              </div>
+              <div class="w3-full">
+                <label>Title</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="tempSettings.title" placeholder="Enter title" />
+              </div>
+              <div class="w3-full">
+                <label>Navigation</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="tempSettings.navigation" placeholder="Enter url" />
+              </div>
+            </div>
+            <div class="w3-half w3-container">
+              <div class="w3-full">
+                <label>Border Width</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="tempSettings.borderWidth" placeholder="Width in px" />
+              </div>
+              <div class="w3-full">
+                <label>Border Color</label>
+                <div class="w3-row w3-section w3-margin-0">
+                  <div class="w3-col" style="width:89%">
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="tempSettings.borderColor"/>
+                  </div>
+                  <div class="w3-rest">
+                    <input type="color" placeholder="Choose color" value="{{tempSettings.borderColor ? tempSettings.borderColor : '#ffffff'}}" style="height:28px;" />
+                  </div>
+                </div>
+              </div>
+              <div class="w3-full">
+                <label>Border Style</label>
+                <select class="w3-input w3-border" [(ngModel)]="tempSettings.borderStyle">
+                  <option value="0">-select-</option>
+                  <option value="1">Solid</option>
+                  <option value="2">Dashed</option>
+                  <option value="3">Dotted</option>
+                </select>
+              </div>
+              <div class="w3-full">
+                <label>Padding <span class="w3-tiny">(in px)</span></label>
+                <div class="w3-row">
+                  <div class="w3-quarter w3-margin-0">
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="tempSettings.paddingTop" placeholder="Top" />
+                  </div>
+                  <div class="w3-quarter w3-margin-0">
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="tempSettings.paddingRight" placeholder="Right" />
+                  </div>
+                  <div class="w3-quarter w3-margin-0">
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="tempSettings.paddingBottom" placeholder="Bottom" />
+                  </div>
+                  <div class="w3-quarter w3-margin-0">
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="tempSettings.paddingLeft" placeholder="Left" />
+                  </div>
+                </div>
+              </div>
+              <div class="w3-full">
+                <label>Text Align</label>
+                <select class="w3-input w3-border" [(ngModel)]="tempSettings.textAlign">
+                  <option value="0">-select-</option>
+                  <option value="1">Left</option>
+                  <option value="2">Center</option>
+                  <option value="3">Right</option>
+                </select>
+              </div>
+              <div class="w3-full">
+                <label>Text</label>
+                <textarea rows="4" class="w3-input w3-border" [(ngModel)]="tempSettings.text" placeholder="Enter Text"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w3-row">
+          <button class="w3-right w3-button w3-secondary w3-round-large w3-margin" type="button" (click)="saveConfiguration(tempSettingsweeee)">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Configuration popup ends-->

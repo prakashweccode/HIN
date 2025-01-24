@@ -1,0 +1,233 @@
+<div class="w3-display-middle">
+  <div class="loader" *ngIf="show">
+  </div>
+</div>
+<div class="w3-margin-top w3-margin-bottom w3-row-padding">
+  <div class="w3-border w3-padding-small w3-border-top w3-border-left w3-border-right w3-border-grey">
+    <div class="w3-row">
+      <div class="w3-col s11" *ngIf="selectedNode">
+        <button *ngIf="!isDownloadEnabled" class="w3-button w3-margin-right-small" (click)="createNewFolder();"><i class="fa fa-folder-o"></i> New directory</button>
+        <button *ngIf="!isDownloadEnabled" class="w3-button w3-margin-right-small" (click)="uploadFiles();"><i class="fa fa-cloud-upload"></i> Upload files</button>
+        <button *ngIf="!isDownloadEnabled" class="w3-button w3-margin-right-small" (click)="uploadFolder();"><i class="fa fa-caret-square-o-up"></i> Upload folder</button>
+        <button *ngIf="isDownloadEnabled" class="w3-button w3-margin-right-small" (click)="download()"><i class="fa fa-download"></i> Download</button>
+        <button *ngIf="isDownloadEnabled" class="w3-button w3-margin-right-small" (click)="preview()"><i class="fa fa-eye"></i> Preview</button>
+        <!--<button class="w3-button w3-margin-right-small" (click)="rename()"><i class="fa fa-pencil-square-o"></i> Rename</button>-->
+        <span class="w3-border-right w3-border-light-grey">&nbsp;</span>&nbsp;
+        <button class="w3-button" (click)="delete()"><i class="fa fa-trash"></i> Delete</button>
+        <!--<div class="w3-right">
+    <button class="w3-button" (click)="clearSelection();"><i class="fa fa-times"></i> Clear selection</button>
+  </div>-->
+      </div>
+      <div class="w3-col s11" *ngIf="!selectedNode">&nbsp;</div>
+      <div class="w3-col s1">
+        <div class="w3-right">
+          <div class="w3-dropdown-hover w3-white">
+            <button class="w3-button"><i [ngClass]="isListView ? 'fa fa-th-large' : 'fa fa-th-list'"></i></button>
+            <div class="w3-dropdown-content w3-bar-block w3-border" style="min-width:0;">
+              <button class="w3-button" (click)="listView()"><i class="fa fa-th-list"></i></button>
+              <button class="w3-button" (click)="thumbNailView()"><i class="fa fa-th-large"></i></button>
+            </div>
+          </div>
+          <span class="w3-border-right w3-border-grey">&nbsp;</span>&nbsp;<button class="w3-button" (click)="syncOneDrive()"><i class="fa fa-refresh"></i> </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="w3-row w3-border-bottom w3-border-left w3-border-right w3-border-grey">
+    <div class="w3-quarter w3-row-padding w3-border-right w3-border-light-grey">
+      <ng-template #nodeTemplateRef let-node>
+        <li>
+          <div (dblclick)="getDrive(node);" (click)="selectDrive(node)" class="w3-padding-top-small w3-padding-bottom-small w3-padding-right-large w3-padding-left-large w3-hover-light-grey w3-display-container">
+            <i class="fa" [ngClass]="node?.ContentType =='file'?'fa-file w3-text-blue':'fa-folder-open w3-text-yellow'"></i> <span>{{node?.Name ? (node?.Name | truncate:15) : ''}}</span>
+            <!--<i class="fa fa-ellipsis-v w3-display-hover w3-right w3-padding-small" aria-hidden="true"></i>-->
+          </div>
+          <ul class="w3-padding-left-medium">
+            <ng-template ngFor [ngForOf]="node?.FileInfos" [ngForTemplate]="nodeTemplateRef"></ng-template>
+          </ul>
+        </li>
+      </ng-template>
+      <ul class="w3-padding-left-medium">
+        <ng-template [ngTemplateOutlet]="nodeTemplateRef" [ngTemplateOutletContext]="{$implicit: rootDrive}"></ng-template>
+      </ul>
+      <!--<ul class="w3-padding-left-medium">
+        <li class="w3-padding-small" *ngIf="rootDrive">
+          <i class="fa fa-folder-open w3-text-yellow"></i> <span (click)="loadItems(rootDrive)">{{rootDrive?.driveType | truncate:10}}</span>
+          <ul class="w3-padding-left-medium" *ngIf="rootDrive?.child">
+            <li class="w3-padding-small" *ngFor="let child of rootDrive.child.value"><i class="fa fa-folder-open w3-text-yellow"></i> <span (click)="loadItems(child)">{{child.name}}</span></li>
+          </ul>
+        </li>
+
+      </ul>-->
+      
+
+      
+
+    </div>
+    
+
+    
+    <div class="w3-threequarter w3-border-left w3-border-grey">
+      <div class="w3-padding-left-small w3-border-bottom w3-border-grey">
+        <div class="w3-row w3-section w3-margin-0">
+          <div class="w3-col" style="width:55px;">
+            <button class="w3-button w3-small" (click)="getDrive(rootDrive);"><i class="fa fa-home"></i></button>
+            <span class="w3-border-right w3-border-grey">&nbsp;</span>&nbsp;
+          </div>
+          <div class="w3-col" style="width:55px;">
+            <button class="w3-button w3-small" (click)="goBack();"><i class="fa fa-long-arrow-up" aria-hidden="true"></i></button>
+            <span class="w3-border-right w3-border-grey">&nbsp;</span>&nbsp;
+          </div>
+          <!--<div class="w3-rest w3-padding-top-xsmall w3-padding-bottom-xsmall">
+    <ul class="breadcrumb w3-margin-0">
+      <li><button class="w3-button w3-tiny" (click)="getDrive(rootDrive);">{{rootDrive?.driveType}}</button></li>
+      <ng-container *ngFor="let childItems of lstSelectedChilds">
+        <i class="fa fa-caret-right w3-margin-right-xsmall w3-margin-left-xsmall"></i>
+        <li><button class="w3-button w3-tiny" (click)="getDrive(childItems);">{{childItems?.name}}</button></li>
+      </ng-container>
+    </ul>
+  </div>-->
+        </div>
+      </div>
+      <div *ngIf="isListView" class="w3-container w3-margin-top w3-margin-bottom">
+        <div class="w3-center w3-hover-white w3-hover-shadow w3-left w3-margin-right w3-margin-top-large w3-round-large w3-tooltip" [ngClass]="child.isSelected ? 'w3-secondary' : ''" (dblclick)="getDrive(child);" (click)="selectDrive(child);" style="width:100px;height:100px;cursor:pointer;" *ngFor="let child of directoryInfos.FileInfos; let i = index;">
+          <div class="w3-row">
+            <i class="fa fa-3x fa-fw w3-margin-top" [ngClass]="child.ContentType == 'file'?'fa-file w3-text-blue':'fa-folder-open w3-text-yellow'"></i>
+          </div>
+          <div class="w3-row">
+            <span class="w3-tiny">
+              {{child.Name | truncate:10}}
+            </span>
+          </div>
+          <span style="position:relative;right:-75px;bottom:-30px;z-index:1;"
+                class="w3-text w3-white w3-border w3-padding w3-text-grey">Name:{{child.Name}}<br />Size:{{child.Size > 0 ? (child.Size | fileSize) : '0 KB'}}</span>
+        </div>
+        <div class="w3-row" *ngIf="directoryInfos.FileInfos.length == 0">
+          <div class="w3-continer w3-center">
+            <div class="w3-row">
+              <i class="fa fa-4x fa-fw fa-folder-open w3-text-grey w3-margin-top"></i>
+            </div>
+            <div class="w3-row">
+              <span class="w3-small w3-text-grey">
+                This folder is empty.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!isListView" class="w3-row w3-margin-bottom">
+        <table class="w3-table w3-hoverable">
+          <thead class="w3-border-bottom">
+            <tr>
+              <!--<td><input type="checkbox" id="chkHeaderAll" /></td>-->
+              <td>Name</td>
+              <td>Date</td>
+              <td>Size</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr (dblclick)="getDrive(child);" [ngClass]="child.isSelected ? 'w3-secondary' : ''" (click)="selectDrive(child);" *ngFor="let child of directoryInfos.FileInfos;let i = index;">
+              <!--<td><input type="checkbox" id="chk{{child.id}}" /></td>-->
+              <td><i class="fa fa-fw" [ngClass]="child.ContentType == 'file'?'fa-file w3-text-blue':'fa-folder-open w3-text-yellow'"></i> {{child.Name | truncate:25}}</td>
+              <td>{{child.CreatedOn | date:'MM/dd/yyyy hh:mm a'}}</td>
+              <td>{{child.Size > 0 ? (child.Size | fileSize) : '0'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="previewToggle" class="w3-modal" style="display:block;">
+  <div class="w3-container w3-modal-content w3-round-large w3-secondary-button" style="width:75% !important;">
+    <span (click)="closePreviewToggle()" class="w3-button w3-margin-right-small w3-display-topright">&times;</span>
+    <div class="w3-small sfcenter w3-margin-top">
+      <div class="marginform w3-animate-opacity">
+        <div class="w3-row w3-round-large w3-secondary-button w3-container w3-padding">
+          <h5 class="w3-left">File Preview</h5>
+        </div>
+        <div *ngIf="getMimeType(selectedNode.Name)">
+          <img [src]="doc" alt="image" style="max-width:100%;" />
+        </div>
+        <div *ngIf="!getMimeType(selectedNode.Name)">
+          <ngx-doc-viewer [url]="doc"
+                          viewer="google"
+                          style="width:100%;height:50vh;">
+          </ngx-doc-viewer>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="addDirectoryToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large w3-secondary-button">
+    <span (click)="closeAddDirectoryToggle()" class="w3-button w3-margin-right-small w3-display-topright">&times;</span>
+    <div class="w3-small sfcenter w3-margin-top">
+      <div class="marginform w3-animate-opacity">
+        <div class="w3-row w3-round-large w3-secondary-button w3-container w3-padding">
+          <h5 class="w3-left">Create Directory</h5>
+        </div>
+        <div class="w3-row w3-padding w3-primary-l4">
+          <div class="marginform">
+            <div class="w3-full">
+              <label>Directory Name</label>
+              <input type="text" [(ngModel)]="newDirectoryName" class="w3-input w3-border" />
+            </div>
+          </div>
+        </div>
+        <div class="w3-row w3-round-bottom-left w3-round-bottom-right w3-secondary-button">
+          <div class="w3-right w3-margin">
+            <button type="button" (click)="saveNewDirectory(newDirectoryName);" class="w3-button w3-border w3-round-large w3-secondary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="uploadToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large w3-secondary-button">
+    <span (click)="closeUploadToggle();" class="w3-button w3-margin-right-small w3-display-topright">&times;</span>
+    <div class="w3-small sfcenter w3-margin-top">
+      <div class="marginform w3-animate-opacity">
+        <div class="w3-row w3-round-large w3-secondary-button w3-container w3-padding">
+          <h5 class="w3-left">Upload File</h5>
+        </div>
+        <div class="w3-row w3-padding w3-primary-l4">
+          <div class="marginform">
+            <div class="w3-full">
+              <input type="file" multiple class="w3-input w3-border" #files />
+            </div>
+          </div>
+        </div>
+        <div class="w3-row w3-round-bottom-left w3-round-bottom-right w3-secondary-button">
+          <div class="w3-right w3-margin">
+            <button type="button" (click)="SaveFiles(files, selectedNode);" class="w3-button w3-border w3-round-large w3-secondary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="folderUploadToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large w3-secondary-button">
+    <span (click)="closeFolderUploadToggle();" class="w3-button w3-margin-right-small w3-display-topright">&times;</span>
+    <div class="w3-small sfcenter w3-margin-top">
+      <div class="marginform w3-animate-opacity">
+        <div class="w3-row w3-round-large w3-secondary-button w3-container w3-padding">
+          <h5 class="w3-left">Upload Folder</h5>
+        </div>
+        <div class="w3-row w3-padding w3-primary-l4">
+          <div class="marginform">
+            <div class="w3-full">
+              <input type="file" webkitdirectory directory multiple class="w3-input w3-border" #folder />
+            </div>
+          </div>
+        </div>
+        <div class="w3-row w3-round-bottom-left w3-round-bottom-right w3-secondary-button">
+          <div class="w3-right w3-margin">
+            <button type="button" (click)="SaveFolder(folder, selectedNode);" class="w3-button w3-border w3-round-large w3-secondary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

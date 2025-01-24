@@ -1,0 +1,74 @@
+<!--<div class="w3-right w3-margin-right">
+  <select class="w3-input w3-border" multiple="multiple" [ngModel]="selectedChartArray" (ngModelChange)="selectedData($event)">
+    <option value="0" disabled>select</option>
+    <option *ngFor="let chartItem of listChartItem" [ngValue]="chartItem">{{chartItem.DropDownName}}</option>
+  </select>
+</div>-->
+
+  <div *ngIf="type == 'Header'">
+    <div class="w3-left w3-cursor h-width" *ngIf="showGuage">
+      <button *ngIf="showGuage" class="w3-button w3-secondary w3-tiny w3-round-large w3-padding-small w3-left w3-margin-top-xlarge" (click)="changeWidth()"><strong>{{zoomIn ? '-' : '+'}}</strong></button>
+      <div class="h-width custom-dropdown-hover" *ngFor="let data of listChartItem">
+        <div *ngIf="data.ShowHeaderChart" class="chart-toggle-click" (click)="data.toggle=!data.toggle;">
+
+          <app-gaugemeter [canvasWidth]="canvasWidth"
+                          [needleValue]="data.NeedleValue"
+                          [centralLabel]="data.CentralLabel"
+                          [options]="data.Options"
+                          [name]="data.Name"
+                          [bottomLabel]="data.BottomLabel">
+          </app-gaugemeter>
+          <div class="w3-dropdown-content w3-container w3-round-large" *ngIf="data.toggle" style="width:250px;">
+            <div class="w3-row w3-padding" *ngFor="let notyLabel of data.Options.notyLabels; index as i;">
+              <div [ngStyle]="{backgroundColor: notyLabel.color}" style="width:25px;height:25px;border:1px solid #808080;float:left;"></div>&nbsp;<span>{{notyLabel.label}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+<div *ngIf="type == 'Dashboard'">
+  <div class="w3-left w3-cursor h-width" (dblclick)="changeWidth()" *ngIf="showGuage">
+    <div class="h-width custom-dropdown-hover" *ngFor="let data of listChartItem">
+      <div *ngIf="data.ShowDashboardChart" (click)="data.toggle=!data.toggle;">
+        <app-gaugemeter [canvasWidth]="canvasWidth"
+                        [needleValue]="data.NeedleValue"
+                        [centralLabel]="data.CentralLabel"
+                        [options]="data.Options"
+                        [name]="data.Name"
+                        [bottomLabel]="data.BottomLabel">
+        </app-gaugemeter>
+        <div class="w3-dropdown-content w3-container w3-round-large" *ngIf="data.toggle" style="width:250px;">
+          <div class="w3-row w3-padding" *ngFor="let notyLabel of data.Options.notyLabels; index as i;">
+            <div [ngStyle]="{backgroundColor: notyLabel.color}" style="width:25px;height:25px;border:1px solid #808080;float:left;"></div>&nbsp;<span>{{notyLabel.label}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="type == 'UserQuote'">
+  <div class="w3-left w3-cursor h-width" (dblclick)="changeWidth()" *ngIf="showGuage">
+    <div class="h-width custom-dropdown-hover" *ngFor="let data of listChartItem">
+      <div *ngIf="data.ShowUserQuoteChart" (click)="data.toggle=!data.toggle;">
+        <app-gaugemeter [canvasWidth]="canvasWidth"
+                        [needleValue]="data.NeedleValue"
+                        [centralLabel]="data.CentralLabel"
+                        [options]="data.Options"
+                        [name]="data.Name"
+                        [bottomLabel]="data.BottomLabel">
+        </app-gaugemeter>
+        <div class="w3-dropdown-content w3-container w3-round-large" *ngIf="data.toggle" style="width:250px;">
+          <div class="w3-row w3-padding" *ngFor="let notyLabel of data.Options.notyLabels; index as i;">
+            <div [ngStyle]="{backgroundColor: notyLabel.color}" style="width:25px;height:25px;border:1px solid #808080;float:left;"></div>&nbsp;<span>{{notyLabel.label}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

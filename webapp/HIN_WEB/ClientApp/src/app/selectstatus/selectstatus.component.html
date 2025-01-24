@@ -1,0 +1,15 @@
+<div *ngIf="statusId">
+  <button class="w3-col s11 w3-input w3-border w3-secondary w3-button w3-round-bottom-right-0 w3-round-top-right-0">{{getStatusName(statusId)}}</button>
+  <i class="w3-col s1 w3-input w3-border w3-secondary w3-button w3-round-bottom-left-0 w3-round-top-left-0" (click)="clearStatus()">X</i>
+</div>
+
+<div *ngIf="!statusId">
+  <div class="w3-dropdown-hover w3-round-large">
+    <button class="w3-input w3-border w3-secondary w3-button" style="width:273px;"> All <i class="fa fa-caret-down w3-margin-top-xsmall w3-margin-right-xsmall w3-right" aria-hidden="true"></i> </button>
+    <div class="w3-dropdown-content w3-card-4 w3-light-grey" style="position:absolute;width:273px; z-index:1">
+      <div *ngFor="let filterStatus of status">
+        <a class="w3-button w3-left-align w3-block w3-margin-right-small w3-border-bottom w3-border-blue-gray" (click)="selectStatusId(filterStatus.Id)">{{filterStatus.Name}}</a>
+      </div>
+    </div>
+  </div>
+</div>

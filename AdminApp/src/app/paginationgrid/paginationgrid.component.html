@@ -1,0 +1,125 @@
+<!--Data Table-->
+<div class="w3-right w3-margin-bottom" *ngIf="isPaginationEnabled">
+  <div class="w3-row">
+    <div class="w3-half">
+      <div class="w3-margin-top-medium custom-font-size-16"><b>Items:</b></div>
+    </div>
+    <div class="w3-half">
+
+      <select style="width:62px" class="w3-input w3-border custom-font-size-110 w3-margin-right" #mySelect (change)="pageLength(mySelect.value)">
+        <option class="custom-font-size-110" *ngFor="let pageOption of pageLengths">{{pageOption}}</option>
+      </select>
+    </div>
+  </div>
+</div>
+<div class="w3-row" *ngIf="isFilterEnabled">
+  <div (click)="filterToggle=!filterToggle" class="w3-container w3-border w3-border-gray w3-padding">
+    <i class="fa fa-filter" aria-hidden="true"></i> Filter(s)
+    <i [ngClass]="filterToggle ? 'w3-right fa fa-angle-right' : 'w3-right fa fa-angle-down'"></i>
+  </div>
+  <div id="Demo3" [ngClass]="filterToggle ? 'w3-show w3-container w3-border w3-border-gray' : 'w3-hide w3-container w3-border w3-border-gray'">
+    <div class="w3-flex-container w3-margin-top-bottom">
+      <!--<label>Company:</label>
+      <select class="w3-margin-left" style="height:28px;">
+        <option value="1">Data 1</option>
+        <option value="2">Data 2</option>
+      </select>-->
+      <div *ngFor="let filterOption of filterOptions;" class="w3-margin-right">
+        <label>{{filterOption.title}}</label>
+        <ng-container [ngSwitch]="filterOption.type">
+          <!--Text control-->
+          <input *ngSwitchCase="'text'" #textControl [placeholder]="filterOption.placeholder" [ngModel]="filterOption.value" (focusout)="onFilterChange(filterOption, textControl.value)" type="text" name="txt_{{filterOption.title}}" id="txt_{{filterOption.title}}" class="form-control">
+          <!--Date control-->
+          <input *ngSwitchCase="'date'" type="date"
+                 (dateChange)="onFilterChange(filterOption, $event)" [ngModel]="filterOption.value" [defaultValue]="''" />
+          <!--Dropdown control-->
+          <select #selectControl *ngSwitchCase="'dropdown'" [ngModel]="filterOption.value" (change)="onFilterChange(filterOption, selectControl.value)" id="select_{{filterOption.title}}" class="form-control">
+            <option value="">-{{filterOption.placeholder}}-</option>
+            <option *ngFor="let data of filterOption.data" value="{{data.id}}">{{data.name}}</option>
+          </select>
+          <!--Grouping control-->
+          <!--<div *ngSwitchCase="'checkbox'" class="mt-2">
+            <label for="" class="alert alert-custom-style"><input type="checkbox" (change)="assignInviteGroup($event)" /> Show Invitation Type</label>
+          </div>-->
+        </ng-container>
+      </div>
+
+      <!--<div class="">
+        <label>Username:</label>
+        <input class="w3-margin-left" type="text" />
+      </div>-->
+    </div>
+
+  </div>
+  <!--Clear filters start-->
+  <div class="w3-row">
+    <button (click)="removeFilterOption(s)" class="w3-button w3-margin-top-bottom-small w3-padding-small w3-tiny w3-round-large w3-blue w3-margin-right-small" *ngFor="let s of selectedFilterOptions">
+      <span>{{s.title}}: {{s.value}}</span>
+      &nbsp;<i class="fa fa-times" aria-hidden="true"></i>
+    </button>
+    <button (click)="clearAllFilters()" class="w3-button w3-tiny w3-padding-small w3-round-large w3-blue" *ngIf="selectedFilterOptions.length >= 2">
+      <span>Clear all fillters</span>
+      &nbsp;<i class="fa fa-times" aria-hidden="true"></i>
+    </button>
+  </div>
+  <!--Clear filters end-->
+</div>
+<table class="w3-table w3-border w3-hoverable">
+  <thead class="w3-theme-gradient w3-text-white">
+    <tr class="w3-primary">
+      <th class="w3-border w3-border-customgray w3-border-width w3-display-container" *ngFor="let header of gridConfig; let i = index;">
+        <span class="w3-margin-left">{{header.headerName}}</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of dataSource" (click)="gridRowClick(data);">
+      <td class="w3-border w3-border-customgray w3-border-width" *ngFor="let content of gridConfig; let i = index;">
+        <span class="w3-margin-left" *ngIf="!content.action">{{dataProcess(content, data)}}</span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!--Pagination-->
+<div *ngIf="isPaginationEnabled">
+  <div class="row w3-margin-top">
+    <div *ngIf="totalCount>0" class="pagination">
+      <div class="border btn">Showing {{pager.startIndex + 1}} to {{pager.endIndex + 1}} of {{totalCount}} entries</div>
+    </div>
+    <div *ngIf="totalCount == 0">
+      <div class="border btn">Showing {{totalCount}} to {{totalCount}} of {{totalCount}} entries</div>
+    </div>
+  </div>
+  <br />
+  <div class="row" style="margin-bottom:20px" *ngIf="totalCount > 0">
+    <div class="column right">
+      <div class="pagination float-right">
+        <a [routerLink]="" (click)="setPage(1);startRange = 1;endRange = 10;">
+          First
+        </a>
+        <a [routerLink]="" (click)="setPage(pager.currentPage - 1)">Prev</a>
+        <ng-container *ngFor="let page of getPageNumber(startRange, endRange)">
+          <a [routerLink]="" *ngIf="page == startRange && startRange!=1 && page > 0" (click)="startRange = startRange - 10;endRange = endRange - 10;pager.currentPage=startRange;setPage(pager.currentPage)">...</a>
+          <a [routerLink]="" *ngIf="page >= startRange && page <= endRange && page > 0" (click)="setPage(page)" [ngClass]="{active:pager.currentPage === page}">{{page}}</a>
+          <a [routerLink]="" *ngIf="page == endRange && endRange!=pager.totalPages" (click)="startRange = startRange + 10;endRange = endRange + 10;pager.currentPage=startRange;setPage(pager.currentPage)">...</a>
+        </ng-container>
+        <a [routerLink]="" (click)="setPage(pager.currentPage + 1)">Next</a>
+        <a [routerLink]="" (click)="setPage(pager.totalPages);endRange = pager.totalPages; startRange= endRange -10;">Last</a>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="totalCount == 0">
+    <div class="column left">
+      &nbsp;
+    </div>
+    <div class="column right">
+      <div class="pagination float-right">
+        <a [routerLink]="">First</a>
+        <a [routerLink]="">Prev</a>
+        <a [routerLink]="" class="active">1</a>
+        <a [routerLink]="">Next</a>
+        <a [routerLink]="">Last</a>
+      </div>
+    </div>
+  </div>
+</div>

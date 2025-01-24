@@ -1,0 +1,4 @@
+<select  class="w3-input w3-border" [ngModel]="currencyId" (ngModelChange)="currencychange($event)">
+  <option [ngValue]="0" disabled>--Select Currency--</option>
+  <option *ngFor="let currency of currencies" [ngValue]="currency.Id">{{currency.Name}} ({{currency.Code}})</option>
+</select>

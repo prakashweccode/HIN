@@ -1,0 +1,258 @@
+<div class="marginform">
+  <div class="w3-container">
+    <div class="w3-row w3-margin-top">
+      <div class="w3-quarter w3-margin-right">
+        <label>Report*</label>
+        <select class="w3-input w3-border" [disabled]="userConfig.Id" [ngClass]="userConfig.Id ? 'w3-disabled':''" [(ngModel)]="userConfig.ReportId">
+          <option value="0">-select-</option>
+          <option value="1">Opportunity</option>
+          <option value="2">Lead</option>
+          <!--<option value="3">User</option>-->
+        </select>
+      </div>
+      <div class="w3-quarter">
+        <label>Name*</label>
+        <input type="text" class="w3-input w3-border" [(ngModel)]="userConfig.Name" [class.w3-border-red]="checkValidation(name)" #name="ngModel" required />
+      </div>
+      <div class="w3-quarter w3-margin-left">
+        <div class="w3-row w3-margin-bottom-small">&nbsp;</div>
+        <input id="configActive" type="checkbox" [(ngModel)]="userConfig.Inactive" />
+        <label for="configActive">&nbsp;Inactive</label>
+      </div>
+    </div>
+    <div class="w3-row w3-margin-top" *ngIf="userConfig.Id">
+      <span>({{queries.length}}) Filter{{queries.length > 1 ?'s':''}} Applied</span>
+    </div>
+    <div *ngIf="userConfig.Id">
+      <div class="w3-row" *ngFor="let query of queries; index as i;">
+        <div class="w3-row" style="display:inline-flex;">
+          <div class="w3-margin-right">
+            <button type="button" class="w3-button w3-padding-small w3-round-large w3-border w3-border-gray w3-tiny" title="Remove" (click)="removeCondition(query);"><i class="fa fa-trash" aria-hidden="true"></i></button>
+          </div>
+          <div class="w3-margin-right">
+            <select class="w3-input w3-border" [(ngModel)]="query.FieldName" (change)="fieldNameChange($event, query);">
+              <option disabled value="0">select</option>
+              <option *ngFor="let field of dataFields" value="{{field.FieldName}}">{{field.FieldName}}</option>
+            </select>
+          </div>
+          <div class="w3-margin-right" *ngIf="query.FieldType != 'date'">
+            <select class="w3-input w3-border" [(ngModel)]="query.CriteriaName" (change)="criteriaChange($event, query);">
+              <option disabled value="0">select</option>
+              <option *ngFor="let criteria of stringCriterias" value="{{criteria.Name}}">{{criteria.Name}}</option>
+            </select>
+          </div>
+          <div class="w3-margin-right" *ngIf="query.FieldType == 'date'">
+            <select class="w3-input w3-border" [(ngModel)]="query.CriteriaName" (change)="criteriaChange($event, query);">
+              <option disabled value="0">select</option>
+              <option *ngFor="let criteria of dateCriterias" value="{{criteria.Name}}">{{criteria.Name}}</option>
+            </select>
+          </div>
+          <div class="w3-margin-right" *ngIf="query.FieldType == 'date' && showDateFrom(query);">
+            <input type="date" style="height: 27px;" [(ngModel)]="query.FromValue" class="w3-input w3-border" />
+          </div>
+          <span class="w3-margin-right w3-margin-top-small" *ngIf="query.FieldType == 'date' && showDateTo(query);">to</span>
+          <div class="w3-margin-right" *ngIf="query.FieldType == 'date' && showDateTo(query);">
+            <input type="date" style="height: 27px;" class="w3-input w3-border" [(ngModel)]="query.ToValue" />
+          </div>
+          <div class="w3-margin-right" *ngIf="query.FieldType != 'date' && showValueFrom(query);">
+            <!--<input type="text" style="height: 27px;" class="w3-input w3-border" [(ngModel)]="query.FromValue" placeholder="Search Value" />-->
+            <select class="w3-input w3-border" [(ngModel)]="query.FromValue">
+              <option *ngFor="let data of query.searchValues" value="{{data.keys}}">{{data.keys}}</option>
+            </select>
+          </div>
+          <span class="w3-margin-right w3-margin-top-small" *ngIf="query.FieldType != 'date' && showValueTo(query);">to</span>
+          <div class="w3-margin-right" *ngIf="query.FieldType != 'date' && showValueTo(query);">
+            <input type="text" style="height: 27px;" class="w3-input w3-border" [(ngModel)]="query.ToValue" placeholder="Search Value To" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="w3-row">
+      <button *ngIf="userConfig.Id" type="button" class="w3-button w3-margin-top w3-round-large w3-border w3-border-gray w3-tiny" (click)="addCondition()">+ Add Condition</button>
+      <button type="button" (click)="saveQuery(userConfig, queries);" class="w3-button w3-margin-top w3-round-large w3-secondary w3-tiny w3-right" [disabled]="checkReqValidation(name)">Save</button>
+    </div>
+  </div>
+  <div class="w3-container" *ngIf="userConfig.Id">
+    <div class="w3-bar w3-center w3-margin-top w3-border-secondary">
+      <div class="w3-left">
+        <button *ngIf="dashBoardQueryId" [class]="activeTab == 'tabChartConfig'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeTab = 'tabChartConfig'">Chart Config</button>
+      </div>
+    </div>
+  </div>
+  <div class="w3-row w3-margin-top" *ngIf="activeTab == 'tabChartConfig' && userConfig.Id">
+    <div class="w3-padding">
+      <label>Chart List</label><button class="w3-button w3-round-large w3-secondary w3-tiny w3-right" (click)="addChartConfig()">+ Add Chart</button>
+      <table class="w3-table-all w3-margin-top">
+        <thead>
+          <tr>
+            <th>&nbsp;</th>
+            <th>Chart Type</th>
+            <th>Name</th>
+            <th>View in Dashboard</th>
+            <th>Configuration</th>
+            <th>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let chart of listOfChartConfig; index as i;">
+            <td>{{i+1}}</td>
+            <td>{{getChartTypeName(chart.ChartType)}}</td>
+            <td>{{chart.Name}}</td>
+            <td>{{chart.DisplayChart}}</td>
+            <td><i class="fa fa-cog" (click)="editChartConfig(chart)" aria-hidden="true"></i></td>
+            <td><button class="w3-button w3-round-large w3-secondary w3-small" (click)="removeChartById(chart.Id)">Delete</button></td>
+          </tr>
+          <tr *ngIf="listOfChartConfig.length==0">
+            <td colspan="6" class="w3-padding">No records.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="w3-row w3-margin-top" *ngIf="previewPanel">
+    <div class="w3-bar w3-center w3-padding w3-secondary-l5 w3-border-top w3-border-bottom">
+      <div class="w3-left w3-margin-top-small w3-margin-bottom-small">
+        <a [class]="activeContainer == 'tabLineChart'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tabLineChart'"><i class="fa fa-align-left" aria-hidden="true"></i></a>
+        <a [class]="activeContainer == 'tabBarChart'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tabBarChart'"><i class="fa fa-bar-chart" aria-hidden="true"></i></a>
+        <a [class]="activeContainer == 'tabPieChart'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tabPieChart'"><i class="fa fa-pie-chart" aria-hidden="true"></i></a>
+        <a [class]="activeContainer == 'tabCountChart'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tabCountChart'"><i class="fa fa-file-text-o" aria-hidden="true"></i></a>
+      </div>
+    </div>
+    <div class="w3-container">
+      <div *ngIf="activeContainer == 'tabLineChart'" class="w3-white ">
+        <div class="w3-margin w3-animate-opacity">
+          <app-angular-google-charts [title]="lineChartTitle"
+                                     [type]="lineChartType"
+                                     [data]="lineChartData"
+                                     [columns]="lineChartNames"
+                                     [options]="lineChartOptions"
+                                     [width]="lineChartWidth"
+                                     [height]="lineChartHeight">
+          </app-angular-google-charts>
+        </div>
+      </div>
+      <div *ngIf="activeContainer == 'tabBarChart'" class="w3-white ">
+        <div class="w3-margin w3-animate-opacity">
+          <app-angular-google-charts [title]="columnChartTitle"
+                                     [type]="columnChartType"
+                                     [data]="columnChartData"
+                                     [columns]="columnChartColumns"
+                                     [options]="columnChartOptions"
+                                     [width]="columnChartWidth"
+                                     [height]="columnChartHeight">
+          </app-angular-google-charts>
+        </div>
+      </div>
+      <div *ngIf="activeContainer == 'tabPieChart'" class="w3-white ">
+        <div class="w3-margin w3-animate-opacity">
+          <app-angular-google-charts [title]="pieChartTitle"
+                                     [type]="pieChartType"
+                                     [data]="pieChartData"
+                                     [columns]="pieChartColumns"
+                                     [options]="pieChartOptions"
+                                     [width]="pieChartWidth"
+                                     [height]="pieChartHeight">
+          </app-angular-google-charts>
+        </div>
+      </div>
+      <div *ngIf="activeContainer == 'tabCountChart'" class="w3-white ">
+        <div class="w3-margin w3-animate-opacity">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="chartConfigToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large w3-secondary-button">
+    <span (click)="closeChartConfigToggle()" class="w3-button w3-round-top-right w3-display-topright">&times;</span>
+    <div class="w3-small sfcenter w3-margin-top">
+      <div class="w3-animate-opacity marginform">
+        <div class="w3-row w3-round-large w3-secondary-button w3-container w3-padding">
+          <h5 class="w3-left">Chart Config</h5>
+        </div>
+        <div class="w3-row w3-padding w3-primary-l4">
+          <div class="w3-row w3-padding-top-small w3-padding-bottom-small">
+            <div class="w3-row w3-section w3-half w3-margin-0">
+              <div class="w3-col" style="width:150px">Chart Type</div>
+              <div class="w3-rest">
+                <select class="w3-input w3-border" [(ngModel)]="chartConfig.ChartType">
+                  <option value="0">-select-</option>
+                  <option *ngFor="let chartType of arrayOfChartType" [ngValue]="chartType.Id">{{chartType.Name}}</option>
+
+                  <!--<option value="1">Pie chart</option>
+                  <option value="2">Bar chart</option>
+                  <option value="3">Column chart</option>
+                  <option value="4">Line chart</option>-->
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="w3-row w3-padding-top-small w3-padding-bottom-small">
+            <div class="w3-row w3-section w3-half w3-margin-0">
+              <div class="w3-col" style="width:150px">Chart Name*</div>
+              <div class="w3-rest">
+                <input type="text" class="w3-input w3-border" [(ngModel)]="chartConfig.Name" [class.w3-border-red]="checkValidation(cname)" #cname="ngModel" required />
+              </div>
+            </div>
+          </div>
+          <div class="w3-row w3-padding-top-small w3-padding-bottom-small">
+            <div class="w3-row w3-section w3-half w3-margin-0">
+              <div class="w3-col" style="width:150px">Group by</div>
+              <div class="w3-rest">
+                <select class="w3-input w3-border" [(ngModel)]="chartConfig.GroupById">
+                  <option value="0">-select-</option>
+                  <option value="1">Opportunity Status</option>
+                  <option value="2">Assigned To</option>
+                  <option value="3">Funnel</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="w3-row w3-padding-top-small w3-padding-bottom-small">
+            <div class="w3-row w3-section w3-half w3-margin-0">
+              <div class="w3-col" style="width:150px">Aggregate operation</div>
+              <div class="w3-rest">
+                <select class="w3-input w3-border" [(ngModel)]="chartConfig.AggregateOperationId">
+                  <option value="0">-select-</option>
+                  <option value="1">Sum</option>
+                  <option value="2">Count</option>
+                  <option value="3">Average</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="w3-row w3-padding-top-small w3-padding-bottom-small">
+            <div class="w3-row w3-section w3-half w3-margin-0">
+              <div class="w3-col" style="width:150px">Chart size</div>
+              <div class="w3-rest">
+                <select class="w3-input w3-border" [(ngModel)]="chartConfig.Size">
+                  <option value="0">-select-</option>
+                  <option value="1">4</option>
+                  <option value="2">6</option>
+                  <option value="3">8</option>
+                  <option value="4">12</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="w3-row w3-padding-top-small w3-padding-bottom-small">
+            <div class="w3-row w3-section w3-half w3-margin-0">
+              <div class="w3-col w3-padding-top-medium" style="width:150px">Visible</div>
+              <div class="w3-rest w3-padding-top-large w3-padding-bottom-medium">
+                <input id="chartVisible" type="checkbox" [(ngModel)]="chartConfig.DisplayChart" />
+                <label for="chartVisible">&nbsp;</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w3-row w3-round-bottom-left w3-round-bottom-right w3-secondary-button">
+          <div class="w3-margin w3-right">
+            <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeChartConfigToggle()">Cancel</button>
+            <button class="w3-button w3-border w3-round-large w3-secondary" (click)="saveChartConfig()" [disabled]="checkReqValidation(cname)">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

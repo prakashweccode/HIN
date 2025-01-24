@@ -1,0 +1,335 @@
+<div class="w3-row">
+  <div class="w3-card-2 w3-white w3-small w3-margin-left w3-margin-right w3-round-large w3-animate-zoom">
+    <br />
+    <div class="w3-row w3-padding w3-animate-opacity w3-secondary-l5 w3-border-top w3-border-bottom">
+      <div class="w3-left w3-xlarge" *ngIf="eventShows?.EventStatusId == null"><b>Event</b></div>
+      <div class="w3-left w3-xlarge" *ngIf="eventShows?.EventStatusId == 1"><b>Event</b></div>
+      <div class="w3-left w3-xlarge" *ngIf="eventShows?.EventStatusId == 2"><b>Show</b></div>
+      <div class="w3-right">
+        <button permissionCheck="14.2.1" class="w3-button w3-margin-right-small w3-secondary w3-round-large" (click)="createNewField()">+ Add New Field</button>
+        <button permissionCheck="14.2.2" *ngIf="eventShows.Id" class="w3-button w3-margin-right-small w3-secondary w3-round-large" (click)="addNewEvent()">New Event</button>
+        <button class="w3-button w3-margin-right w3-secondary w3-round-large" (click)="cancel()">
+          <i class="fa fa-reply"></i>
+        </button>
+      </div>
+    </div>
+    <div class="w3-container">
+      <div class="w3-row">
+        <div class="w3-full">
+          <div class="marginform">
+            <div class="w3-full w3-container">
+              <input id="active" type="checkbox" [(ngModel)]="eventShows.Inactive" />
+              <label for="active">&nbsp;Inactive</label>
+            </div>
+
+            <div class="w3-half w3-container">
+              <div class="w3-full " permissionCheck="14.2.3">
+                <label>Mode</label>
+                <select class="w3-input w3-border" [(ngModel)]="eventShows.EventModeId" (change)="SelectedEventModeChange($event.target.value)">
+                  <option value="0">--Select Event Mode--</option>
+                  <option *ngFor="let eventMode of listEventMode" value="{{eventMode.Id}}">{{eventMode.Name}}</option>
+                </select>
+              </div>
+
+              <div class="w3-full " permissionCheck="14.2.5">
+                <label>Number *</label>
+                <input class="w3-input w3-border" disabled="disabled" type="text" [(ngModel)]="eventShows.EventNumber" [class.w3-border-red]="checkValidation(number)" #number="ngModel" required />
+              </div>
+              <div class="w3-full" permissionCheck="14.2.6">
+                <label>Name *</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="eventShows.Name" [class.w3-border-red]="checkValidation(name)" #name="ngModel" required />
+              </div>
+
+              <div class="w3-full">
+                <app-entityname [entityTypeId]="entityTodoName" [entityId]="entityTodoValue" (sendEntityValue)="sendEntityValue($event)" (sendEntityTypeName)="sendEntityType($event)"></app-entityname>
+              </div>
+
+              <!--<div class="w3-full" *ngIf="eventShows.EventModeId == 1" permissionCheck="8.2.6">
+                <label>Vendor</label>
+                <select class="w3-input w3-border" [(ngModel)]="eventShows.VendorId" permissionCheck="8.2.6">
+                  <option value="0">--Select Vendor--</option>
+                  <option *ngFor="let vendor of listVendor" [ngValue]="vendor.VendorId">{{vendor.Name}}</option>
+                </select>
+              </div>-->
+              <div class="w3-full" permissionCheck="14.2.9">
+                <label>Website</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="eventShows.Website" />
+              </div>
+              <div class="w3-full" permissionCheck="14.2.10">
+                <label>Industry</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="eventShows.Industry" />
+              </div>
+              <app-customsection [entityType]="entityType" [alignment]="'left'" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="eventShowLeftCustomFieldValues"></app-customsection>
+            </div>
+            <div class="w3-half w3-container">
+              <div class="w3-full" permissionCheck="14.2.4">
+                <label>Status</label>
+                <app-customdropdown [getApiPath]="'CustomDropDown/GetEventStatus'" [isAddEnabled]="true" [selectedValue]="eventShows.EventStatusId" (saveSelectedValue)="eventShows.EventStatusId = $event" [saveApiPath]="'CustomDropDown/SaveEventStatus'"></app-customdropdown>
+              </div>
+              <div class="w3-full" permissionCheck="14.2.11">
+                <label>Telephone Number</label>
+                <input class="w3-input w3-border" type="text" mask="(000) 000-0000" [showMaskTyped]="true" [(ngModel)]="eventShows.Telephone" />
+              </div>
+              <div class="w3-full" permissionCheck="14.2.12">
+                <label>Address</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="eventShows.Address" />
+              </div>
+              <div class="w3-full" permissionCheck="14.2.13">
+                <label>City</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="eventShows.City" />
+              </div>
+              <div class="w3-full" permissionCheck="14.2.14">
+                <label>State</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="eventShows.State" />
+              </div>
+              <div class="w3-full" permissionCheck="14.2.15">
+                <label>Zip Code</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="eventShows.ZipCode" />
+              </div>
+
+              <div class="w3-full" permissionCheck="14.2.16">
+                <label>Country</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="eventShows.Country" />
+              </div>
+              <app-customsection [entityType]="entityType" [alignment]="'right'" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="eventShowRightCustomFieldValues"></app-customsection>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="w3-bar w3-center w3-margin-top w3-border-secondary">
+        <div class="w3-left">
+          <button permissionCheck="14.2.17" [class]="activeContainer == 'tab2'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab2'">Cost</button>
+          <button [disabled]="!eventShows.Id" permissionCheck="14.2.18" [class]="activeContainer == 'tab1'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab1'">Contacts ({{contactInformations.length}})</button>
+          <button [disabled]="!eventShows.Id" permissionCheck="14.2.19" [class]="activeContainer == 'tab3'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab3'">Notes</button>
+          <button permissionCheck="14.2.20" [disabled]="!eventShows.Id" [class]="activeContainer == 'tab9'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab9'">Files</button>
+        </div>
+      </div>
+      <div *ngIf="activeContainer == 'tab7'">
+        <div class="w3-margin w3-animate-opacity">
+          <h6 class="w3-left w3-margin-bottom-small w3-margin-top-small">Lead/Customer</h6>
+          <div class="w3-row">
+            <button type="button" (click)="addNewLead()" class="w3-button w3-secondary w3-border w3-round-large w3-right"> Add Lead</button>
+          </div>
+          <div class="w3-row">
+            <table class="w3-table w3-bordered">
+              <thead>
+                <tr>
+                  <th>Lead Name</th>
+                  <th>City</th>
+                  <th>Company Name</th>
+                  <th>Annual Revenue</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let lead of listOfLeads" style="cursor:pointer" (click)="viewLead(lead);">
+                  <td>{{lead.LeadName}}</td>
+                  <td>{{lead.City}}</td>
+                  <td>{{lead.CompanyName}}</td>
+                  <td>{{lead.AnnualRevenue}}</td>
+                </tr>
+                <tr *ngIf="listOfLeads.length == 0">
+                  <td>No Records Found.</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="activeContainer == 'tab8'">
+        <div class="w3-margin w3-animate-opacity">
+          <h6 class="w3-left w3-margin-bottom-small w3-margin-top-small">Vendor</h6>
+          <div class="w3-row">
+            <div class="w3-row">
+              <button type="button" (click)="addNewVendor()" class="w3-button w3-secondary w3-border w3-round-large w3-right"> Add Vendor</button>
+            </div>
+            <div class="w3-row">
+              <table class="w3-table w3-bordered">
+                <thead>
+                  <tr>
+                    <th>Number</th>
+                    <th>Name</th>
+                    <th>City</th>
+                    <th>State</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let vendor of listOfVendors" style="cursor:pointer" (click)="viewVendor(vendor);">
+                    <td>{{vendor.VendorNumber}}</td>
+                    <td>{{vendor.Name}}</td>
+                    <td>{{vendor.City}}</td>
+                    <td>{{vendor.State}}</td>
+                  </tr>
+                  <tr *ngIf="listOfVendors.length == 0">
+                    <td>No Records Found.</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="activeContainer == 'tab9'" permissionCheck="14.2.20">
+        <div class="w3-margin w3-animate-opacity">
+          <h6 class="w3-left w3-margin-bottom-small w3-margin-top-small">Files</h6>
+          <div class="w3-row">
+            <app-sf-file-explorer [entity]="entityType" [entityNumber]="entityNumber"></app-sf-file-explorer>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="activeContainer == 'tab10'" permissionCheck="14.2.18">
+        <div class="w3-margin w3-animate-opacity">
+          <h6 class="w3-left w3-margin-bottom-small w3-margin-top-small">Contacts From Event</h6>
+          <div class="w3-row">
+            <app-contactinformation [dataSource]="participantsInfo" [additionalInfo]="false" [entityType]="participantEntityType" [entityId]="entityId"></app-contactinformation>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="activeContainer == 'tab6'">
+        <div class="w3-margin w3-animate-opacity">
+          <h6 class="w3-left w3-margin-bottom-small w3-margin-top-small">Affiliate</h6>
+          <div class="w3-row">
+            <app-categorylist [entity]="entityType" title="Affiliate" [selectedValues]="selectedAffiliateCategories" [categoryType]="1" [entityId]="entityId" (categoryEmitter)="MapAffiliateCategoryValues($event)" (dataEmitter)="AffliateData($event)"></app-categorylist>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="activeContainer == 'tab5'" class="w3-margin w3-animate-opacity">
+        <h6 class="w3-left w3-margin-top-small w3-margin-bottom-small">Referral</h6>
+        <div class="w3-full">
+          <button type="button" (click)="addNewReferral(referral)" class="w3-button w3-secondary w3-border w3-round-large w3-right">+ Add Referral</button>
+        </div>
+        <div class="w3-full">
+          <table class="w3-table w3-bordered">
+            <thead>
+              <tr>
+                <th>Partner / Reference</th>
+                <th>Telephone Number</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Industry </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of listReferrals">
+                <td><a class="hyper-link" (click)="redirectToReferral(data)">{{data.Name}}</a></td>
+                <td>{{data.Telephone}}</td>
+                <td>{{data.City}}</td>
+                <td>{{data.State}}</td>
+                <td>{{data.Industry}}</td>
+              </tr>
+              <tr *ngIf="listReferrals.length == 0">
+                <td>No records</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div *ngIf="activeContainer == 'tab4'" class="w3-margin w3-animate-opacity">
+        <h6 class="w3-left w3-margin-top-small w3-margin-bottom-small">Partner</h6>
+        <div class="w3-full">
+          <button type="button" (click)="addNewPartner(partner)" class="w3-button w3-secondary w3-border w3-round-large w3-right">+ Add Partner</button>
+        </div>
+        <div class="w3-full">
+          <table class="w3-table w3-bordered">
+            <thead>
+              <tr>
+                <th>Partner / Reference</th>
+                <th>Telephone Number</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Industry </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of listPartners">
+                <td><a class="hyper-link" (click)="redirectToPaartner(data)">{{data.Name}}</a></td>
+                <td>{{data.Telephone}}</td>
+                <td>{{data.City}}</td>
+                <td>{{data.State}}</td>
+                <td>{{data.Industry}}</td>
+              </tr>
+              <tr *ngIf="listPartners.length == 0">
+                <td>No records</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div permissionCheck="14.2.18" *ngIf="activeContainer == 'tab1'" class="w3-margin w3-animate-opacity">
+        <h6 class="w3-left w3-margin-top-small w3-margin-bottom-small">Contacts</h6>
+        <div class="w3-full">
+          <app-contactinformation [basePermission]="8.2.15" [dataSource]="contactInformations" [additionalInfo]="false" [entityType]="entityType" [entityId]="entityId"></app-contactinformation>
+        </div>
+      </div>
+      <div permissionCheck="14.2.17" class="w3-white" *ngIf="activeContainer == 'tab2'">
+        <div class="w3-margin w3-animate-opacity marginform">
+          <div class="w3-full">
+            <h6 class="w3-left">Cost</h6>
+            <button type="button" permissionCheck="14.2.17.3" (click)="addNewCostField()" class="w3-button w3-secondary w3-border w3-round-large w3-right">+ Add New Field</button>
+          </div>
+          <div class="w3-row">
+            <div class="w3-half w3-container" permissionCheck="14.2.17.1">
+              <div class="w3-full">
+                <label>Travel Cost</label>
+                <input class="w3-input w3-border" type="text"  placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" [(ngModel)]="eventCost.Travel" />
+              </div>
+              <app-customsection [entityType]="costEntityType" [alignment]="'left'" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="eventCostLeftCustomFieldValues"></app-customsection>
+            </div>
+            <div class="w3-half w3-container" permissionCheck="14.2.17.2">
+              <div class="w3-full">
+                <label>Show Cost</label>
+                <input class="w3-input w3-border" type="text"  placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" permissionCheck="8.2.16.3" [(ngModel)]="eventCost.Show" />
+              </div>
+              <app-customsection [entityType]="costEntityType" [alignment]="'right'" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="eventCostRightCustomFieldValues"></app-customsection>
+            </div>
+          </div>
+          <div class="w3-row">
+            <div class="w3-container" permissionCheck="14.2.17.4">
+              <label>Remarks</label>
+              <textarea class="w3-input w3-border" type="text" [(ngModel)]="eventCost.Notes"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div permissionCheck="14.2.19" class="w3-white" *ngIf="activeContainer == 'tab3'">
+        <div class="w3-margin w3-animate-opacity">
+          <h6 class="w3-left">Notes</h6>
+          <div class="w3-full">
+            <app-notesinfo [entityType]="entityType" [notesDataSource]="notesInfos" [entityId]="entityId"></app-notesinfo>
+          </div>
+        </div>
+      </div>
+      <div class="w3-margin w3-right">
+        <button class="w3-button w3-border w3-round-large w3-margin-right-small" (click)="cancel()">Cancel</button>
+        <button class="w3-button w3-secondary w3-border w3-round-large" (click)="saveEventShow(eventShows)" [disabled]="checkReqValidation(name)||checkReqValidation(number)">Save</button>
+      </div>
+      <br>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div *ngIf="addCustomToggle" class="w3-modal w3-show">
+    <div class="w3-modal-content w3-secondary w3-round-large w3-secondary-button">
+      <div class="w3-row">
+        <div class="w3-container w3-center">
+          <p>Add Field</p>
+          <span (click)="closeError()" class="w3-button w3-display-topright">&times;</span>
+        </div>
+        <app-addnewfield [addCustomToggle]="addCustomToggle" [entityTypeId]="entityTypeId" (dataExist)="dataExist($event)" (saveSuccess)="saveSuccess($event)"></app-addnewfield>
+      </div>
+    </div>
+  </div>
+</div>

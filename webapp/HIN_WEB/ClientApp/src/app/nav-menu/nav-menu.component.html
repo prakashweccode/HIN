@@ -1,0 +1,51 @@
+<div class="">
+  <header>
+    <div *ngIf="navBarService && navBarService.userInformation && navBarService.userInformation.Token">
+      <app-sidenav></app-sidenav>
+    </div>
+    <div [ngClass]="((navBarService && navBarService.userInformation && navBarService.userInformation.Token) ? (showSideMenu?'h-margin-left pageWidth':'h-margin-left smallWidth'):'largeWidth')">
+
+      <div class="w3-bar w3-padding" [ngClass]="!(navBarService && navBarService.userInformation && navBarService.userInformation.Token)?'w3-primary':''">
+        <div class="w3-left" *ngIf="!(navBarService && navBarService.userInformation && navBarService.userInformation.Token)">
+          <a [routerLink]="['/']" class="w3-bar-item w3-button w3-hover-none w3-hover-black">HEALTH INFORMATION NETWORK</a>
+        </div>
+
+        <div class="w3-right">
+          <!--<div navPermissionCheck="10" class="" *ngIf="(navBarService && navBarService.userInformation && navBarService.userInformation.Token)">
+            <div class="w3-dropdown-hover w3-round-large">
+              <button class="w3-secondary-l3 w3-padding-top-small w3-padding-bottom-small w3-large w3-round-large w3-border w3-border-blue-grey w3-button">System Maintenance <i class="fa w3-medium fa-chevron-down"></i></button>
+              <div class="w3-dropdown-content w3-card-4 w3-light-grey" style="position: absolute;top: 45px;width:16%; z-index:1">
+                <a navPermissionCheck="10.1" *ngIf="navBarService && navBarService.userInformation && navBarService.userInformation.Token" (click)="gotoUser()" class="w3-button w3-left-align w3-block w3-margin-right-small w3-border-bottom w3-border-blue-gray"><i class="fa fa-users" aria-hidden="true"></i> Users</a>
+                <a navPermissionCheck="10.2" *ngIf="navBarService && navBarService.userInformation && navBarService.userInformation.Token" (click)="gotoCompanies()" class="w3-button w3-left-align w3-block w3-margin-right-small w3-border-bottom w3-border-blue-gray"><i class="fa fa-briefcase" aria-hidden="true"></i> Companies</a>
+                <a navPermissionCheck="10.3" *ngIf="navBarService && navBarService.userInformation && navBarService.userInformation.Token" (click)="gotoCurrencies()" class="w3-button w3-left-align w3-block w3-margin-right-small w3-border-bottom w3-border-blue-gray"><i class="fa fa-money" aria-hidden="true"></i> Currencies</a>
+                <a navPermissionCheck="10.4" *ngIf="navBarService && navBarService.userInformation && navBarService.userInformation.Token" (click)="manageCustomFields()" class="w3-button w3-left-align w3-block w3-margin-right-small w3-border-bottom w3-border-blue-gray"><i class="fa fa-anchor" aria-hidden="true"></i> Custom Columns</a>
+                <a navPermissionCheck="10.5" *ngIf="navBarService && navBarService.userInformation && navBarService.userInformation.Token" (click)="gotoSettings()" class="w3-button w3-left-align w3-block w3-margin-right-small w3-border-bottom w3-border-blue-gray"><i class="fa fa-lock" aria-hidden="true"></i> Settings</a>
+                <a navPermissionCheck="10.6" *ngIf="navBarService && navBarService.userInformation && navBarService.userInformation.Token" (click)="gotoSecurityPermission()" class="w3-button w3-left-align w3-block w3-margin-right-small w3-border-bottom w3-border-blue-gray"><i class="fa fa-cog" aria-hidden="true"></i> Security Permissions</a>
+                <a *ngIf="navBarService && navBarService.userInformation && navBarService.userInformation.Token && navBarService.userInformation.User.IsAdmin" (click)="gotoCharts()" class="w3-button w3-left-align w3-block w3-margin-right-small w3-border-bottom w3-border-blue-gray"><i class="fa fa-pie-chart" aria-hidden="true"></i> User Quota</a>
+                <a *ngIf="navBarService && navBarService.userInformation && navBarService.userInformation.Token" (click)="gotoImportSettings()" class="w3-button w3-left-align w3-block w3-margin-right-small w3-border-bottom w3-border-blue-gray"><i class="fa fa-upload" aria-hidden="true"></i> Import Settings</a>
+                <a *ngIf="navBarService && navBarService.userInformation && navBarService.userInformation.Token" (click)="gotoDashboardSettings()" class="w3-button w3-left-align w3-block w3-margin-right-small w3-border-bottom w3-border-blue-gray"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard Settings</a>
+                <a *ngIf="navBarService && navBarService.userInformation && navBarService.userInformation.Token" (click)="gotoOffice365Mail()" class="w3-button w3-left-align w3-block w3-margin-right-small w3-border-bottom w3-border-blue-gray"><i class="fa fa-envelope" aria-hidden="true"></i> Office 365</a>
+              </div>
+            </div>
+          </div>-->
+          <!--<a *ngIf="!(navBarService && navBarService.userInformation && navBarService.userInformation.Token)" [routerLink]="['/companyregister']" class="w3-bar-item w3-button w3-hover-none w3-text-grey w3-hover-text-white">Create New Company</a>-->
+
+          <!--<a *ngIf="!(navBarService && navBarService.userInformation && navBarService.userInformation.Token)" [routerLink]="['/login']" class="w3-bar-item w3-button w3-hover-none w3-text-grey w3-hover-text-white">Login</a>-->
+
+          <div class="w3-dropdown-hover w3-right" *ngIf="(navBarService && navBarService.userInformation && navBarService.userInformation.Token)">
+            <div class="w3-dropdown-content w3-bar-block w3-border w3-card-4" style="right:0">
+            </div>
+          </div>
+        </div>
+
+
+
+        <!--<div *ngIf="showGaugeChart">
+          <app-chart [isChangeWidth]="true" [type]="'Header'" [userId]="userId" [chartWidth]="80"></app-chart>
+        </div>-->
+      </div>
+    </div>
+  </header>
+</div>
+
+

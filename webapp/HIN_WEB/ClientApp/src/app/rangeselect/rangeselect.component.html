@@ -1,0 +1,80 @@
+<div *ngIf="SelectType == 'date'">
+  <div *ngIf="rangeSelectDate.From && rangeSelectDate.To">
+    <button class="w3-col s11 w3-input w3-border w3-secondary w3-button w3-round-bottom-right-0 w3-round-top-right-0" (click)="openModal()">{{rangeSelectDate.From | date : 'MM/dd/yyyy'}} - {{rangeSelectDate.To | date : 'MM/dd/yyyy'}}</button>
+    <i class="w3-col s1 w3-input w3-border w3-secondary w3-button w3-round-bottom-left-0 w3-round-top-left-0" (click)="clearDateRangeData()">X</i>
+  </div>
+  <button *ngIf="!(rangeSelectDate.From && rangeSelectDate.To)" class="w3-input w3-border w3-secondary w3-button" (click)="openModal()"> All <i class="fa fa-caret-down w3-margin-top-xsmall w3-margin-right-xsmall w3-right" aria-hidden="true"></i> </button>
+</div>
+
+<div *ngIf="SelectType == 'number'">
+  <div *ngIf="rangeSelectNumber.From && rangeSelectNumber.To">
+    <button class="w3-col s11 w3-input w3-border w3-secondary w3-button w3-round-bottom-right-0 w3-round-top-right-0" (click)="openNumberModal()">{{rangeSelectNumber.From}} - {{rangeSelectNumber.To}}</button>
+    <i class="w3-col s1 w3-input w3-border w3-secondary w3-button w3-round-bottom-left-0 w3-round-top-left-0" (click)="clearNumberRangeData()">X</i>
+  </div>
+  <button *ngIf="!(rangeSelectNumber.From && rangeSelectNumber.To)" class="w3-input w3-border w3-secondary w3-button" (click)="openNumberModal()"> All <i class="fa fa-caret-down w3-margin-top-xsmall w3-margin-right-xsmall w3-right" aria-hidden="true"></i> </button>
+</div>
+
+
+<div *ngIf="toggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large w3-animate-zoom w3-secondary-button">
+    <span (click)="clearDateRangeData()" class="w3-button w3-round-top-right w3-display-topright">&times;</span>
+    <div class="w3-small sfcenter">
+      <div class="w3-animate-opacity">
+        <div class="w3-row w3-round-large w3-secondary-button w3-container">
+          <h5 class="w3-left">Select Date</h5>
+        </div>
+        <div class="w3-row w3-round-bottom-left w3-round-bottom-right w3-primary-l4">
+          <div class="w3-half w3-container marginform">
+            <div class="w3-full">
+              <label>From</label>
+              <input class="w3-input w3-border" type="date" [ngModel]="changeFormatDate(rangeSelectDate.From)" (ngModelChange)="fromDateChangeEvent($event)" />
+            </div>
+          </div>
+          <div class="w3-half w3-container marginform">
+            <div class="w3-full">
+              <label>To</label>
+              <input class="w3-input w3-border" type="date" [ngModel]="changeFormatDate(rangeSelectDate.To)" (ngModelChange)="toDateChangeEvent($event)" />
+            </div>
+          </div>
+          <div class="w3-row">
+            <div class="w3-margin w3-right">
+              <button class="w3-button w3-border w3-round-large w3-secondary" (click)="selectRange(rangeSelectDate)">Select</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="numberToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large w3-animate-zoom w3-secondary-button">
+    <span (click)="clearNumberRangeData()" class="w3-button w3-round-top-right w3-display-topright">&times;</span>
+    <div class="w3-small sfcenter">
+      <div class="w3-animate-opacity">
+        <div class="w3-row w3-round-large w3-secondary-button w3-container">
+          <h5 class="w3-left">Select Range</h5>
+        </div>
+        <div class="w3-row w3-round-bottom-left w3-round-bottom-right w3-primary-l4">
+          <div class="w3-half w3-container marginform">
+            <div class="w3-full">
+              <label>From</label>
+              <input class="w3-input w3-border" type="number" [(ngModel)]="rangeSelectNumber.From" />
+            </div>
+          </div>
+          <div class="w3-half w3-container marginform">
+            <div class="w3-full">
+              <label>To</label>
+              <input class="w3-input w3-border" type="number" [(ngModel)]="rangeSelectNumber.To" />
+            </div>
+          </div>
+          <div class="w3-row">
+            <div class="w3-margin w3-right">
+              <button class="w3-button w3-border w3-round-large w3-secondary" (click)="selectRange(rangeSelectNumber)">Select</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

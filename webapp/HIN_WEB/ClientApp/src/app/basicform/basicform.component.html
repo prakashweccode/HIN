@@ -1,0 +1,1159 @@
+<div class="w3-row">
+  <div class="w3-card w3-white w3-small w3-margin-left w3-margin-right w3-round-large w3-animate-zoom">
+    <br />
+    <div class="w3-row w3-padding w3-animate-opacity w3-margin-bottom w3-secondary-l5 w3-border-top w3-border-bottom">
+      <div class="w3-left w3-container w3-xlarge"><b>Patient Form</b></div>
+      <a class="w3-button w3-secondary w3-round-large w3-margin-right-small w3-right" (click)="goToPreview()"><i class="fa fa-print" aria-hidden="true"></i> Print</a>
+      <a class="w3-button w3-secondary w3-round-large w3-margin-right-small w3-right" (click)="goToLogin()"> Back </a>
+    </div>
+    <div style="display: block;padding: 20px 30px;">
+      <div style="display: -webkit-box;">
+        <div style="width: 50%;float: left;"><img style="max-width: 100px;" src="{{logo?logo:'assets/images/defaultlogo.png'}}"></div>
+        <div class="w3-right w3-margin-right" style="width: 40%;float: right;">
+          <h3 style="font-size: 26px;font-weight: 600;text-align:right;margin:0px;">Patient Information</h3>
+        </div>
+      </div>
+      <div style="padding-top: 50px;padding-bottom: 10px;">
+        <div id="pdf-form">
+          <div style="display: flow-root;margin-bottom: 14px; ">
+            <div style="width: 50%; float: left; position: relative;">
+              <label>First Name  * : </label> <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.PatientName" id="patientName" value="{#patientName}" tabindex="1" />
+              <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="patientName" (click)="voiceToText($event);"></button>
+              <button type="button" class="app-speech-stop-btn2" name="patientName_stop" style="display: none; right: 0.35rem;top:0;" (click)="stopVoiceToText($event);"></button>
+            </div>
+            <div style="width: 50%; float: right; position: relative;">
+              <label>Last Name * : </label> <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.LastName" id="lastName" value="{#lastName}" tabindex="2" />
+              <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="lastName" (click)="voiceToText($event);"></button>
+              <button type="button" class="app-speech-stop-btn2" name="lastName_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+            </div>
+          </div>
+          <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+            <div style="width: 100%; float: left; position: relative;">
+              <label>Address * : </label> <input style="width: 90%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Address" id="address" value="{#address}" tabindex="3" />
+              <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="address" (click)="voiceToText($event);"></button>
+              <button type="button" class="app-speech-stop-btn2" name="address_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+            </div>
+          </div>
+          <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+            <div style="width: 33%; float: left; position: relative;">
+              <label>City * : </label> <input style="width: 85%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.City" id="city" value="{#city}" tabindex="4">
+              <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="city" (click)="voiceToText($event);"></button>
+              <button type="button" class="app-speech-stop-btn2" name="city_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+            </div>
+            <div style="width: 33%; float: left; position: relative;">
+              <label>State * : </label> <input style="width: 82%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.State" id="state" value="{#state}" tabindex="5">
+              <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="state" (click)="voiceToText($event);"></button>
+              <button type="button" class="app-speech-stop-btn2" name="state_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+            </div>
+            <div style="width: 33%; float: left; position: relative;">
+              <label>Zip Code * : </label> <input style="width: 75%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Zipcode" id="zipCode" value="{#zipCode}" tabindex="6">
+              <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="zipCode" (click)="voiceToText($event);"></button>
+              <button type="button" class="app-speech-stop-btn2" name="zipCode_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+            </div>
+          </div>
+          <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+            <div style="width: 30%; float: left; position: relative;">
+              <label>Age * : </label>
+              <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Age" id="age" value="{#age}" tabindex="7">
+              <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="age" (click)="voiceToText($event);"></button>
+              <button type="button" class="app-speech-stop-btn2" name="age_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+            </div>
+            <div style="width: 30%;float: left;">
+              <label>Gender * : </label> <input type="radio" binding="true" control-type="radio" name="Gender" value="true" (change)="changeGender($event)" [(ngModel)]="tempPatient.Gender" /> M / <input type="radio" binding="true" control-type="radio" name="Gender" value="false" (change)="changeGender($event)" [(ngModel)]="tempPatient.Gender" /> F
+            </div>
+            <div style="width: 30%; float: left;">
+              <label>D.O.B * : </label>
+              <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="date" [(ngModel)]="tempPatient.Dob" (change)="ageCalculator($event)" id="dob" value="{#dob}" />
+
+            </div>
+          </div>
+          <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+            <div style="width: 30%; float: left; position: relative;">
+              <label> Home Phone : </label> <input style="width: 75%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.HomePhone" id="homephone" value="{#homephone}" tabindex="8">
+              <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="homephone" (click)="voiceToText($event);"></button>
+              <button type="button" class="app-speech-stop-btn2" name="homephone_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+            </div>
+            <div style="width: 30%; float: left; position: relative;">
+              <label> Cell Phone * : </label> <input style="width: 75%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.CellPhone" id="cellphone" value="{#cellphone}" tabindex="9">
+              <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="cellphone" (click)="voiceToText($event);"></button>
+              <button type="button" class="app-speech-stop-btn2" name="cellphone_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+            </div>
+            <div style="width: 30%; float: left; position: relative;">
+              <label>Marital Status : </label> <input style="width: 71%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.MaritalStatus" id="maritalstatus" value="{#maritalstatus}" tabindex="10" />
+              <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="maritalstatus" (click)="voiceToText($event);"></button>
+              <button type="button" class="app-speech-stop-btn2" name="maritalstatus_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+            </div>
+          </div>
+          <div style="display: flow-root; margin-bottom: 14px; position: relative;">
+            <div style="width: 100%;float: left;">
+              <label>Email Address * : </label> <input style="width: 85%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.EmailAddress" id="emailaddress" value="{#emailaddress}" tabindex="11" />
+              <button style="right:0.35rem;top:0;"
+                      type="button" class="app-speech-input-btn2" name="emailaddress" (click)="voiceToText($event);"></button>
+              <button type="button" class="app-speech-stop-btn2" name="emailaddress_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+            </div>
+          </div>
+          <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+            <div style="width: 50%; float: left; position: relative;">
+              <label> Emergency Contact * : </label> <input style="width: 73%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.EmergencyContact" id="emergencycontact" value="{#emergencycontact}" tabindex="12" />
+              <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="emergencycontact" (click)="voiceToText($event);"></button>
+              <button type="button" class="app-speech-stop-btn2" name="emergencycontact_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+            </div>
+            <div style="width: 50%; float: left; position: relative;">
+              <label> Telephone : </label> <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Telephone" id="telephone" value="{#telephone}" tabindex="13" />
+              <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="telephone" (click)="voiceToText($event);"></button>
+              <button type="button" class="app-speech-stop-btn2" name="telephone_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+            </div>
+          </div>
+          <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+            <div style="width: 80%; float: left;">
+              <label> Allergies : </label> <input style="border: none;" type="checkbox" (change)="onCheckboxChange($event)" [(ngModel)]="tempPatient.Nka"><label style="margin-left:5px">Not Known Allergies</label>
+              <div *ngIf="checkData " style="width: 95%; float: left; position: relative;">
+                <input style="width: 95%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Allergies" id="allergies" value="{#allergies}" tabindex="14" />
+                <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="allergies" (click)="voiceToText($event);"></button>
+                <button type="button" class="app-speech-stop-btn2" name="allergies_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+              </div>
+
+            </div>
+          </div>
+          <div class="w3-center">
+            <h3 style="font-size: 26px;font-weight: 600;margin:0px;">Past Medical History</h3>
+          </div>
+          <!--<div style="border: 1px solid #ddd; border-bottom:none; text">
+    <label>Please check each applicable diagnosis:</label>
+  </div>
+  <div class="w3-container w3-show-inline-flex" style="border: 1px solid #ddd; padding-right: 32px">
+
+      <div style="width:500px">
+        <input style="border: none; margin-left: -12px" type="checkbox"><label style="margin-left:5px">Hypertension</label>
+      </div>
+      <div style="width:500px">
+        <input style="border: none; margin-left: -12px" type="checkbox"><label style="margin-left:5px">Hypertension</label>
+      </div>
+      <div style="width:500px">
+        <input style="border: none; margin-left: -12px" type="checkbox"><label style="margin-left:5px">Hypertension</label>
+      </div>
+    </div>-->
+
+          <table class="w3-table-all w3-center" style="text-align:center">
+            <tbody>
+              <tr style="text-align:center; border:none">
+                <th>
+                  <label>Please check each applicable diagnosis:</label>
+                </th>
+              </tr>
+              <tr style="width:100px">
+                <td>
+                  <ul style="list-style-type:none;">
+                    <li class="w3-half"><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.Hypertension"><label style="margin-left:5px">Hypertension</label></li>
+                    <li class="w3-half"><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.HeartDisease"><label style="margin-left:5px">Heart disease</label></li>
+                    <li class="w3-half"><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.Liverdisease"><label style="margin-left:5px">Liver disease</label></li>
+                    <li class="w3-half"><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.KidneyDisease"><label style="margin-left:5px">Kidney disease</label></li>
+                    <li class="w3-half">
+                      <input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.Diabetes"><label style="margin-left:5px">Diabetes</label>
+                    </li>
+                    <li class="w3-half"><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.ThyroidDisease"><label style="margin-left:5px">Thyroid disease</label></li>
+                    <li class="w3-half">
+                      <input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.InsulinDependent"><label style="margin-left:5px">If yes, Insulin dependent?</label><span></span>
+                    </li>
+                    <li class="w3-half">
+                      <input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.Asthma"><label style="margin-left:5px">Asthma</label><span></span>
+                    </li>
+                    <li class="w3-half">
+                      <input style="border: none; margin-left: -12px;" type="checkbox" [(ngModel)]="tempPatient.Cancer"><label style="margin-left:5px">Cancer</label>
+                    </li>
+                    <li class="w3-half">
+                      
+                      <input style="border: none; margin-left: -12px;" type="checkbox" [(ngModel)]="tempPatient.MentalDisorder"><label style="margin-left:5px">Mental Disorder</label>
+                    </li>
+                    <li class=""></li>
+
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+            <div style="width: 50%; float: left; position: relative; ">
+              <label> Type </label><input style="width: 92%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Type" id="type" value="{#type}" tabindex="15"/>
+              <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="type" (click)="voiceToText($event);"></button>
+              <button type="button" class="app-speech-stop-btn2" name="type_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+            </div>
+          </div>
+
+          <br />
+          <br />
+
+          <label>Other medical Problems</label>
+          <table class="w3-table-all">
+            <tbody>
+              <tr>
+                <td style="height: 30px; position: relative;">
+                  <input style="width: 100%; border: none; margin-left: -12px" type="text" [(ngModel)]="tempPatient.OtherMedicalProblems" id="othermedicalproblems" value="{#othermedicalproblems}" tabindex="16">
+                  <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="othermedicalproblems" (click)="voiceToText($event);"></button>
+                  <button type="button" class="app-speech-stop-btn2" name="othermedicalproblems_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <br />
+          <br />
+
+          <label>Past surgeries and hospitalization </label>
+          <table class="w3-table-all w3-margin-bottom">
+            <tbody>
+              <tr>
+                <td style="height: 30px; position: relative;">
+                  <input style="width: 100%; border: none; margin-left: -12px" type="text" [(ngModel)]="tempPatient.PastSurgeriesAndHospitalization" id="pastsurgeries" value="{#pastsurgeries}" tabindex="17">
+                  <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="pastsurgeries" (click)="voiceToText($event);"></button>
+                  <button type="button" class="app-speech-stop-btn2" name="pastsurgeries_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+                </td>
+              </tr>
+              <tr>
+                <!--<td style="position: relative; height: 30px;">
+          <input type="checkbox" [(ngModel)]="tempPatient.BloodTransfusion"><label> Have you ever had a blood transfusion? </label> <input style="width: 53%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.BloodTransfusionData" id="bloodtransfusiondata" value="{#bloodtransfusiondata}" tabindex="18">
+          <button style="right: 43.35rem; top: 8px;" type="button" class="app-speech-input-btn2" name="bloodtransfusiondata" (click)="voiceToText($event);"></button>
+          <button type="button" class="app-speech-stop-btn2" name="bloodtransfusiondata_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+        </td>-->
+              </tr>
+            </tbody>
+          </table>
+
+          <!--<div style="position: relative; display: flow-root">
+    <input type="checkbox" [(ngModel)]="tempPatient.BloodTransfusion"><label> Have you ever had a blood transfusion? </label> <input style="width: 53%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.BloodTransfusionData" id="bloodtransfusiondata" value="{#bloodtransfusiondata}" tabindex="18">
+    <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="bloodtransfusiondata" (click)="voiceToText($event);"></button>
+    <button type="button" class="app-speech-stop-btn2" name="bloodtransfusiondata_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+  </div>-->
+
+          <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+            <div style="width: 50%; float: left; position: relative; ">
+              <input type="checkbox" [(ngModel)]="tempPatient.BloodTransfusion"><label> Have you ever had a blood transfusion? </label> <input style="width: 70%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.BloodTransfusionData" id="bloodtransfusiondata" value="{#bloodtransfusiondata}" tabindex="18" />
+              <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="bloodtransfusiondata" (click)="voiceToText($event);"></button>
+              <button type="button" class="app-speech-stop-btn2" name="bloodtransfusiondata_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+            </div>
+          </div>
+
+
+          <br />
+          <br />
+
+          <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+            <div style="width: 50%; float: left; position: relative; ">
+              <label> Medication : </label> <input style="width: 85%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Medication" id="medication" value="{#medication}" tabindex="19" />
+              <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="medication" (click)="voiceToText($event);"></button>
+              <button type="button" class="app-speech-stop-btn2" name="medication_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+            </div>
+          </div>
+
+          <!--<div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+    <div style="width: 50%;float: left;">
+      <label> Patient Signature : </label> <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text">
+    </div>
+    <div style="width: 50%;float: left;">
+      <label> Date : </label> <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="date">
+    </div>
+  </div>-->
+        </div>
+      </div>
+      <div style="margin-top: 20px;">
+        <div style="text-align: center;margin: 0px;">
+          <p>3107W hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
+          <p>Office:(786) 638-4747 <sup>.</sup>Fax:(954) 367-3763</p>
+        </div>
+      </div>
+    </div>
+
+
+    <div style="display: block;padding: 20px 30px;">
+      <div style="display: -webkit-box;">
+        <div style="width: 50%;float: left;"><img style="max-width: 100px;" src="{{logo?logo:'assets/images/defaultlogo.png'}}"></div>
+      </div>
+      <div style="padding-top: 50px;padding-bottom: 10px;">
+        <div id="pdf-form">
+          <div class="w3-center">
+            <h3 style="font-size: 26px;font-weight: 600;margin:0px;">Social History</h3>
+          </div>
+
+
+          <table class="w3-table-all w3-center" style="text-align: center; border: 1px solid #999;">
+
+            <tbody>
+              <tr>
+                <td style="border: 1px solid #999;">
+                  <label style="text-align: center; display: block;"><b>Excersice</b></label>
+                  <ul style="list-style-type: none; padding-inline-start: 10px;">
+                    <li><input style="border: none; margin-left: -12px" [(ngModel)]="tempPatient.Sedentary" type="checkbox"><label style="margin-left:5px">Sedentary (No excersice)</label></li>
+                    <li><input style="border: none; margin-left: -12px" [(ngModel)]="tempPatient.MildExercise" type="checkbox"><label style="margin-left:5px">mild exercise (Walking, wolf)</label></li>
+                    <li><input style="border: none; margin-left: -12px" [(ngModel)]="tempPatient.RegularVigorius" type="checkbox"><label style="margin-left:5px">Regular Vigorius exercise (4x/week)</label></li>
+                  </ul>
+                </td>
+                <td style="border:1px solid #999;">
+                  <label style="text-align: center; display: block;"><b>Alcohol</b></label>
+                  <ul style="list-style-type: none; padding-inline-start: 10px;">
+                    <li><input style="border: none; margin-left: -12px" [(ngModel)]="tempPatient.DrinkAlcohol" type="checkbox"><label style="margin-left:5px">Drink alcohol</label></li>
+                    <li></li>
+                    <li style="margin-left:-12px"><label>How many drinks per week? </label><input style="width: 53%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.DrinkAlcoholData"></li>
+                  </ul>
+                </td>
+                <td style="border:1px solid #999;">
+                  <label style="text-align: center; display: block;"><b>Tobacco</b></label>
+                  <ul style="list-style-type: none; padding-inline-start: 10px;">
+                    <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.UseTobocco"><label style="margin-left:5px">Use tobocco</label></li>
+                    <li><label>Packs per day? </label><input style="width: 7%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.PacksPerDay"><label style="margin-left:5px">no of years? </label><input style="width: 7%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Years"><label style="margin-left:5px">year quit </label><input style="width: 7%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.YearsToQuit"></li>
+
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid #999;">
+                  <label style="text-align: center; display: block;"><b>Drugs</b></label>
+                  <ul style="list-style-type: none; padding-inline-start: 10px;">
+                    <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.StreetDrugs"><label style="margin-left:5px">Currently use recreational or street drugs</label></li>
+                    <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.StreetDrugNeedle"><label style="margin-left:5px">used street drugs with a needle in the past</label></li>
+                  </ul>
+                </td>
+                <td style="border: 1px solid #999;">
+                  <label style="text-align: center; display: block;"><b>Sex</b></label>
+                  <ul style="list-style-type: none; padding-inline-start: 10px;">
+                    <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.Contraception"><label style="margin-left:5px">Contraception / Birth control </label><input style="width: 53%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.ContraceptionData"></li>
+                  </ul>
+                </td>
+                <td style="border: 1px solid #999;">
+                  <label style="text-align: center; display: block;"><b>Personal Saftey</b></label>
+                  <ul style="list-style-type: none; padding-inline-start: 10px;">
+                    <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.LiveAlone"><label style="margin-left:5px">Live alone</label></li>
+                    <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.FrequentlyFalls"><label style="margin-left:5px">Frequently falls in the last 6 months</label></li>
+                  </ul>
+                </td>
+              </tr>
+
+
+            </tbody>
+          </table>
+
+          <br />
+          <br />
+
+          <div *ngIf="femaleData" style="border: 2px solid #999;" class="w3-padding">
+            <div class="w3-row">
+              <label> G </label><input style="width: 20%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.G"> &nbsp;<label> P </label><input style="width: 20%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.P"> &nbsp;
+              <label> A </label><input style="width: 20%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.A"> &nbsp;<label> LMP </label><input style="width: 20%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Lmp">
+            </div>
+            <div class="w3-row w3-margin-top-xxlarge">
+              <label> Mamogram </label><input style="width: 20%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Mamogram"> &nbsp;<label> Pap Smear </label><input style="width: 20%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.PapSmear">
+            </div>
+          </div>
+          <br />
+          <div class="w3-left">
+            <label> <strong> Colonoscopy : </strong> </label>
+            <input type="radio" binding="true" control-type="radio" name="Colonoscopy" value="true" (change)="changeColonoscopy($event)" [(ngModel)]="tempPatient.Colonoscopy"> Yes
+            <input type="radio" binding="true" control-type="radio" name="Colonoscopy" value="false" (change)="changeColonoscopy($event)" [(ngModel)]="tempPatient.Colonoscopy"> No
+          </div>
+          <div class="w3-margin-top-3xlarge" style="display: flow-root;margin-bottom: 14px;">
+            <div style="width: 95%; float: left; position: relative;">
+              <input style="width: 95%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.ColonoscopyData" id="colonoscopy" value="{#colonoscopy}" tabindex="20">
+              <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="colonoscopy" (click)="voiceToText($event);"></button>
+              <button type="button" class="app-speech-stop-btn2" name="colonoscopy_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+            </div>
+          </div>
+
+          <div class="w3-center">
+            <h3 style="font-size: 26px;font-weight: 600;margin:0px;">Family Health History</h3>
+          </div>
+
+          <table class="w3-table-all w3-center" style="text-align: center; border: 1px solid #999;">
+            <tbody>
+              <tr>
+                <th style="border:none">Relationship</th>
+                <th style="border:none">Age</th>
+                <th style="border:none">Significant Health Problems</th>
+              </tr>
+            <tbody>
+              <tr>
+                <td style="border: 1px solid #999; width: 200px;">Father</td>
+                <td style="border: 1px solid #999; text-align: center; position: relative; ">
+                  <input style="width: 90%; border: none; margin-left: -12px" type="text" [(ngModel)]="tempPatient.FatherAge" id="fatherage" value="{#fatherage}" tabindex="21">
+                  <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="fatherage" (click)="voiceToText($event);"></button>
+                  <button type="button" class="app-speech-stop-btn2" name="fatherage_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+                </td>
+                <td style="border: 1px solid #999; text-align: center; position: relative; ">
+                  <input style="width: 98%; border: none; margin-left: -12px" type="text" [(ngModel)]="tempPatient.FatherHealthProblem" id="fatherproblem" value="{#fatherproblem}" tabindex="22">
+                  <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="fatherproblem" (click)="voiceToText($event);"></button>
+                  <button type="button" class="app-speech-stop-btn2" name="fatherproblem_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+                </td>
+              </tr>
+              <tr>
+                <td style="border: 1px solid #999; width: 200px;">Mother</td>
+                <td style="border: 1px solid #999; text-align: center; position: relative;">
+                  <input style="width: 90%; border: none; margin-left: -12px" type="text" [(ngModel)]="tempPatient.MotherAge" id="motherage" value="{#motherage}" tabindex="23">
+                  <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="motherage" (click)="voiceToText($event);"></button>
+                  <button type="button" class="app-speech-stop-btn2" name="motherage_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+                </td>
+                <td style="border: 1px solid #999; text-align: center; position: relative; ">
+                  <input style="width: 98%; border: none; margin-left: -12px" type="text" [(ngModel)]="tempPatient.MotherHealthPproblem" id="motherproblem" value="{#motherproblem}" tabindex="24">
+                  <button style="right:0.35rem;top:0;"
+                          type="button" class="app-speech-input-btn2" name="motherproblem" (click)="voiceToText($event);"></button>
+                  <button type="button" class="app-speech-stop-btn2" name="motherproblem_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+                </td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #999 ">Sibling</td>
+                <td style="border: 1px solid #999; text-align: center; position: relative;">
+                  <input style="width: 90%; border: none; margin-left: -12px" type="text" [(ngModel)]="tempPatient.SiblingAge" id="siblingage" value="{#siblingage}" tabindex="25">
+                  <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="siblingage" (click)="voiceToText($event);"></button>
+                  <button type="button" class="app-speech-stop-btn2" name="siblingage_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+                </td>
+                <td style="border: 1px solid #999; text-align: center; position: relative;">
+                  <input style="width: 98%; border: none; margin-left: -12px" type="text" [(ngModel)]="tempPatient.SiblingHealthProblem" id="siblingproblem" value="{#siblingproblem}" tabindex="26">
+                  <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="siblingproblem" (click)="voiceToText($event);"></button>
+                  <button type="button" class="app-speech-stop-btn2" name="siblingproblem_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+                </td>
+              </tr>
+              <!--<tr><td style="border:1px solid #999"><input style="width: 100%; border: none; margin-left: -12px" type="text"></td><td style="border: 1px solid #999; text-align: center; width:180px;"><input style="width: 100%; border: none; margin-left: -12px" type="text"></td><td style="border: 1px solid #999; text-align: center"><input style="width: 100%; border: none; margin-left: -12px" type="text"></td></tr>-->
+            </tbody>
+          </table>
+          <br />
+          <br />
+
+          <div style="margin-top: 20px;">
+            <div style="text-align: center;margin: 0px;">
+              <p>3107W hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
+              <p>Office:(786) 638-4747 <sup>.</sup>Fax:(954) 367-3763</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: block;padding: 20px 30px;">
+      <div style="display: -webkit-box;">
+        <div style="width: 50%;float: left;"><img style="max-width: 100px;" src="{{logo?logo:'assets/images/defaultlogo.png'}}"></div>
+      </div>
+      <div class="w3-right w3-padding-left-10">
+        <button class="w3-button-alt w3-border w3-round-large w3-padding-left-10" [ngClass]="activeContainer=='tab1'?'activeTab':''" (click)="openEN()"> EN </button>
+        <button class="w3-button-alt  w3-border w3-round-large " [ngClass]="activeContainer=='tab2'?'activeTab':''" (click)="openES()" > ES </button>
+      </div>
+      <div style="padding-top: 50px;padding-bottom: 10px;">
+        <div id="pdf-form">
+          <div *ngIf="activeContainer == 'tab1'">
+            <div class="w3-center">
+              <h3 style="font-size: 26px;font-weight: 600;margin:0px;"><u>CONSENT FOR TREATMENT</u></h3>
+            </div>
+            <div class="w3-row w3-margin-left w3-margin-top-xxlarge">
+              <p>The undersigned has been informed of the treatment considered necessary for the patient whose name appears below. Physicians and employees of the above facility will perform the treatment and procedures.</p>
+            </div>
+            <div class="w3-row w3-margin-left">
+              <p>Authorization is hereby granted for such treatment, procedures, including the administration of anesthetics, medications or other therapies that may be deemed necessary.</p>
+            </div>
+            <div class="w3-row w3-margin-left">
+              <p>I consent for myself or on behalf of the patient, the selection, assignment of physician, and agree to arrange with him for obtaining a complete diagnosis and continuation of treatment as needed.</p>
+            </div>
+            <div class="w3-row w3-margin-left">
+              <p>I certify that I have read the above authorization and understand it.  I also certify that no guarantees or assurances have been made to me as to the results that may be obtained by this treatment. </p>
+            </div>
+
+            <div class="w3-margin-top-xxlarge w3-margin-left" style="display: flow-root;margin-bottom: 14px;">
+              <div style="width: 50%; float: left; position: relative;">
+                <label> Patient Printed Name : </label>
+                <input style="width: 70%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.PatientPrintedName" id="patientprintedname" value="{#patientprintedname}" tabindex="27">
+                <button style="right:0.35rem;top:0;"
+                        type="button" class="app-speech-input-btn2" name="patientprintedname" (click)="voiceToText($event);"></button>
+                <button type="button" class="app-speech-stop-btn2" name="patientprintedname_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+              </div>
+              <div style="width: 50%;float: left;">
+                <label> Date : </label> <input style="width: 70%;border: none;border-bottom: 1px solid #999;outline:none;" type="date" [(ngModel)]="tempPatient.Date">
+              </div>
+            </div>
+            <div class="w3-margin-top-xxlarge w3-margin-left" style="display: flow-root;margin-bottom: 14px;">
+              <div style="width: 100%;float: left;">
+                <div class="w3-half w3-margin-right">
+                  <label>Patient Signature</label>
+                  <div *ngIf="!signPad()">
+                    <app-signpad (image)="binding($event,'ps')"></app-signpad>
+                  </div>
+                  <div *ngIf="signPad()">
+                    <i class="fa fa-pencil-square w3-right w3-hover" style="height:20px; width:20px;" aria-hidden="true" (click)="toggleSignPad()"></i>
+                    <img style="margin-left: 50px;" [src]="'data:image/jpg;base64,'+tempPatient.PatientSignature" />
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="w3-row w3-margin-left">
+              <p>*All authorizations must be signed by the patient or an authorized person in case of a minor or when the patient is physically or mentally incompetent. </p>
+            </div>
+
+            <div class="w3-row w3-margin-left">
+              <p>****************************************************************************************************************************************</p>
+            </div>
+
+          </div>
+          <div *ngIf="activeContainer == 'tab2'">
+
+
+            <div class="w3-center">
+              <h3 style="font-size: 26px;font-weight: 600;margin:0px;"><u>CONSENTIMIENTO PARA TRATAMIENTO</u></h3>
+            </div>
+
+            <div class="w3-row w3-margin-left w3-margin-top-xxlarge">
+              <p>El que suscribe, se le ha informado que el tratamiento para el paciente cuyo nombre aparece debajo, el cual se considera necesario y que el tratamiento lo efectuaran los doctores de la institución arriba mencionada.</p>
+            </div>
+            <div class="w3-row w3-margin-left">
+              <p>Su autorización es garantía para realizar cualquier tratamiento, procedimiento y administración de anestésicos, medicamentos u otras terapias que puedan ser necesarias.</p>
+            </div>
+            <div class="w3-row w3-margin-left">
+              <p>Yo consiento por mí mismo o en lugar del paciente con respecto a la designación del médico y que de acuerdo hacer los arreglos con el fin de obtener un diagnóstico completo y la continuación del tratamiento como sea necesario.</p>
+            </div>
+            <div class="w3-row w3-margin-left">
+              <p>Por este medio certifico que he leído toda la información que aparece arriba y que la comprendo, igualmente certifico que no se me ha dado ninguna garantía o seguridad de los resultados que se pudieran obtener de este tratamiento. </p>
+            </div>
+
+            <div class="w3-margin-top-xxlarge w3-margin-left" style="display: flow-root;margin-bottom: 14px;">
+              <div style="width: 60%; float: left; position: relative;">
+                <label> Nombre del Paciente (Letra en Molde) : </label>
+                <input style="width: 60%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.NombreDelPaciente" id="nombredelpaciente" value="{#nombredelpaciente}" tabindex="28">
+                <button style="right:0.35rem;top:0;" type="button" class="app-speech-input-btn2" name="nombredelpaciente" (click)="voiceToText($event);"></button>
+                <button type="button" class="app-speech-stop-btn2" name="nombredelpaciente_stop" style="display: none; right: 0.35rem; top: 0;" (click)="stopVoiceToText($event);"></button>
+              </div>
+              <div style="width: 40%;float: left;">
+                <label> Fecha : </label> <input style="width: 50%;border: none;border-bottom: 1px solid #999;outline:none;" type="date" [(ngModel)]="tempPatient.Fecha">
+              </div>
+            </div>
+            <div class="w3-margin-top-xxlarge w3-margin-left" style="display: flow-root;margin-bottom: 14px;">
+              <div style="width: 100%;float: left;">
+                <!--<label> Firma del Paciente : </label> <input style="width: 30%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.FirmaDelPaciente">-->
+                <div class="w3-half w3-margin-right">
+                  <label>Firma del Paciente</label>
+                  <div *ngIf="!signPad()">
+                    <app-signpad (image)="signatureBinding($event,'fdp')"></app-signpad>
+                  </div>
+                  <div *ngIf="signPad()">
+                    <i class="fa fa-pencil-square w3-right w3-hover" style="height:20px; width:20px;" aria-hidden="true" (click)="toggleSignPad()"></i>
+                    <img style="margin-left: 50px;" [src]="'data:image/jpg;base64,'+tempPatient.FirmaDelPaciente" />
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="w3-row w3-margin-left w3-margin-top-xxlarge">
+              <p>*Todas las autorizaciones tienen que ser firmados por el paciente o un individuo autorizado en caso de un menor o si el paciente esta fisicamente o psicologicamente incompetente.	 </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 20px;">
+        <div style="text-align: center;margin: 0px;">
+          <p>3107W hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
+          <p>Office:(786) 638-4747 <sup>.</sup>Fax:(954) 367-3763</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: block;padding: 20px 30px;">
+      <div style="display: -webkit-box;">
+        <div style="width: 50%;float: left;"><img style="max-width: 100px;" src="{{logo?logo:'assets/images/defaultlogo.png'}}"></div>
+      </div>
+      <div style="padding-top: 50px;padding-bottom: 10px;">
+        <div id="pdf-form">
+          <div *ngIf="activeContainer== 'tab1'">
+            <div class="w3-center">
+              <h3 style="font-size: 26px;font-weight: 600;margin:0px;"><u>ATTENTION TO ALL PATIENTS</u></h3>
+            </div>
+            <div class="w3-row w3-margin-left w3-margin-top-xxlarge">
+              <p>Under Florida Law, the Physician is generally required to carry medical malpractice insurance or otherwise demonstrated financial responsibility to cover potential claims for medical malpractice. Your doctor has decided not to carry medical malpractice insurance. This is permitted under Florida Law subjected to certain conditions. Florida Law imposes penalties against noninsured physician who fail to satisfy adverse judgment arising from claims of medical malpractice. This notice is provided pursuant to Florida Law.</p>
+            </div>
+            <div class="w3-row w3-margin-left w3-margin-top-3xlarge">
+              <input style="border: none; margin-left: 0px;" type="checkbox" [(ngModel)]="tempPatient.AttentionAgree"><label style="margin-left:5px">I have read this statement and fully understand it.</label>
+              <!--<p>I have read this statement and fully understand it.</p>-->
+            </div>
+
+            <div class="w3-margin-top-xxlarge w3-margin-left" style="display: flow-root;margin-bottom: 14px;">
+              <div style="width: 100%;float: left;">
+                <!--<label> Patient Signature : </label> <input style="width: 70%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.PatientAttenSign">-->
+                <div class="w3-half w3-margin-right">
+                  <label>Patient Signature</label>
+                  <div *ngIf="!signPad()">
+                    <app-signpad (image)="binding($event,'pas')"></app-signpad>
+                  </div>
+                  <div *ngIf="signPad()">
+                    <i class="fa fa-pencil-square w3-right w3-hover" style="height:20px; width:20px;" aria-hidden="true" (click)="toggleSignPad()"></i>
+                    <img style="margin-left: 50px;" [src]="'data:image/jpg;base64,'+tempPatient.PatientAttenSign" />
+                  </div>
+
+                </div>
+              </div>
+              <div style="width: 50%;float: left;">
+                <label> Date : </label> <input style="width: 70%;border: none;border-bottom: 1px solid #999;outline:none;" type="date" [(ngModel)]="tempPatient.AttenDate">
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="activeContainer == 'tab2'">
+            <div class="w3-center w3-margin-top-xxlarge">
+              <h3 style="font-size: 26px;font-weight: 600;margin:0px;"><u>ATENCION PACIENTES</u></h3>
+            </div>
+
+            <div class="w3-row w3-margin-left w3-margin-top-xxlarge">
+              <p>Bajo las leyes de la Florida, se requiere generalmente que los médicos tengan seguro de mala práctica médica, de lo contrario demostrar responsabilidad financiera para cubrir posibles reclamaciones por mala práctica médica. Su médico ha decidido no tener seguro de mala práctica.  Esto se permite por las leyes de la Florida sujetas a ciertas condiciones.  Las Leyes de la Florida imponen multas a los médicos no asegurados que no satisfagan juicios adversos derivados de reclamaciones de mala práctica médica. Este aviso ha sido provisto siguiendo las leyes de la Florida.</p>
+            </div>
+
+            <div class="w3-row w3-margin-left w3-margin-top-xxlarge">
+              <input style="border: none; margin-left: 0px;" type="checkbox" [(ngModel)]="tempPatient.AtencionAgree"><label style="margin-left:5px">Yo he leído y entiendo perfectamente este aviso.</label>
+              <!--<p>Yo he leído y entiendo perfectamente este aviso.</p>-->
+            </div>
+
+
+            <div class="w3-margin-top-xxlarge w3-margin-left" style="display: flow-root;margin-bottom: 14px;">
+              <div style="width: 100%;float: left;">
+                <!--<label> Firma del Paciente : </label> <input style="width: 60%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.FirmaDelAtencion">-->
+                <div class="w3-half w3-margin-right">
+                  <label>Firma del Paciente</label>
+                  <div *ngIf="!signPad()">
+                    <app-signpad (image)="signatureBinding($event,'fda')"></app-signpad>
+                  </div>
+                  <div *ngIf="signPad()">
+                    <i class="fa fa-pencil-square w3-right w3-hover" style="height:20px; width:20px;" aria-hidden="true" (click)="toggleSignPad()"></i>
+                    <img style="margin-left: 50px;" [src]="'data:image/jpg;base64,'+tempPatient.FirmaDelAtencion" />
+                  </div>
+
+                </div>
+              </div>
+              <div style="width: 50%;float: left;">
+                <label> Date : </label> <input style="width: 50%;border: none;border-bottom: 1px solid #999;outline:none;" type="date" [(ngModel)]="tempPatient.AtencionDate">
+              </div>
+            </div>
+            <br />
+            <br />
+          </div>
+
+          <div style="margin-top: 20px;">
+            <div style="text-align: center;margin: 0px;">
+              <p>3107W hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
+              <p>Office:(786) 638-4747 <sup>.</sup>Fax:(954) 367-3763</p>
+            </div>
+          </div>
+        </div>
+        <div class="w3-row">
+          <div class="w3-margin w3-right">
+            <button class="w3-button w3-secondary w3-border w3-round-large" (click)="saveTempPatient(tempPatient)"> Save </button>
+            <button class="w3-button w3-secondary w3-border w3-round-large" (click)="goToLogin()"> Back </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="printPage" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-secondary-button w3-round-large">
+    <div id="popupPrintWrapper">
+      <span (click)="closeprintPage()" class="noprint w3-button w3-display-topright">&times;</span>
+      <div class="w3-small sfcenter w3-margin-top">
+        <div class="w3-animate-opacity marginform w3-container">
+          <header>
+            <a *ngIf="buttonEnable" class="w3-bar-item w3-button w3-right w3-padding noprint" (click)="print()"><i class="fa fa-print" aria-hidden="true"></i> Print Result</a>
+            <br />
+            <div style="display: -webkit-box;">
+              <div style="width: 50%;float: left;"><img style="max-width: 100px;" src="{{logo?logo:'assets/images/defaultlogo.png'}}"></div>
+              <div class="w3-right w3-margin-right" style="width: 40%;float: right;">
+                <h3 style="font-size: 26px;font-weight: 600;text-align:right;margin:0px;">Patient Information</h3>
+              </div>
+            </div>
+          </header>
+          <div style="display: block;padding: 20px 30px;">
+
+            <div style="padding-top: 50px;padding-bottom: 10px;">
+              <div id="pdf-form">
+                <div style="display: flow-root;margin-bottom: 14px;">
+                  <div style="width: 50%;float: left;">
+                    <label>First Name  * : </label> <input style="width: 71%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.PatientName" />
+                  </div>
+                  <div style="width: 50%;float: right;">
+                    <label>Last Name  : </label> <input style="width: 71%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.LastName" />
+                  </div>
+                </div>
+                <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+                  <div style="width: 100%;float: left;">
+                    <label>Address : </label> <input style="width: 90%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Address" />
+                  </div>
+                </div>
+                <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+                  <div style="width: 33%;float: left;">
+                    <label>City : </label> <input style="width: 50%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.City" />
+                  </div>
+                  <div style="width: 33%;float: left;">
+                    <label>State : </label> <input style="width: 50%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.State">
+                  </div>
+                  <div style="width: 33%;float: left;">
+                    <label>Zip Code : </label> <input style="width: 50%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Zipcode">
+                  </div>
+                </div>
+                <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+                  <div style="width: 30%;float: left;">
+                    <label>Age : </label> <input style="width: 50%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Age">
+                  </div>
+                  
+                  <div style="width: 30%;float: left;">
+                    <label>Gender : </label> <input type="radio" binding="true" [(ngModel)]="tempPatient.Gender" control-type="radio" [value]="true" name="popUpGender" /> M /
+                    <input type="radio" binding="true" control-type="radio" [value]="false" [(ngModel)]="tempPatient.Gender" name="popUpGender" /> F
+                  </div>
+                  {{tempPatient.Gender}}
+                  <div style="width: 30%;float: left;">
+                    <label>D.O.B : </label> <input style="width: 50%;border: none;border-bottom: 1px solid #999;outline:none;" type="date" [(ngModel)]="tempPatient.Dob">
+                  </div>
+                </div>
+                <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+                  <div style="width: 30%;float: left;">
+                    <label>Marital Status : </label> <input style="width: 50%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.MaritalStatus">
+                  </div>
+                  <div style="width: 30%;float: left;">
+                    <label> Home Phone : </label> <input style="width: 50%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.HomePhone">
+                  </div>
+                  <div style="width: 30%;float: left;">
+                    <label> Cell Phone : </label> <input style="width: 50%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.CellPhone">
+                  </div>
+                </div>
+                <div style="display: flow-root;margin-bottom: 14px;">
+                  <div style="width: 100%;float: left;">
+                    <label>Email Address : </label> <input style="width: 85%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.EmailAddress">
+                  </div>
+                </div>
+                <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+                  <div style="width: 50%;float: left;">
+                    <label> Emergency Contact : </label> <input style="width: 50%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.EmergencyContact">
+                  </div>
+                  <div style="width: 50%;float: left;">
+                    <label> Telephone : </label> <input style="width: 50%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Telephone">
+                  </div>
+                </div>
+                <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+                  <div style="width: 80%;float: left;">
+                    <label> Allergies : </label> <input style="border: none;" type="checkbox" [(ngModel)]="tempPatient.Nka"><label style="margin-left:5px">Not Known Allergies</label>
+                    <div *ngIf="checkData">
+                      <input style="width:100%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Allergies">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="w3-center">
+                  <h3 style="font-size: 26px;font-weight: 600;margin:0px;">Past Medical History</h3>
+                </div>
+
+                <table class="w3-table w3-center" style="text-align:center">
+                  <tbody>
+                    <tr style="text-align:center; border:none">
+                      <th>
+                        <label>Please check each applicable diagnosis:</label>
+                      </th>
+                    </tr>
+                    <tr style="width:100px">
+
+                      <td>
+                        <ul style="list-style-type:none;">
+                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.Hypertension"><label style="margin-left:5px">Hypertension</label></li>
+                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.HeartDisease"><label style="margin-left:5px">Heart disease</label></li>
+                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.Liverdisease"><label style="margin-left:5px">Liver disease</label></li>
+                          <li>
+                            <input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.InsulinDependent"><label style="margin-left:5px">If yes, Insulin dependent?</label><span></span>
+                          </li>
+                          <li>
+                            <input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.Cancer"><label style="margin-left:5px">Cancer</label>
+                          </li>
+                          <li>
+                            <label style="margin-left: -12px;">Type : </label><input style="width: 50%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Type">
+                          </li>
+                        </ul>
+                      </td>
+                      <td>
+                        <ul style="list-style-type:none;">
+                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.KidneyDisease"><label style="margin-left:5px">Kidney disease</label></li>
+                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.Diabetes"><label style="margin-left:5px">Diabetes</label></li>
+                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.ThyroidDisease"><label style="margin-left:5px">Thyroid disease</label></li>
+                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.Asthma"><label style="margin-left:5px">Asthma</label></li>
+                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.MentalDisorder"><label style="margin-left:5px">Mental Disorder</label></li>
+                        </ul>
+                      </td>
+
+
+                    </tr>
+                  </tbody>
+                </table>
+                <br />
+                <br />
+
+                <label>Other medical Problems</label>
+                <table class="w3-table">
+                  <tbody>
+                    <tr><td style="height: 30px"><input style="width: 100%; border: none; margin-left: -12px" type="text" [(ngModel)]="tempPatient.OtherMedicalProblems"></td></tr>
+                  </tbody>
+                </table>
+                <br />
+                <br />
+
+                <label>Past surgeries and hospitalization </label>
+                <table class="w3-table">
+                  <tbody>
+                    <tr><td style="height: 30px"><input style="width: 100%; border: none;" type="text" [(ngModel)]="tempPatient.PastSurgeriesAndHospitalization"></td></tr>
+                  </tbody>
+                </table>
+                <br />
+
+                <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+                  <div style="width: 50%; float: left; position: relative; ">
+                    <input type="checkbox" [(ngModel)]="tempPatient.BloodTransfusion"><label> Have you ever had a blood transfusion? </label> <input style="width: 70%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.BloodTransfusionData" />
+
+                  </div>
+                </div>
+
+                <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+                  <div style="width: 50%;float: left;">
+                    <label> Medication : </label> <input style="width: 100%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Medication">
+                  </div>
+                </div>
+                <!--<div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+                  <div style="width: 50%;float: left;">
+                    <label> Patient Signature : </label> <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text">
+                  </div>
+                  <div style="width: 50%;float: left;">
+                    <label> Date : </label> <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="date">
+                  </div>
+                </div>-->
+              </div>
+            </div>
+            <div id="footer" style="margin-top: 20px;">
+              <div style="text-align: center;margin: 0px;">
+                <p>3107W hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
+                <p>Office:(786) 638-4747 <sup>.</sup>Fax:(954) 367-3763</p>
+              </div>
+            </div>
+            <div class="page-break"></div>
+          </div>
+
+          <div style="display: block;padding: 20px 30px;">
+            <div style="display: -webkit-box;">
+              <div style="width: 50%;float: left;"><img style="max-width: 100px;" src="{{logo?logo:'assets/images/defaultlogo.png'}}"></div>
+            </div>
+            <div style="padding-top: 50px;padding-bottom: 10px;">
+              <div id="pdf-form">
+                <div class="w3-center">
+                  <h3 style="font-size: 26px;font-weight: 600;margin:0px;">Social History</h3>
+                </div>
+                <table class="w3-table w3-center" style="text-align: center; border: 1px solid #999;">
+                  <tbody>
+                    <tr>
+                      <td style="border: 1px solid #999;">
+                        <label style="text-align: center; display: block;"><b>Excersice</b></label>
+                        <ul style="list-style-type: none; padding-inline-start: 10px;">
+                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.Sedentary"><label style="margin-left:5px">Sedentary (No excersice)</label></li>
+                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.MildExercise"><label style="margin-left:5px">mild exercise (Walking, wolf)</label></li>
+                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.RegularVigorius"><label style="margin-left:5px">Regular Vigorius exercise (4x/week)</label></li>
+                        </ul>
+                      </td>
+                      <td style="border:1px solid #999;">
+                        <label style="text-align: center; display: block;"><b>Alcohol</b></label>
+                        <ul style="list-style-type: none; padding-inline-start: 10px;">
+                          <li><input style="border: none; margin-left: -12px" [(ngModel)]="tempPatient.DrinkAlcohol" type="checkbox"><label style="margin-left:5px">Drink alcohol</label></li>
+                          <li></li>
+                          <li style="margin-left:-12px"><label>How many drinks per week? </label><input style="width: 53%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.DrinkAlcoholData"></li>
+                        </ul>
+                      </td>
+                      <td style="border:1px solid #999;">
+                        <label style="text-align: center; display: block;"><b>Tobacco</b></label>
+                        <ul style="list-style-type: none; padding-inline-start: 10px;">
+                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.UseTobocco"><label style="margin-left:5px">Use tobocco</label></li>
+                          <li><label>Packs per day? </label><input style="width: 7%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.PacksPerDay"><label style="margin-left:5px">no of years? </label><input style="width: 7%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Years"><label style="margin-left:5px">year quit </label><input style="width: 7%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.YearsToQuit"></li>
+
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="border: 1px solid #999;">
+                        <label style="text-align: center; display: block;"><b>Drugs</b></label>
+                        <ul style="list-style-type: none; padding-inline-start: 10px;">
+                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.StreetDrugs"><label style="margin-left:5px">Currently use recreational or street drugs</label></li>
+                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.StreetDrugNeedle"><label style="margin-left:5px">used street drugs with a needle in the past</label></li>
+                        </ul>
+                      </td>
+                      <td style="border: 1px solid #999;">
+                        <label style="text-align: center; display: block;"><b>Sex</b></label>
+                        <ul style="list-style-type: none; padding-inline-start: 10px;">
+                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.Contraception"><label style="margin-left:5px">Contraception / Birth control </label><input style="width: 53%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.ContraceptionData"></li>
+                        </ul>
+                      </td>
+                      <td style="border: 1px solid #999;">
+                        <label style="text-align: center; display: block;"><b>Personal Saftey</b></label>
+                        <ul style="list-style-type: none; padding-inline-start: 10px;">
+                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.LiveAlone"><label style="margin-left:5px">Live alone</label></li>
+                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.FrequentlyFalls"><label style="margin-left:5px">Frequently falls in the last 6 months</label></li>
+                        </ul>
+                      </td>
+                    </tr>
+
+
+                  </tbody>
+                </table>
+                <br />
+                <br />
+
+                <div *ngIf="femaleData" style="border: 2px solid #999;" class="w3-padding">
+                  <div class="w3-row">
+                    <label> G </label><input style="width: 20%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.G"> &nbsp;<label> P </label><input style="width: 20%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.P"> &nbsp;
+                    <label> A </label><input style="width: 20%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.A"> &nbsp;<label> LMP </label><input style="width: 20%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Lmp">
+                  </div>
+                  <div class="w3-row w3-margin-top-xxlarge">
+                    <label> Mamogram </label><input style="width: 20%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Mamogram"> &nbsp;<label> Pap Smear </label><input style="width: 20%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.PapSmear">
+                  </div>
+                </div>
+                <br />
+                <div class="w3-left">
+                  <label> <strong> Colonoscopy : </strong> </label>
+                  <input type="radio" binding="true" control-type="radio" name="Colonoscopy" [(ngModel)]="tempPatient.Colonoscopy"> Yes
+                  <input type="radio" binding="true" control-type="radio" name="Colonoscopy" [(ngModel)]="tempPatient.Colonoscopy"> No
+                </div>
+                <div class="w3-margin-top-3xlarge" style="display: flow-root;margin-bottom: 14px;">
+                  <div style="width: 95%; float: left; position: relative;">
+                    <input style="width: 95%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.ColonoscopyData">
+                  </div>
+                </div>
+
+                <div class="w3-center">
+                  <h3 style="font-size: 26px;font-weight: 600;margin:0px;">Family Health History</h3>
+                </div>
+
+
+                <table class="w3-table w3-center" style="text-align: center; border: 1px solid #999;">
+                  <tbody>
+                    <tr>
+                      <th style="border:none">Relationship</th>
+                      <th style="border:none">Age</th>
+                      <th style="border:none">Significant Health Problems</th>
+                    </tr>
+                  <tbody>
+                    <tr>
+                      <td style="border: 1px solid #999; width: 200px;">Father</td>
+                      <td style="border:1px solid #999; text-align:center">
+                        <input style="width: 100%; border: none; margin-left: -12px" type="text" [(ngModel)]="tempPatient.FatherAge">
+                      </td>
+                      <td style="border: 1px solid #999; text-align: center "><input style="width: 100%; border: none; margin-left: -12px" type="text" [(ngModel)]="tempPatient.FatherHealthProblem"></td>
+                    </tr>
+                    <tr>
+                      <td style="border: 1px solid #999; width: 200px;">Mother</td>
+                      <td style="border: 1px solid #999; text-align: center"><input style="width: 100%; border: none; margin-left: -12px" type="text" [(ngModel)]="tempPatient.MotherAge"></td>
+                      <td style="border: 1px solid #999; text-align: center"><input style="width: 100%; border: none; margin-left: -12px" type="text" [(ngModel)]="tempPatient.MotherHealthPproblem"></td>
+                    </tr>
+                    <tr>
+                      <td style="border:1px solid #999 ">Sibling</td>
+                      <td style="border: 1px solid #999; text-align: center"><input style="width: 100%; border: none; margin-left: -12px" type="text" [(ngModel)]="tempPatient.SiblingAge"></td>
+                      <td style="border: 1px solid #999; text-align: center;"><input style="width: 100%; border: none; margin-left: -12px" type="text" [(ngModel)]="tempPatient.SiblingHealthProblem"></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br />
+                <br />
+                <!--<div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
+                  <div style="width: 95%;float: left;">
+                    <label> Colonoscopy : </label><input style="width: 100%;border: none;border-bottom: 1px solid #999;outline:none;" type="text">
+                    <input class="w3-margin-top-xlarge" style="width: 100%;border: none;border-bottom: 1px solid #999;outline:none;" type="text">
+                  </div>
+                </div>-->
+              </div>
+            </div>
+            <div id="footer" style="margin-top: 20px;">
+              <div style="text-align: center;margin: 0px;">
+                <p>3107W hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
+                <p>Office:(786) 638-4747 <sup>.</sup>Fax:(954) 367-3763</p>
+              </div>
+            </div>
+            <div class="page-break"></div>
+          </div>
+
+          <div style="display: block;padding: 20px 30px;">
+            <div style="display: -webkit-box;">
+              <div style="width: 50%;float: left;"><img style="max-width: 100px;" src="{{logo?logo:'assets/images/defaultlogo.png'}}"></div>
+            </div>
+            <div style="padding-top: 50px;padding-bottom: 10px;">
+              <div id="pdf-form">
+                <div *ngIf="tempPatient.IsConsentEn == true">
+                  <div class="w3-center">
+                    <h3 style="font-size: 26px;font-weight: 600;margin:0px;"><u>CONSENT FOR TREATMENT</u></h3>
+                  </div>
+                  <div class="w3-row w3-margin-left w3-margin-top-xxlarge">
+                    <p>The undersigned has been informed of the treatment considered necessary for the patient whose name appears below. Physicians and employees of the above facility will perform the treatment and procedures.</p>
+                  </div>
+                  <div class="w3-row w3-margin-left">
+                    <p>Authorization is hereby granted for such treatment, procedures, including the administration of anesthetics, medications or other therapies that may be deemed necessary.</p>
+                  </div>
+                  <div class="w3-row w3-margin-left">
+                    <p>I consent for myself or on behalf of the patient, the selection, assignment of physician, and agree to arrange with him for obtaining a complete diagnosis and continuation of treatment as needed.</p>
+                  </div>
+                  <div class="w3-row w3-margin-left">
+                    <p>I certify that I have read the above authorization and understand it.  I also certify that no guarantees or assurances have been made to me as to the results that may be obtained by this treatment. </p>
+                  </div>
+
+                  <div class="w3-margin-top-xxlarge w3-margin-left" style="display: flow-root;margin-bottom: 14px;">
+                    <div style="width: 65%;float: left;">
+                      <label> Patient Printed Name : </label> <input style="width: 65%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.PatientPrintedName">
+                    </div>
+                    <div style="width: 35%;float: left;">
+                      <label> Date : </label> <input style="width:60%;border: none;border-bottom: 1px solid #999;outline:none;" type="date" [(ngModel)]="tempPatient.Date">
+                    </div>
+                  </div>
+                  <div class="w3-margin-top-xxlarge w3-margin-left" style="display: flow-root;margin-bottom: 14px;">
+                    <div style="width: 100%;float: left;">
+                      <label> Patient Signature : </label>
+                      <div>
+                        <img style="margin-left: 50px;" [src]="'data:image/jpg;base64,'+tempPatient.PatientSignature" />
+                      </div>
+
+                      <!--//<input style="width: 60%;border: none;border-bottom: 1px solid #999;outline:none;" type="text">-->
+                    </div>
+                  </div>
+
+                  <div class="w3-row w3-margin-left">
+                    <p>*All authorizations must be signed by the patient or an authorized person in case of a minor or when the patient is physically or mentally incompetent. </p>
+                  </div>
+
+                  <div class="w3-row w3-margin-left">
+                    <p>***********************************************************************************************************</p>
+                  </div>
+                </div>
+
+                <div *ngIf="tempPatient.IsConsentimiento == true">
+                  <div class="w3-center">
+                    <h3 style="font-size: 26px;font-weight: 600;margin:0px;"><u>CONSENTIMIENTO PARA TRATAMIENTO</u></h3>
+                  </div>
+
+                  <div class="w3-row w3-margin-left w3-margin-top-xxlarge">
+                    <p>El que suscribe, se le ha informado que el tratamiento para el paciente cuyo nombre aparece debajo, el cual se considera necesario y que el tratamiento lo efectuaran los doctores de la institución arriba mencionada.</p>
+                  </div>
+                  <div class="w3-row w3-margin-left">
+                    <p>Su autorización es garantía para realizar cualquier tratamiento, procedimiento y administración de anestésicos, medicamentos u otras terapias que puedan ser necesarias.</p>
+                  </div>
+                  <div class="w3-row w3-margin-left">
+                    <p>Yo consiento por mí mismo o en lugar del paciente con respecto a la designación del médico y que de acuerdo hacer los arreglos con el fin de obtener un diagnóstico completo y la continuación del tratamiento como sea necesario.</p>
+                  </div>
+                  <div class="w3-row w3-margin-left">
+                    <p>Por este medio certifico que he leído toda la información que aparece arriba y que la comprendo, igualmente certifico que no se me ha dado ninguna garantía o seguridad de los resultados que se pudieran obtener de este tratamiento. </p>
+                  </div>
+
+                  <div class="w3-margin-top-xxlarge w3-margin-left" style="display: flow-root;margin-bottom: 14px;">
+                    <div style="width: 65%;float: left;">
+                      <label> Nombre del Paciente (Letra en Molde) : </label> <input style="width: 45%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.NombreDelPaciente">
+                    </div>
+                    <div style="width: 35%;float: left;">
+                      <label> Fecha : </label> <input style="width: 65%;border: none;border-bottom: 1px solid #999;outline:none;" type="datetime" [(ngModel)]="tempPatient.Fecha">
+                    </div>
+                  </div>
+                  <div class="w3-margin-top-xxlarge w3-margin-left" style="display: flow-root;margin-bottom: 14px;">
+                    <div style="width: 100%;float: left;">
+                      <label> Firma del Paciente : </label>
+                      <div>
+                        <img style="margin-left: 50px;" [src]="'data:image/jpg;base64,'+tempPatient.FirmaDelPaciente" />
+                      </div>
+                      <!--<input style="width: 30%;border: none;border-bottom: 1px solid #999;outline:none;" type="text">-->
+                    </div>
+                  </div>
+                  <div class="w3-row w3-margin-left w3-margin-top-xxlarge">
+                    <p>*Todas las autorizaciones tienen que ser firmados por el paciente o un individuo autorizado en caso de un menor o si el paciente esta fisicamente o psicologicamente incompetente.	 </p>
+                  </div>
+                  </div>
+
+                </div>
+              </div>
+            <div id="footer" style="margin-top: 20px;">
+              <div style="text-align: center;margin: 0px;">
+                <p>3107W hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
+                <p>Office:(786) 638-4747 <sup>.</sup>Fax:(954) 367-3763</p>
+              </div>
+            </div>
+            <div class="page-break"></div>
+          </div>
+
+          <div style="display: block;padding: 20px 30px;">
+            <div style="display: -webkit-box;">
+              <div style="width: 50%;float: left;"><img style="max-width: 100px;" src="{{logo?logo:'assets/images/defaultlogo.png'}}"></div>
+            </div>
+            <div style="padding-top: 50px;padding-bottom: 10px;">
+              <div id="pdf-form">
+                <div *ngIf="tempPatient.IsConsentEn == true">
+                  <div class="w3-center">
+                    <h3 style="font-size: 26px;font-weight: 600;margin:0px;"><u>ATTENTION TO ALL PATIENTS</u></h3>
+                  </div>
+                  <div class="w3-row w3-margin-left w3-margin-top-xxlarge">
+                    <p>Under Florida Law, the Physician is generally required to carry medical malpractice insurance or otherwise demonstrated financial responsibility to cover potential claims for medical malpractice. Your doctor has decided not to carry medical malpractice insurance. This is permitted under Florida Law subjected to certain conditions. Florida Law imposes penalties against noninsured physician who fail to satisfy adverse judgment arising from claims of medical malpractice. This notice is provided pursuant to Florida Law.</p>
+                  </div>
+                  <div class="w3-row w3-margin-left w3-margin-top-3xlarge">
+                    <input style="border: none; margin-left: 0px;" type="checkbox" [(ngModel)]="tempPatient.AttentionAgree"><label style="margin-left:5px">I have read this statement and fully understand it.</label>
+                    <!--<p>I have read this statement and fully understand it.</p>-->
+                  </div>
+
+                  <div class="w3-margin-top-xxlarge w3-margin-left" style="display: flow-root;margin-bottom: 14px;">
+                    <div style="width: 60%;float: left;">
+                      <label> Patient Signature : </label>
+                      <div>
+                        <img style="margin-left: 50px;" [src]="'data:image/jpg;base64,'+tempPatient.PatientAttenSign" />
+                      </div>
+                      <!--<input style="width: 60%;border: none;border-bottom: 1px solid #999;outline:none;" type="text">-->
+                    </div>
+                    <div style="width: 40%;float: left;">
+                      <label> Date : </label> <input style="width: 60%;border: none;border-bottom: 1px solid #999;outline:none;" type="date" [(ngModel)]="tempPatient.AttenDate">
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="tempPatient.IsConsentimiento == true">
+                  <div class="w3-center w3-margin-top-xxlarge">
+                    <h3 style="font-size: 26px;font-weight: 600;margin:0px;"><u>ATENCION PACIENTES</u></h3>
+                  </div>
+
+                  <div class="w3-row w3-margin-left w3-margin-top-xxlarge">
+                    <p>Bajo las leyes de la Florida, se requiere generalmente que los médicos tengan seguro de mala práctica médica, de lo contrario demostrar responsabilidad financiera para cubrir posibles reclamaciones por mala práctica médica. Su médico ha decidido no tener seguro de mala práctica.  Esto se permite por las leyes de la Florida sujetas a ciertas condiciones.  Las Leyes de la Florida imponen multas a los médicos no asegurados que no satisfagan juicios adversos derivados de reclamaciones de mala práctica médica. Este aviso ha sido provisto siguiendo las leyes de la Florida.</p>
+                  </div>
+
+                  <div class="w3-row w3-margin-left w3-margin-top-xxlarge">
+                    <input style="border: none; margin-left: 0px;" type="checkbox" [(ngModel)]="tempPatient.AtencionAgree"><label style="margin-left:5px">Yo he leído y entiendo perfectamente este aviso.</label>
+                    <!--<p>Yo he leído y entiendo perfectamente este aviso.</p>-->
+                  </div>
+
+
+                  <div class="w3-margin-top-xxlarge w3-margin-left" style="display: flow-root;margin-bottom: 14px;">
+                    <div style="width: 60%;float: left;">
+                      <label> Firma del Paciente : </label>
+                      <div>
+                        <img style="margin-left: 50px;" [src]="'data:image/jpg;base64,'+tempPatient.FirmaDelAtencion" />
+                      </div>
+                      <!--<input style="width: 60%;border: none;border-bottom: 1px solid #999;outline:none;" type="text">-->
+                    </div>
+                    <div style="width: 40%;float: left;">
+                      <label> Date : </label> <input style="width: 50%;border: none;border-bottom: 1px solid #999;outline:none;" type="date" [(ngModel)]="tempPatient.AtencionDate">
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+            <div id="footer" style="margin-top: 20px;">
+              <div style="text-align: center;margin: 0px;">
+                <p>3107W hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
+                <p>Office:(786) 638-4747 <sup>.</sup>Fax:(954) 367-3763</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  
+
+  <!--<div class="overlay" *ngIf="show">
+    <div class="w3-display-middle">
+      <div class="loader">
+      </div>
+
+    </div>
+
+  </div>-->

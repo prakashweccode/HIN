@@ -1,0 +1,29 @@
+<div class="w3-display-container w3-container w3-padding-16 w3-round-large" [ngClass]="cssStyle">
+  <div *ngIf="!collopse" class="a-blink" [@enterAnimation]>
+    <div class="w3-row">
+      <div class="w3-right">
+        <button class="w3-button h-grow-vert w3-hover-none">Today</button>
+        <button class="w3-button h-grow-vert w3-hover-none">Week</button>
+        <button class="w3-button h-grow-vert w3-hover-none">Month</button>
+        <button class="w3-button h-grow-vert w3-hover-none">Year</button>
+
+      </div>
+    </div>
+    <div class="w3-left">
+      <div class="w3-row"><i class="fa w3-xxxlarge w3-center" [ngClass]="cssFont"></i></div>
+      <h4 class="w3-center">{{title}}</h4>
+    </div>
+    <div class="w3-right">
+      <div class="w3-large" *ngFor="let widget of data"><label>{{widget.title}}</label> {{widget.value}}</div>
+    </div>
+    <div class="w3-clear"></div>
+  </div>
+
+  <div class="w3-display-topleft">
+    <button class="w3-button h-grow-vert w3-hover-none w3-margin-bottom-xsmall"><i class="fa fa-minus" *ngIf="!collopse" (click)="collopse=!collopse"></i><i class="fa fa-plus" *ngIf="collopse" (click)="collopse=!collopse"></i></button>
+
+  </div>
+  <div class="w3-display-topmiddle a-slideFadeUp" *ngIf="collopse">
+    <div class="w3-margin-top-xsmall">{{title}}</div>
+  </div>
+</div>

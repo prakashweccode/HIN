@@ -1,0 +1,65 @@
+
+
+
+<div class="w3-panel w3-card-2 w3-white w3-small sfcenter w3-margin-top">
+  <div class="w3-margin w3-animate-opacity">
+    <h4 class="w3-left">
+      Add organization
+    </h4>
+    <button class="w3-button w3-right w3-primary w3-round-large" (click)="cancel()">
+      <i class="fa fa-reply"></i>
+    </button>
+  </div>
+  <div class="w3-row w3-padding ">
+    <div class="w3-full">
+      <div class="marginform">
+        <div class="w3-full">
+          <label>Name</label>
+          <input class="w3-input w3-border" type="text" [(ngModel)]="organization.Name" />
+        </div>
+        <div class="w3-full">
+          <label>Label</label>
+          <input class="w3-input w3-border" type="text" />
+        </div>
+        <div class="w3-full">
+          <label>Owner</label>
+          <input class="w3-input w3-border" type="text" />
+        </div>
+        <div class="w3-full">
+          <label>Address</label>
+          <input class="w3-input w3-border" type="text" [(ngModel)]="organization.Address" />
+        </div>
+        <div class="w3-full">
+          <label>City</label>
+          <input class="w3-input w3-border" type="text" [(ngModel)]="organization.City" />
+        </div>
+        <div class="w3-full">
+          <label>State</label>
+          <input class="w3-input w3-border" type="text" [(ngModel)]="organization.State" />
+        </div>
+        <div class="w3-full">
+          <label>Zip Code</label>
+          <input class="w3-input w3-border" type="text" [(ngModel)]="organization.ZipCode" />
+        </div>
+        <div class="w3-full">
+          <label>Country</label>
+          <input class="w3-input w3-border" type="text" [(ngModel)]="organization.Country" />
+        </div>
+        <div class="w3-full">
+          <label>Website</label>
+          <input class="w3-input w3-border" type="text" [(ngModel)]="organization.Website" />
+        </div>
+        <div class="w3-full">
+          <label>Visible to</label>
+          <input class="w3-input w3-border" type="text" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="w3-margin w3-right">
+    <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="cancel()">Cancel</button>
+    <button class="w3-button w3-secondary w3-border w3-round-large" (click)="saveOrganization(organization)">Save</button>
+  </div>
+  <br>
+</div>
+
