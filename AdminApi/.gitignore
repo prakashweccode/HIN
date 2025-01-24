@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/App/obj
+/DTO/obj/Debug/net6.0
+/DTO/obj
+/App/.vs/K9CRM_Company/v17
+/App/bin/Debug/net6.0/ref
+/App/bin/Debug/net6.0
+/DTO/bin/Debug/net6.0

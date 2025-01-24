@@ -1,0 +1,48 @@
+<div class="w3-right">
+  <button type="button" permissionCheck="{{basePermission}}.90" (click)="addCategory()" class="w3-secondary w3-button w3-round-large">+ Add Category</button>
+</div>
+
+<div class="w3-container w3-show-inline-flex" permissionCheck="{{basePermission}}.91">
+  <div *ngFor="let data of listCategories; let i = index;">
+    <div class="marginform">
+      <div class="w3-container w3-margin-bottom">
+          <input id={{i}} type="checkbox" [value]="data.Id" [checked]="CheckSelectedValue(data.Id)" (change)="selectCategory($event)" />
+          <label for={{i}}>&nbsp;{{data.Name}}</label>
+      </div>
+    </div>
+    <!--<div class="w3-quarter">
+      <label>
+        <input  permissionCheck="{{basePermission}}.91" class="w3-check w3-border" type="checkbox" [value]="data.Id" [checked]="CheckSelectedValue(data.Id)" (change)="selectCategory($event)">&nbsp;{{data.Name}}
+      </label>
+    </div>-->
+  </div>
+</div>
+<div *ngIf="toggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large">
+    <div class="w3-container">
+      <span (click)="closeToggle()" class="w3-button w3-display-topright">&times;</span>
+      <div class="w3-white w3-small sfcenter w3-margin-top">
+        <div class="w3-margin w3-animate-opacity marginform">
+          <div class="w3-row">
+            <h5>Add a category</h5>
+          </div>
+          <div class="w3-full w3-container" permissionCheck="{{basePermission}}.92">
+            <label>Category Name: </label>
+            <input type="text" class="w3-input w3-border" [disabled]="category.Id > 0"  permissionCheck="{{basePermission}}.92" [(ngModel)]="category.Name" />
+          </div>
+          <div class="w3-full w3-container w3-margin-top" permissionCheck="{{basePermission}}.93">
+            <!--<label>
+              <input class="w3-check w3-border" type="checkbox" [(ngModel)]="category.IsActive" permissionCheck="{{basePermission}}.93">&nbsp;Active
+            </label>-->
+            <input permissionCheck="{{basePermission}}.93" id="activeCategory" type="checkbox"[(ngModel)]="category.IsActive"/>
+            <label for="activeCategory">&nbsp;Active</label>
+          </div>
+          <div class="w3-margin w3-right" *ngIf="!(category.Id > 0)">
+            <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeToggle()" permissionCheck="{{basePermission}}.94">Cancel</button>
+            <button class="w3-button w3-secondary w3-border w3-round-large" (click)="saveCategories()" permissionCheck="{{basePermission}}.95">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

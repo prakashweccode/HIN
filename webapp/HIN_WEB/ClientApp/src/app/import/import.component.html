@@ -1,0 +1,47 @@
+<div class="w3-row">
+  <div class="w3-card-2 w3-white w3-small w3-margin-right w3-margin-left w3-round-large w3-animate-zoom">
+    <br />
+    <div class="w3-row w3-padding w3-animate-opacity w3-secondary-l5 w3-border-top w3-border-bottom">
+      <div class="w3-left w3-xlarge">
+        <b>
+          Import
+        </b>
+      </div>
+      <div *ngIf="fileName==''">
+        <button (click)="cancel()" class="w3-button w3-secondary w3-round-large w3-right"><i class="fa fa-reply"></i></button>
+      </div>
+      <div *ngIf="fileName != ''">
+        <button type="button" (click)="UploadFile(file)" class="w3-button w3-right w3-secondary w3-round-large"><i class="fa fa-upload"></i> Import</button>
+        <button type="reset" (click)="ResetFileUpload()" class="w3-button w3-round-large w3-right w3-margin-right w3-border">Cancel</button>
+      </div>
+    </div>
+    <div class="w3-row w3-padding">
+      <div>
+        <input type="file" style="display:none;" (change)="SelectFile(file)" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" #file>
+        <button type="button" (click)="file.click()" class="w3-button w3-round-large w3-mobile w3-secondary"><i class="fa fa-search"></i> Browse Files</button>
+        <span class="w3-margin-left"><i *ngIf="fileName" class="fa fa-file"></i> {{fileName}}</span>
+      </div>
+      <div class="w3-margin-top">
+        
+      </div>
+      <div class="w3-row w3-margin" *ngIf="fileName">
+        <app-csv-entity-mapper [entityColumns]="entityColumns" [requiredColumns]="requiredColumns" (emitMappedColumn)="addMappedColumn($event);" [fileColumns]="fileColumns"></app-csv-entity-mapper>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<div class="w3-container">
+  <div class="w3-panel w3-card-2 w3-white w3-small">
+    <div class="w3-row w3-margin-top">
+      <div class="w3-margin">
+        <h4>Upload File</h4>
+
+        <div *ngIf="fileName != ''" class="w3-margin-top">
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>-->

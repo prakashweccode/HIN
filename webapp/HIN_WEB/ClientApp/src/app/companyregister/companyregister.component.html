@@ -1,0 +1,157 @@
+<div class="w3-round-large w3-card-2 w3-white w3-small w3-margin-right w3-margin-left w3-animate-zoom w3-margin-top">
+  <div class="w3-container">
+
+    <div class="">
+      <h4 class="w3-center w3-full">WELCOME TO HIN</h4>
+      <p class="w3-center w3-margin-small w3-full">Create a password to set up your account.</p>
+    </div>
+    <div class="w3-row">
+      <button *ngIf="loggedUser && loggedUser.User && loggedUser.User.UserId" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right" (click)="showSettings=!showSettings"><i [ngClass]="showSettings?'fa fa-reply fa-lg':'fa fa-cog fa-lg'" aria-hidden="true" ></i></button>
+      <button *ngIf="loggedUser && loggedUser.User && loggedUser.User.UserId" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="back()">Back To List</button>
+
+    </div>
+
+
+    <div *ngIf="!showSettings">
+      <div class="w3-row marginform">
+        <div class="w3-full w3-container" permissionCheck="10.2.2.1">
+          <label>Company Name*</label>
+          <input class="w3-input w3-border" type="text" permissionCheck="10.2.2.1" [(ngModel)]="companyRegister.CompanyName" [class.w3-border-red]="checkValidation(companyName)" #companyName="ngModel" required>
+        </div>
+        <div class="w3-row w3-full">
+          <div class="w3-third w3-container" permissionCheck="10.2.2.2">
+            <label>Phone Number*</label>
+            <input class="w3-input w3-border" type="text" permissionCheck="10.2.2.2" mask="(000) 000-0000" [showMaskTyped]="true" [(ngModel)]="companyRegister.PhoneNumber" [class.w3-border-red]="checkValidation(phoneNumber)" #phoneNumber="ngModel" required>
+          </div>
+          <div class="w3-third w3-container" permissionCheck="10.2.2.3">
+            <label>Extension</label>
+            <input class="w3-input w3-border" type="text" permissionCheck="10.2.2.3" [(ngModel)]="companyRegister.Extension">
+          </div>
+          <div class="w3-third w3-container" permissionCheck="10.2.2.4">
+            <label>Fax</label>
+            <input class="w3-input w3-border" type="text" [(ngModel)]="companyRegister.FaxNumber" permissionCheck="10.2.2.4">
+          </div>
+        </div>
+        <div class="w3-row w3-full w3-margin-top">
+          <h5 class="w3-left">Contact</h5>
+        </div>
+        <div class="w3-row">
+          <div class="w3-half">
+            <div class="w3-full w3-container" permissionCheck="10.2.2.5">
+              <label>First Name*</label>
+              <input class="w3-input w3-border" type="text" permissionCheck="10.2.2.5" [(ngModel)]="companyRegister.ContactFirstName" [class.w3-border-red]="checkValidation(contactFirstName)" #contactFirstName="ngModel" required>
+            </div>
+            <!--<div class="w3-full w3-container" permissionCheck="10.2.2.6">
+              <label>Middle Name</label>
+              <input class="w3-input w3-border" type="text" permissionCheck="10.2.2.6" [(ngModel)]="companyRegister.ContactMiddleName">
+            </div>-->
+            <div class="w3-full w3-container" permissionCheck="10.2.2.7">
+              <label>Last Name*</label>
+              <input class="w3-input w3-border" type="text" permissionCheck="10.2.2.7" [(ngModel)]="companyRegister.ContactLastName" [class.w3-border-red]="checkValidation(contactLastName)" #contactLastName="ngModel" required>
+            </div>
+            <div class="w3-full w3-container" permissionCheck="10.2.2.8">
+              <label>Title</label>
+              <app-customstringdropdown [getApiPath]="'CustomDropDown/GetContactTitle'" [isAddEnabled]="true" [selectedValue]="companyRegister.ContactTitle" (saveSelectedValue)="companyRegister.ContactTitle=$event" [saveApiPath]="'CustomDropDown/SaveContactTitle'"></app-customstringdropdown>
+              <!--<input class="w3-border w3-input" type="text" permissionCheck="10.2.2.8" [(ngModel)]="companyRegister.ContactTitle">-->
+            </div>
+            <div class="w3-full w3-container" permissionCheck="10.2.2.9">
+              <label>Cell Number</label>
+              <input class="w3-input w3-border" type="text" permissionCheck="10.2.2.9" mask="(000) 000-0000" [showMaskTyped]="true" [(ngModel)]="companyRegister.CellNumber" #phoneNumber="ngModel">
+            </div>
+            <div class="w3-full w3-container" permissionCheck="10.2.2.10">
+              <label>Email*</label>
+              <input class="w3-border w3-input" type="text" permissionCheck="10.2.2.10" [(ngModel)]="companyRegister.Email" [class.w3-border-red]="checkValidation(email)" #email="ngModel" required>
+            </div>
+          </div>
+
+          <div class="w3-half">
+            <div class="w3-full w3-container" permissionCheck="10.1.1.2.4">
+              <label>User Name*</label>
+              <input class="w3-border w3-input" type="text" permissionCheck="10.1.1.2.4" [(ngModel)]="companyRegister.UserName" [class.w3-border-red]="checkValidation(username)" #username="ngModel" required>
+            </div>
+            <div class="w3-full w3-container" permissionCheck="10.2.2.11">
+              <label>Password*</label>
+              <input class="w3-input w3-border" type="password" permissionCheck="10.2.2.11" [(ngModel)]="companyRegister.Password" [class.w3-border-red]="checkValidation(password)" #password="ngModel" required>
+            </div>
+            <div class="w3-full w3-container" permissionCheck="10.2.2.12">
+              <label>Confirm Password*</label>
+              <input class="w3-input w3-border" type="password" permissionCheck="10.2.2.12" [(ngModel)]="companyRegister.ConfirmPassword" [class.w3-border-red]="checkValidation(confirmPassword)" #confirmPassword="ngModel" required>
+            </div>
+            <div class="w3-full w3-container">
+              <label>User Licenses</label>
+              <input class="w3-border w3-input" type="number" [(ngModel)]="companyRegister.MaximumUser">
+            </div>
+            <div class="w3-full w3-container" permissionCheck="10.2.2.13">
+              <label>Address</label>
+              <input class="w3-input w3-border" type="text" permissionCheck="10.2.2.13" [(ngModel)]="companyRegister.Address">
+            </div>
+            <div class="w3-row w3-full">
+              <div class="w3-half w3-container" permissionCheck="10.2.2.14">
+                <label>City</label>
+                <input class="w3-border w3-input" type="text" permissionCheck="10.2.2.14" [(ngModel)]="companyRegister.City">
+              </div>
+              <div class="w3-half w3-container" permissionCheck="10.2.2.15">
+                <label>State</label>
+                <input class="w3-border w3-input" type="text" permissionCheck="10.2.2.15" [(ngModel)]="companyRegister.State">
+              </div>
+            </div>
+
+            <div class="w3-row w3-full">
+              <div class="w3-half w3-container" permissionCheck="10.2.2.16">
+                <label>Country</label>
+                <input class="w3-border w3-input" type="text" permissionCheck="10.2.2.16" [(ngModel)]="companyRegister.ZipCode">
+              </div>
+              <div class="w3-half w3-container" permissionCheck="10.2.2.17">
+                <label>Zip Code</label>
+                <input class="w3-border w3-input" type="text" permissionCheck="10.2.2.17" [(ngModel)]="companyRegister.Country">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="showSettings" class="w3-white ">
+      <div class="w3-margin w3-animate-opacity">
+        <h6 class="w3-left">Settings</h6>
+        <div class="w3-row">
+          <div class="w3-full marginform">
+            <ng-container *ngFor="let data of settings; index as i">
+              <div class="w3-third">
+                <div *ngIf="data.Type == 'Text'">
+                  <label>{{data.Name}}</label>
+                  <input class="w3-input w3-border" type="text" [(ngModel)]="companySettings[i].Value"/>
+                </div>
+                <div *ngIf="data.Type == 'Number'">
+                  <label>{{data.Name}}</label>
+                  <div *ngIf="data.Name == 'File Upload Size'">
+                    <input class="w3-input w3-border" mask="000" suffix="GB" placeholder="GB" type="text" [(ngModel)]="companySettings[i].Value"/>
+                  </div>
+                  <div *ngIf="!(data.Name == 'File Upload Size')">
+                    <input class="w3-input w3-border" type="number" [(ngModel)]="companySettings[i].Value"/>
+                  </div>
+                </div>
+                <div *ngIf="data.Type == 'Boolean'">
+                  <div class="w3-margin-bottom-small">
+                    <input id={{i}} type="checkbox" [ngModel]="selectCompanySettingValue(companySettings[i].Value)" (ngModelChange)="companySettings[i].Value = $event" />
+                    <label for={{i}}>&nbsp;{{data.Name}}</label>
+                  </div>
+                </div>
+                <div *ngIf="data.Type == 'DateTime'">
+                  <label>{{data.Name}}</label>
+                  <input class="w3-input w3-border" type="datetime" [(ngModel)]="companySettings[i].Value" />
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="w3-margin w3-right">
+      <button *ngIf="companyRegister?.RegisterId == null" class="w3-button w3-border w3-round-large w3-margin-right-small" (click)="cancel()">Cancel</button>
+      <button *ngIf="!showSettings" class="w3-button w3-secondary w3-border w3-round-large" [disabled]="checkReqValidation(companyName) || checkReqValidation(phoneNumber) || checkReqValidation(contactFirstName) || checkReqValidation(contactLastName) || checkReqValidation(cellNumber) || checkReqValidation(username) || checkReqValidation(email) || checkReqValidation(password) || checkReqValidation(confirmPassword)" (click)="saveCompanyRegister(companyRegister)">Save</button>
+      <button *ngIf="showSettings" class="w3-button w3-secondary w3-border w3-round-large" (click)="saveCompanyRegister(companyRegister)">Save</button>
+    </div>
+    <br>
+  </div>
+</div>

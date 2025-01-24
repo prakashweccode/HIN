@@ -1,0 +1,265 @@
+
+<div class="w3-row">
+  <div class="w3-card w3-white w3-small w3-margin-left w3-margin-right w3-round-large w3-animate-zoom">
+    <br />
+    <div class="w3-row w3-padding w3-animate-opacity w3-margin-bottom w3-secondary-l5 w3-border-top w3-border-bottom">
+      <div class="w3-left w3-container w3-xlarge"><b>Appointment Dictation</b></div>
+      <button class="w3-button w3-secondary w3-right w3-round-large w3-margin-right" (click)="cancel()">
+        <i class="fa fa-reply"></i>
+      </button>
+      <button *ngIf="!recordStart" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="startSpeech()"><i class="fa fa-microphone" aria-hidden="true"></i> Start Recording</button>
+      <button *ngIf="recordStart" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="stopSpeech()"><i class="fa fa-microphone-slash" aria-hidden="true"></i> Stop Recording</button>
+      <button *ngIf="template.TemplateId" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="previewTemplate()">Preview Template</button>
+    </div>
+    <div class="w3-row">
+
+      <div class="w3-half w3-container marginform">
+        <div class="w3-row">
+          <div class="w3-half" permissionCheck="7.2.1">
+            <label>Appointment</label>
+            <select class="w3-input w3-border" [(ngModel)]="template.AppointmentId" #patientName (change)="appointemntPatientName(patientName.value)">
+              <option value="0" disabled>
+                --select Appointment--
+              </option>
+              <option *ngFor="let data of lstAppointment" value="{{data.Id}}">{{data.ServiceNumber}}</option>
+            </select>
+          </div>
+          <div class="w3-half w3-padding-left-10" permissionCheck="7.2.2">
+            <label>Template </label>
+            <select #ddlTemplate class="w3-input w3-border" [(ngModel)]="template.TemplateId" (change)="templateChange(ddlTemplate.value)">
+              <option value="0" disabled>
+                --select template--
+              </option>
+              <option *ngFor="let data of lstTemplateList" value="{{data.id}}">{{data.templateName}}</option>
+            </select>
+          </div>
+
+        </div>
+        <div class="w3-row">
+          <div class="w3-half">
+            <div class="w3-row app-speech-input">
+              <label>Patient Name </label>
+              <input id="txtPatientName" tabindex="1" class="w3-input w3-border app-speech-input-form-control form-control ng-untouched ng-pristine ng-valid" type="text" [(ngModel)]="template.PatientName" />
+              <button class="app-speech-input-btn w3-margin-top-large"></button>
+            </div>
+          </div>
+          <div class="w3-half w3-margin-0">
+            <div class="w3-half w3-padding-left-10">
+              <label>Gender</label>
+              <select class="w3-input w3-border" [(ngModel)]="template.Sex">
+                <option value="0">--select--</option>
+                <option *ngFor="let gender of listGender" [ngValue]="gender.GenderId">{{gender.GenderName}}</option>
+              </select>
+            </div>
+            <div class="w3-half w3-padding-left-10">
+              <label>Age </label>
+              <input id="txtAge" tabindex="2" class="w3-input w3-border" type="text" [(ngModel)]="template.Age" />
+            </div>
+          </div>
+          
+        </div>
+        <div class="w3-full w3-margin-bottom w3-margin-top app-speech-input">
+          <label>Chief Compliant </label>
+          <textarea id="txtChiefComplaint" tabindex="3" class="w3-input w3-border app-speech-input-form-control" rows="3" type="text" [(ngModel)]="template.ChiefCompliant"></textarea>
+          <button class="app-speech-input-btn w3-margin-top-large"></button>
+        </div>
+        <!--<div class="w3-full">
+          <label>Response to Physical Therapy </label><br />
+          <div class="w3-margin-top-small">
+            <div class="w3-third w3-container w3-margin-bottom">
+              <input id="1" type="checkbox">
+              <label for="1">&nbsp;Poor</label>
+            </div>
+            <div class="w3-third w3-container w3-margin-bottom">
+              <input id="2" type="checkbox">
+              <label for="2">&nbsp;Average</label>
+            </div>
+            <div class="w3-third w3-container w3-margin-bottom">
+              <input id="3" type="checkbox">
+              <label for="3">&nbsp;Good</label>
+            </div>
+          </div>
+        </div>
+        <div class="w3-full">
+          <label>Imaging Results </label><br />
+          <div class="w3-margin-top-small">
+            <div class="w3-third w3-container w3-margin-bottom">
+              <input id="1" type="checkbox">
+              <label for="1">&nbsp;X-Ray</label>
+            </div>
+            <div class="w3-third w3-container w3-margin-bottom">
+              <input id="2" type="checkbox">
+              <label for="2">&nbsp;CT Scan</label>
+            </div>
+            <div class="w3-third w3-container w3-margin-bottom">
+              <input id="3" type="checkbox">
+              <label for="3">&nbsp;MRI</label>
+            </div>
+          </div>
+          <textarea class="w3-input w3-border w3-margin-bottom" rows="3" type="text"></textarea>
+        </div>-->
+      </div>
+
+      <div class="w3-half w3-container marginform">
+        <div class="w3-full w3-margin-0">
+          <label>Date </label>
+          <input class="w3-input w3-border" type="datetime-local" [ngModel]="calendarFormatDate(template.Date)"
+                 (ngModelChange)="template.Date = $event" />
+        </div>
+        <div class="w3-full">
+          <label>Date of Accident </label>
+          <input class="w3-input w3-border" type="datetime-local" [(ngModel)]="template.DateOfAccident" />
+        </div>
+        <div class="w3-full w3-margin-bottom w3-margin-top app-speech-input">
+          <label>History of Illness </label>
+          <textarea class="w3-input app-speech-input-form-control" id="txtHistoryOfIllness" tabindex="4" rows="3" type="text" [(ngModel)]="template.HistoryOfIllness"></textarea>
+          <button class="app-speech-input-btn w3-margin-top-large"></button>
+        </div>
+        <!--<div class="w3-full">
+          <label>Response to Medication </label><br />
+          <div class="w3-margin-top-small">
+            <div class="w3-third w3-container w3-margin-bottom">
+              <input id="1" type="checkbox">
+              <label for="1">&nbsp;Poor</label>
+            </div>
+            <div class="w3-third w3-container w3-margin-bottom">
+              <input id="2" type="checkbox">
+              <label for="2">&nbsp;Average</label>
+            </div>
+            <div class="w3-third w3-container w3-margin-bottom">
+              <input id="3" type="checkbox">
+              <label for="3">&nbsp;Good</label>
+            </div>
+          </div>
+
+        </div>
+        <div class="w3-full w3-margin-bottom">
+          <label>Others </label>
+          <textarea class="w3-input w3-border" rows="5" type="text"></textarea>
+        </div>-->
+      </div>
+    </div>
+    <div class="w3-row">
+      <div class="w3-margin w3-right">
+        <button class="w3-button w3-secondary w3-border w3-round-large" (click)="saveTemplate()">Save</button>
+      </div>
+      <!--<div class="w3-margin w3-left">
+        <button *ngIf="template.Id" class="w3-button w3-secondary w3-border w3-round-large w3-margin-right-small" (click)="PrintPDF()">Preview</button>
+        <button *ngIf="template.Id" class="w3-button w3-secondary w3-border w3-round-large">Send to Onedrive</button>
+      </div>-->
+    </div>
+  </div>
+</div>
+
+<!-- Preview Modal Starts -->
+
+<div class="row">
+  <div *ngIf="isPreview" class="w3-modal w3-show">
+    <div class="w3-modal-content w3-round-large w3-secondary-button" style="width: 1040px;height:90vh;overflow-x:auto;">
+      <div class="w3-row w3-secondary">
+        <div class="w3-container w3-center">
+          <p>Preview</p>
+          <span (click)="closePreview()" class="w3-button w3-display-topright">&times;</span>
+        </div>
+      </div>
+      <button class="w3-button w3-secondary w3-margin-top-small w3-right w3-margin-right w3-border w3-round-large">Send to Onedrive</button>
+      <button class="w3-button w3-secondary w3-margin-top-small w3-right w3-margin-right-small w3-border w3-round-large">Send Mail</button>
+      <div class="w3-row" [innerHTML]="bindPreviewHTML(selectedTemplate.TemplateHtml)"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Preview Modal Ends -->
+
+<div *ngIf="isPrint" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-secondary-button w3-round-large">
+    <div class="">
+      <span (click)="closePrint()" class="w3-button w3-display-topright">&times;</span>
+      <div class="w3-small sfcenter w3-margin-top">
+        <div class="w3-animate-opacity marginform">
+          <div id="printWrapper">
+            <div class="html">
+              <div class="body">
+                <header>
+                  <a class="w3-bar-item w3-button w3-right w3-padding noprint" (click)="print('printWrapper')"><i class="fa fa-print" aria-hidden="true"></i> Print Result</a>
+                  <br />
+                  <br />
+                </header>
+                <main>
+                  <div class="w3-container">
+                    <div class="w3-row">
+                      <div class="w3-half">
+                        <div><b>Patient Name :</b><span class="w3-right-align"><u>{{template.PatientName}}</u></span></div>
+                      </div>
+                      <div class="w3-half">
+                        <div><b>Date :</b><span class="w3-right-align"><u>{{template.Date | date:"dd/MM/yyyy"}}</u></span></div>
+                      </div>
+                    </div>
+                    <div class="w3-row">
+                      <div class="w3-third">
+                        <div><b>Gender :</b><span class="w3-right-align"><u>{{getGenderName(template.Sex)}}</u></span></div>
+                      </div>
+                      <div class="w3-third">
+                        <div><b>Age :</b><span class="w3-right-align"><u>{{template.Age}}</u></span></div>
+                      </div>
+                      <div class="w3-third">
+                        <div><b>Date Of Accident :</b><span class="w3-right-align"><u> {{template.DateOfAccident | date:"dd/MM/yyyy"}}</u></span></div>
+                      </div>
+                    </div>
+                    <div class="w3-row w3-margin-top-small">
+                      <div><b>Chief Complaint :</b><span class="w3-right-align"><u>{{template.ChiefCompliant}}</u></span></div>
+                    </div>
+                    <div class="w3-row w3-margin-top-small">
+                      <div><b>History Of Illness :</b><span class="w3-right-align"><u>{{template.HistoryOfIllness}}</u></span></div>
+                    </div>
+                  </div>
+                </main>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<div id="displayNone" style="display:none;">
+  <div class="container">
+    <div id="pdfTable" #pdfTable>
+      <div class="w3-row">
+        <div class="details-inner">
+          <div class="w3-full">
+            <ng-container>
+              <div>
+
+                <div class="w3-row">
+                  <div style="">Patient Name : <u>{{template.PatientName}}</u> </div><br />
+                  <div>Date : <u>{{template.Date | date:"dd/MM/yyyy"}} </u></div><br />
+                  <div>Appointment : <u>{{getServiceName(template.AppointmentId)}}</u> </div><br />
+                  <!--<div>Gender : <u>{{getGenderName(template.Sex)}}</u> </div><br />-->
+                  <div>Age : <u>{{template.Age}}</u> </div><br />
+                  <div>Chief Compliant : <u>{{template.ChiefCompliant}}</u> </div><br />
+                  <div>Date of Accident :<u> {{template.DateOfAccident | date:"dd/MM/yyyy"}}</u> </div><br />
+                  <div>History of Illness : {{template.HistoryOfIllness}} </div><br />
+
+
+
+
+                </div>
+              </div>
+            </ng-container>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

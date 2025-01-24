@@ -1,0 +1,42 @@
+<div class="w3-row">
+  <div class="w3-card-2 w3-white w3-small w3-margin-right w3-margin-left w3-round-large w3-margin-top">
+    <br />
+    <div class="w3-row w3-animate-opacity w3-margin-bottom w3-secondary-l5 w3-border-top w3-border-bottom">
+      <h4 class="w3-left w3-container w3-xlarge">
+        <b>Add custom currency</b>
+      </h4>
+      <button class="w3-button w3-right w3-margin w3-secondary w3-round-large" (click)="cancel()">
+        <i class="fa fa-reply"></i>
+      </button>
+    </div>
+    <div class="w3-panel">
+      <div class="w3-container">
+        <div class="w3-full">
+          <div class="marginform">
+            <div class="w3-full" permissionCheck="10.3.2.1">
+              <label>Full name</label>
+              <input class="w3-input w3-border" type="text" permissionCheck="10.3.2.1" [(ngModel)]="currencies.Name" />
+            </div>
+            <div class="w3-full" permissionCheck="10.3.2.2">
+              <label>Symbol</label>
+              <input class="w3-input w3-border" type="text" permissionCheck="10.3.2.2" [(ngModel)]="currencies.Symbol" />
+            </div>
+            <div class="w3-full" permissionCheck="10.3.2.3">
+              <label>Code</label>
+              <input class="w3-input w3-border" type="text" permissionCheck="10.3.2.3" [(ngModel)]="currencies.Code" />
+            </div>
+            <div class="w3-full" permissionCheck="10.3.2.4">
+              <label>Decimal points</label>
+              <input class="w3-input w3-border" type="text" permissionCheck="10.3.2.4" [(ngModel)]="currencies.DecimalPoints" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w3-margin w3-right">
+        <button class="w3-button w3-border w3-round-large w3-margin-right-small" (click)="cancel()">Cancel</button>
+        <button class="w3-button w3-secondary w3-border w3-round-large" (click)="saveCurrency(currencies)">Save</button>
+      </div>
+      <br>
+    </div>
+  </div>
+</div>

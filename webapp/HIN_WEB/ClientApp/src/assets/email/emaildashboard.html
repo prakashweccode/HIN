@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+      <!--<link rel="stylesheet" href="style.css">-->
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@200;300;400;700&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <script src="https://kit.fontawesome.com/170179ec9c.js" crossorigin="anonymous"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      <script>
+      $(document).ready(function(){
+      $("#myBtn").click(function(){
+      $("#myModal").modal();
+  });
+});
+</script>
+      <script>
+         $(document).ready(function(){
+         $('#show').click(function() {
+         $('.text-blocks').toggle("slide");
+         $('.name-owner').toggle("slide");
+    });
+});
+</script>
+      <script>
+        function rotateImage() {
+        var img = document.getElementById('myimage');
+        img.style.transform = 'rotate(180deg)';
+    }
+      </script>
+      <script>
+             $('#myModal').on('shown.bs.modal', function () {
+             $('#myInput').trigger('focus')
+             })
+      </script>
+      <!-- amCharts javascript sources -->
+		<script type="text/javascript" src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+		<script type="text/javascript" src="https://www.amcharts.com/lib/3/serial.js"></script>
+		<script type="text/javascript" src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+		
+
+		<!-- amCharts javascript code -->
+		<script type="text/javascript">
+			AmCharts.makeChart("chartdiv",
+				{
+					"type": "serial",
+					"categoryField": "category",
+					"autoMarginOffset": 40,
+					"marginRight": 60,
+					"marginTop": 60,
+					"colors": [
+						"#7ac29a",
+						"#000000",
+						"#000000",
+						"#000000",
+						"#000000",
+						"#000000",
+						"#000000",
+						"#000000",
+						"#000000",
+						"#000000",
+						"#000000",
+						"#000000",
+						"#000000",
+						"#000000",
+						"#000000",
+						"#000000",
+						"#000000",
+						"#000000",
+						"#000000",
+						"#000000",
+						"#000000"
+					],
+					"startDuration": 1,
+					"color": "#777",
+					"fontSize": 13,
+					"handDrawThickness": 3,
+					"theme": "light",
+					"categoryAxis": {
+						"gridPosition": "start"
+					},
+					"trendLines": [],
+					"graphs": [
+						{
+							"balloonText": "[[title]] of [[category]]:[[value]]",
+							"bullet": "round",
+							"bulletSize": 10,
+							"id": "AmGraph-1",
+							"lineAlpha": 1,
+							"lineThickness": 3,
+							"title": "graph 1",
+							"type": "smoothedLine",
+							"valueField": "column-1"
+						},
+						{
+							"id": "AmGraph-2",
+							"title": "graph 2"
+						}
+					],
+					"guides": [],
+					"valueAxes": [
+						{
+							"id": "ValueAxis-1",
+							"title": ""
+						},
+						{
+							"id": "ValueAxis-2"
+						}
+					],
+					"allLabels": [],
+					"balloon": {},
+					"titles": [],
+					"dataProvider": [
+						{
+							"category": "9 AM",
+							"column-1": "150"
+						},
+						{
+							"category": "12 PM",
+							"column-1": "100"
+						},
+						{
+							"category": "3 PM",
+							"column-1": "300"
+						},
+						{
+							"category": "6 PM",
+							"column-1": "600"
+						},
+						{
+							"category": "9 PM",
+							"column-1": "250"
+						},
+						{
+							"category": "12 AM",
+							"column-1": "190"
+						},
+						{
+							"category": "3 AM",
+							"column-1": "109"
+						},
+						{
+							"category": "6 AM",
+							"column-1": "110"
+						},
+						{
+							"category": "9 AM",
+							"column-1": "350"
+						}
+					]
+				}
+			);
+		</script>
+      <style>
+          body {
+               font-family: 'Mulish';
+               }
+</style>
+    <title>HIN | Email Template</title>
+  </head>
+  <body>
+    <main>
+        <div class="container-fluid" style="height:100%; background: #F4F3EF">
+            <div class="row" style="height:100%;">               
+                 <div id="full-content-wrap" class="container">
+                     
+             <!-----Top Bar Start----->        
+                     <div class="row top-bar">
+                         <div class="col-sm-12 col-md-5 col-lg-5">
+                             <h3>Welcome Back <b>Prakash</b></h3>
+                         </div>
+                         <div class="col-sm-12 col-md-4 col-lg-3">
+                             <p class="top-search-wrap"><input type="text" placeholder="Search...."><button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button></p>
+                         </div>
+                         <div class="col-sm-12 col-md-4 col-lg-4 top-nav-wrap">
+                           <div class="col-sm-12 col-md-3 col-lg-3"><p class="main-top-bar"><a href="#"><i class="fa fa-bar-chart" aria-hidden="true"></i> Stats</a></p></div>
+                             <div class="col-sm-12 col-md-5 col-lg-5"><p class="main-top-bar"><a href="#"><i class="fa fa-bell-o" aria-hidden="true"></i> Notifications<span>5</span></a></div>
+                             <div class="col-sm-12 col-md-4 col-lg-4"><p class="main-top-bar"><a href="#"><i class="fa fa-cogs" aria-hidden="true"></i> Settings</a></div>
+
+                         </div>                
+                        
+                     </div>
+   <!-------Top Bar End------>
+   
+                 <div class="row" style="margin-top:30px;">
+                <!---Side Nav Start----->     
+                     <div class="col-sm-12 col-md-3 col-lg-3">
+                      <div class="main-side">
+                          <ul>
+                         <li class="active"><a (click)="navigateToDashboard()"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>
+                         <li><a (click)="navigateToEmail()"><i class="fa fa-pencil" aria-hidden="true"></i> Create Email</a></li>
+                         <li><a href="#"><i class="fa fa-users" aria-hidden="true"></i> Audiences</a></li>
+                         <li><a href="#"><i class="fa fa-bullhorn" aria-hidden="true"></i> Campaigns</a></li>
+                         <li><a href="#"><i class="fa fa-area-chart" aria-hidden="true"></i> Analytics</a></li>
+                         <li><a href="#"> <i class="fa fa-envelope" aria-hidden="true"></i> Messages</a></li>
+                         <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i> Search</a></li>
+                         
+                         
+                     </ul>
+                     <div class="recent-campaign">
+                        <h3>Most Recent Campaign</h3>
+                         <h4>HIN Mail Template</h4>
+                         <p class="image-wrap"><img src="assets/email/images/K9erp.png"></p>
+                         <p><i class="fa fa-calendar" aria-hidden="true"></i>
+ 2 April, 2021 12:53:09 PM</p>
+                         <ul>
+                             <li>Click Rate: <span>34%</span></li>
+                             <li>Bounce Rate: <span>1%</span></li>
+                             <li>Successful Deliveries: <span>99%</span></li>
+                         </ul>
+                     </div>     
+                     </div>
+                     </div>     
+                 <!---Side Nav End-----> 
+                 <!---Main Content Start----->
+                     <div class="col-sm-12 col-md-9 col-lg-9">
+                         <div class="col-sm-12 col-md-12 col-lg-12">
+                         <h4 class="campaign-note">This section is your feed. Your most important marketing activity will show up here. <span>Once your campaign is underway, things will look a lot more exciting.</span></h4>
+                         </div>
+                         <div class="col-sm-12 col-md-4 col-lg-4 dash-cols">
+                             <div class="dash-inner"><span><i class="fa fa-bullhorn" aria-hidden="true"></i></span><h3>Campaigns<b>2 Ongoing</b></h3><p>Updated few hours ago</p></div>
+                         </div>
+                         <div class="col-sm-12 col-md-4 col-lg-4 dash-cols"><div class="dash-inner"><span><i class="fa fa-users" aria-hidden="true"></i></span><h3>Audiences<b>54</b></h3><p>Active Audience: 28</p></div>
+                         </div>
+                         <div class="col-sm-12 col-md-4 col-lg-4 dash-cols"><div class="dash-inner"><span><i class="fa fa-usd" aria-hidden="true"></i></span><h3>Revenue<b>$1,095</b></h3><p>as per Last Day</p></div>
+                         
+                         </div>
+                         <div class="col-sm-12 col-md-12 col-lg-12">
+                         <div class="behaviour-block">
+                         <h4>User Actions<span>Based on last 24-Hour Statistics</span></h4>
+                         <div id="chartdiv" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
+                             
+                         </div>
+                     
+                         </div> 
+                   </div>
+                      
+                 <!---Main Content End----->     
+                </div>   
+                   
+                     
+     
+                          
+                     
+                     
+            </div>     
+           </div>
+                
+   </div>
+        
+      
+    </main>
+  </body>
+</html>

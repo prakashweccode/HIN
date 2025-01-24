@@ -1,0 +1,848 @@
+<div class="w3-row">
+  <div class="w3-card w3-white w3-margin-right w3-margin-left w3-margin-bottom w3-round-large">
+    <div class="w3-container">
+      
+    </div>
+
+    <div class="w3-row w3-padding w3-margin-top-small w3-animate-opacity w3-secondary-l5 w3-border-top w3-border-bottom">
+      <div class="w3-margin-top-small w3-row w3-right">
+        <button class="w3-button w3-small w3-right w3-secondary w3-round-large" (click)="pipeline()">+ New Funnels</button>
+        <button *ngIf="activeContainer == 'tab3'" class="w3-button w3-small w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="addNewTodo()">+ Add To Do</button>
+        <button *ngIf="activeContainer == 'tab9'" class="w3-button w3-small w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="addNewReferral()">+ Add Referral</button>
+        <button class="w3-button w3-right w3-secondary w3-round-large w3-small w3-margin-right-small" (click)="editPipeline(pipelineGroupId)"><i class="fa fa-pencil"></i></button>
+      </div>
+      <div class="w3-left w3-xlarge">
+        <b>{{activeContainer == 'tab1' ? 'Practice Funnel' : activeContainer == 'tab3' ? 'To Do Funnel': activeContainer == 'tab5' ?'Vendor To Do': activeContainer == 'tab6' ?'Vendor Funnel': activeContainer == 'tab7' ?'Patient Funnel' : activeContainer == 'tab8'?'Partner Funnel':activeContainer == 'tab9'?'Referral Funnel': activeContainer == 'tab10' ?'Event Funnel' :activeContainer == 'service'?'Appointment Funnel':''}}</b>
+      </div>
+      <div *ngIf="!(activeContainer == 'tab7' || activeContainer == 'service' || activeContainer == 'tab10')" class="w3-right w3-large w3-margin-right">
+        <div class="w3-tag w3-round w3-green w3-margin-right-small" style="padding:3px">
+          <div class="w3-tag w3-round w3-green w3-border w3-border-white" (click)="getByStatus(filterByStatus.Done, activeContainer)" (drop)="todoDoneDrop($event)"
+               (dragover)="allowDrop($event)">
+            Done
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!(activeContainer == 'tab3' || activeContainer == 'tab5' || activeContainer == 'tab7' || activeContainer == 'service' || activeContainer == 'tab10')" class="w3-right w3-large">
+        <div class="w3-tag w3-blue w3-round w3-margin-right-small" style="padding:3px">
+          <div class="w3-tag w3-round w3-blue w3-border w3-border-white" (click)="getByStatus(filterByStatus.InProgress, activeContainer)" (drop)="inprogressdrop($event)"
+               (dragover)="allowDrop($event)">
+            In Progress
+          </div>
+        </div>
+        <div class="w3-tag w3-round w3-green w3-margin-right-small" style="padding:3px">
+          <div class="w3-tag w3-round w3-green w3-border w3-border-white" (click)="getByStatus(filterByStatus.Won, activeContainer)" (drop)="wondrop($event)"
+               (dragover)="allowDrop($event)">
+            Received
+          </div>
+        </div>
+        <div class="w3-tag w3-margin-right-small w3-round w3-red" style="padding:3px">
+          <div class="w3-tag w3-round w3-red w3-border w3-border-white" (click)="getByStatus(filterByStatus.Lost, activeContainer)" (drop)="lostdrop($event)"
+               (dragover)="allowDrop($event)">
+            Lost
+          </div>
+        </div>
+        <div class="w3-tag w3-round w3-yellow w3-margin-right" style="padding:3px">
+          <div class="w3-tag w3-round w3-yellow w3-border w3-border-white" (click)="getByStatus(filterByStatus.Cancel, activeContainer)" (drop)="canceldrop($event)"
+               (dragover)="allowDrop($event)">
+            Cancelled
+          </div>
+        </div>
+      </div>
+      <div *ngIf="(activeContainer == 'service' || activeContainer == 'tab10' || activeContainer == 'tab3' )" class="w3-right w3-large">
+        <div class="w3-tag w3-blue w3-round w3-margin-right-small" style="padding:3px">
+          <div class="w3-tag w3-round w3-blue w3-border w3-border-white" (click)="getServiceByStatus(filterServiceStatus.Inprogress, activeContainer)" (drop)="inProgresServiceDrop($event)"
+               (dragover)="allowDrop($event)">
+            In Progress
+          </div>
+        </div>
+        <div class="w3-tag w3-round w3-yellow w3-margin-right-small" style="padding:3px">
+          <div class="w3-tag w3-round w3-yellow w3-border w3-border-white" (click)="getServiceByStatus(filterServiceStatus.Onhold, activeContainer)" (drop)="onHoldServiceDrop($event)"
+               (dragover)="allowDrop($event)">
+            On Hold
+          </div>
+        </div>
+        <div class="w3-tag w3-margin-right-small w3-round w3-green" style="padding:3px">
+          <div class="w3-tag w3-round w3-green w3-border w3-border-white" (click)="getServiceByStatus(filterServiceStatus.Completed, activeContainer)" (drop)="completedServiceDrop($event)"
+               (dragover)="allowDrop($event)">
+            Completed
+          </div>
+        </div>
+        <div class="w3-tag w3-round w3-red w3-margin-right" style="padding:3px">
+          <div class="w3-tag w3-round w3-red w3-border w3-border-white" (click)="getServiceByStatus(filterServiceStatus.Cancel, activeContainer)" (drop)="cancelServiceDrop($event)"
+               (dragover)="allowDrop($event)">
+            Cancelled
+          </div>
+        </div>
+      </div>
+      <!--<div *ngIf="!(activeContainer == 'tab1')">
+    <div class="w3-right w3-margin-right-small">
+      <select class="w3-round-large w3-input w3-border w3-select w3-small" style="max-width:250px;" [(ngModel)]="userId" (change)="getPipeLineByUserId(activeContainer)">
+        <option [ngValue]="0">All</option>
+        <option *ngFor="let user of users" [ngValue]="user.UserId">{{user.Name}}</option>
+      </select>
+    </div>
+    <div class="w3-right w3-margin-top-medium w3-margin-left"><label>Assigned To:&nbsp;</label></div>
+  </div>-->
+      <div *ngIf="activeContainer == 'tab1'">
+        <div class="w3-right w3-margin-right-small">
+          <select class="w3-round-large w3-input w3-border w3-select w3-small" [compareWith]="compareFn" [(ngModel)]="selectedAssignedName" (ngModelChange)="sendAssignedName(selectedAssignedName)">
+            <option [ngValue]="0">All</option>
+            <option *ngFor="let assignedName of assignedNames" [ngValue]="assignedName">{{assignedName.Name}} ({{assignedName.Type}})</option>
+          </select>
+        </div>
+        <div class="w3-right w3-margin-top-medium w3-margin-left"><label>Assigned To:&nbsp;</label></div>
+      </div>
+    </div>
+
+    <div class="w3-container">
+      <div class="w3-bar w3-center w3-margin-top-small w3-border-secondary">
+
+
+        <div class="w3-row w3-padding w3-margin-top-medium w3-animate-opacity w3-border-top marginform w3-border-bottom">
+          <div class="w3-left w3-xlarge">
+            <i class="fa fa-filter" aria-hidden="true"></i>
+          </div>
+
+          <button class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="updateDealProbability()"><i class="fa fa-refresh"></i></button>
+          <div class="w3-right w3-margin-right-small">
+            <select class="w3-round-large w3-input w3-border w3-select w3-small w3-margin-top-small" style="max-width:250px;" [(ngModel)]="pipelineGroupId" (change)="getPipeLineByPipeLineGroupId(pipelineGroupId)">
+              <option [ngValue]="0" disabled>--Select Funnel--</option>
+              <option *ngFor="let pipeLineGroup of listPipeLineByTypeId" [ngValue]="pipeLineGroup.PipelineGroupId">{{pipeLineGroup.Name}}</option>
+            </select>
+          </div>
+          <div class="w3-right w3-margin-top-medium w3-margin-left"><label>Funnel:&nbsp;</label></div>
+          <div>
+            <div *ngIf="!(activeContainer == 'tab3' || activeContainer == 'tab5' || activeContainer == 'tab7' || activeContainer == 'service' || activeContainer == 'tab10')">
+              <div class="w3-right">
+                <select class="w3-round-large w3-margin-right w3-small w3-border w3-select w3-input w3-margin-top-small" style="max-width:250px;" [(ngModel)]="filterByStatusById" (change)="getByStatus(filterByStatusById, activeContainer)">
+                  <option [ngValue]="0" disabled>--Filter By Status--</option>
+                  <option *ngFor="let filterStatus of getStatusByEnum()" [ngValue]="Dealstatus[filterStatus]">{{filterStatus}}</option>
+                </select>
+              </div>
+              <div class="w3-right w3-margin-top-medium"><label>Status:&nbsp;</label></div>
+            </div>
+            <div *ngIf="(activeContainer == 'service' || activeContainer == 'tab10' || activeContainer == 'tab3')">
+              <div class="w3-right">
+                <select class="w3-round-large w3-margin-right w3-small w3-border w3-select w3-input w3-margin-top-small" style="max-width:250px;" [(ngModel)]="filterByServiceStatusById" (change)="getByStatus(filterByServiceStatusById, activeContainer)">
+                  <option [ngValue]="0" disabled>--Filter By Status--</option>
+                  <option *ngFor="let filterStatus of getServiceStatusByEnum()" [ngValue]="ServiceStatus[filterStatus]">{{filterStatus}}</option>
+                </select>
+              </div>
+              <div class="w3-right w3-margin-top-medium"><label>Status:&nbsp;</label></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="w3-full w3-margin-top">
+          <div class="w3-left">
+            <button [class]="activeContainer == 'tab10'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="getPipeLineByTypeId(pipeLineGroupTypeId.Event)">Event Funnel</button>
+            <!--<button [class]="activecontainer == 'tab1'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="getpipelinebytypeid(pipelinegrouptypeid.sales)">opportunity sales</button>-->
+            <button [class]="activeContainer == 'tab7'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="getPipeLineByTypeId(pipeLineGroupTypeId.Lead)">Patient Funnel</button>
+            <!--<a [class]="activeContainer == 'tab2'?'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-green':'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-white'" (click)="activeContainer = 'tab2'">Opportunity List</a>-->
+            <!--<a [class]="activeContainer == 'tab4'?'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-green':'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-white'" (click)="activeContainer = 'tab4'">Todo List</a>-->
+            <button [class]="activeContainer == 'service'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="getPipeLineByTypeId(pipeLineGroupTypeId.Service)">Appointment Funnel</button>
+            <button [class]="activeContainer == 'tab3'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="getPipeLineByTypeId(pipeLineGroupTypeId.Todo)">To Do Funnel</button>
+            <button [class]="activeContainer == 'tab9'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="getPipeLineByTypeId(pipeLineGroupTypeId.Referral)">Referral Funnel</button>
+
+            <!--<button [class]="activeContainer == 'tab6'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="getPipeLineByTypeId(pipeLineGroupTypeId.Vendor)">Vendor Funnel</button>-->
+            <!--<div class="w3-dropdown-hover w3-float-None">
+              <button [class]="(activeContainer == 'tab6' || activeContainer == 'tab9')?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'">Provider Funnel</button>
+              <div class="w3-dropdown-content w3-card-4">
+
+
+
+              </div>
+            </div>-->
+            <!--<button [class]="activeContainer == 'tab8'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="getPipeLineByTypeId(pipeLineGroupTypeId.Partner)">Partner Funnel</button>-->
+            <!--<button [class]="activeContainer == 'tab6'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="getPipeLineByTypeId(pipeLineGroupTypeId.Vendor)">Vendor Funnel</button>
+            <button [class]="activeContainer == 'tab8'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="getPipeLineByTypeId(pipeLineGroupTypeId.Partner)">Partner Funnel</button>
+            <button [class]="activeContainer == 'tab9'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="getPipeLineByTypeId(pipeLineGroupTypeId.Referral)">Referral Funnel</button>-->
+            <!--<button [class]="activeContainer == 'tab5'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="getPipeLineByTypeId(pipeLineGroupTypeId.VendorToDo)">Vendor To Do</button>-->
+
+
+          </div>
+
+        </div>
+      </div>
+
+      <div *ngIf="activeContainer == 'tab1'" class="w3-white">
+        <div class="w3-row">
+          <table class="w3-responsive">
+            <tr>
+              <td *ngFor="let pipeline of sortBy('DisplayOrder');let i = index">
+                <div id="pipe{{i}}" class="w3-secondary-l5 w3-margin-right w3-margin-bottom w3-margin-top w3-card-2 w3-round-large w3-col w3-display-container" style="width: 150px; padding-bottom: 10px;"
+                     (drop)="drop($event, pipeline)"
+                     (dragover)="allowDrop($event)">
+                  <div class="w3-secondary-button" style="width:150px;" (dragover)="noAllowDrop($event)">
+                    <div class="w3-row w3-center" style="min-height:50px;">
+                      <div class="w3-col s2">
+                        <div class="w3-margin-left-medium">
+                          <i (click)="sortFunnel(pipeline, reverse)" class="cursor-pointer w3-small fa" [ngClass]="{'fa-sort' : (order !== pipeline.Name), 'fa-sort-asc' : (order === pipeline.Name && reverse == true), 'fa-sort-desc' : (order === pipeline.Name && reverse == false) }" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                      <div class="w3-col s8">
+                        <div class="w3-medium">
+                          {{pipeline.Name}}
+                        </div>
+                      </div>
+                      <div class="w3-col s2">
+                        <div class="w3-margin-right-medium">
+                          <i class="fa fa-plus w3-medium" (click)="addPipelineDeal(pipeline)" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <!--<i  class="fa fa-sort w3-light-grey w3-small"></i>&nbsp;-->
+                    <!--<div *ngIf="listofPipeline.length-1 != (i)">
+                      <div class="w3-right w3-display-topright" style="margin-right: 30px; margin-top: 8px; right:-15px;">
+                        <i class="fa fa-angle-double-right w3-text-secondary fa-2x" style="margin-top:-4px;margin-right:-16px;"></i>
+                      </div>
+                    </div>-->
+                  </div>
+                  <div class="w3-margin-left-small w3-margin-right-small" style="display: block;height: 60vh;overflow-y: auto;">
+                    <div draggable="true" class="w3-card w3-light-grey w3-padding-tiny w3-round-medium w3-margin-top-small w3-hover-shadow" [class.w3-light-grey]="!deal.Color" [ngStyle]="{'background-color':deal.Color}" style="cursor:all-scroll" *ngFor="let deal of getStageDeal(pipeline.PipelineId);let z = index"
+                         (dragover)="allowDropTile($event)" id="drag{{deal.DealId}}"
+                         (click)="editDealFromDrag(deal)" (dragstart)="drag($event, deal)">
+
+                      <div class="w3-row">
+                        <div class="w3-col s10"><div class="w3-small w3-margin-right">{{deal.DealName}}</div></div>
+                        <div class="w3-col s2"><span class="w3-right w3-red w3-round-medium">{{deal.Percentage?deal.Percentage:0}}%</span></div>
+                      </div>
+
+
+                      <!--<div class="w3-row">
+                        <div class="w3-rest">
+                          <span class="w3-medium">{{deal.DealName}}</span>
+                        </div>
+                        <div class="w-col" style="width:30px;">
+                          <span class="w3-right w3-tag w3-red w3-round-large">{{deal.Percentage?deal.Percentage:0}}%</span>
+                        </div>
+                      </div>-->
+                      <div class="w3-tiny w3-padding-bottom-small"><i class="fa fa-calendar" aria-hidden="true"></i> {{getLastActionDate(deal)}}</div>
+
+                      <!--<span>{{deal.StatusId}}</span>-->
+                    </div>
+                  </div>
+
+                  <!--<ul class="w3-ul">
+                    <li class="w3-bar">
+                      <div class="w3-bar-item" draggable="true" id="drag{{pipeline.PipelineId}}"
+                           (dragstart)="drag($event)" (dragover)="noAllowDrop($event)"
+                           *ngFor="let deal of getStageDeal(pipeline.PipelineId)">
+                        <span class="w3-large">{{deal.ContactPersonName}}</span><br>
+                        <span>{{deal.Title}}</span>
+                      </div>
+                    </li>
+                  </ul>-->
+                  <!--<div draggable="true" droppable="false" class="w3-green w3-round-xlarge w3-container w3-padding w3-margin-top"
+                       (dragstart)="drag($event)" (dragover)="noAllowDrop($event)"
+                       id="drag2">
+                    Lead 2
+                  </div>
+                  <div draggable="true" droppable="false" class="w3-green w3-round-xlarge w3-container w3-padding w3-margin-top"
+                       (dragstart)="drag($event)" (dragover)="noAllowDrop($event)"
+                       id="drag3">
+                    Lead 3
+                  </div>-->
+
+
+
+                </div>
+              </td>
+            </tr>
+          </table>
+          <ng-container>
+
+            <!--<div id="pipe2" class="w3-white w3-margin w3-hover-shadow w3-col w3-container" style="width:200px;min-height:100px;padding-bottom:50px;"
+                 (drop)="drop($event)"
+                 (dragover)="allowDrop($event)">
+              <div class="w3-full w3-padding" (dragover)="noAllowDrop($event)">
+                Stage 2
+                <div class="w3-right stagearrow">
+                  <i class="fa fa-angle-double-right w3-text-green fa-2x"></i>
+                </div>
+              </div>
+            </div>
+            <div id="pipe3" class="w3-white w3-margin w3-hover-shadow w3-col w3-container" style="width:200px;min-height:100px;padding-bottom:50px;"
+                 (drop)="drop($event)"
+                 (dragover)="allowDrop($event)">
+              <div class="w3-full w3-padding" (dragover)="noAllowDrop($event)">
+                Stage 3
+                <div class="w3-right stagearrow">
+                  <i class="fa fa-angle-double-right w3-text-green fa-2x"></i>
+                </div>
+              </div>
+              <div draggable="true" class="w3-green w3-round-xlarge w3-padding w3-margin-top"
+                   (dragstart)="drag($event)" (dragover)="noAllowDrop($event)"
+                   id="drag4">
+                Lead 4
+              </div>
+              <div draggable="true" droppable="false" class="w3-green w3-round-xlarge w3-container w3-padding w3-margin-top"
+                   (dragstart)="drag($event)" (dragover)="noAllowDrop($event)"
+                   id="drag5">
+                Lead 5
+              </div>
+              <div draggable="true" droppable="false" class="w3-green w3-round-xlarge w3-container w3-padding w3-margin-top"
+                   (dragstart)="drag($event)" (dragover)="noAllowDrop($event)"
+                   id="drag6">
+                Lead 6
+              </div>
+            </div>-->
+            <!--<div id="pipe4" class="w3-white w3-margin w3-hover-shadow w3-col w3-container" style="width:200px;min-height:100px;padding-bottom:50px;"
+                 (drop)="drop($event)"
+                 (dragover)="allowDrop($event)">
+              <div class="w3-full w3-padding" (dragover)="noAllowDrop($event)">
+                Stage 4
+                <div class="w3-right stagearrow">
+                  <i class="fa fa-angle-double-right w3-text-green fa-2x"></i>
+                </div>
+              </div>
+              <div draggable="true" class="w3-green w3-round-xlarge w3-padding w3-margin-top"
+                   (dragstart)="drag($event)" (dragover)="noAllowDrop($event)"
+                   id="drag7">
+                Lead 7
+              </div>
+              <div draggable="true" droppable="false" class="w3-green w3-round-xlarge w3-container w3-padding w3-margin-top"
+                   (dragstart)="drag($event)" (dragover)="noAllowDrop($event)"
+                   id="drag9">
+                Lead 8
+              </div>
+              <div draggable="true" droppable="false" class="w3-green w3-round-xlarge w3-container w3-padding w3-margin-top"
+                   (dragstart)="drag($event)" (dragover)="noAllowDrop($event)"
+                   id="drag10">
+                Lead 10
+              </div>
+            </div>-->
+          </ng-container>
+        </div>
+      </div>
+
+      <!--<div *ngIf="activeContainer == 'tab2'" class="w3-container w3-display-container">
+      <div class="w3-panel w3-card-2 w3-white w3-small sfcenter w3-margin-top marginform">
+        <div class="w3-row-padding">
+          <div class="w3-third">
+
+          </div>
+          <div class="w3-third ">-->
+      <!--<input class="w3-input w3-border" type="text" placeholder="Search for user">-->
+      <!--</div>
+            <div class="w3-third">
+
+            </div>
+
+            <app-data-grid [gridHeaders]="gridHeaders" [actions]="actions" [dataSource]="dataSource" [filterColumns]="filterColumns" [apiUrl]="'/api/Deal/GetODataDealList'" [pageSize]="25"
+                           [isResponsive]="false" [isSearchEnabled]="true" [isPaginationEnabled]="true" [pageLengthOptions]="pageLengthOptions" (rowClick)="editDeal($event);">
+            </app-data-grid>
+          </div>
+        </div>
+      </div>-->
+
+      <div *ngIf="activeContainer == 'tab3'" class="w3-white">
+        <div class="w3-row">
+          <table class="w3-responsive">
+            <tr>
+              <td *ngFor="let pipeline of sortBy('DisplayOrder');let i = index">
+                <div id="pipe{{i}}" class="w3-secondary-l5 w3-margin-right w3-margin-top w3-margin-bottom w3-card-2 w3-round-large w3-col" style="width: 150px;height: 70vh; overflow-x: hidden; overflow-y: auto; padding-bottom: 50px;"
+                     (drop)="dropTodo($event, pipeline)"
+                     (dragover)="allowDrop($event)">
+
+                  <div class="w3-block w3-secondary-button" (dragover)="noAllowDrop($event)" style="position: sticky; top: 0;background-color: #fff;">
+                    <div class="w3-row w3-center" style="min-height:50px;">
+                      <div class="w3-col s2">
+                        <div class="w3-margin-left-medium">
+                          <i (click)="sortTodoFunnel(pipeline, todoReverse)" class="cursor-pointer w3-small fa" [ngClass]="{'fa-sort' : (todoOrder !== pipeline.Name), 'fa-sort-asc' : (todoOrder === pipeline.Name && todoReverse == true), 'fa-sort-desc' : (todoOrder === pipeline.Name && todoReverse == false) }" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                      <div class="w3-col s8">
+                        <div class="w3-medium">
+                          {{pipeline.Name}}
+                        </div>
+                      </div>
+                      <div class="w3-col s2">
+                        <div class="w3-margin-right-medium">
+                          <i class="fa fa-plus w3-medium" (click)="addPipelineTodo(pipeline)" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="w3-margin-left-small w3-margin-right-small">
+                    <div draggable="true" class="w3-card w3-light-grey w3-round-medium w3-padding-tiny w3-margin-top w3-hover-shadow" [class.w3-light-grey]="!todo.Color" [ngStyle]="{'background-color':todo.Color}" style="cursor:all-scroll" *ngFor="let todo of getStageTodo(pipeline.PipelineId);let z = index"
+                         (dragover)="allowDropTile($event)" id="drag{{todo.Id}}"
+                         (click)="editTodoFromDrag(todo)" (dragstart)="dragTodo($event, todo)">
+                      <span class="w3-small">{{todo.TodoName}}</span><br>
+                      <span class="w3-tiny"><i class="fa fa-calendar" aria-hidden="true"></i> {{todo.StartDate | date:'MM/dd/yyyy hh:mm a'}}</span>
+                    </div>
+                  </div>
+
+                </div>
+              </td>
+            </tr>
+          </table>
+          <ng-container>
+
+          </ng-container>
+        </div>
+      </div>
+
+      <div *ngIf="activeContainer == 'tab5'" class="w3-white">
+        <div class="w3-row">
+          <table class="w3-responsive">
+            <tr>
+              <td *ngFor="let pipeline of sortBy('DisplayOrder');let i = index">
+                <div id="pipe{{i}}" class="w3-secondary-l5 w3-margin-right w3-margin-top w3-margin-bottom w3-card-2 w3-round-large w3-col" style="width: 150px;height: 70vh; overflow-x: hidden; overflow-y: auto; padding-bottom: 50px;"
+                     (drop)="dropVendortodo($event, pipeline)"
+                     (dragover)="allowDrop($event)">
+
+                  <div class="w3-block w3-secondary-button" (dragover)="noAllowDrop($event)" style="position:sticky;top:0;background-color:#fff;">
+                    <div class="w3-row w3-center" style="min-height:50px;">
+                      <div class="w3-col s2">
+                        <div class="w3-margin-left-medium">
+                          <i (click)="sortTodoFunnel(pipeline, todoReverse)" class="cursor-pointer w3-small fa" [ngClass]="{'fa-sort' : (todoOrder !== pipeline.Name), 'fa-sort-asc' : (todoOrder === pipeline.Name && todoReverse == true), 'fa-sort-desc' : (todoOrder === pipeline.Name && todoReverse == false) }" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                      <div class="w3-col s8">
+                        <div class="w3-medium">
+                          {{pipeline.Name}}
+                        </div>
+                      </div>
+                      <div class="w3-col s2">
+                        <div class="w3-margin-right-medium">
+                          <i class="fa fa-plus w3-medium" (click)="addPipelineTodo(pipeline)" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="w3-margin-left-small w3-margin-right-small">
+                    <div draggable="true" class="w3-card w3-light-grey w3-round-medium w3-padding-tiny w3-margin-top w3-hover-shadow" [class.w3-light-grey]="!todo.Color" [ngStyle]="{'background-color':todo.Color}" style="cursor:all-scroll" *ngFor="let todo of getStageVendorTodo(pipeline.PipelineId);let z = index"
+                         (dragover)="allowDropTile($event)" id="drag{{todo.Id}}"
+                         (click)="editTodoFromDrag(todo)" (dragstart)="dragVendorTodo($event, todo)">
+                      <span class="w3-small">{{todo.TodoName}}</span><br>
+                      <span class="w3-tiny"><i class="fa fa-calendar" aria-hidden="true"></i> {{todo.StartDate | date:'MM/dd/yyyy hh:mm a'}}</span>
+                    </div>
+                  </div>
+
+                </div>
+              </td>
+            </tr>
+          </table>
+          <ng-container>
+
+          </ng-container>
+        </div>
+      </div>
+
+
+      <div *ngIf="activeContainer == 'tab10'" class="w3-white">
+        <div class="w3-row">
+          <table class="w3-responsive">
+            <tr>
+              <td *ngFor="let pipeline of sortBy('DisplayOrder');let i = index">
+                <div id="pipe{{i}}" class="w3-secondary-l5 w3-margin-right w3-margin-top w3-margin-bottom w3-card-2 w3-round-large w3-col" style="width: 150px;height: 70vh; overflow-x: hidden; overflow-y: auto; padding-bottom: 50px;"
+                     (drop)="dropEvent($event, pipeline)"
+                     (dragover)="allowDrop($event)">
+
+                  <div class="w3-block w3-secondary-button" (dragover)="noAllowDrop($event)" style="position:sticky;top:0;background-color:#fff;">
+                    <div class="w3-row w3-center" style="min-height:50px;">
+                      <div class="w3-col s2">
+                        <div class="w3-margin-left-medium">
+                          <i (click)="sortEventFunnel(pipeline, eventReverse)" class="cursor-pointer w3-small fa" [ngClass]="{'fa-sort' : (eventOrder !== pipeline.Name), 'fa-sort-asc' : (eventOrder === pipeline.Name && eventReverse == true), 'fa-sort-desc' : (eventOrder === pipeline.Name && eventReverse == false) }" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                      <div class="w3-col s8">
+                        <div class="w3-medium">
+                          {{pipeline.Name}}
+                        </div>
+                      </div>
+                      <div class="w3-col s2">
+                        <div class="w3-margin-right-medium">
+                          <i class="fa fa-plus w3-medium" (click)="addPipelineEvent(pipeline)" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="w3-margin-left-small w3-margin-right-small">
+                    <div draggable="true" class="w3-card w3-light-grey w3-round-medium w3-padding-tiny w3-margin-top w3-hover-shadow" [class.w3-light-grey]="!event.Color" [ngStyle]="{'background-color':event.Color}" style="cursor:all-scroll" *ngFor="let event of getStageEvent(pipeline.PipelineId);let z = index"
+                         (dragover)="allowDropTile($event)" id="drag{{event.Id}}"
+                         (click)="editEventFromDrag(event)" (dragstart)="dragEvent($event, event)">
+                      <span class="w3-small">{{event.EventName}}</span><br>
+                      <span class="w3-tiny"><i class="fa fa-calendar" aria-hidden="true"></i> {{event.EventCreated | date:'MM/dd/yyyy hh:mm a'}}</span>
+                    </div>
+                  </div>
+
+                </div>
+              </td>
+            </tr>
+          </table>
+          <ng-container>
+
+          </ng-container>
+        </div>
+      </div>
+
+
+      <div *ngIf="activeContainer == 'tab6'" class="w3-white">
+        <div class="w3-row">
+          <table class="w3-responsive">
+            <tr>
+              <td *ngFor="let pipeline of sortBy('DisplayOrder');let i = index">
+                <div id="pipe{{i}}" class="w3-secondary-l5 w3-margin-right w3-margin-bottom w3-margin-top w3-card-2 w3-round-large w3-col" style="width: 150px;height: 70vh; overflow-x: hidden; overflow-y: auto; padding-bottom: 50px;"
+                     (drop)="dropVendor($event, pipeline)"
+                     (dragover)="allowDrop($event)">
+                  <div class="w3-block w3-secondary-button" (dragover)="noAllowDrop($event)" style="position:relative; top: 0;">
+                    <div class="w3-row w3-center" style="min-height:50px;">
+                      <div class="w3-col s2">
+                        <div class="w3-margin-left-medium">
+                          <i (click)="sortVendorFunnel(pipeline, reverse)" class="cursor-pointer w3-small fa" [ngClass]="{'fa-sort' : (order !== pipeline.Name), 'fa-sort-asc' : (order === pipeline.Name && reverse == true), 'fa-sort-desc' : (order === pipeline.Name && reverse == false) }" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                      <div class="w3-col s8">
+                        <div class="w3-medium">
+                          {{pipeline.Name}}
+                        </div>
+                      </div>
+                      <div class="w3-col s2">
+                        <div class="w3-margin-right-medium">
+                          <i class="fa fa-plus w3-medium" (click)="addPipelineVendor(pipeline)" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-margin-left-small w3-margin-right-small">
+                    <div draggable="true" class="w3-card w3-light-grey w3-padding-tiny w3-round-medium w3-margin-top w3-hover-shadow" [class.w3-light-grey]="!vendor.Color" [ngStyle]="{'background-color':vendor.Color}" style="cursor:all-scroll" *ngFor="let vendor of getStageVendor(pipeline.PipelineId);let z = index"
+                         (dragover)="allowDropTile($event)" id="drag{{vendor.VendorId}}"
+                         (click)="editVendorFromDrag(vendor)" (dragstart)="dragVendor($event, vendor)">
+
+                      <div class="w3-row">
+                        <div class="w3-col s12"><div class="w3-small w3-margin-right">{{vendor.Name}}</div></div>
+                      </div>
+                      <div class="w3-tiny w3-padding-bottom-small"><i class="fa fa-calendar" aria-hidden="true"></i> {{changeFormatDate(vendor.EndOfContract)}}</div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <ng-container>
+          </ng-container>
+        </div>
+      </div>
+
+      <div *ngIf="activeContainer == 'tab7'" class="w3-white">
+        <div class="w3-row">
+          <table class="w3-responsive">
+            <tr>
+              <td *ngFor="let pipeline of sortBy('DisplayOrder');let i = index">
+                <div id="pipe{{i}}" class="w3-secondary-l5 w3-margin-right w3-margin-bottom w3-margin-top w3-card-2 w3-round-large w3-col" style="width: 150px;height: 70vh; overflow-x: hidden; overflow-y: auto; padding-bottom: 50px;"
+                     (drop)="dropLead($event, pipeline)"
+                     (dragover)="allowDrop($event)">
+                  <div class="w3-block w3-secondary-button" (dragover)="noAllowDrop($event)" style="position:relative; top: 0;">
+                    <div class="w3-row w3-center" style="min-height:50px;">
+                      <div class="w3-col s2">
+                        <div class="w3-margin-left-medium">
+                          <i (click)="sortVendorFunnel(pipeline, reverse)" class="cursor-pointer w3-small fa" [ngClass]="{'fa-sort' : (order !== pipeline.Name), 'fa-sort-asc' : (order === pipeline.Name && reverse == true), 'fa-sort-desc' : (order === pipeline.Name && reverse == false) }" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                      <div class="w3-col s8">
+                        <div class="w3-medium">
+                          {{pipeline.Name}}
+                        </div>
+                      </div>
+                      <div class="w3-col s2">
+                        <div class="w3-margin-right-medium">
+                          <i class="fa fa-plus w3-medium" (click)="addPipelineLead(pipeline)" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-margin-left-small w3-margin-right-small">
+                    <div draggable="true" class="w3-card w3-light-grey w3-padding-tiny w3-round-medium w3-margin-top w3-hover-shadow" [class.w3-light-grey]="!lead.Color" [ngStyle]="{'background-color':lead.Color}" style="cursor:all-scroll" *ngFor="let lead of getStageLead(pipeline.PipelineId);let z = index"
+                         (dragover)="allowDropTile($event)" id="drag{{lead.LeadId}}"
+                         (click)="editLeadFromDrag(lead)" (dragstart)="dragLead($event, lead)">
+
+                      <div class="w3-row">
+                        <div class="w3-col s12"><div class="w3-small w3-margin-right">{{lead.LeadName}}</div></div>
+                        <!--<div class="w3-col s2"><span class="w3-right w3-red w3-round-medium">{{lead.Percentage?lead.Percentage:0}}%</span></div>-->
+                      </div>
+                      <div class="w3-tiny w3-padding-bottom-small"><i class="fa fa-calendar" aria-hidden="true"></i> {{changeFormatDate(lead.CreatedOn)}}</div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <ng-container>
+          </ng-container>
+        </div>
+      </div>
+
+
+      <div *ngIf="activeContainer == 'service'" class="w3-white">
+        <div class="w3-row">
+          <table class="w3-responsive">
+            <tr>
+              <td *ngFor="let pipeline of sortBy('DisplayOrder');let i = index">
+                <div id="pipe{{i}}" class="w3-secondary-l5 w3-margin-right w3-margin-bottom w3-margin-top w3-card-2 w3-round-large w3-col" style="width: 150px;height: 70vh; overflow-x: hidden; overflow-y: auto; padding-bottom: 50px;"
+                     (drop)="dropService($event, pipeline)"
+                     (dragover)="allowDrop($event)">
+                  <div class="w3-block w3-secondary-button" (dragover)="noAllowDrop($event)" style="position:relative; top: 0;">
+                    <div class="w3-row w3-center" style="min-height:50px;">
+                      <div class="w3-col s2">
+                        <div class="w3-margin-left-medium">
+                          <i (click)="sortServiceFunnel(pipeline, reverse)" class="cursor-pointer w3-small fa" [ngClass]="{'fa-sort' : (order !== pipeline.Name), 'fa-sort-asc' : (order === pipeline.Name && reverse == true), 'fa-sort-desc' : (order === pipeline.Name && reverse == false) }" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                      <div class="w3-col s8">
+                        <div class="w3-medium">
+                          {{pipeline.Name}}
+                        </div>
+                      </div>
+                      <div class="w3-col s2">
+                        <div class="w3-margin-right-medium">
+                          <i class="fa fa-plus w3-medium" (click)="addPipelineService(pipeline)" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-margin-left-small w3-margin-right-small">
+                    <div draggable="true" class="w3-card w3-light-grey w3-padding-tiny w3-round-medium w3-margin-top w3-hover-shadow" [class.w3-light-grey]="!service.Color" [ngStyle]="{'background-color':service.Color}" style="cursor:all-scroll" *ngFor="let service of getStageService(pipeline.PipelineId);let z = index"
+                         (dragover)="allowDropTile($event)" id="drag{{service.Id}}"
+                         (click)="editServiceFromDrag(service)" (dragstart)="dragService($event, service)">
+
+                      <div class="w3-row">
+                        <div class="w3-col s10"><div class="w3-small w3-margin-right">{{service.ServiceNumber}}</div></div>
+                        <!--<div class="w3-col s2"><span class="w3-right w3-red w3-round-medium">{{service.Percentage?service.Percentage:0}}%</span></div>-->
+                      </div>
+                      <div class="w3-tiny w3-padding-bottom-small"><i class="fa fa-calendar" aria-hidden="true"></i> {{changeFormatDate(service.StartDate)}}</div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <ng-container>
+          </ng-container>
+        </div>
+      </div>
+
+
+
+      <div *ngIf="activeContainer == 'tab8'" class="w3-white">
+        <div class="w3-row">
+          <table class="w3-responsive">
+            <tr>
+              <td *ngFor="let pipeline of sortBy('DisplayOrder');let i = index">
+                <div id="pipe{{i}}" class="w3-secondary-l5 w3-margin-right w3-margin-bottom w3-margin-top w3-card-2 w3-round-large w3-col" style="width: 150px;height: 70vh; overflow-x: hidden; overflow-y: auto; padding-bottom: 50px;"
+                     (drop)="dropPartner($event, pipeline)"
+                     (dragover)="allowDrop($event)">
+                  <div class="w3-block w3-secondary-button" (dragover)="noAllowDrop($event)" style="position:relative; top: 0;">
+                    <div class="w3-row w3-center" style="min-height:50px;">
+                      <div class="w3-col s2">
+                        <div class="w3-margin-left-medium">
+                          <i (click)="sortPartnerFunnel(pipeline, reverse)" class="cursor-pointer w3-small fa" [ngClass]="{'fa-sort' : (order !== pipeline.Name), 'fa-sort-asc' : (order === pipeline.Name && reverse == true), 'fa-sort-desc' : (order === pipeline.Name && reverse == false) }" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                      <div class="w3-col s8">
+                        <div class="w3-medium">
+                          {{pipeline.Name}}
+                        </div>
+                      </div>
+                      <div class="w3-col s2">
+                        <div class="w3-margin-right-medium">
+                          <i class="fa fa-plus w3-medium" (click)="addPipelinePartner(pipeline)" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-margin-left-small w3-margin-right-small">
+                    <div draggable="true" class="w3-card w3-light-grey w3-padding-tiny w3-round-medium w3-margin-top w3-hover-shadow" [class.w3-light-grey]="!partner.Color" [ngStyle]="{'background-color':partner.Color}" style="cursor:all-scroll" *ngFor="let partner of getStagePartner(pipeline.PipelineId);let z = index"
+                         (dragover)="allowDropTile($event)" id="drag{{partner.PartnetId}}"
+                         (click)="editPartnerFromDrag(partner)" (dragstart)="dragPartner($event, partner)">
+
+                      <div class="w3-row">
+                        <div class="w3-col s12"><div class="w3-small w3-margin-right">{{partner.Name}}</div></div>
+                        <!--<div class="w3-col s2"><span class="w3-right w3-red w3-round-medium">{{partner.Percentage?partner.Percentage:0}}%</span></div>-->
+                      </div>
+                      <div class="w3-tiny w3-padding-bottom-small"><i class="fa fa-calendar" aria-hidden="true"></i> {{changeFormatDate(partner.EndOfContract)}}</div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <ng-container>
+          </ng-container>
+        </div>
+      </div>
+
+      <div *ngIf="activeContainer == 'tab9'" class="w3-white">
+        <div class="w3-row">
+          <table class="w3-responsive">
+            <tr>
+              <td *ngFor="let pipeline of sortBy('DisplayOrder');let i = index">
+                <div id="pipe{{i}}" class="w3-secondary-l5 w3-margin-right w3-margin-bottom w3-margin-top w3-card-2 w3-round-large w3-col" style="width: 150px;height: 70vh; overflow-x: hidden; overflow-y: auto; padding-bottom: 50px;"
+                     (drop)="dropReferral($event, pipeline)"
+                     (dragover)="allowDrop($event)">
+                  <div class="w3-block w3-secondary-button" (dragover)="noAllowDrop($event)" style="position:relative; top: 0;">
+                    <div class="w3-row w3-center" style="min-height:50px;">
+                      <div class="w3-col s2">
+                        <div class="w3-margin-left-medium">
+                          <i (click)="sortReferrralFunnel(pipeline, reverse)" class="cursor-pointer w3-small fa" [ngClass]="{'fa-sort' : (order !== pipeline.Name), 'fa-sort-asc' : (order === pipeline.Name && reverse == true), 'fa-sort-desc' : (order === pipeline.Name && reverse == false) }" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                      <div class="w3-col s8">
+                        <div class="w3-medium">
+                          {{pipeline.Name}}
+                        </div>
+                      </div>
+                      <div class="w3-col s2">
+                        <div class="w3-margin-right-medium">
+                          <i class="fa fa-plus w3-medium" (click)="addPipelineReferral(pipeline)" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-margin-left-small w3-margin-right-small">
+                    <div draggable="true" class="w3-card w3-light-grey w3-padding-tiny w3-round-medium w3-margin-top w3-hover-shadow" [class.w3-light-grey]="!referral.Color" [ngStyle]="{'background-color':referral.Color}" style="cursor:all-scroll" *ngFor="let referral of getStageReferral(pipeline.PipelineId);let z = index"
+                         (dragover)="allowDropTile($event)" id="drag{{referral.ReferralId}}"
+                         (click)="editReferralFromDrag(referral)" (dragstart)="dragReferral($event, referral)">
+
+                      <div class="w3-row">
+                        <div class="w3-col s12"><div class="w3-small w3-margin-right">{{referral.Name}}</div></div>
+                        <!--<div class="w3-col s2"><span class="w3-right w3-red w3-round-medium">{{referral.Percentage?referral.Percentage:0}}%</span></div>-->
+                      </div>
+                      <div class="w3-tiny w3-padding-bottom-small"><i class="fa fa-calendar" aria-hidden="true"></i> {{changeFormatDate(referral.EndOfContract)}}</div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <ng-container>
+          </ng-container>
+        </div>
+      </div>
+
+
+
+      <!--<div *ngIf="activeContainer == 'tab4'" class="w3-container w3-display-container">
+        <app-todolist></app-todolist>
+      </div>-->
+      <!--<div *ngIf="activeContainer == 'tab5'" class="w3-white">
+        <div class="w3-row">
+          <table class="w3-responsive">
+            <tr>
+              <td *ngFor="let pipeline of sortBy('DisplayOrder');let i = index">
+                <div id="pipe{{i}}" class="w3-secondary-l5 w3-margin-right w3-margin-top w3-margin-bottom w3-card-2 w3-round-large w3-col w3-display-container" style="width: 150px;height: 70vh; overflow-x: hidden; overflow-y: auto; padding-bottom: 50px;"
+                     (drop)="dropVendor($event, pipeline)"
+                     (dragover)="allowDrop($event)">
+
+                  <div class="w3-block w3-secondary-button" (dragover)="noAllowDrop($event)" style="position:sticky;top:0;background-color:#fff;">
+                    <div class="w3-row w3-center" style="min-height:50px;">
+                      <div class="w3-col s2">
+                        <div class="w3-margin-left-medium">
+                          <i (click)="sortVendorFunnel(pipeline, reverse)" class="cursor-pointer w3-small fa" [ngClass]="{'fa-sort' : (order !== pipeline.Name), 'fa-sort-asc' : (order === pipeline.Name && reverse == true), 'fa-sort-desc' : (order === pipeline.Name && reverse == false) }" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                      <div class="w3-col s8">
+                        <div class="w3-medium">
+                          {{pipeline.Name}}
+                        </div>
+                      </div>
+                      <div class="w3-col s2">
+                        <div class="w3-margin-right-medium">
+                          <i class="fa fa-plus w3-medium" (click)="addPipelineVendor(pipeline)" aria-hidden="true"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="w3-margin-left-small w3-margin-right-small">
+                    <div draggable="true" class="w3-card w3-light-grey w3-round-medium w3-padding-tiny w3-margin-top w3-hover-shadow" style="cursor:all-scroll" *ngFor="let vendor of getStageVendor(pipeline.PipelineId);let z = index"
+                         (dragover)="allowDropTile($event)" id="drag{{vendor.VendorId}}"
+                         (click)="editVendorFromDrag(vendor)" (dragstart)="dragVendor($event, vendor)">
+                      <span class="w3-small">{{vendor.Name}}</span><br>
+                      <span class="w3-tiny"><i class="fa fa-calendar" aria-hidden="true"></i> {{changeFormatDate(vendor.CreatedOn)}}</span>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>-->
+    </div>
+    <div *ngIf="toggle" class="w3-modal" style="display:block;">
+      <div class="w3-modal-content w3-round-large">
+        <div class="w3-container">
+          <span (click)="closeToggle()" class="w3-button w3-display-topright">&times;</span>
+          <div class="w3-white w3-small sfcenter w3-margin-top">
+            <div class="w3-margin w3-animate-opacity">
+              <div class="w3-row">
+                <h5 class="w3-container">Reason*</h5>
+              </div>
+              <div class="w3-container">
+                <div class="w3-full">
+                  <!--<label>Reason</label>-->
+                  <div>
+                    <!--<textarea class="w3-input w3-border" [(ngModel)]="cancelReasonId" [class.w3-border-red]="checkValidation(cReason)" #cReason="ngModel" required></textarea>-->
+                    <app-customdropdown [getApiPath]="'CustomDropDown/GetReason'" [isAddEnabled]="true" [selectedValue]="cancelReasonId" (saveSelectedValue)="cancelReasonId=$event" [saveApiPath]="'CustomDropDown/SaveReason'"></app-customdropdown>
+                  </div>
+                </div>
+              </div>
+
+              <div class="w3-margin w3-right">
+                <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeToggle()">Cancel</button>
+                <button class="w3-button w3-secondary w3-border w3-round-large" [disabled]="checkReqValidation(cReason)" (click)="saveCancelReason()">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="wonToggle">
+  <div class="w3-modal w3-show">
+    <div class="w3-modal-content w3-secondary w3-round-large w3-secondary-button">
+      <div class="w3-row">
+        <div class="w3-container w3-center">
+          <div class="w3-padding">Add Actual Amount</div>
+          <span (click)="closeError()" class="w3-button w3-display-topright">&times;</span>
+        </div>
+        <app-actualamount [deal]="dragElement" (saveSuccess)="saveWonAmount($event)"></app-actualamount>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="reasonToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large">
+    <div class="w3-container">
+      <span (click)="closeServiceCancelReason()" class="w3-button w3-display-topright">&times;</span>
+      <div class="w3-white w3-small sfcenter w3-margin-top">
+        <div class="w3-margin w3-animate-opacity">
+          <div class="w3-row">
+            <h5 class="w3-container">Cancel Reason*</h5>
+          </div>
+          <div class="w3-container">
+            <div class="w3-full">
+              <div>
+                <app-customdropdown [getApiPath]="'CustomDropDown/GetReason'" [isAddEnabled]="true" [selectedValue]="serviceCancelReasonId" (saveSelectedValue)="serviceCancelReasonId=$event" [saveApiPath]="'CustomDropDown/SaveReason'"></app-customdropdown>
+              </div>
+            </div>
+          </div>
+
+          <div class="w3-margin w3-right">
+            <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeServiceCancelReason()">Cancel</button>
+            <button class="w3-button w3-secondary w3-border w3-round-large" [disabled]="checkReqValidation(cancelReason)" (click)="updateCancelReason()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

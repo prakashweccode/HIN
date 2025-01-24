@@ -1,0 +1,95 @@
+<div class="lo-wrapper">
+  <button (click)="addListOption()" title="{{config.addButtonTitle}}" [ngClass]="config.addButtonClass ? config.addButtonClass :''" class="lo-add-btn">
+    <i [ngClass]="config.addButtonIconClass ? config.addButtonIconClass : ''"></i>{{config.addButtonText?config.addButtonText:''}}
+  </button>
+  <select *ngIf="isIdColum" [ngClass]="config.selectClass ? config.selectClass:''" class="lo-select" [(ngModel)]="selectedId" (change)="changeSelectedOption($event);">
+    <option value="0" disabled>{{config.placeholder}}</option>
+    <!--<ng-template *ngIf="config.displayField == 'Description'">-->
+    <option *ngFor="let data of dataSource" value="{{data.Id}}">{{data.Description}}</option>
+    <!--</ng-template>-->
+    <!--<ng-template *ngIf="config.displayField == 'Title'">
+      <option *ngFor="let data of dataSource" value="{{data.Id}}">{{data.Title}}</option>
+    </ng-template>-->
+  </select>
+  <select *ngIf="!isIdColum" [ngClass]="config.selectClass ? config.selectClass:''" class="lo-select" [(ngModel)]="selectedName" (change)="changeSelectedOptioninString(selectedName);">
+    <option value="0" disabled>{{config.placeholder}}</option>
+    <!--<ng-template *ngIf="config.displayField == 'Description'">-->
+    <option *ngFor="let data of dataSource" value="{{data.Description}}">{{data.Description}}</option>
+    <!--</ng-template>-->
+    <!--<ng-template *ngIf="config.displayField == 'Title'">
+      <option *ngFor="let data of dataSource" value="{{data.Id}}">{{data.Title}}</option>
+    </ng-template>-->
+  </select>
+  <button title="{{config.editButtonTitle}}" (click)="editListOption()" [ngClass]="config.editButtonClass ? config.editButtonClass :''" class="lo-edit-btn">
+    <i [ngClass]="config.editButtonIconClass ? config.editButtonIconClass : ''"></i>{{config.editButtonText?config.editButtonText:''}}
+  </button>
+</div>
+<div class="row">
+  <div *ngIf="addOptionToggle" class="w3-modal w3-show">
+    <div class="w3-modal-content w3-secondary-button">
+      <div class="w3-row">
+        <div class="w3-container w3-center">
+          <p>Add Options</p>
+          <span (click)="closeAddOptionPopup()" class="w3-button w3-display-topright">&times;</span>
+        </div>
+        <div class="w3-row w3-padding w3-primary-l4">
+          <div class="w3-row w3-section" *ngFor="let listItem of listOptions; index as i;">
+            <div class="w3-col" style="width:5%;">
+              <button style="height:24px;" title="Remove" class="w3-button w3-padding-bottom-small w3-padding-top-small w3-round-medium w3-padding-left-xxlarge w3-padding-right-xxlarge w3-light-grey" (click)="deleteListItem(listItem);"><i class="fa fa-trash"></i></button>
+            </div>
+            <div class="w3-rest">
+              <div class="w3-twothird">
+                <input style="height:24px;" type="text" class="w3-input w3-border" [(ngModel)]="listItem.Description"/>
+              </div>
+              <div class="w3-third">
+                <div class="w3-margin-left w3-margin-top-small">
+                  <input id="chkInactive{{i}}" type="checkbox" [(ngModel)]="listItem.Inactive"/>
+                  <label for="chkInactive{{i}}">&nbsp;Inactive</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button class="w3-button w3-border w3-border-gray w3-round-large w3-tiny" (click)="addNewListItem()">+ Add New</button>
+          </div>
+        </div>
+        <div class="w3-row">
+          <button class="w3-button w3-block w3-border w3-border-primary-l4 w3-secondary w3-center" (click)="saveOptions()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div *ngIf="editOptionToggle" class="w3-modal w3-show">
+    <div class="w3-modal-content w3-secondary-button">
+      <div class="w3-row">
+        <div class="w3-container w3-center">
+          <p>Edit Option</p>
+          <span (click)="closeEditOptionPopup()" class="w3-button w3-display-topright">&times;</span>
+        </div>
+        <div class="w3-row w3-padding w3-primary-l4">
+          <div class="w3-row w3-section">
+            <!--<div class="w3-col" style="width:5%;">
+              <button style="height:24px;" title="Remove" class="w3-button w3-padding-bottom-small w3-padding-top-small w3-round-medium w3-padding-left-xxlarge w3-padding-right-xxlarge w3-light-grey" (click)="deleteListItem(listItem);"><i class="fa fa-trash"></i></button>
+            </div>-->
+            <div class="w3-rest">
+              <div class="w3-twothird">
+                <input style="height:24px;" type="text" class="w3-input w3-border" [(ngModel)]="selectedListOption.Description" />
+              </div>
+              <div class="w3-third">
+                <div class="w3-margin-left w3-margin-top-small">
+                  <input id="chkInactive" type="checkbox" [(ngModel)]="selectedListOption.Inactive" />
+                  <label for="chkInactive">&nbsp;Inactive</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w3-row">
+          <button class="w3-button w3-block w3-border w3-border-primary-l4 w3-secondary w3-center" (click)="updateOption()">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,88 @@
+
+<div class="w3-container w3-bottombar" style="border-color: #2a5298!important;">
+  <div class="w3-half">
+    <h2>Create New Company </h2>
+  </div>
+  <div class="w3-half w3-margin-top">
+    <div class="w3-row">
+      <div class="w3-right">
+        <label class="switch w3-margin-top w3-margin-left">
+          <input type="checkbox" [(ngModel)]="companyRegister.isActive">
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <div class="w3-right">
+        <h2>{{companyRegister.isActive ? 'Active' : 'Inactive'}}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="w3-row w3-margin-top form-control-margin">
+  <div class="w3-container">
+    <button class="w3-button w3-theme-gradient w3-right w3-text-white" (click)="saveCompanyDetails(companyRegister);" [disabled]="checkReqValidation(companyname)||checkReqValidation(contactfirstname)||checkReqValidation(contacttitle)||checkReqValidation(contactlastname)||checkReqValidation(email)||checkReqValidation(cellnumber)||checkReqValidation(name)">Save</button>
+  </div>
+  <div class="w3-container w3-half">
+    <div class="w3-row margin-small">
+      <label>
+        Company Name<label class="w3-text-red">*</label>
+      </label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="companyRegister.companyName" [class.w3-border-red]="checkValidation(companyname)" #companyname="ngModel" required />
+    </div>
+    <div class="w3-row margin-small">
+      <label>
+        First Name<label class="w3-text-red">*</label>
+      </label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="companyRegister.contactFirstName" [class.w3-border-red]="checkValidation(contactfirstname)" #contactfirstname="ngModel" required />
+    </div>
+    <div class="w3-row margin-small">
+      <label>
+        Contact Title<label class="w3-text-red">*</label>
+      </label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="companyRegister.contactTitle" [class.w3-border-red]="checkValidation(contacttitle)" #contacttitle="ngModel" required />
+    </div>
+    <div class="w3-row margin-small">
+      <label>Maximum User</label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="companyRegister.maximumUser" />
+    </div>
+    <div class="w3-row margin-small">
+      <label>
+        Sub Domain<label class="w3-text-red">*</label>
+      </label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="companyRegister.name" [class.w3-border-red]="checkValidation(name)" #name="ngModel" required />
+    </div>
+  </div>
+
+  <div class="w3-container w3-half">
+    <div class="w3-row margin-small">
+      <label>Phone Number</label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="companyRegister.phoneNumber" />
+    </div>
+    <div class="w3-row margin-small">
+      <label>
+        Last Name<label class="w3-text-red">*</label>
+      </label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="companyRegister.contactLastName" [class.w3-border-red]="checkValidation(contactlastname)" #contactlastname="ngModel" required />
+    </div>
+    <div class="w3-row margin-small">
+      <label>
+        Email Id<label class="w3-text-red">*</label>
+      </label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="companyRegister.email" [class.w3-border-red]="checkValidation(email)" #email="ngModel" required />
+    </div>
+    <div class="w3-row margin-small">
+      <label>
+        Cell Number<label class="w3-text-red">*</label>
+      </label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="companyRegister.cellNumber" [class.w3-border-red]="checkValidation(cellnumber)" #cellnumber="ngModel" required />
+    </div>
+    <div class="w3-row margin-small">
+      <label>
+        CompanyLogo
+      </label>
+      <br />
+      <input type="file" id="file" (change)="onFileSelected($event)" #fileUpload />
+    </div>
+  </div>
+  </div>
+
+

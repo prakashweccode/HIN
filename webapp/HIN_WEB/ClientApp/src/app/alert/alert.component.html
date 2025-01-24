@@ -1,0 +1,12 @@
+<div class="row">
+  <div *ngIf="alertToggle" class="w3-modal">
+    <div class="w3-modal-content w3-round-large">
+      <div class="w3-container">
+        <span (click)="closeError()" class="w3-button w3-display-topright">&times;</span>
+        <p>{{alerHeader}}</p>
+        <p>{{alertMessage}}</p>
+        <p>{{alertFooter}}</p>
+      </div>
+    </div>
+  </div>
+</div>

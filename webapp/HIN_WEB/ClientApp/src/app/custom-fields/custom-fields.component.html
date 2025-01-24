@@ -1,0 +1,111 @@
+<div class="w3-animate-zoom w3-card-2 w3-white w3-small w3-margin-right w3-margin-left marginform w3-round-large">
+  <div class="w3-container">
+    <div class="">
+      <h4 class=""><b>Customize data fields</b></h4>
+    </div>
+    <!--<div class="w3-bar">
+      <a [class]="activeContainer == 'tab1'?'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-secondary':'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-white'" (click)="activeContainer = 'tab1'">Lead</a>
+      <a [class]="activeContainer == 'tab2'?'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-secondary':'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-white'" (click)="activeContainer = 'tab2'">Contact</a>
+      <a [class]="activeContainer == 'tab3'?'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-secondary':'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-white'" (click)="activeContainer = 'tab3'">Organization</a>
+    </div>-->
+    <div class="w3-container w3-display-container" permissionCheck="10.4.1">
+      <!--<button class="w3-button w3-right w3-secondary w3-round-large" (click)="addCustomFields()">+ Add custom field</button>-->
+      <app-data-grid [gridHeaders]="gridHeaders" [actions]="actions" [dataSource]="dataSource" [filterColumns]="filterColumns" [apiUrl]="'/api/CustomProperty/GetLeadCustomColumns'" [pageSize]="25"
+                     [isResponsive]="false" [isSearchEnabled]="true" [isPaginationEnabled]="true" [pageLengthOptions]="pageLengthOptions" (rowClick)="editCustomColumns($event);">
+      </app-data-grid>
+    </div>
+  </div>
+</div>
+<div class="row" permissionCheck="10.4.2">
+  <div *ngIf="addCustomToggle" class="w3-modal w3-show">
+    <div class="w3-modal-content w3-secondary w3-round-large w3-secondary-button">
+      <div class="w3-row">
+        <div class="w3-container w3-center">
+          <p>Add Field</p>
+          <span (click)="closeError()" class="w3-button w3-display-topright">&times;</span>
+        </div>
+        
+        <div class="w3-container w3-tiny w3-primary-l4">
+          <div class="w3-row w3-margin-bottom">
+            <div class="w3-half marginform">
+              <div class="w3-full" permissionCheck="10.4.2.1">
+                <label>Name</label>
+                <input class="w3-input w3-border" permissionCheck="10.4.2.1" [(ngModel)]="customField.PropertyName" type="text">
+              </div>
+              <div class="w3-full" permissionCheck="10.4.2.2">
+                <label>Type</label>
+                <select class="w3-input w3-border" permissionCheck="10.4.2.2" [(ngModel)]="customField.PropertyType" #selectedType (change)="typeChange(selectedType.value)">
+                  <option *ngFor="let data of dbPropertyTypes" value="{{data.Id}}">{{data.Name}}</option>
+                </select>
+              </div>
+              <div class="w3-full">
+                <label>Column Size</label>
+                <select class="w3-input w3-border" [(ngModel)]="customField.ColumnSize">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
+              </div>
+              <div class="w3-full w3-margin-top" *ngIf="showListItem">
+                <label>{{customField.PropertyType == 6 ? 'Dropdown Options':'Multi-Select Options'}}</label>
+                <div class="w3-padding w3-border w3-border-green">
+                  <div class="w3-row w3-section" *ngFor="let listItem of lstCustomFieldListItems">
+                    <div class="w3-col" style="width:10%;">
+                      <button style="height:24px;" title="Remove" class="w3-button w3-padding-bottom-small w3-padding-top-small w3-round-medium w3-padding-left-xxlarge w3-padding-right-xxlarge w3-light-grey" (click)="deleteListItem(listItem);"><i class="fa fa-trash"></i></button>
+                    </div>
+                    <div class="w3-rest">
+                      <input type="text" class="w3-input w3-border" [(ngModel)]="listItem.Description" />
+                    </div>
+                    <!--<div class="w3-col" style="width:10%;">
+          <button style="height:33px;" class="w3-button w3-light-grey"><i class="fa fa-check"></i></button>
+        </div>-->
+                  </div>
+                  <div><a class="hyper-link" (click)="addNewListItem()">+ Add New</a></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="w3-half marginform">
+              <div class="w3-half w3-container" permissionCheck="10.4.2.3">
+                <div class="w3-full">
+                  <label>Field properties</label>
+                  <div class="w3-full w3-margin-top" permissionCheck="10.4.2.3.1">
+                    <!--<label><input class="w3-checkbox w3-border" permissionCheck="10.4.2.3.1" [(ngModel)]="customField.IsVisible" type="checkbox" /> Visible</label>-->
+                    <input id="isVisible" type="checkbox" permissionCheck="10.4.2.3.1" [(ngModel)]="customField.IsVisible" />
+                    <label for="isVisible">&nbsp;Visible</label>
+                  </div>
+                  <div class="w3-full w3-margin-top" permissionCheck="10.4.2.3.2">
+                    <!--<label><input class="w3-checkbox w3-border" permissionCheck="10.4.2.3.2" [(ngModel)]="customField.IsRequired" type="checkbox" /> Required</label>-->
+                    <input id="isRequired" type="checkbox" permissionCheck="10.4.2.3.2" [(ngModel)]="customField.IsRequired" />
+                    <label for="isRequired">&nbsp;Required</label>
+                  </div>
+                </div>
+              </div>
+              <div class="w3-half w3-container" permissionCheck="10.4.2.3">
+                <div class="w3-full">
+                  <br />
+                  <div class="w3-full w3-margin-top" permissionCheck="10.4.2.3.3">
+                    <!--<label><input class="w3-checkbox w3-border" permissionCheck="10.4.2.3.3" [(ngModel)]="customField.IsImportant" type="checkbox" /> Important</label>-->
+                    <input id="isImportant" type="checkbox" permissionCheck="10.4.2.3.3" [(ngModel)]="customField.IsImportant" />
+                    <label for="isImportant">&nbsp;Important</label>
+                  </div>
+                  <div class="w3-full w3-margin-top">
+                    <!--<label><input class="w3-checkbox w3-border" [(ngModel)]="customField.IsRight" type="checkbox" /> Right</label>-->
+                    <input id="isRight" type="checkbox" [(ngModel)]="customField.IsRight" />
+                    <label for="isRight">&nbsp;Right</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="w3-container w3-padding w3-center">
+          <button type="button" (click)="saveCustomField(customField)" class="w3-button w3-block w3-secondary">Save</button>
+          <!--<button type="reset" (click)="closeError()" class="w3-button w3-small w3-round-large w3-white w3-right w3-margin-right w3-border">Cancel</button>-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+<style>
+  .loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: fixed;
+    z-index: 8000;
+   
+  }
+
+  @-webkit-keyframes spin {
+    0% {
+      -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+</style>
+
+
+  <!--<div class="w3-display-middle">{{hrefUrl}}</div>-->
+  <link rel="stylesheet" type="text/css" [href]="hrefUrl">
+  <div class="w3-display-middle">
+    <div class="loader" *ngIf="show">
+    </div>
+  </div>
+  <app-nav-menu></app-nav-menu>
+  <!--<div [style]="((navBarService && navBarService.userInformation && navBarService.userInformation.Token) ?('margin-left: 55px;'):'')">  -->
+  <div style="margin-top:0px;" [ngClass]="((navbarService && navbarService.userInformation && navbarService.userInformation.Token) ? (showSideMenu?'h-margin-left pageWidth':'h-margin-left smallWidth'):'largeWidth')">
+    <router-outlet></router-outlet>
+  </div>
+  <div id="snackbar" class="noty-bar"></div>
+  <!-- <app-dynamicmodal #modal [toggle]="modalShow" [componentCont]="comp"></app-dynamicmodal>-->
+  <div *ngIf="modalShow">
+    <div class="w3-modal" style="display:block;">
+      <div class="w3-modal-content w3-round-large" style="width:90vw;background-color:transparent;">
+        <div>
+
+          <div class="w3-small sfcenter w3-margin-top w3-display-container" style="background-color:transparent;">
+            <span (click)="closeModel()" class="w3-button w3-red w3-circle w3-display-topright" style="margin-top:-2px">&times;</span>
+            <div class="w3-margin w3-animate-opacity">
+              <router-outlet name="modal"></router-outlet>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+

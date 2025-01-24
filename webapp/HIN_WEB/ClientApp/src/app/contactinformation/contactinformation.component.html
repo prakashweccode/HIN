@@ -1,0 +1,341 @@
+<div class="w3-container">
+  <div class="w3-full">
+    <div class="w3-right">
+      <app-assignedtogrid [assignedToGrid]="assignedToGrid" (sendAssignedId)="selectedContactData($event)"></app-assignedtogrid>
+    </div>
+    <button permissionCheck="{{basePermission}}.40" type="button" (click)="addNewContact()" class="w3-button w3-secondary w3-border w3-round-large w3-right">+ Add Contact</button>
+  </div>
+  <div class="w3-full" permissionCheck="{{basePermission}}.41">
+    <table class="w3-table w3-bordered">
+      <thead>
+        <tr>
+          <th gridPermissionCheck="{{basePermission}}.42">Contact</th>
+          <!--<th>Type</th>-->
+          <th gridPermissionCheck="{{basePermission}}.43">Gender</th>
+          <th gridPermissionCheck="{{basePermission}}.44">Relationship</th>
+          <th gridPermissionCheck="{{basePermission}}.45">Email</th>
+          <th gridPermissionCheck="{{basePermission}}.46">Cell Number</th>
+          <th gridPermissionCheck="{{basePermission}}.47">Office Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of dataSource">
+          <td gridPermissionCheck="{{basePermission}}.42" style="cursor:pointer" (click)="editContactInfo(data);">{{data.ContactName}}</td>
+          <!--<td>{{getLeadGenEntityName(data.Type)}}</td>-->
+          <td gridPermissionCheck="{{basePermission}}.43">{{data.Gender?getgenderName(data.Gender):""}}</td>
+          <td gridPermissionCheck="{{basePermission}}.44">{{data.ContactTitle}}</td>
+          <td gridPermissionCheck="{{basePermission}}.45">{{data.Email}}</td>
+          <td gridPermissionCheck="{{basePermission}}.46">{{data.CellNumber}}</td>
+          <td gridPermissionCheck="{{basePermission}}.47">{{data.OfficeNumber}}</td>
+        </tr>
+        <tr *ngIf="dataSource.length == 0">
+          <td colspan="7">No Records</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div *ngIf="toggle" class="w3-modal" style="display:block;" permissionCheck="{{basePermission}}.61">
+  <div class="w3-modal-content w3-round-large w3-secondary-button">
+    <span (click)="closeToggle()" class="w3-button w3-margin-right-small w3-display-topright">&times;</span>
+    <div class="w3-small sfcenter w3-margin-top">
+      <div class="w3-animate-opacity marginform">
+        <div class="w3-row w3-round-large w3-secondary-button w3-container w3-padding">
+          <h5 class="w3-left">{{contactInfo.Type == 1?'Lead Contact':contactInfo.Type == 2? 'Opportunity Contact':'Contact Information'}}</h5>
+          <button permissionCheck="{{basePermission}}.48" type="button" (click)="createNewField()" class="w3-button w3-round-large w3-right w3-border w3-secondary mr30">+ Add New Field</button>
+        </div>
+        <div class="w3-row w3-padding w3-primary-l4">
+          <div class="w3-row">
+            <div class="w3-full w3-container" *ngIf="additionalInfo" permissionCheck="{{basePermission}}.60">
+              <label><input permissionCheck="{{basePermission}}.60" type="radio" class="w3-radio" [(ngModel)]="contactInfo.IsMember" [value]="true" name="networktype" />&nbsp;Member</label> &nbsp;&nbsp;
+              <label><input permissionCheck="{{basePermission}}.60" type="radio" class="w3-radio" [(ngModel)]="contactInfo.IsMember" [value]="false" name="networktype" />&nbsp;Guest</label>
+            </div>
+            <div class="w3-full w3-container" permissionCheck="{{basePermission}}.49">
+              <label><input permissionCheck="{{basePermission}}.49" type="checkbox" [(ngModel)]="contactInfo.Inactive" class="w3-check" name="contactInfoInactive" />&nbsp;Inactive</label>
+            </div>
+            <div class="w3-container w3-half">
+              <div class="w3-full">
+                <label>Contact Information Number*</label>
+                <input class="w3-input w3-border" [(ngModel)]="contactInfo.ContactInfoNumber" type="text" disabled="disabled" />
+              </div>
+              <div class="w3-full" permissionCheck="{{basePermission}}.50">
+                <label>First Name *</label>
+                <input permissionCheck="{{basePermission}}.50" class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.FirstName" [class.w3-border-red]="checkValidation(firstName)" #firstName="ngModel" required />
+              </div>
+              <div class="w3-full" permissionCheck="{{basePermission}}.51">
+                <label>Last Name</label>
+                <input permissionCheck="{{basePermission}}.51" class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.LastName" required />
+              </div>
+              <div class="w3-full" permissionCheck="{{basePermission}}.52">
+                <label>Relationship</label>
+                <div [ngClass]="(!(!selectedContact || selectedContact.Id == 0))?'w3-disabled':''">
+                  <app-customstringdropdown [getApiPath]="'CustomDropDown/GetContactTitle'" [isAddEnabled]="true" [selectedValue]="contactInfo.ContactTitle" (saveSelectedValue)="contactInfo.ContactTitle=$event" [saveApiPath]="'CustomDropDown/SaveContactTitle'"></app-customstringdropdown>
+                </div>
+
+                <!--<input permissionCheck="{{basePermission}}.52" class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.ContactTitle" [class.w3-border-red]="checkValidation(title)" #title="ngModel" required />-->
+              </div>
+              <div class="w3-full" permissionCheck="{{basePermission}}.53">
+                <label>Gender</label>
+                <select permissionCheck="{{basePermission}}.53" class="w3-input w3-border" [(ngModel)]="contactInfo.Gender">
+                  <option value="0">--select--</option>
+                  <option *ngFor="let gender of listGender" [ngValue]="gender.GenderId">{{gender.GenderName}}</option>
+                </select>
+              </div>
+              <div class="w3-full" permissionCheck="{{basePermission}}.54">
+                <label>LinkedIn Profile</label>
+                <input permissionCheck="{{basePermission}}.54" class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.LinkedInProfile" />
+              </div>
+              <div class="w3-full w3-border w3-border-secondary-l5">
+                <div class="w3-row w3-secondary-l5 w3-padding-medium w3-cursor"><div (click)="showContactAddress = !showContactAddress"><i [ngClass]="showContactAddress?'fa fa-angle-down' : 'fa fa-angle-right'"></i> <label class="w3-center"> Address</label></div></div>
+                <div class="w3-row w3-margin-medium" *ngIf="showContactAddress">
+                  <div class="w3-half">
+                    <label>Address</label>
+                    <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.Address" />
+                  </div>
+                  <div class="w3-half w3-padding-left-10">
+                    <label>City</label>
+                    <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.City" />
+                  </div>
+                  <div class="w3-half">
+                    <label>State</label>
+                    <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.State" />
+                  </div>
+                  <div class="w3-half w3-padding-left-10">
+                    <label>Country</label>
+                    <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.Country" />
+                  </div>
+                  <div class="w3-half">
+                    <label>ZipCode</label>
+                    <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.ZipCode" />
+                  </div>
+                </div>
+              </div>
+              <app-customsection [entityType]="entityTypeId" [alignment]="'left'" [customFields]="customFields" [entityId]="contactId" [customFieldValues]="leftContactCFValues"></app-customsection>
+            </div>
+            <div class="w3-container w3-half">
+              <div class="w3-full" permissionCheck="{{basePermission}}.55">
+                <label>Extension</label>
+                <input permissionCheck="{{basePermission}}.55" class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.Extension" />
+              </div>
+              <div class="w3-full" permissionCheck="{{basePermission}}.56">
+                <label>Office Number</label>
+                <input permissionCheck="{{basePermission}}.56" class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.OfficeNumber" />
+              </div>
+              <div class="w3-full" permissionCheck="{{basePermission}}.57">
+                <label>Fax Number</label>
+                <input permissionCheck="{{basePermission}}.57" class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.FaxNumber" />
+              </div>
+              <div class="w3-full" permissionCheck="{{basePermission}}.58">
+                <label>Cell Number</label>
+                <input permissionCheck="{{basePermission}}.58" class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.CellNumber" />
+              </div>
+              <div class="w3-full" permissionCheck="{{basePermission}}.59">
+                <label>Email</label>
+                <input permissionCheck="{{basePermission}}.59" class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.Email" />
+              </div>
+              <div class="w3-full">
+                <label>Notes</label>
+                <textarea class="w3-input w3-border" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.Notes" rows="2"></textarea>
+              </div>
+              
+              <div class="w3-full w3-border w3-border-secondary-l5">
+                <div class="w3-row w3-secondary-l5 w3-padding-medium w3-cursor"><div (click)="showContactOrigin = !showContactOrigin"><i [ngClass]="showContactOrigin?'fa fa-angle-down' : 'fa fa-angle-right'"></i> <label class="w3-center"> Contact Affiliate</label></div></div>
+                <div class="w3-row w3-margin-medium" *ngIf="showContactOrigin">
+                  <div class="w3-half">
+                    <label>Origin</label>
+                    <select class="w3-input w3-border" [(ngModel)]="contactInfo.OrginId" (change)="getEntityByOrigin(contactInfo.OrginId);">
+                      <option value="0">-select-</option>
+                      <option value="1">Lead</option>
+                      <option value="2">Vendor</option>
+                      <option value="3">Partner</option>
+                    </select>
+                  </div>
+                  <div class="w3-half w3-padding-left-10" *ngIf="contactInfo.OrginId == 1">
+                    <label>Lead Name</label>
+                    <select class="w3-input w3-border" [(ngModel)]="contactInfo.LeadId">
+                      <option value="0">-select-</option>
+                      <option *ngFor="let data of listLeads" value="{{data.leadId}}">{{data.leadName}}</option>
+                    </select>
+                  </div>
+                  <div class="w3-half w3-padding-left-10" *ngIf="contactInfo.OrginId == 2">
+                    <label>Vendor Name</label>
+                    <select class="w3-input w3-border" [(ngModel)]="contactInfo.Vendor">
+                      <option value="0">-select-</option>
+                      <option *ngFor="let data of listVendors" value="{{data.vendorId}}">{{data.name}}</option>
+                    </select>
+                  </div>
+                  <div class="w3-half w3-padding-left-10" *ngIf="contactInfo.OrginId == 3">
+                    <label>Partner Name</label>
+                    <select class="w3-input w3-border" [(ngModel)]="contactInfo.PartnerId">
+                      <option value="0">-select-</option>
+                      <option *ngFor="let data of listPartners" value="{{data.partnerId}}">{{data.name}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <app-customsection [entityType]="entityTypeId" [alignment]="'right'" [customFields]="customFields" [entityId]="contactId" [customFieldValues]="rightContactCFValues"></app-customsection>
+            </div>
+          </div>
+          <div>
+            <div class="w3-bar w3-center w3-margin-top w3-border-secondary">
+              <div class="w3-left w3-container">
+                <a [class]="activeContainer == 'tab1'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab1'">Affiliate</a>
+                <a [class]="activeContainer == 'tab2'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab2'">Skills</a>
+                <a [class]="activeContainer == 'tabEmployer'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tabEmployer'">Employer</a>
+              </div>
+            </div>
+            <div class="w3-container" *ngIf="activeContainer == 'tabEmployer'">
+              <div class="w3-animate-opacity">
+                <h6 class="w3-margin-0">Employer Information</h6>
+                <div class="w3-row">
+                  <div class="w3-full">
+                    <div class="w3-half marginform">
+                      <div class="w3-row">
+                        <div class="w3-half">
+                          <div>
+                            <label>Start Date</label>
+                            <input class="w3-input w3-border" placeholder="MM/DD/YYYY" type="date" />
+                          </div>
+                        </div>
+                        <div class="w3-half w3-padding-left-10">
+                          <div>
+                            <label>End Date</label>
+                            <input class="w3-input w3-border" placeholder="MM/DD/YYYY" type="date" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="w3-row">
+                        <div class="w3-half">
+                          <div>
+                            <label>Company Name*</label>
+                            <input class="w3-input w3-border" type="text" />
+                          </div>
+                        </div>
+                        <div class="w3-half w3-padding-left-10">
+                          <div>
+                            <label>Tel Number*</label>
+                            <input class="w3-input w3-border" type="text" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="w3-row">
+                        <div class="w3-half">
+                          <div>
+                            <label>Contact Name*</label>
+                            <input class="w3-input w3-border" type="text" />
+                          </div>
+                        </div>
+                        <div class="w3-half w3-padding-left-10">
+                          <div>
+                            <label>Email*</label>
+                            <input class="w3-input w3-border" type="text" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="w3-container w3-half marginform">
+                      <div class="w3-row">
+                        <div class="w3-half">
+                          <div>
+                            <label>Address Line 1</label>
+                            <input class="w3-input w3-border" type="text" />
+                          </div>
+                        </div>
+                        <div class="w3-half w3-padding-left-10">
+                          <div>
+                            <label>Address Line 2</label>
+                            <input class="w3-input w3-border" type="text" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="w3-row">
+                        <div class="w3-half">
+                          <div>
+                            <label>City</label>
+                            <input class="w3-input w3-border" type="text" />
+                          </div>
+                        </div>
+                        <div class="w3-half w3-padding-left-10">
+                          <div>
+                            <label>State</label>
+                            <input class="w3-input w3-border" type="text" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="w3-row">
+                        <div class="w3-half">
+                          <div>
+                            <label>Zip Code</label>
+                            <input class="w3-input w3-border" type="text" />
+                          </div>
+                        </div>
+                        <div class="w3-half w3-padding-left-10">
+                          <div>
+                            <label>Website</label>
+                            <input class="w3-input w3-border" type="text" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="w3-full">
+                        <div>
+                          <label>Notes</label>
+                          <textarea class="w3-input w3-border" type="text"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="activeContainer == 'tab1'">
+              <div class="w3-margin w3-animate-opacity">
+                <h6 class="w3-left w3-margin-bottom-small w3-margin-top-small">Affiliate</h6>
+                <div class="w3-row">
+                  <app-categorylist [entity]="contactEntityType" title="Affiliate" [selectedValues]="selectedAffiliateCategories" [categoryType]="1" [entityId]="contactInfo.Id" (categoryEmitter)="MapAffiliateCategoryValues($event)" (dataEmitter)="AffliateData($event)"></app-categorylist>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="activeContainer == 'tab2'">
+              <div class="w3-margin w3-animate-opacity">
+                <h6 class="w3-left w3-margin-bottom-small w3-margin-top-small">Skills</h6>
+                <div class="w3-row">
+                  <app-categorylist [entity]="contactEntityType" [categoryType]="2" [selectedValues]="selectedSkillsCategories" title="Skill" [entityId]="contactInfo.Id" (categoryEmitter)="MapSkillsCategoryValues($event)" (dataEmitter)="SkillData($event)"></app-categorylist>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+
+        </div>
+        <div class="w3-row w3-round-bottom-left w3-round-bottom-right w3-secondary-button">
+          <div class="w3-margin w3-right" *ngIf="!contactInfo.Id">
+            <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeToggle()" permissionCheck="{{basePermission}}.62">Cancel</button>
+            <button class="w3-button w3-border w3-round-large w3-secondary" (click)="saveContactInfo(contactInfo)" [disabled]="checkReqValidation(firstName)" permissionCheck="{{basePermission}}.63">Save</button>
+          </div>
+        </div>
+        <div class="w3-row w3-round-bottom-left w3-round-bottom-right w3-secondary-button">
+          <div class="w3-margin w3-right" *ngIf="contactInfo.Id">
+            <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeToggle()" permissionCheck="{{basePermission}}.62">Cancel</button>
+            <button class="w3-button w3-border w3-round-large w3-secondary" (click)="updateContactInfo(contactInfo)" [disabled]="checkReqValidation(firstName)" permissionCheck="{{basePermission}}.63">Update</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="row">
+  <div *ngIf="addCustomToggle" class="w3-modal w3-show">
+    <div class="w3-modal-content w3-secondary-button">
+      <div class="w3-row">
+        <div class="w3-container w3-center">
+          <p>Add Field</p>
+          <span (click)="closeError()" class="w3-button w3-display-topright">&times;</span>
+        </div>
+        <app-addnewfield [addCustomToggle]="addCustomToggle" [entityTypeId]="entityTypeId" (dataExist)="dataExist($event)" (saveSuccess)="saveSuccess($event)"></app-addnewfield>
+      </div>
+    </div>
+  </div>
+</div>

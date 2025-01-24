@@ -1,0 +1,19 @@
+<div class="w3-card-2 w3-white w3-small sfcenter w3-round-large w3-animate-zoom">
+  <div class="w3-container">
+    <h4 class="w3-left w3-xlarge w3-margin-top w3-margin-bottom"><b>Partner</b></h4>
+    <!--<button class="w3-button w3-right w3-secondary w3-round-large w3-margin-top w3-margin-bottom" (click)="addPartner()">+ Add Partner</button>-->
+    <div class="w3-dropdown-click w3-right w3-hover-none">
+      <button class="w3-button w3-round-large w3-secondary w3-margin-top" (click)="addPartner()">+ Add Partner</button>
+      <!--<button (click)="toggle=!toggle" class="w3-button w3-round-top-right w3-round-bottom-right w3-secondary w3-margin-top"><i [class]="toggle?'fa w3-medium fa-chevron-up':'fa w3-medium fa-chevron-down'"></i></button>
+      <div id="Demo" class="w3-dropdown-content w3-bar-block w3-border w3-show" *ngIf="toggle">
+        <a class="w3-bar-item w3-button w3-border-bottom w3-light-gray" (click)="addPartner()">Add Partner</a>
+        <a class="w3-bar-item w3-button w3-light-gray" (click)="gotoImport()">Import Data</a>
+      </div>-->
+    </div>
+    <div class="w3-container">
+      <app-data-grid [gridHeaders]="gridHeaders" [actions]="actions" [dataSource]="dataSource" [filterColumns]="filterColumns" [apiUrl]="'/api/Partner/GetODataPartner'" [pageSize]="25"
+                     [isResponsive]="false" [isSecurityEnabled]="isSecurityEnabled" [allLead]="true" [additionalFilter]="additionalFilter" [isSearchEnabled]="true" [isPaginationEnabled]="true" [pageLengthOptions]="pageLengthOptions" (rowClick)="editPartner($event);">
+      </app-data-grid>
+    </div>
+  </div>
+</div>

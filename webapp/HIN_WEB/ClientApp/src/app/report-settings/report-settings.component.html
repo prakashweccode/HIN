@@ -1,0 +1,17 @@
+<div class="w3-row">
+  <div class="w3-card-2 w3-white w3-small w3-margin-right w3-margin-left w3-round-large w3-margin-top">
+    <br />
+    <div class="w3-row w3-padding w3-animate-opacity w3-secondary-l5 w3-border-top w3-border-bottom">
+      <div class="w3-left w3-xlarge">
+        <b>Dashboard Config</b>
+      </div>
+      <button class="w3-button w3-secondary w3-right w3-round-large w3-margin-right" (click)="backToDashboardConfig()">
+        <i class="fa fa-reply"></i>
+      </button>
+    </div>
+    <div class="w3-row">
+      <app-chart-creation [entity]="entity" [dashBoardQueryId]="dashBoardQueryId"></app-chart-creation>
+    </div>
+    <br>
+  </div>
+</div>

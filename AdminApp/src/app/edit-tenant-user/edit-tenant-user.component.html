@@ -1,0 +1,61 @@
+
+<div class="w3-container w3-bottombar" style="border-color: #2a5298!important;">
+  <div class="w3-half">
+    <h2>User Edit </h2>
+  </div>
+  <div class="w3-half w3-margin-top">
+    <div class="w3-row">
+      <div class="w3-right">
+        <label class="switch w3-margin-top w3-margin-left">
+          <input type="checkbox" [(ngModel)]="userDetails.isActive">
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <div class="w3-right">
+        <h2>{{userDetails.isActive ? 'Active' : 'Inactive'}}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="w3-row w3-margin-top form-control-margin">
+  <div class="w3-container">
+    <button class="w3-button w3-theme-gradient w3-right w3-text-white" (click)="updateUserDetails(userDetails);">Save</button>
+  </div>
+  <div class="w3-container w3-half">
+    <div class="w3-row margin-small">
+      <label>UserName</label>
+      <input type="text" class="w3-input w3-border" disabled="disabled" [(ngModel)]="userDetails.userName" />
+    </div>
+    <div class="w3-row margin-small">
+      <label>First Name</label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="userDetails.firstName"/>
+    </div>
+    <div class="w3-row margin-small">
+      <label>Reset Login Password</label>
+      <input type="password" class="w3-input w3-border" [(ngModel)]="loginPassword" placeholder="********"/>
+    </div>
+    <!--<div class="w3-row margin-small">
+      <label>Confirm Login Password</label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="userDetails.userName"/>
+    </div>-->
+  </div>
+  <div class="w3-container w3-half">
+    <div class="w3-row margin-small">
+      <label>Email</label>
+      <input type="text" class="w3-input w3-border" disabled="disabled" [(ngModel)]="userDetails.email"/>
+    </div>
+    <div class="w3-row margin-small">
+      <label>Last Name</label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="userDetails.lastName"/>
+    </div>
+    <div class="w3-row margin-small">
+      <label>Reset Admin Password</label>
+      <input type="password" class="w3-input w3-border" [(ngModel)]="adminPassword" placeholder="********"/>
+    </div>
+    <!--<div class="w3-row margin-small">
+      <label>Confirm Admin Password</label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="userDetails.userName"/>
+    </div>-->
+  </div>
+</div>
+

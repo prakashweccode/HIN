@@ -1,0 +1,18 @@
+<div class="w3-row w3-border-gray">
+  <div class="w3-full marginform w3-border w3-padding">
+    <ng-container *ngFor="let data of entityColumns;">
+      <div class="w3-row w3-margin-top-medium">
+        <div class="w3-col s3">
+          <label>{{data}} <span *ngIf="checkRequired(data);" class="w3-text-red">*</span></label>
+        </div>
+        <div class="w3-col s3">
+          <select class="w3-input w3-border" (change)="mapColumns(data, $event);">
+            <option value="0" disabled>select</option>
+            <option *ngFor="let column of fileColumns" value="{{column}}">{{column}}</option>
+            <option value="!import">Do Not Import!</option>
+          </select>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

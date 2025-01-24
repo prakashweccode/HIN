@@ -1,0 +1,34 @@
+<div class="w3-panel w3-card-2 w3-white w3-small sfcenter w3-margin-top">
+  <div class="w3-margin w3-animate-opacity">
+    <h4 class="w3-left">Add Role</h4>
+    <button class="w3-button w3-right w3-primary w3-round-large" (click)="cancel()">
+      <i class="fa fa-reply"></i>
+    </button>
+  </div>
+  <div class="w3-row w3-padding ">
+    <label>Role name</label>
+    <input class="w3-input w3-border" type="text" [(ngModel)]="role.RoleName"/>
+  </div>
+  <div class="w3-row w3-padding">
+    <!--<label class="switch">
+      <input type="checkbox">
+      <span class="slider round"></span>
+    </label> Active-->
+    <div class="w3-container w3-margin-top w3-padding w3-border w3-border-green">
+      <h6>Permissions</h6>
+      <div class="w3-row w3-padding" *ngFor="let data of lstPermissions">
+        <label class="switch">
+          <input type="checkbox" [(ngModel)]="data.IsSelected" value="{{data.Id}}">
+          <span class="slider round"></span>
+        </label> {{data.Name}}
+      </div>
+    </div>
+  </div>
+
+  <div class="w3-margin w3-right">
+    <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="cancel()">Cancel</button>
+    <button class="w3-button w3-secondary w3-border w3-round-large" (click)="saveRole()">Save</button>
+  </div>
+  <br>
+</div>
+

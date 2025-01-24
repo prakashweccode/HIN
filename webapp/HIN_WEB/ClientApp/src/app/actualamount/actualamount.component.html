@@ -1,0 +1,12 @@
+      <div class="w3-small sfcenter">
+        <div class="w3-animate-opacity marginform">
+          <div class="w3-container w3-primary-l4">
+            <div class="w3-third">
+              <input class="w3-input w3-border w3-margin-bottom" placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" type="text" [(ngModel)]="deal.ActualAmount" />
+            </div>
+          </div>
+          <div class="">
+            <button class="w3-button w3-block w3-secondary" (click)="saveActualAmount()">Save</button>
+          </div>
+        </div>
+      </div>

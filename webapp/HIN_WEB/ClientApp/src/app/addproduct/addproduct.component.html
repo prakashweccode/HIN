@@ -1,0 +1,59 @@
+
+
+
+<div class="w3-panel w3-card-2 w3-white w3-small sfcenter w3-margin-top">
+  <div class="w3-margin w3-animate-opacity">
+    <h4 class="w3-left">
+      Add new product
+    </h4>
+    <button class="w3-button w3-right w3-primary w3-round-large" (click)="cancel()">
+      <i class="fa fa-reply"></i>
+    </button>
+  </div>
+  <div class="w3-row w3-padding ">
+    <div class="w3-full">
+      <div class="marginform">
+        <div class="w3-full">
+          <label>Product name</label>
+          <input class="w3-input w3-border" type="text" />
+        </div>
+        <div class="w3-full">
+          <label>Product code</label>
+          <input class="w3-input w3-border" type="text" />
+        </div>
+        <div class="w3-full">
+          <label>Category</label>
+          <input class="w3-input w3-border" type="text" />
+        </div>
+        <div class="w3-full">
+          <label>Unit</label>
+          <input class="w3-input w3-border" type="text" />
+        </div>
+        <div class="w3-row">
+          <div class="w3-full">
+            <div class="w3-half">
+              <label>Unit price</label>
+              <input class="w3-input w3-border w3-padding" type="text" />
+            </div>
+            <div class="w3-half">
+              <label>&nbsp;</label>
+              <input class="w3-input w3-border w3-padding" type="text" />
+              <!--<app-currency [currencyId]="lead.CurrencyId" (currencychanged)="dealChanged($event)"></app-currency>-->
+            </div>
+          </div>
+        </div>
+        <a>+ add one more</a>
+        <div class="w3-full">
+          <label>Tax %</label>
+          <input class="w3-input w3-border" type="text" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="w3-margin w3-right">
+    <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="cancel()">Cancel</button>
+    <button class="w3-button w3-secondary w3-border w3-round-large">Save</button>
+  </div>
+  <br>
+</div>
+

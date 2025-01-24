@@ -1,0 +1,384 @@
+<div class="w3-row">
+  <div class="w3-card-2 w3-white w3-small w3-margin-right w3-margin-left w3-round-large w3-animate-zoom">
+    <br />
+    <div class="w3-row w3-padding w3-animate-opacity w3-secondary-l5 w3-border-top w3-border-bottom">
+      <div class="w3-left w3-xlarge">
+        <b>
+          Network
+        </b>
+
+      </div>
+      <button class="w3-button w3-right w3-primary w3-round-large w3-margin-right" (click)="cancel()"><i class="fa fa-reply"></i></button>
+      <button class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="addNetworking()" permissionCheck="15.2.2">+ Add Network</button>
+      <button class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="createNewField()" permissionCheck="15.2.1">+ Add New Field</button>
+    </div>
+    <div class="w3-panel w3-margin-top-small">
+      <div class="w3-row">
+        <div class="marginform">
+          <div class="w3-full w3-container">
+            <input id="inactive" type="checkbox" [(ngModel)]="networking.Inactive" name="networkinactive" />
+            <label for="inactive">&nbsp;Inactive</label>
+          </div>
+          <div class="w3-half w3-container">
+            <div class="w3-full " permissionCheck="15.2.3">
+              <label>Network Number *</label>
+              <input class="w3-input w3-border" type="text" disabled="disabled" [(ngModel)]="networking.NetworkingNumber" [class.w3-border-red]="checkValidation(networkingNumber)" #networkingNumber="ngModel" required />
+            </div>
+            <div class="w3-full" permissionCheck="15.2.4">
+              <label>Network Name *</label>
+              <input class="w3-input w3-border" type="text" [(ngModel)]="networking.NetworkingName" [class.w3-border-red]="checkValidation(networkingName)" #networkingName="ngModel" required />
+            </div>
+            <div class="w3-full" permissionCheck="15.2.5">
+              <label>Telephone</label>
+              <input class="w3-input w3-border" type="text" [(ngModel)]="networking.Telephone" mask="(000) 000-0000" [showMaskTyped]="true" />
+            </div>
+            <div class="w3-full" permissionCheck="15.2.6">
+              <label>Fax</label>
+              <input class="w3-input w3-border" type="text" [(ngModel)]="networking.Fax" />
+            </div>
+            <div class="w3-full" permissionCheck="15.2.7">
+              <label>Website</label>
+              <input class="w3-input w3-border" type="text" [(ngModel)]="networking.Website" />
+            </div>
+            <app-customsection [entityType]="entityType" [alignment]="'left'" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="networkingLeftCustomFieldValues"></app-customsection>
+          </div>
+          <div class="w3-half w3-container">
+            <div class="w3-full" permissionCheck="15.2.8">
+              <label>Address</label>
+              <input class="w3-input w3-border" type="text" [(ngModel)]="networking.Address" />
+            </div>
+            <div class="w3-full" permissionCheck="15.2.9">
+              <label>City</label>
+              <input class="w3-input w3-border" type="text" [(ngModel)]="networking.City" />
+            </div>
+            <div class="w3-full" permissionCheck="15.2.10">
+              <label>State</label>
+              <input class="w3-input w3-border" type="text" [(ngModel)]="networking.State" />
+            </div>
+            <div class="w3-full" permissionCheck="15.2.11">
+              <label>Zip Code</label>
+              <input class="w3-input w3-border" type="text" [(ngModel)]="networking.Zipcode" />
+            </div>
+            <div class="w3-full" permissionCheck="15.2.12">
+              <label>Country</label>
+              <input class="w3-input w3-border" type="text" [(ngModel)]="networking.Country" />
+            </div>
+            <div class="w3-full" permissionCheck="15.2.13">
+              <label>Industry</label>
+              <input class="w3-input w3-border" type="text" [(ngModel)]="networking.Industry" />
+            </div>
+            <app-customsection [entityType]="entityType" [alignment]="'right'" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="networkingRightCustomFieldValues"></app-customsection>
+          </div>
+        </div>
+      </div>
+      <div class="w3-container">
+        <div class="w3-bar w3-center w3-margin-top w3-border-secondary">
+          <div class="w3-left">
+            <button [class]="activeContainer == 'tab2'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-round-large w3-margin-right-small w3-secondary-theme2'" (click)="activeContainer = 'tab2'" permissionCheck="15.2.14">Cost</button>
+            <button [disabled]="!networking.NetworkingId" [class]="activeContainer == 'tab1'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab1'" permissionCheck="15.2.15">Contacts ({{contactInformations.length}})</button>
+            <button [disabled]="!networking.NetworkingId" [class]="activeContainer == 'tab3'?'w3-button w3-round-large w3-margin-right-small w3-secondary':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab3'" permissionCheck="15.2.16">Notes ({{notesInfos.length}})</button>
+          </div>
+        </div>
+
+
+        <div *ngIf="activeContainer == 'tab9'" class="w3-white">
+          <div class="w3-animate-opacity">
+            <h6 class="w3-left w3-margin-top-small w3-margin-bottom-small">Referrals</h6>
+            <div class="w3-full">
+              <button type="button" (click)="addNewReferral(referral)" class="w3-button w3-secondary w3-border w3-round-large w3-right">+ Add Referral</button>
+            </div>
+            <div class="w3-full">
+              <table class="w3-table w3-bordered">
+                <thead>
+                  <tr>
+                    <th>Partner / Reference</th>
+                    <th>Telephone Number</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Industry </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of listReferrals">
+                    <td><a class="hyper-link" (click)="redirectToReferral(data)">{{data.Name}}</a></td>
+                    <td>{{data.Telephone}}</td>
+                    <td>{{data.City}}</td>
+                    <td>{{data.State}}</td>
+                    <td>{{data.Industry}}</td>
+                  </tr>
+                  <tr *ngIf="listPartners.length == 0">
+                    <td>No records</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div *ngIf="activeContainer == 'tab8'" class="w3-white">
+          <div class="w3-animate-opacity">
+            <h6 class="w3-left w3-margin-top-small w3-margin-bottom-small">Partners</h6>
+            <div class="w3-full">
+              <button type="button" (click)="addNewPartner(partner)" class="w3-button w3-secondary w3-border w3-round-large w3-right">+ Add Partner</button>
+            </div>
+            <div class="w3-full">
+              <table class="w3-table w3-bordered">
+                <thead>
+                  <tr>
+                    <th>Partner / Reference</th>
+                    <th>Telephone Number</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Industry </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of listPartners">
+                    <td><a class="hyper-link" (click)="redirectToPaartner(data)">{{data.Name}}</a></td>
+                    <td>{{data.Telephone}}</td>
+                    <td>{{data.City}}</td>
+                    <td>{{data.State}}</td>
+                    <td>{{data.Industry}}</td>
+                  </tr>
+                  <tr *ngIf="listPartners.length == 0">
+                    <td>No records</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="activeContainer == 'tab1'" class="w3-white"permissionCheck="15.2.15">
+          <div class="w3-animate-opacity">
+            <h6 class="w3-left w3-margin-top-small w3-margin-bottom-small">Contacts</h6>
+            <div class="w3-full">
+              <app-contactinformation [dataSource]="contactInformations" [additionalInfo]="false" [entityType]="entityType" [entityId]="entityId"></app-contactinformation>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="activeContainer == 'tab6'" class="w3-white">
+          <div class="w3-animate-opacity">
+            <h6 class="w3-left w3-margin-top-small w3-margin-bottom-small">Member of Network</h6>
+            <div class="w3-full">
+              <app-contactinformation [dataSource]="contactList" [additionalInfo]="true" [entityType]="entityType" [entityId]="entityId" [basePermission]="9.2.19"></app-contactinformation>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="activeContainer == 'tab2'" class="w3-white" permissionCheck="15.2.14">
+          <div class="w3-full w3-margin-top">
+            <button type="button" (click)="addNetworkingCostCustomField()" class="w3-button w3-secondary w3-border w3-round-large w3-right">+ Add New Field</button>
+          </div>
+          <div class="w3-animate-opacity">
+            <div class="w3-full">
+              <h6 class="w3-left w3-margin-top-small w3-margin-bottom-small">Cost</h6>
+            </div>
+            <div class="w3-row marginform">
+              <div class="w3-full">
+                <div class="w3-half w3-container">
+                  <div class="w3-full " permissionCheck="15.2.14.1">
+                    <label>Yearly</label>
+                    <input class="w3-input w3-border" type="text"  placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" [(ngModel)]="networkingCost.Yearly" />
+                  </div>
+                  <div class="w3-full" permissionCheck="15.2.14.2">
+                    <label>Monthly</label>
+                    <input class="w3-input w3-border" type="text" placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" [(ngModel)]="networkingCost.Monthly" />
+                  </div>
+                  <div class="w3-full" permissionCheck="15.2.14.3">
+                    <label>Weekly</label>
+                    <input class="w3-input w3-border" type="text" placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" [(ngModel)]="networkingCost.Weekly" />
+                  </div>
+                  <div class="w3-full" permissionCheck="15.2.14.4">
+                    <label>Per Event</label>
+                    <input class="w3-input w3-border" type="text" placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" [(ngModel)]="networkingCost.PerEvent" />
+                  </div>
+                  <div class="w3-full" permissionCheck="15.2.14.5">
+                    <label>Travel Cost</label>
+                    <input class="w3-input w3-border" type="text" placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" [(ngModel)]="networkingCost.TravelCost" />
+                  </div>
+                  <app-customsection [entityType]="networkingCostEntityType" [alignment]="'left'" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="networkingCostLeftCustomFieldValues"></app-customsection>
+                </div>
+                <div class="w3-half w3-container">
+                  <div class="w3-full ">
+                    <label>Remark</label>
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="networkingCost.YearlyNote" />
+                  </div>
+                  <div class="w3-full">
+                    <label>Remark</label>
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="networkingCost.MonthlyNote" />
+                  </div>
+                  <div class="w3-full">
+                    <label>Remark</label>
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="networkingCost.WeeklyNote" />
+                  </div>
+                  <div class="w3-full">
+                    <label>Remark</label>
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="networkingCost.PerEventNote" />
+                  </div>
+                  <div class="w3-full">
+                    <label>Remark</label>
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="networkingCost.TravelCostNote" />
+                  </div>
+                  <app-customsection [entityType]="networkingCostEntityType" [alignment]="'right'" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="networkingCostRightCustomFieldValues"></app-customsection>
+                </div>
+                <div class="w3-full w3-container" permissionCheck="15.2.14.6">
+                  <label>Remark: </label>
+                  <textarea class="w3-input w3-border" [(ngModel)]="networkingCost.Note"></textarea>
+                </div>
+              </div>
+            </div>
+            <!--<div class="w3-margin w3-right">
+        <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="cancel()">Cancel</button>
+        <button class="w3-button w3-secondary w3-border w3-round-large" (click)="saveNetworkingCost(networkingCost)">Save</button>
+      </div>-->
+          </div>
+
+        </div>
+
+        <div class="w3-white" *ngIf="activeContainer == 'tab3'" permissionCheck="15.2.16.1">
+          <div class="w3-animate-opacity">
+            <h6 class="w3-left w3-margin-top-small w3-margin-bottom-small">Notes</h6>
+            <div class="w3-full">
+              <app-notesinfo [entityType]="entityType" [notesDataSource]="notesInfos" [entityId]="entityId"></app-notesinfo>
+            </div>
+          </div>
+        </div>
+        <div class="w3-white" *ngIf="activeContainer == 'tab7'">
+          <div class="w3-animate-opacity">
+            <h6 class="w3-left w3-margin-top-small w3-margin-bottom-small">Affiliate</h6>
+            <div class="w3-row">
+              <app-categorylist [entity]="entityType" [categoryType]="1" [selectedValues]="selectedCategories" title="Networking" [entityId]="entityId" (dataEmitter)="AffliateData($event)" (categoryEmitter)="MapCategoryValues($event)"></app-categorylist>
+            </div>
+          </div>
+        </div>
+
+        <div class="w3-white" *ngIf="activeContainer == 'tab4'">
+          <div class="w3-animate-opacity">
+            <div class="w3-full">
+              <h6 class="w3-left w3-margin-top-small w3-margin-bottom-small">Leads / Customers</h6>
+            </div>
+            <div class="w3-full">
+              <table class="w3-table w3-bordered">
+                <thead>
+                  <tr>
+                    <th>Lead Name</th>
+                    <th>City</th>
+                    <th>Company Name</th>
+                    <th>Annual Revenue</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let lead of listOfLeads" style="cursor:pointer" (click)="viewLead(lead);">
+                    <td>{{lead.LeadName}}</td>
+                    <td>{{lead.City}}</td>
+                    <td>{{lead.CompanyName}}</td>
+                    <td>{{lead.AnnualRevenue}}</td>
+                  </tr>
+                  <tr *ngIf="listOfLeads.length == 0">
+                    <td>No Records Found.</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="w3-white" *ngIf="activeContainer == 'tab5'">
+          <div class="w3-animate-opacity marginform">
+            <div class="w3-full">
+              <h6 class="w3-left w3-margin-top-small w3-margin-bottom-small">Meet Days / Events</h6>
+            </div>
+
+            <div class="w3-row w3-section">
+              <div class="w3-col" style="width:15%;">
+                <div class="w3-padding w3-center">
+                  Yearly
+                </div>
+              </div>
+              <div class="w3-rest">
+                <div class="w3-half w3-container">
+                  <label>Date</label>
+                  <input type="date" class="w3-input w3-border" [ngModel]="changeFormatDate(networkingEventMeet.YearlyDate)" (ngModelChange)="networkingEventMeet.YearlyDate = $event" />
+                </div>
+                <div class="w3-half">
+                  <label>Time</label>
+                  <input type="time" class="w3-input w3-border" [(ngModel)]="networkingEventMeet.YearlyTime" />
+                </div>
+              </div>
+            </div>
+            <div class="w3-row w3-section">
+              <div class="w3-col" style="width:15%;">
+                <div class="w3-padding w3-center">
+                  Monthly
+                </div>
+              </div>
+              <div class="w3-rest">
+                <div class="w3-half w3-container">
+                  <label>Date</label>
+                  <input type="date" class="w3-input w3-border" [ngModel]="changeFormatDate(networkingEventMeet.MonthlyDate)" (ngModelChange)="networkingEventMeet.MonthlyDate = $event" />
+                </div>
+                <div class="w3-half">
+                  <label>Time</label>
+                  <input type="time" class="w3-input w3-border" [(ngModel)]="networkingEventMeet.MonthlyTime" />
+                </div>
+              </div>
+            </div>
+            <div class="w3-row w3-section">
+              <div class="w3-col" style="width:15%;">
+                <div class="w3-padding w3-center">
+                  Weekly
+                </div>
+              </div>
+              <div class="w3-rest">
+                <div class="w3-half w3-container">
+                  <label>Date</label>
+                  <input type="date" class="w3-input w3-border" [ngModel]="changeFormatDate(networkingEventMeet.WeeklyDate)" (ngModelChange)="networkingEventMeet.WeeklyDate = $event" />
+                </div>
+                <div class="w3-half">
+                  <label>Time</label>
+                  <input type="time" class="w3-input w3-border" [(ngModel)]="networkingEventMeet.WeeklyTime" />
+                </div>
+              </div>
+            </div>
+            <div class="w3-row" permissionCheck="9.2.18.4">
+              <label>Remarks</label>
+              <textarea class="w3-input w3-border" [(ngModel)]="networkingEventMeet.Notes" permissionCheck="9.2.18.4"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="w3-margin w3-right">
+        <button class="w3-button w3-border w3-round-large w3-margin-right-small" (click)="cancel()">Cancel</button>
+        <button class="w3-button w3-secondary w3-border w3-round-large" (click)="saveNetworking(networking)" [disabled]="checkReqValidation(networkingName)||checkReqValidation(networkingNumber)">Save</button>
+      </div>
+      <br>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div *ngIf="addCustomToggle" class="w3-modal w3-show">
+    <div class="w3-modal-content w3-secondary w3-round-large w3-secondary-button">
+      <div class="w3-row">
+        <div class="w3-container w3-center">
+          <p>Add Field</p>
+          <span (click)="closeError()" class="w3-button w3-display-topright">&times;</span>
+        </div>
+        <app-addnewfield [addCustomToggle]="addCustomToggle" (dataExist)="dataExist($event)" [entityTypeId]="entityTypeId" (saveSuccess)="saveSuccess($event)"></app-addnewfield>
+      </div>
+    </div>
+  </div>
+</div>

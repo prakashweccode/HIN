@@ -1,0 +1,108 @@
+  <div class="w3-card-2 w3-white w3-small w3-margin-left w3-margin-right w3-round-large w3-animate-zoom">
+    <div class="w3-container">
+      <h4 class="w3-left w3-xlarge w3-margin-top w3-margin-bottom w3-container"><b>% Of open opportunity closed by month</b></h4>
+      <div class="w3-right w3-margin-top">
+        <button class="w3-button w3-margin-right w3-secondary w3-round-large" (click)="cancel()">
+          <i class="fa fa-reply"></i>
+        </button>
+      </div>
+    </div>
+    <div class="w3-container">
+      <div class="w3-row">
+        <div class="w3-full">
+          <div class="marginform">
+            <div class="w3-row">
+              <div class="w3-container w3-third">
+                <label>Select User</label>
+                <app-assignedtogrid [multiSelect]="true" [assignedToGrid]="assignedToGrid" (sendArrayOfAssignedId)="selectAssignedValue($event)"></app-assignedtogrid>
+              </div>
+              <div class="w3-container w3-third">
+                <label>Select Year</label>
+                <select class="w3-input w3-border" (change)="ChangeDDYear($event)">
+                  <option value="2021">2021</option>
+                  <option value="2020">2020</option>
+                  <option value="2019">2019</option>
+                  <option value="2018">2018</option>
+                  <option value="2017">2017</option>
+                  <option value="2016">2016</option>
+                  <option value="2015">2015</option>
+                  <option value="2014">2014</option>
+                  <option value="2013">2013</option>
+                  <option value="2012">2012</option>
+                </select>
+              </div>
+            </div>
+            <div class="w3-row">
+              
+            </div>
+            <div class="w3-row">
+              <div class="w3-container w3-third">
+                &nbsp;
+              </div>
+            </div>
+            
+            <!--<app-dealgetreport [rangeType]="radioReport" [fromDate]="dealReport.reportinput.From" [toDate]="dealReport.reportinput.To" (fromDateChange)="dealReport.reportinput.From=$event" (dateChanged)="dealReport.reportinput.To=$event" (handleFrequencyChange)="handleFrequencyChange($event)"></app-dealgetreport>-->
+          </div>
+        </div>
+
+      </div>
+      <div class="w3-right w3-margin">
+        <button class="w3-button w3-border w3-round-large w3-margin-right-small" (click)="cancel()">Back</button>
+        <button class="w3-button w3-secondary w3-border w3-round-large w3-margin-right-small" (click)="getOpenDeals()">Get Report</button>
+        <!--<button *ngIf="listDeal.length > 0" class="w3-button w3-secondary w3-border w3-round-large" (click)="exportCSV()"><i class="fa fa-upload" aria-hidden="true"></i> Export CSV</button>-->
+      </div>
+      <div class="w3-margin-bottom ">
+        <div class="w3-full w3-container">
+          <table class="w3-table w3-bordered  w3-border">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>January</th>
+                <th>February</th>
+                <th>March</th>
+                <th>April</th>
+                <th>May</th>
+                <th>June</th>
+                <th>July</th>
+                <th>August</th>
+                <th>September</th>
+                <th>October</th>
+                <th>November</th>
+                <th>December</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of lstOpenDeals | paginate: { itemsPerPage: 50, currentPage: p }">
+                <td>{{data.AssignedUser}}</td>
+                <td>{{data.Jan}}</td>
+                <td>{{data.Feb}}</td>
+                <td>{{data.Mar}}</td>
+                <td>{{data.Apr}}</td>
+                <td>{{data.May}}</td>
+                <td>{{data.Jun}}</td>
+                <td>{{data.Jul}}</td>
+                <td>{{data.Aug}}</td>
+                <td>{{data.Sep}}</td>
+                <td>{{data.Oct}}</td>
+                <td>{{data.Nov}}</td>
+                <td>{{data.Dec}}</td>
+                <td>
+                  {{calculateTotal(data)}}
+                </td>
+              </tr>
+              <tr *ngIf="lstOpenDeals.length == 0">
+                <td>No Records Found.</td>
+                <td colspan="13"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination float-right">
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        </div>
+
+      </div>
+
+    </div>
+  </div>

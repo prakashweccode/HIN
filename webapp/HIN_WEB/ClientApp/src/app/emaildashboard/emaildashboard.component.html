@@ -1,0 +1,36 @@
+  <div class="w3-card w3-row w3-white w3-margin-right w3-margin-left w3-margin-bottom w3-round-large">
+  <br />
+  <button class="w3-button w3-circle w3-xlarge w3-secondary bottomright" (click)="addNewTemplate();"><strong>+</strong></button>
+  <div class="container-fluid">
+    <!----Top Bar Start---->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="template-head">
+          <h2>Select a Template to start</h2>
+          <div class="w3-right w3-margin-left">
+            <input class="w3-button w3-round-large w3-secondary" type="button" value="+ Create New Template" (click)="addNewTemplate();" />
+          </div>
+          <p class="search-template">
+            <i class="fa fa-search" aria-hidden="true"></i>
+            <input type="text" placeholder="Search Template Here...">
+          </p>
+        </div>
+      </div>
+
+    </div>
+    <!----Top Bar End---->
+    <!----Prebuilt Templates Start---->
+
+    <div class="container-fluid">
+      <div class="row">
+        <div *ngFor="let template of emailTemplatesName">
+          <div class="templates-wraps w3-cursor" (click)="editTemplate(template.TemplateId);">
+            <img src="\assets\images\template5.png" alt="Template Designs">
+            <p>{{template.TemplateName}} <i class="fa fa-cog" aria-hidden="true"></i></p>
+          </div>
+          </div>
+        </div>
+    </div>
+    <!----Prebuilt Templates End---->
+  </div>
+</div>

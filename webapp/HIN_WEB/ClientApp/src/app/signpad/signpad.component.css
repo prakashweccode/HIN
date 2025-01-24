@@ -1,0 +1,6 @@
+.signature-pad {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.08) inset;
+  border-radius: 4px;
+  padding: 4px;
+}
+

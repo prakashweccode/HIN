@@ -1,0 +1,62 @@
+<div class="w3-card-2 w3-white w3-small sfcenter marginform w3-round-large w3-animate-zoom">
+  <div class="w3-container">
+    <div class="w3-row w3-margin-top w3-margin-bottom">
+      <h4 class="w3-left w3-xlarge" style="margin:0;"><b>Contact Groups </b></h4>
+      <div class="w3-right">
+        <a class="w3-button w3-secondary w3-round-large" (click)="addNewContactGroup()">+ Add New Group</a>
+      </div>
+      <div class="w3-right w3-margin-right-small">
+        <app-connectoffice365 (statusEmitter)="statusEmitter($event)"></app-connectoffice365>
+      </div>
+      <div *ngIf="selectedGroups.length > 0" class="w3-right w3-margin-right-small">
+        <a class="w3-button w3-secondary w3-round-large" (click)="sendEmail()">Send Email</a>
+      </div>
+    </div>
+    <app-data-grid [gridHeaders]="gridHeaders" [actions]="actions" [dataSource]="dataSource" [filterColumns]="filterColumns" [selectedArray]="selectedGroups" [apiUrl]="'/api/ContactInfo/OdataContactGroup'" [pageSize]="25"
+                   [isResponsive]="false" [isSearchEnabled]="true" [isPaginationEnabled]="true" [pageLengthOptions]="pageLengthOptions" (rowClick)="editContactGroup($event);"(selectedArrayOfData)="selectedGroupArray($event)">
+    </app-data-grid>
+  </div>
+</div>
+<div class="row">
+  <div *ngIf="modalToggle" class="w3-modal w3-show" style="top:-45px;">
+    <div class="w3-modal-content w3-secondary-button" style="width:80%;">
+      <div class="w3-row">
+        <div class="w3-container w3-center">
+          <p>Contact Group</p>
+          <span (click)="closeModal()" class="w3-button w3-display-topright">&times;</span>
+        </div>
+        <div class="w3-container w3-primary-l4 marginform">
+          <div class="w3-full">
+            <label>Group Name *</label>
+            <input class="w3-input w3-border" type="text" [(ngModel)]="group.GroupName" [class.w3-border-red]="checkValidation(groupName)" #groupName="ngModel" required />
+          </div>
+          <div class="w3-border w3-border-grey w3-round-large w3-margin-top">
+            <div class="w3-row">
+              <button class="w3-button w3-light-gray w3-block w3-round-large" (click)="contactToggle = !contactToggle"><span class="w3-left">select contacts </span><span class="w3-center">({{selectedContacts.length}}) contacts selected</span><i [ngClass]="contactToggle ? 'w3-right fa fa-angle-down' : 'w3-right fa fa-angle-right'"></i></button>
+            </div>
+            <div *ngIf="contactToggle" class="w3-row w3-round-large w3-container w3-white w3-small w3-padding" style="max-height:555px;overflow:auto;">
+              <app-data-grid [enableSelectAll]="'true'" [gridHeaders]="contactGridHeaders" [actions]="contactActions" [dataSource]="contactDataSource" [filterColumns]="contactFilterColumns" [selectedArray]="selectedContacts" [multiSelectType]="'contact'" [apiUrl]="'/api/ContactInfo/OdataVwContactInfo'" [pageSize]="500"
+                             [isResponsive]="false" [isSearchEnabled]="true" [isPaginationEnabled]="true" [pageLengthOptions]="contactPageLengthOptions" (selectedArrayOfData)="selectedArray($event)">
+              </app-data-grid>
+            </div>
+          </div>
+          <div class="w3-full">&nbsp;</div>
+        </div>
+        <div class="w3-container w3-round-bottom-left w3-round-bottom-right w3-secondary-button">
+          <div class="w3-margin w3-right">
+            <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeModal()">Cancel</button>
+            <button class="w3-button w3-border w3-round-large w3-secondary" (click)="saveGroup()" [disabled]="checkReqValidation(groupName)">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="emailToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large">
+    <div class="w3-container">
+      <span (click)="closeEmailToggle()" class="w3-button w3-display-topright">&times;</span>
+      <app-chooseemailtemplate (sendModalClose)="emailToggleModalClose($event)" (sendBatchEmail)="sendBatchEmail($event)"></app-chooseemailtemplate>
+    </div>
+  </div>
+</div>

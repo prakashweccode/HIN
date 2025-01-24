@@ -1,0 +1,122 @@
+<div class="w3-margin w3-animate-opacity">
+  <div class="w3-row">
+    <h5>Compose</h5>
+  </div>
+  <div class="w3-full w3-container">
+    <label>To</label>
+    <div class="w3-row">
+      <div class="w3-col s1">
+        <button class="w3-button w3-white w3-border w3-border-light-gray" (click)="chooseContacts()"><i aria-hidden="true" class="fa fa-address-book-o"></i></button>
+      </div>
+      <div class="w3-col s11">
+        <ul class="sf-multiselect-ul">
+          <ng-container *ngFor="let toRecipient of officeemails.message.toRecipients">
+            <span class="w3-tag w3-teal sf-multiselect-span" *ngIf="officeemails.message.toRecipients.length > 0">{{toRecipient.emailAddress.address}} <i class="fa fa-close" (click)="removeRecipient(toRecipient.emailAddress.address)"></i></span>
+          </ng-container>
+          <li class="sf-multiselect-li">
+            <input class="w3-border-0 w3-round-large sf-multiselect-textbox" type="text" (keypress)="enterContact($event)" (focusout)="chooseContactBlur($event)" />
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="w3-full w3-container">
+    <label>Cc</label>
+    <div class="w3-row">
+      <div class="w3-col s1">
+        <button class="w3-button w3-white w3-border w3-border-light-gray" (click)="chooseCcContacts()"><i aria-hidden="true" class="fa fa-address-book-o"></i></button>
+      </div>
+      <div class="w3-col s11">
+        <ul class="sf-multiselect-ul">
+          <ng-container *ngFor="let ccRecipient of officeemails.message.ccRecipients">
+            <span class="w3-tag w3-teal sf-multiselect-span" *ngIf="officeemails.message.ccRecipients.length > 0">{{ccRecipient.emailAddress.address}} <i class="fa fa-close" (click)="removeCcRecipient(ccRecipient.emailAddress.address)"></i></span>
+          </ng-container>
+          <li class="sf-multiselect-li">
+            <input class="w3-border-0 w3-round-large sf-multiselect-textbox" type="text" (keypress)="enterCcContact($event)" (focusout)="chooseCcContactBlur($event)" />
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="w3-row marginform w3-container w3-margin-top">
+    <div class="w3-col s2">
+      <label>Subject :</label>
+    </div>
+    <div class="w3-col s10">
+      <input class="w3-input w3-border" type="text" [(ngModel)]="officeemails.message.subject" />
+    </div>
+  </div>
+
+
+  <div class="w3-row marginform w3-container w3-margin-top">
+    <div class="w3-col s2">
+      <label>Select Template :</label>
+    </div>
+    <div class="w3-col s10">
+      <select class="w3-input w3-border" [ngModel]="emailHistory.EmailTemplateId" (ngModelChange)="selectedEmailTemplate($event)">
+        <option value="0" disabled>select</option>
+        <option *ngFor="let emailTemplate of lstOfEmailTemplate" [ngValue]="emailTemplate.TemplateId">{{emailTemplate.TemplateName}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="w3-full w3-container w3-margin-top" *ngIf="!showEmailTemplate">
+    <label></label>
+    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="officeemails.message.body.content"></angular-editor>
+  </div>
+
+  <div class="w3-full w3-container w3-margin-top" style="height:50vh;overflow-y:auto;" *ngIf="showEmailTemplate">
+    <div [innerHTML]="bindPreviewHTML(officeemails.message.body.content)">
+    </div>
+  </div>
+
+  <div class="w3-margin w3-right">
+    <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeToggle()"><i class="fa fa-times"></i> Cancel</button>
+    <button class="w3-button w3-secondary w3-border w3-round-large" (click)="sendEmail(officeemails)"><i class="fa fa-paper-plane"></i> Send</button>
+  </div>
+</div>
+
+
+
+
+
+
+<div *ngIf="contactToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large">
+    <div class="w3-container">
+      <span (click)="closeContacts()" class="w3-button w3-display-topright">&times;</span>
+      <div class="w3-white w3-small sfcenter w3-margin-top">
+        <div class="w3-margin w3-animate-opacity">
+          <div class="w3-row">
+            <h5>Contacts</h5>
+          </div>
+          <div class="w3-row" style="height:65vh;overflow-y:auto">
+            <table class="w3-table-all">
+              <thead>
+                <tr>
+                  <th>
+                    <input type="checkbox" class="w3-check" (change)="selectAllContact($event)" />
+                  </th>
+                  <th>Contact Name</th>
+                  <th>Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of contactInformations">
+                  <td><input type="checkbox" class="w3-check" [checked]="isAllChecked" (change)="selectContact($event, data)" /></td>
+                  <td>{{data.ContactName}}</td>
+                  <td>{{data.Email}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="w3-margin w3-right">
+            <button class="w3-button w3-border w3-secondary w3-round-large w3-margin-right" (click)="saveSelectedContacts()">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

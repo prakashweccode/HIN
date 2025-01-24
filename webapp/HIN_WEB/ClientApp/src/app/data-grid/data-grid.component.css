@@ -1,0 +1,139 @@
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+
+}
+.gird-search-icon {
+  width: 8%;
+  float: left;
+  padding-top: 8px;
+  padding-left: 2px;
+  cursor: pointer;
+}
+.grid-header-column {
+  
+}
+.grid-filter-control {
+  width: 84%;
+  float: left;
+  margin-top:0!important;
+  padding:5px 7px!important;
+  height:28px;
+}
+.grid-filter-wrapper{
+    display:inline-block;
+    width:100%;
+    padding:0!important;
+    margin-top:0!important;
+}
+.grid-clear-icon {
+  width: 8%;
+  float: left;
+  padding-top: 8px;
+  padding-left: 2px;
+  cursor: pointer;
+}
+th, td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+tbody > tr:nth-child(even){
+}
+/*tbody > tr{
+    padding:5px 0;
+}*/
+td, th{
+    padding: 5px 2px !important;
+}
+.pagination {
+    margin-right:50px;
+}
+/* Pagination links */
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+}
+
+  /* Style the active/current link */
+  .pagination a.active {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  /* Add a grey background color on mouse-over */
+  .pagination a:hover:not(.active) {
+    background-color: #ddd;
+  }
+
+.float-right{
+  float:right;
+}
+
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #4CAF50;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  margin: auto;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  position: fixed;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.row{width:100%}
+.column {
+  float: left;
+}
+
+.left {
+  width: 20%;
+}
+
+.right {
+  width: 80%;
+}
+.row-no-record{
+  padding:5px;
+}
+.hyper-link {
+  padding: 7px 10px 7px 0px;
+  cursor: pointer;
+}
+/* Clear floats after the columns */
+/*.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}*/

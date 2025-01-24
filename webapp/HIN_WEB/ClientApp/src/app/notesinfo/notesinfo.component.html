@@ -1,0 +1,53 @@
+<div class="w3-container">
+  <div class="w3-full">
+    <button permissionCheck="{{basePermission}}.80" type="button" (click)="addNewNotes()" class="w3-button w3-secondary w3-border w3-round-large w3-right">+ Add Notes</button>
+  </div>
+  <div class="w3-full" permissionCheck="{{basePermission}}.81">
+    <table class="w3-table w3-bordered">
+      <thead>
+        <tr>
+          <th gridPermissionCheck="{{basePermission}}.82">Created On</th>
+          <th gridPermissionCheck="{{basePermission}}.83">Created By</th>
+          <th gridPermissionCheck="{{basePermission}}.84">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of notesDataSource" style="cursor:pointer" (click)="ViewNote(data);">
+          <td gridPermissionCheck="{{basePermission}}.82">{{data.CreatedOn | date : 'MM/dd/yyy HH:mm'}}</td>
+          <td gridPermissionCheck="{{basePermission}}.83">{{data.CreatedBy}}</td>
+          <td gridPermissionCheck="{{basePermission}}.84">{{data.Description | truncate : 30}}</td>
+        </tr>
+        <tr *ngIf="notesDataSource.length == 0">
+          <td colspan="3">No Records</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div *ngIf="toggle" class="w3-modal" style="display:block;" permissionCheck="{{basePermission}}.86">
+  <div class="w3-modal-content w3-secondary-button w3-round-large">
+    <div class="">
+      <span (click)="closeToggle()" class="w3-button w3-display-topright">&times;</span>
+      <div class="w3-small sfcenter w3-margin-top">
+        <div class="w3-animate-opacity marginform">
+          <div class="w3-row w3-center">
+            <p>Add Note</p>
+          </div>
+          <div class="w3-container w3-primary-l4">
+            <div class="w3-full" permissionCheck="{{basePermission}}.85">
+              <label>Note: </label>
+              <textarea class="w3-input w3-border w3-margin-bottom" rows="5" [disabled]="notesInformation.Id > 0" [(ngModel)]="notesInformation.Description" permissionCheck="{{basePermission}}.85"></textarea>
+            </div>
+          </div>
+          <div class="w3-margin-top w3-margin-bottom" *ngIf="!(notesInformation.Id > 0)">
+            <!--<button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeToggle()">Cancel</button>-->
+            <button class="w3-button w3-block w3-secondary" (click)="saveEntityNotes(notesInformation)" permissionCheck="{{basePermission}}.87">Save</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

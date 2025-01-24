@@ -1,0 +1,84 @@
+<!--<div class="w3-row">
+  <div class="w3-third">
+    &nbsp;
+  </div>
+  <div class="w3-third w3-margin-top w3-container">
+    <div class="w3-panel-upd w3-card-2 w3-white w3-small">
+      <div class="w3-margin">
+        <h4 style="margin-bottom:-22px;" class="w3-center"><strong>Health Information Network</strong></h4>
+      </div>
+      <div class="w3-row w3-padding marginform w3-center">
+        <div class="w3-full w3-center">
+          <div class="w3-half" style="border-right:2px solid; padding-right:10px;">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <button class="w3-button w3-block w3-mobile w3-secondary w3-border" (click)="openBasicForm()">Patient Form</button>
+          </div>
+          <div class="w3-half w3-padding-left-10">
+            <p >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <button class="w3-button w3-block w3-mobile w3-secondary w3-border" (click)="openLogin()">Login</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="w3-third">
+    &nbsp;
+  </div>
+</div>-->
+
+<div class="w3-container main-banner">
+  <section id="home">
+    <div class="heading">
+      <h3>Health<br> Information<br> Network</h3>
+      <h2 class="forgot-password">
+        Need an<br>appointment ?
+      </h2>
+    </div>
+    <div class="forgot-pwd-box-1">
+      <div class="text-box">
+        <div class="spacer"></div>
+        <div class="border-left"></div>
+        <div class="text"><p>Click the below link and fill the the details. We will get back to you via your registered email / phone number.</p></div>
+      </div>
+    </div>
+    <div class="forgot-pwd-box-2">
+      <div class="email-box">
+        <label>Already a user ?</label>
+        <!-- <input type ="email" required> -->
+        <div class="button-submit"><button type="button" (click)="loginRedirect()"><b>Login</b></button></div>
+      </div>
+    </div>
+    <div class="learmore-button">
+      <a (click)="isOpen=true" href="#">Patient Form</a>
+    </div>
+
+    <div class="footer">
+      <div class="footer-right"><span class="created-by">Created By:</span><a href="https://weccode.com/"><img src="../../assets/images/weccode_logo.png"></a></div>
+    </div>
+  </section>
+</div>
+
+<div *ngIf="isOpen" class="w3-modal w3-show">
+  <div class="w3-modal-content w3-round-large">
+    <span (click)="isOpen=false" class="noprint w3-button w3-display-topright">&times;</span>
+    <div class="container">
+      <div class="w3-card w3-round-large w3-padding w3-white">
+        <h3 class="w3-center">
+          HIN
+        </h3>
+        <div class="w3-container">
+          <label>Enter Practice Code</label>
+          <input type="text" class="w3-input w3-border" [(ngModel)]="practiceCode" style="text-transform: uppercase" />
+          <div class="w3-margin-top">
+            <button class="w3-button w3-text-white w3-grey w3-mobile w3-right w3-margin-left w3-round-large w3-theme-gradient" (click)="practiceCodeValidate()">Go</button>
+            <div class="w3-mobile w3-hide-large w3-hide-medium w3-margin-top">&nbsp;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

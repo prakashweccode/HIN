@@ -1,0 +1,8 @@
+<div class="w3-container w3-margin">
+  <div class="w3-row">
+    <h3>Companies</h3>
+  </div>
+  <button class="w3-button w3-theme-gradient w3-round-large w3-text-white w3-left w3-margin-bottom" (click)="createCompany()">+ Create Company</button>
+  <app-paginationgrid [gridConfig]="gridConfig" [isFilterEnabled]="false" [action]="'GetCompanyRegisterList'" [pageSize]="10" [isPaginationEnabled]="true" [pageLengths]="pageLengths" [isGlobalSearchEnabled]="false" (rowClick)="navigateAction($event);"></app-paginationgrid>
+</div>
+

@@ -1,0 +1,75 @@
+
+<div class="w3-container w3-bottombar" style="border-color: #2a5298!important;">
+  <div class="w3-half">
+    <h2>Company Edit </h2>
+  </div>
+  <div class="w3-half w3-margin-top">
+    <div class="w3-row">
+      <div class="w3-right">
+        <label class="switch w3-margin-top w3-margin-left">
+          <input type="checkbox" [(ngModel)]="companyDetails.isActive">
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <div class="w3-right">
+        <h2>{{companyDetails.isActive ? 'Active' : 'Inactive'}}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="w3-row w3-margin-top form-control-margin">
+  <div class="w3-container">
+    <button class="w3-button w3-theme-gradient w3-right w3-text-white" (click)="updateCompanyDetails(companyDetails);">Save</button>
+  </div>
+  <div class="w3-container w3-half">
+    <div class="w3-row margin-small">
+      <label>Company Name</label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="companyDetails.name" />
+    </div>
+    <div class="w3-row margin-small">
+      <label>First Name</label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="companyDetails.contactFirstName" />
+    </div>
+    <div class="w3-row margin-small">
+      <label>Contact Title</label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="companyDetails.contactTitle" />
+    </div>
+    <div class="w3-row margin-small">
+      <label>Maximum User</label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="companyDetails.maximumUser" />
+    </div>
+    <div class="w3-row margin-small">
+      <label>Company Url</label>
+      <br />
+      <!--<input type="text" class="w3-input w3-border" disabled [(ngModel)]="companyDetails.name" />-->
+      <!--UAT-->
+      <!--PROD-->
+      <!--<a target="_blank" href="https://{{companyDetails.name}}.healthinformation.network">https://{{companyDetails.name}}.healthinformation.network</a>-->
+      <a target="_blank" href="https://{{companyDetails.name}}.yourmedchart.com">https://{{companyDetails.name}}.yourmedchart.com</a>
+
+    </div>
+  </div>
+  <div class="w3-container w3-half">
+    <div class="w3-row margin-small">
+      <label>Phone Number</label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="companyDetails.phoneNumber" />
+    </div>
+    <div class="w3-row margin-small">
+      <label>Last Name</label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="companyDetails.contactLastName" />
+    </div>
+    <div class="w3-row margin-small">
+      <label>Email Id</label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="companyDetails.email" />
+    </div>
+    <div class="w3-row margin-small">
+      <label>Cell Number</label>
+      <input type="text" class="w3-input w3-border" [(ngModel)]="companyDetails.cellNumber" />
+    </div>
+    <div class="w3-row margin-small">
+      <label>Code</label>
+      <input type="text" class="w3-input w3-border" disabled [(ngModel)]="companyDetails.companyPracticeCode" />
+    </div>
+  </div>
+</div>
+

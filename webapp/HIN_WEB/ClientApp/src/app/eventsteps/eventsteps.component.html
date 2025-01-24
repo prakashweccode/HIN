@@ -1,0 +1,161 @@
+<div class="w3-row w3-animate-zoom">
+  <div class="w3-card w3-margin-right w3-margin-left w3-margin-bottom w3-round-large w3-white">
+    <div class="w3-container">
+      <div class="w3-row w3-margin-top-small">
+        <button class="w3-button w3-right w3-small w3-secondary w3-round-large" (click)="cancel()"><i class="fa fa-reply"></i></button>
+        <button class="w3-button w3-right w3-small h-grow-small w3-secondary w3-round-large w3-margin-right-small" (click)="addNewContact()">+ Add Contact</button>
+        <button class="w3-button w3-right w3-small h-grow-small w3-secondary w3-round-large w3-margin-right-small" (click)="addNewEvent()">+ Add Event</button>
+      </div>
+    </div>
+    <div class="">
+      <div class="w3-panel w3-light-grey w3-padding w3-border-bottom w3-border-top w3-margin-top-small">
+        <div class="w3-left">
+          <label class="w3-left w3-xlarge"><b>Event Steps</b></label>
+        </div>
+      </div>
+      <div class="w3-margin-top w3-container">
+        <div class="w3-quarter">
+          <div class="w3-row">
+            <label class="w3-left w3-margin-right">
+              Event Name
+            </label>
+          </div>
+          <div class="w3-row">
+            <label class="w3-small" style="cursor:pointer" (click)="editEvent(events)">
+              {{events.EventName}} <i class="fa fa-link" style="color:red;"></i>
+            </label>
+          </div>
+        </div>
+        <div class="w3-half">
+          <div class="w3-row">
+            <label>
+              Funnel
+            </label>
+          </div>
+          <div class="w3-row">
+            <label class="w3-left w3-small" style="cursor:pointer" (click)="editEvent(events)">
+              {{getPipeLineGroupName(events.PipelineGroupId)}} <i class="fa fa-link" style="color:red;"></i>
+            </label>
+
+            <div class="w3-left w3-margin-left">
+              <div class="sf-stage-selector">
+                <label class="{{selectedPipeIndex==i?'w3-display-container sf-stage-selector__stage sf-stage-selector__stage--current':'w3-display-container sf-stage-selector__stage'}} tooltip" *ngFor="let pipeline of sortBy('DisplayOrder');let i = index">
+                  <span class="bottomtooltiptext">{{pipeline.Name}}</span>
+                  <i class="fa fa-angle-right w3-text-white fa-3x w3-display-right" style="margin-right: 6px;margin-top: -1px;"></i>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="w3-container w3-margin-bottom w3-margin-top">
+        <div class="w3-bar w3-center w3-margin-bottom w3-border-secondary">
+          <div class="w3-left">
+            <a [class]="activeContainer == 'tab1'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab1'">Calendar Invite</a>
+            <a [class]="activeContainer == 'tab2'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab2'">Files</a>
+            <a [class]="activeContainer == 'tab3'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab3'">Email</a>
+            <a [class]="activeContainer == 'tab4'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab4'">Notes</a>
+          </div>
+        </div>
+
+        <div *ngIf="activeContainer == 'tab1'" class="w3-white w3-row w3-small">
+          <app-steps [entityType]="entityType" [entityId]="entityId"></app-steps>
+        </div>
+        <div *ngIf="activeContainer == 'tab2'" class="w3-white">
+          <app-sf-file-explorer [entity]="entityType" [entityNumber]="entityNumber"></app-sf-file-explorer>
+        </div>
+        <div *ngIf="activeContainer == 'tab3'" class="w3-white">
+          <div class="w3-margin w3-animate-opacity">
+            <div class="w3-row w3-padding-bottom">
+              <app-email [entityType]="entityType" [emailDataSource]="emailInfos" [entityId]="entityId"></app-email>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="activeContainer == 'tab4'" class="w3-white">
+          <div class="w3-margin w3-animate-opacity">
+            <h6 class="w3-left">Notes</h6>
+            <div class="w3-row w3-padding-bottom">
+              <app-notesinfo [entityType]="entityType" [notesDataSource]="notesInfos" [entityId]="entityId"></app-notesinfo>
+            </div>
+          </div>
+        </div>
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div *ngIf="toggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large w3-secondary-button">
+    <span (click)="closeToggle()" class="w3-button w3-margin-right-small w3-display-topright">&times;</span>
+    <div class="w3-small sfcenter w3-margin-top">
+      <div class="w3-animate-opacity marginform">
+        <div class="w3-row">
+          <h5 class="w3-container">Contact Information</h5>
+        </div>
+        <div class="w3-row w3-padding w3-primary-l4">
+          <div class="w3-full">
+            <div class="w3-container w3-half">
+              <div class="w3-full">
+                <label>First Name *</label>
+                <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.FirstName" [class.w3-border-red]="checkValidation(firstName)" #firstName="ngModel" required />
+              </div>
+              <div class="w3-full">
+                <label>Last Name *</label>
+                <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.LastName" [class.w3-border-red]="checkValidation(lastName)" #lastName="ngModel" required />
+              </div>
+              <div class="w3-full">
+                <label>Contact Title *</label>
+                <app-customstringdropdown [getApiPath]="'CustomDropDown/GetContactTitle'" [isAddEnabled]="true" [selectedValue]="contactInfo.ContactTitle" (saveSelectedValue)="contactInfo.ContactTitle=$event" [saveApiPath]="'CustomDropDown/SaveContactTitle'"></app-customstringdropdown>
+              </div>
+              <div class="w3-full">
+                <label>Gender</label>
+                <!--<select class="w3-input w3-border" [(ngModel)]="contactInfo.Gender">
+                  <option value="0" disabled="disabled">--select--</option>
+                  <option *ngFor="let gender of listGender" [ngValue]="gender.GenderId">{{gender.GenderName}}</option>
+                </select>-->
+                <app-customdropdown [getApiPath]="'CustomDropDown/GetGender'" [selectedValue]="contactInfo.Gender" (saveSelectedValue)="contactInfo.Gender = $event" [saveApiPath]="'CustomDropDown/SaveGender'"></app-customdropdown>
+              </div>
+              <div class="w3-full">
+                <label>LinkedIn Profile</label>
+                <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.LinkedInProfile" />
+              </div>
+            </div>
+            <div class="w3-container w3-half">
+              <div class="w3-full">
+                <label>Extension</label>
+                <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.Extension" />
+              </div>
+              <div class="w3-full">
+                <label>Office Number</label>
+                <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.OfficeNumber" />
+              </div>
+              <div class="w3-full">
+                <label>Fax Number</label>
+                <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.FaxNumber" />
+              </div>
+              <div class="w3-full">
+                <label>Cell Number</label>
+                <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.CellNumber" />
+              </div>
+              <div class="w3-full">
+                <label>Email</label>
+                <input class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.Email" />
+              </div>
+            </div>
+            <div class="w3-margin w3-right">
+              <button class="w3-button w3-border w3-round-large w3-margin-right-small" (click)="closeToggle()">Cancel</button>
+              <button class="w3-button w3-secondary w3-border w3-round-large" [disabled]="checkReqValidation(title) || checkReqValidation(firstName) || checkReqValidation(lastName)" (click)="saveContactInfo(contactInfo)">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

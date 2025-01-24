@@ -1,0 +1,4 @@
+<select class="w3-input w3-border" [(ngModel)]="assignedTo" (ngModelChange)="sendId(assignedTo)">
+  <option value="0" disabled>select</option>
+  <option *ngFor="let userDetail of users" [ngValue]="userDetail.UserId">{{userDetail.Name}}</option>
+</select>

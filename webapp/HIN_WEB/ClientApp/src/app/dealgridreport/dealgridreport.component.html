@@ -1,0 +1,33 @@
+<div class="w3-margin-bottom ">
+  <div class="w3-full w3-container">
+    <table class="w3-table w3-bordered  w3-border">
+      <thead>
+        <tr>
+          <th>Opportunity Name</th>
+          <th>Customer - Leads</th>
+          <th>Expected Revenue</th>
+          <th>Created Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of reportData | paginate: { itemsPerPage: 5, currentPage: p }">
+          <td>{{data.DealName}}</td>
+          <td>{{data.LeadProvider}}</td>
+          <td>{{data.ExpectedRevenue ? ('$ '+ data.ExpectedRevenue) : data.ExpectedRevenue}}</td>
+          <td>{{data.CreatedOn | date : 'dd/MM/yyyy HH:mm:ss'}}</td>
+        </tr>
+        <tr *ngIf="reportData.length == 0">
+          <td>No Records Found.</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="pagination float-right">
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
+
+</div>
+

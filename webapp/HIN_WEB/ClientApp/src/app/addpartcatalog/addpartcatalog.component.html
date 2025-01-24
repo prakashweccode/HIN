@@ -1,0 +1,51 @@
+<div class="w3-row">
+  <div class="w3-card-2 w3-white w3-small sfcenter w3-round-large w3-animate-zoom">
+    <br/>
+    <div class="w3-row w3-padding w3-animate-opacity w3-secondary-l5 w3-border-top w3-border-bottom">
+      <div class="w3-left w3-xlarge">
+        <b>Part Catalog</b>
+      </div>
+      <button class="w3-button w3-secondary w3-right w3-round-large w3-margin-right" (click)="cancel()">
+        <i class="fa fa-reply"></i>
+      </button>
+    </div>
+    <div class="w3-panel w3-margin-top-small">
+      <div class="w3-row">
+        <div class="marginform">
+          <div class="w3-full">
+            <div class="w3-third w3-container">
+              <label>Part Code</label>
+              <input class="w3-input w3-border" type="text" [(ngModel)]="partCatalog.PartCode">
+            </div>
+            <div class="w3-third w3-container">
+              <label>Unit of Measure</label>
+              <app-customdropdown [getApiPath]="'CustomDropDown/GetUOM'" [isAddEnabled]="true" [selectedValue]="partCatalog.Uomid" (saveSelectedValue)="partCatalog.Uomid=$event" [saveApiPath]="'CustomDropDown/SaveUOM'"></app-customdropdown>
+            </div>
+            <div class="w3-third w3-container">
+              <label>Sales Price</label>
+              <input class="w3-input w3-border" type="text" placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" [(ngModel)]="partCatalog.SalesPrice">
+            </div>
+          </div>
+          <div class="w3-row w3-full">
+            <div class="w3-third w3-container">
+              <label>Part Description</label>
+              <input class="w3-input w3-border" type="text" [(ngModel)]="partCatalog.PartDescription">
+            </div>
+            <div class="w3-third w3-container">
+              <label>Estimated Cost</label>
+              <input class="w3-input w3-border" type="text" placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" [(ngModel)]="partCatalog.EstimateCost">
+            </div>
+            <div class="w3-third w3-container">
+              <input id="inactive" type="checkbox" [(ngModel)]="partCatalog.IsNonTaxable">
+              <label for="inactive">&nbsp;Non Taxable</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w3-margin w3-right">
+        <button class="w3-button w3-border w3-round-large w3-margin-right-small" (click)="cancel()">Cancel</button>
+        <button class="w3-button w3-secondary w3-border w3-round-large" (click)="savePartCatalog(partCatalog)">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

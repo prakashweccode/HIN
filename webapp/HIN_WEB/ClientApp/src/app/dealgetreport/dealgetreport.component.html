@@ -1,0 +1,43 @@
+<div class="w3-quarter w3-container">
+  <div>
+    <input type="radio" class="w3-radio" name="radioLead" value="1" (change)="handleFrequencyChangeEvent($event)" checked />
+    <label for="perlead">&nbsp;Per&nbsp;Day</label>
+  </div>
+  <div class="w3-margin-top" *ngIf="rangeType == 1">
+    <input class="w3-input w3-border" type="date" [ngModel]="changeFormatDate(toDate)" (ngModelChange)="dateChangeEvent($event)" />
+  </div>
+</div>
+
+<div class="w3-quarter w3-container">
+  <div>
+    <input type="radio" class="w3-radio" name="radioLead" value="2" (change)="handleFrequencyChangeEvent($event)" />
+    <label>&nbsp;Per&nbsp;Month</label>
+  </div>
+  <div class="w3-margin-top" *ngIf="rangeType == 2">
+    <input class="w3-input w3-border" type="date" [ngModel]="changeFormatDate(toDate)" (ngModelChange)="dateChangeEvent($event)"/>
+  </div>
+
+</div>
+
+<div class="w3-quarter w3-container">
+  <div>
+    <input type="radio" class="w3-radio" name="radioLead" value="3" (change)="handleFrequencyChangeEvent($event)" />
+    <label>&nbsp;Per&nbsp;Range (Quarterly Basis)</label>
+  </div>
+  <div class="w3-margin-top">
+    <input class="w3-input w3-border" type="date" [ngModel]="changeFormatDate(fromDate)" (ngModelChange)="fromDateChangeEvent($event)" *ngIf="rangeType == 3" />
+  </div>
+  <div class="w3-margin-top">
+    <input class="w3-input w3-border" type="date" [ngModel]="changeFormatDate(toDate)" (ngModelChange)="dateChangeEvent($event)" *ngIf="rangeType == 3" />
+  </div>
+</div>
+
+<div class="w3-quarter w3-container">
+  <div>
+    <input type="radio" class="w3-radio" name="radioLead" value="4" (change)="handleFrequencyChangeEvent($event)" />
+    <label>&nbsp;Per&nbsp;Year</label>
+  </div>
+  <div class="w3-margin-top" *ngIf="rangeType == 4">
+    <input class="w3-input w3-border" type="date" [ngModel]="changeFormatDate(toDate)" (ngModelChange)="dateChangeEvent($event)" />
+  </div>
+</div>

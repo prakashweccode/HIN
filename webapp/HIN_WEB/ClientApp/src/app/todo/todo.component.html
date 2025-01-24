@@ -1,0 +1,307 @@
+
+<div class="w3-card w3-white w3-small w3-margin-left w3-margin-right w3-round-large w3-animate-zoom">
+  <br />
+  <div class="w3-row w3-padding w3-animate-opacity w3-secondary-l5 w3-border-top w3-border-bottom">
+    <div class="w3-left w3-xlarge">
+      <b>{{todo.Id?"Edit To Do":"Add To Do"}}</b>
+    </div>
+
+    <button *ngIf="todo.Id" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right" (click)="addTodo()">Add To Do</button>
+    <button permissionCheck="6.2.4" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="backToFunnel()">Back To Funnel</button>
+    <button permissionCheck="6.2.3" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="cancel()">Back To List</button>
+    <button permissionCheck="6.2.2" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="backToCalendar()">Back To Calendar</button>
+    <button permissionCheck="6.2.1" class="w3-button w3-secondary w3-round-large w3-right w3-margin-right-small" (click)="addTodoCustomFields()">+ Add New Field</button>
+    <button *ngIf="todo.Id" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="updateDonestatus(todo.Id)">Done</button>
+  </div>
+  <div class="w3-container">
+    <div class="w3-panel w3-margin-top-small">
+      <div class="w3-row">
+        <div class="marginform w3-row w3-margin-bottom">
+          <div class="w3-half w3-container">
+            <div class="w3-full w3-margin-bottom">
+              <div class="w3-half pr2" permissionCheck="6.2.5">
+                <label>Todo Number*</label>
+                <input class="w3-input w3-border" [(ngModel)]="todo.TodoNumber" type="text" disabled="disabled" />
+              </div>
+              <div class="w3-half pl2" permissionCheck="6.2.6">
+                <label>Importance</label>
+                <select class="w3-input w3-border" [(ngModel)]="todo.ImportanceId">
+                  <option *ngFor="let data of listImportance" value="{{data.Id}}">{{data.Name}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="w3-row">
+              <div class="w3-full" permissionCheck="6.2.7">
+                <label>To Do Name *</label>
+                <input class="w3-input w3-border" type="text" [(ngModel)]="todo.TodoName" [class.w3-border-red]="checkValidation(name)" #name="ngModel" required />
+              </div>
+            </div>
+            <div class="w3-full" permissionCheck="6.2.8">
+              <label>To Do Subject *</label>
+              <input class="w3-input w3-border" type="text" [(ngModel)]="todo.Subject" [class.w3-border-red]="checkValidation(subject)" #subject="ngModel" required />
+            </div>
+
+
+            <div class="w3-row">
+              <div class="w3-half pr2" permissionCheck="6.2.9">
+                <label>Start Date *</label>
+                <input type="datetime-local" class="w3-input w3-border" disabled="disabled" [ngModel]="calendarFormatDate(todo.StartDate)"
+                       (ngModelChange)="todo.StartDate = $event" />
+              </div>
+              <div class="w3-half pl2" permissionCheck="6.2.10">
+                <label>End Date *</label>
+                <input style="width:85%;" type="datetime-local" class="w3-input w3-border w3-left" disabled="disabled" [ngModel]="calendarFormatDate(todo.EndDate)"
+                       (ngModelChange)="todo.EndDate = $event" />
+                <button title="Calendar" class="w3-button w3-border w3-col w3-white w3-left" (click)="OpenCalendarPopup(todo)" style="width:14%;height:30px;padding:0;">
+                  <i class="fa fa-calendar-plus-o"></i>
+                </button>
+              </div>
+            </div>
+
+            <!--<div class="w3-input w3-border" type="datetime-local" permissionCheck="{{basePermissionCheck}}.8">{{todo.StartDate}}</div>
+      <div class="w3-input w3-border" type="datetime-local" permissionCheck="{{basePermissionCheck}}.9">{{todo.EndDate}}</div>-->
+
+            <div class="w3-row">
+              <app-calendarselect [entityType]="todoEntityType" [calendarToggle]="calendarToggle" (close)="close($event)" (selectStartDate)="selectStartDate($event)" (selectEndDate)="selectEndDate($event)" [entityId]="todo.Id"></app-calendarselect>
+            </div>
+            <!--<div class="w3-full" permissionCheck="{{basePermissionCheck}}.9">
+        <label>End Date</label>
+        <input class="w3-input w3-border" type="datetime-local" [ngModel]="changeFormatDate(todo.EndDate)"
+               (ngModelChange)="todo.EndDate = $event" />
+      </div>-->
+            <div class="w3-row">
+              <div class="w3-half pr2" permissionCheck="6.2.11">
+                <label>Funnel</label>
+                <select class="w3-input w3-border" [(ngModel)]="todo.PipelineGroupId" (change)="getPipeLineByPipeLineGroupId(todo.PipelineGroupId)">
+                  <option [ngValue]="0">--Select Pipeline--</option>
+                  <option [ngValue]="-1">+ New Funnel</option>
+                  <option *ngFor="let pipeLineGroup of listPipeLineGroup" [ngValue]="pipeLineGroup.PipelineGroupId">{{pipeLineGroup.Name}}</option>
+                </select>
+              </div>
+
+              <div class="w3-half pl2" permissionCheck="6.2.12">
+                <label>Color</label>
+                <div class="w3-row">
+                  <input style="width:80%;" type="text" class="w3-input w3-border w3-left" [(ngModel)]="todo.Color" />
+                  <input style="width:20%;" class="color-picker w3-left" value="{{todo.Color ? todo.Color : '#ffffff'}}" type="color" (change)="colorChange($event.target.value)" />
+                </div>
+                <!--<div class="w3-threequarter">
+            <input type="text" class="w3-input w3-border" [(ngModel)]="todo.Color" permissionCheck="{{basePermissionCheck}}.12" />
+          </div>
+          <div class="w3-quarter w3-margin-0">
+            <input class="color-picker" value="{{todo.Color ? todo.Color : '#ffffff'}}" type="color" (change)="colorChange($event.target.value)" permissionCheck="{{basePermissionCheck}}.12" />
+          </div>-->
+              </div>
+            </div>
+
+
+            <div class="w3-full" permissionCheck="6.2.11">
+              <label>Funnel stage</label>
+              <div class="sf-stage-selector">
+                <label class="{{selectedPipeIndex==i?'w3-display-container sf-stage-selector__stage sf-stage-selector__stage--current':'w3-display-container sf-stage-selector__stage'}} tooltip" (click)="selectedPipeIndex=i;todo.PipelineId=pipeline.PipelineId" *ngFor="let pipeline of sortBy('DisplayOrder');let i = index">
+                  <span class="bottomtooltiptext">{{pipeline.Name}}</span>
+                  <i class="fa fa-angle-right w3-text-white fa-3x w3-display-right" style="margin-right: 6px;margin-top: -1px;"></i>
+                </label>
+              </div>
+            </div>
+
+
+            <app-customsection [entityType]="todoEntityType" [alignment]="'left'" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="todoLeftCustomFieldValues"></app-customsection>
+          </div>
+          <div class="w3-half w3-container">
+            <div class="w3-full">
+              <div class="w3-half pr2" permissionCheck="6.2.13">
+                <label>To Do Status</label>
+                <app-customdropdown [getApiPath]="'CustomDropDown/GetCompletedStatus'" [isAddEnabled]="true" [selectedValue]="todo.CompletedBy" (saveSelectedValue)="todo.CompletedBy = $event" [saveApiPath]="'CustomDropDown/SaveCompletedStatus'" ></app-customdropdown>
+              </div>
+
+              <div class="w3-half p12" permissionCheck="6.2.14">
+                <label>Security Group*</label>
+                <select class="w3-input w3-border" [(ngModel)]="todo.SecurityGroupId" [class.w3-border-red]="checkValidation(securityGroupId)" #securityGroupId="ngModel" required>
+                  <option value="0" disabled>-select-</option>
+                  <option *ngFor="let data of lstGroups;" value="{{data.UserGroupId}}">{{data.Name}}</option>
+                </select>
+              </div>
+
+
+            </div>
+            <!--<div>
+        <app-entityname [entityTypeId]="entityTodoName" [entityId]="entityTodoValue" (sendEntityValue)="sendEntityValue($event)" (sendEntityTypeName)="sendEntityType($event)"></app-entityname>
+      </div>-->
+            <!--<div class="w3-full" permissionCheck="{{basePermissionCheck}}.17">
+        <label>Vendor Name</label>
+        <select class="w3-input w3-border" [(ngModel)]="todo.VendorId" permissionCheck="{{basePermissionCheck}}.17">
+          <option *ngFor="let data of vendorList" value="{{data.VendorId}}">{{data.Name}}</option>
+        </select>
+      </div>-->
+            <div class="w3-row">
+              <div class="w3-half" permissionCheck="6.2.15">
+                <label>Assigned To</label>
+                <!--<app-assignedname (sendAssignedValue)="selectAssignedValue($event)" [selectedValue]="todo"></app-assignedname>-->
+                <select class="w3-input w3-border" [(ngModel)]="todo.AssignedTo">
+                  <option *ngFor="let data of Users" value="{{data.UserId}}">{{data.FirstName}}</option>
+                </select>
+              </div>
+              <div class="w3-half w3-padding-left-10" permissionCheck="6.2.16">
+                <label>Created By</label>
+                <app-createdby [createdby]="todo.CreatedBy"></app-createdby>
+              </div>
+            </div>
+
+            <div class="w3-full" permissionCheck="6.2.17">
+              <label>Location</label>
+              <div>
+                <!--<app-customstringdropdown [getApiPath]="'CustomDropDown/GetLocation'" [isAddEnabled]="true" [selectedValue]="todo.LocationTitle" (saveSelectedValue)="todo.LocationTitle=$event" [saveApiPath]="'CustomDropDown/SaveLocation'"></app-customstringdropdown>-->
+                <app-dropdown-options [config]="loConfig" [selectedName]="todo.LocationTitle" [isIdColum]="false" [entityType]="loEntity" [getApi]="" [postApi]="" (selectedNoteId)="selectedLocationTitle($event)"></app-dropdown-options>
+              </div>
+
+              <!--<input permissionCheck="{{basePermission}}.52" class="w3-input w3-border" type="text" [disabled]="!(!selectedContact || selectedContact.Id == 0)" [(ngModel)]="contactInfo.ContactTitle" [class.w3-border-red]="checkValidation(title)" #title="ngModel" required />-->
+            </div>
+
+            <div class="w3-full" permissionCheck="6.2.18">
+              <label>Remarks</label>
+              <textarea class="w3-input w3-border" [(ngModel)]="todo.Notes"></textarea>
+            </div>
+
+
+
+            <!--<fieldset class="w3-margin-top-medium" permissionCheck="{{basePermissionCheck}}.18">
+        <legend><input type="checkbox" class="w3-check" [(ngModel)]="todo.IsRecurrence" permissionCheck="{{basePermissionCheck}}.18" /><label> Recurrence</label></legend>
+        <div class="w3-row" *ngIf="todo.IsRecurrence">
+          <div class="w3-row">
+            <div class="w3-half w3-container" permissionCheck="{{basePermissionCheck}}.19">
+              <label>Start Date</label>
+              <input type="date" class="w3-input w3-border" (ngModelChange)="recurrence.StartDate = $event" [ngModel]="FormatDate(recurrence.StartDate)" permissionCheck="{{basePermissionCheck}}.19" />
+            </div>
+            <div class="w3-half w3-container" permissionCheck="{{basePermissionCheck}}.20">
+              <label>End Date</label>
+              <input type="date" class="w3-input w3-border" (ngModelChange)="recurrence.EndDate = $event" [ngModel]="FormatDate(recurrence.EndDate)" permissionCheck="{{basePermissionCheck}}.20" />
+            </div>
+          </div>
+          <div class="w3-full w3-container" permissionCheck="{{basePermissionCheck}}.21">
+            <label>Frequency</label>
+          </div>
+          <div class="w3-full w3-container" permissionCheck="{{basePermissionCheck}}.21">
+            <div class="w3-quarter" *ngFor="let data of recurrenceTypes">
+              <label for="rdo{{data.Name}}"><input class="w3-radio" id="rdo{{data.Name}}" [checked]="frequency == data.Id ? 'true' : 'false'" (change)="handleFrequencyChange($event)" type="radio" name="frequency" value="{{data.Id}}" permissionCheck="{{basePermissionCheck}}.21"><span class="w3-small"> {{data.Name}}</span></label>
+            </div>
+          </div>
+          <div class="w3-full" *ngIf="frequency == 1">
+            <div class="w3-full">
+              <div class="w3-half w3-container" permissionCheck="{{basePermissionCheck}}.22">
+                <label>Start Time</label>
+                <input type="time" class="w3-input w3-border" [(ngModel)]="recurrence.StartTime" permissionCheck="{{basePermissionCheck}}.22" />
+              </div>
+              <div class="w3-half w3-container" permissionCheck="{{basePermissionCheck}}.23">
+                <label>End Time</label>
+                <input type="time" class="w3-input w3-border" [(ngModel)]="recurrence.EndTime" permissionCheck="{{basePermissionCheck}}.23" />
+              </div>
+            </div>
+          </div>
+          <div class="w3-full" *ngIf="frequency == 2">
+            <div class="w3-full w3-container" permissionCheck="{{basePermissionCheck}}.24">
+              <label>Recurs every week on</label>
+            </div>
+            <div class="w3-full w3-container" permissionCheck="{{basePermissionCheck}}.24">
+              <div class="w3-quarter" *ngFor="let day of days" permissionCheck="{{basePermissionCheck}}.24">
+                <label for="chk{{day.DayName}}"><input id="chk{{day.DayName}}" (change)="selectWeekDays($event)" class="w3-check" type="checkbox" value="{{day.Id}}" permissionCheck="{{basePermissionCheck}}.24" /> {{day.DayName}}</label>
+              </div>
+            </div>
+            <div class="w3-full">
+              <div class="w3-half w3-container" permissionCheck="{{basePermissionCheck}}.25">
+                <label>Start Time</label>
+                <input type="time" class="w3-input w3-border" [(ngModel)]="recurrence.StartTime" permissionCheck="{{basePermissionCheck}}.25" />
+              </div>
+              <div class="w3-half w3-container" permissionCheck="{{basePermissionCheck}}.26">
+                <label>End Time</label>
+                <input type="time" class="w3-input w3-border" [(ngModel)]="recurrence.EndTime" permissionCheck="{{basePermissionCheck}}.26" />
+              </div>
+            </div>
+          </div>
+          <div class="w3-full" *ngIf="frequency == 3">
+            <div class="w3-full w3-container" permissionCheck="{{basePermissionCheck}}.27">
+              <label>Recurs on</label>
+            </div>
+            <div class="w3-row">
+              <div class="w3-half w3-container" permissionCheck="{{basePermissionCheck}}.27">
+                <label>Date</label>
+                <input type="date" class="w3-input w3-border" [(ngModel)]="recurrence.RecursOn" permissionCheck="{{basePermissionCheck}}.27" />
+              </div>
+            </div>
+            <div class="w3-full">
+              <div class="w3-half w3-container" permissionCheck="{{basePermissionCheck}}.28">
+                <label>Start Time</label>
+                <input type="time" class="w3-input w3-border" [(ngModel)]="recurrence.StartTime" permissionCheck="{{basePermissionCheck}}.28" />
+              </div>
+              <div class="w3-half w3-container" permissionCheck="{{basePermissionCheck}}.29">
+                <label>End Time</label>
+                <input type="time" class="w3-input w3-border" [(ngModel)]="recurrence.EndTime" permissionCheck="{{basePermissionCheck}}.29" />
+              </div>
+            </div>
+          </div>
+          <div class="w3-full" *ngIf="frequency == 4">
+            <div class="w3-full w3-container" permissionCheck="{{basePermissionCheck}}.30">
+              <label>Recurs on</label>
+            </div>
+            <div class="w3-row">
+              <div class="w3-half w3-container" permissionCheck="{{basePermissionCheck}}.30">
+                <label>Date</label>
+                <input type="date" class="w3-input w3-border" [(ngModel)]="recurrence.RecursOn" permissionCheck="{{basePermissionCheck}}.30" />
+              </div>
+            </div>
+            <div class="w3-full">
+              <div class="w3-half w3-container" permissionCheck="{{basePermissionCheck}}.31">
+                <label>Start Time</label>
+                <input type="time" class="w3-input w3-border" [(ngModel)]="recurrence.StartTime" permissionCheck="{{basePermissionCheck}}.31" />
+              </div>
+              <div class="w3-half w3-container" permissionCheck="{{basePermissionCheck}}.32">
+                <label>End Time</label>
+                <input type="time" class="w3-input w3-border" [(ngModel)]="recurrence.EndTime" permissionCheck="{{basePermissionCheck}}.32" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>-->
+
+
+
+            <app-customsection [entityType]="todoEntityType" [alignment]="'right'" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="todoRightCustomFieldValues"></app-customsection>
+
+          </div>
+        </div>
+        <div class="w3-bar w3-container w3-center w3-margin-top w3-border-secondary">
+          <div class="w3-left">
+            <button *ngIf="todo.Id" [class]="activeContainer == 'tabContacts'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tabContacts'">Contact Information ({{contactInformations.length}})</button>
+          </div>
+        </div>
+        <div *ngIf="activeContainer == 'tabContacts'" class="w3-container w3-white">
+          <div class="w3-row w3-padding ">
+            <div class="w3-full">
+              <app-contactinformation [dataSource]="contactInformations" [additionalInfo]="false" [entityType]="todoEntityType" [entityId]="todo.Id"></app-contactinformation>
+            </div>
+          </div>
+        </div>
+        <div class="w3-row">
+          <div class="w3-margin w3-right" permissionCheck="{{basePermissionCheck}}.16">
+            <!--<button class="w3-button w3-border w3-round-large w3-margin-right" (click)="cancel()">Cancel</button>-->
+            <button permissionCheck="{{basePermissionCheck}}.16" class="w3-button w3-secondary w3-border w3-round-large" (click)="saveTodo(todo)" [disabled]="checkReqValidation(subject)||checkReqValidation(name)">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="row">
+  <div *ngIf="addCustomToggle" class="w3-modal w3-show">
+    <div class="w3-modal-content w3-secondary w3-round-large w3-secondary-button">
+      <div class="w3-row">
+        <div class="w3-container w3-center">
+          <p>Add Field</p>
+          <span (click)="closeError()" class="w3-button w3-display-topright">&times;</span>
+        </div>
+        <app-addnewfield [addCustomToggle]="addCustomToggle" [entityTypeId]="entityTypeId" (dataExist)="dataExist($event)" (saveSuccess)="saveSuccess($event)"></app-addnewfield>
+      </div>
+    </div>
+  </div>
+</div>

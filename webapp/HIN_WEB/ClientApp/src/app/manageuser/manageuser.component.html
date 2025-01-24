@@ -1,0 +1,127 @@
+<div *ngIf="passwordValidation" class="row">
+  <div class="w3-modal w3-show">
+    <div class="w3-modal-content w3-secondary w3-round-large w3-secondary-button">
+      <div class="w3-row">
+        <div class="w3-container w3-center">
+          <p>Enter Password</p>
+          <span (click)="closePasswordPopup()" class="w3-button w3-display-topright">&times;</span>
+        </div>
+        <div class="w3-container w3-tiny w3-primary-l4">
+          <div class="w3-row w3-margin-bottom marginform">
+            <div class="w3-half">
+              <div class="w3-full w3-margin-right">
+                <input type="password" class="w3-input w3-border" [(ngModel)]="verificationCode" />
+              </div>
+            </div>
+            <div class="w3-half">
+              <div class="w3-third">
+                <button class="w3-button w3-round-large w3-secondary" (click)="verifyPassword(verificationCode)">Verify</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div *ngIf="passwordverified">
+  <div class="w3-card-2 w3-white w3-small w3-round-large w3-margin-right w3-margin-left marginform w3-animate-zoom">
+    <div class="w3-container">
+      <div class="">
+        <div class="w3-left w3-xlarge w3-margin-top-small w3-margin-bottom-small">Manage users</div>
+      </div>
+      <div>
+
+        <div class="w3-container w3-margin-top w3-margin-bottom w3-bar">
+          <a permissionCheck="10.1.1" [class]="activeContainer == 'tab1'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab1'">Users</a>
+          <!--<a [class]="activeContainer == 'tab2'?'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-green':'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-white'" (click)="activeContainer = 'tab2'">Permission sets</a>-->
+          <a permissionCheck="10.1.2" [class]="activeContainer == 'tab3'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab3'">Groups</a>
+          <!--<a [class]="activeContainer == 'tab4'?'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-secondary':'w3-bar-item w3-button w3-hover-none w3-border-white w3-hover-border-blue w3-white'" (click)="activeContainer = 'tab4'">Roles</a>-->
+          <button permissionCheck="10.1.1.2" *ngIf="activeContainer == 'tab1'" class="w3-button w3-right w3-secondary w3-round-large" (click)="gotoAddUser()">+ Add users</button>
+         
+          <button permissionCheck="10.1.2.2" *ngIf="activeContainer == 'tab3'" class="w3-button w3-right w3-secondary w3-round-large" (click)="addGroup()">+ Add Group</button>
+
+        </div>
+
+        <div *ngIf="activeContainer == 'tab1'" permissionCheck="10.1.1" class="w3-container w3-display-container">
+          <!--<div class="w3-bar w3-margin-top">
+    <button class="w3-bar-item w3-button w3-border">Active</button>
+    <button class="w3-bar-item w3-button w3-border">Invited</button>
+    <button class="w3-bar-item w3-button w3-border">Deactivated</button>
+  </div>-->
+          <div class="w3-row-padding">
+            <!--<div class="w3-third">
+
+    </div>
+    <div class="w3-third ">
+      <input class="w3-input w3-border" type="text" placeholder="Search for user">
+    </div>
+    <div class="w3-third">
+
+    </div>-->
+
+            <app-data-grid permissionCheck="10.1.1.1" [gridHeaders]="gridHeaders" [actions]="actions" [dataSource]="dataSource" [filterColumns]="filterColumns" [apiUrl]="'/api/Users/GetODataUserList'" [pageSize]="25"
+                           [isResponsive]="false" [isSearchEnabled]="true" [isPaginationEnabled]="true" [pageLengthOptions]="pageLengthOptions" (rowClick)="editUser($event);">
+            </app-data-grid>
+          </div>
+          <button *ngIf="activeContainer == 'tab1'" class="w3-button w3-right w3-secondary w3-round-large" (click)="goToExit()">X Exit</button>
+        </div>
+
+        <!--<div *ngIf="activeContainer == 'tab2'" class="w3-container w3-display-container">
+          <p>Permission sets</p>
+        </div>-->
+
+        <div *ngIf="activeContainer == 'tab3'" permissionCheck="10.1.2">
+          <div class="w3-container">
+            <div class="w3-full">
+              <table class="w3-table w3-bordered" permissionCheck="10.1.2.1">
+                <thead>
+                  <tr>
+                    <th permissionCheck="10.1.2.1.1">Name</th>
+                    <th permissionCheck="10.1.2.1.2">CreatedOn</th>
+                    <th permissionCheck="10.1.2.1.3">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let groups of lstGroups">
+                    <td permissionCheck="10.1.2.1.1"><a class="hyper-link" (click)="manageGroup(groups)">{{groups.Name}}</a></td>
+                    <td permissionCheck="10.1.2.1.2">{{groups.CreatedOn | date:'medium'}}</td>
+                    <td permissionCheck="10.1.2.1.3">{{groups.IsActive == true ? 'Active' : 'Inactive'}}</td>
+                  </tr>
+                  <tr *ngIf="lstGroups == null">
+                    <td>No Records</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="activeContainer == 'tab4'" class="w3-container w3-display-container">
+          <button class="w3-button w3-right w3-secondary w3-round-large" (click)="addRole()">+ Add Role</button>
+
+          <table class="w3-table w3-bordered">
+            <tr>
+              <th>Role Name</th>
+              <th>Status</th>
+            </tr>
+            <tr *ngFor="let data of lstRoles">
+              <td><a class="hyper-link" (click)="manageRole(data)">{{data.RoleName}}</a></td>
+              <td>{{data.Status}}</td>
+            </tr>
+            <tr *ngIf="lstRoles.length == 0">
+              <td class="row-no-record">No Records Found</td>
+              <td></td>
+            </tr>
+          </table>
+
+        </div>
+      </div>
+      <br>
+
+    </div>
+  </div>
+</div>
+

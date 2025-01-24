@@ -1,0 +1,87 @@
+<div class="w3-card-2 w3-white w3-small w3-margin-right w3-margin-left w3-round-large w3-animate-zoom">
+  <div class="w3-container">
+    <div class="w3-row w3-margin-bottom-small">
+      <div class="w3-right w3-margin-top-small">
+        <button class="w3-button w3-right w3-secondary w3-round-large w3-margin-right" (click)="cancel()">
+          <i class="fa fa-reply"></i>
+        </button>
+      </div>
+    </div>
+    <div class="w3-row w3-container w3-animate-opacity w3-secondary-l5 w3-border-top w3-border-bottom">
+      <div class="w3-left w3-xlarge"><b>Add Group</b></div>
+    </div>
+
+    <div class="w3-panel w3-margin-top-small">
+      <div class="w3-row">
+        <div class="w3-full">
+          <div class="marginform">
+            <div class="w3-full w3-container" permissionCheck="10.1.2.2.1">
+              <input id="active" type="checkbox" [(ngModel)]="group.IsActive" permissionCheck="10.1.2.2.1" />
+              <label for="active">&nbsp;Active</label>
+            </div>
+            <div class="w3-full w3-container" permissionCheck="10.1.2.2.2">
+              <label>Group name</label>
+              <input class="w3-input w3-border" [(ngModel)]="group.Name" type="text" permissionCheck="10.1.2.2.2" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w3-margin-right w3-margin-bottom w3-margin-top w3-right">
+        <button class="w3-button w3-border w3-round-large w3-margin-right-small" (click)="cancel()">Cancel</button>
+        <button class="w3-button w3-secondary w3-border w3-round-large" (click)="saveUserGroups(group)">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--<div class="w3-row w3-padding" *ngIf="group.UserGroupId > 0">
+
+<div *ngIf="activeContainer == 'tab1'" class="w3-container w3-display-container">
+  <button class="w3-button w3-secondary w3-round-large" (click)="addUserToGroup()">+ Add User To Group</button>
+
+  <table class="w3-table w3-bordered">
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Username</th>
+    </tr>
+    <tr *ngFor="let user of lstUsers">
+      <td>{{user.FirstName + ' ' + user.LastName}}</td>
+      <td>{{user.Email}}-->
+<!--<a class="hyper-link" (click)="manageGroup(groups)">{{groups.Name}}</a>-->
+<!--</td>
+        <td>{{user.UserName}}</td>
+      </tr>
+      <tr *ngIf="lstUsers == null">
+        <td>No Records</td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+</div>-->
+
+<div class="row">
+  <div *ngIf="addUserToggle" class="w3-modal w3-show">
+    <div class="w3-modal-content w3-round-large">
+      <div class="w3-row">
+        <div class="w3-container w3-light-grey">
+          <p>Add user to group</p>
+          <span (click)="closeError()" class="w3-button w3-display-topright">&times;</span>
+        </div>
+        <div class="w3-container w3-tiny">
+          <div class="w3-half w3-padding">
+            <label>Users</label>
+            <select class="w3-input w3-border" [(ngModel)]="userGroupMapping.UserId">
+              <option value="0" disabled="disabled">Select user</option>
+              <option *ngFor="let user of lstAllUsers" value="{{user.UserId}}">{{user.FirstName}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="w3-container w3-padding w3-border-top">
+          <button type="button" (click)="saveUserToGroup(userGroupMapping)" class="w3-button w3-small w3-right w3-secondary w3-round-large">Save</button>
+          <button type="reset" (click)="closeError()" class="w3-button w3-small w3-round-large w3-white w3-right w3-margin-right w3-border">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

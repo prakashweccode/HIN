@@ -1,0 +1,41 @@
+<div class="w3-white w3-small sfcenter w3-margin-top">
+  <div class="w3-margin w3-animate-opacity">
+
+    <div class="w3-row marginform w3-container w3-margin-top">
+      <div class="w3-col s2">
+        <label>Subject :</label>
+      </div>
+      <div class="w3-col s10">
+        <input class="w3-input w3-border" type="text" [(ngModel)]="batchEmailSender.Subject" />
+      </div>
+    </div>
+
+    <div class="w3-row marginform w3-container w3-margin-top">
+      <div class="w3-col s2">
+        <label>Select Template :</label>
+      </div>
+      <div class="w3-col s10">
+        <select class="w3-input w3-border" [ngModel]="batchEmailSender.TemplateId" (ngModelChange)="selectedEmailTemplate($event)">
+          <option value="0" disabled>select</option>
+          <option [ngValue]="-1">Default Template</option>
+          <option *ngFor="let emailTemplate of lstOfEmailTemplate" [ngValue]="emailTemplate.TemplateId">{{emailTemplate.TemplateName}}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="w3-full w3-container w3-margin-top" *ngIf="!showEmailTemplate">
+      <label></label>
+      <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="batchEmailSender.ContentHtml"></angular-editor>
+    </div>
+
+    <div class="w3-full w3-container w3-margin-top" *ngIf="showEmailTemplate">
+      <div [innerHTML]="bindPreviewHTML(templateHtml)">
+      </div>
+    </div>
+
+    <div class="w3-margin w3-right">
+      <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeToggle()"><i class="fa fa-times"></i> Cancel</button>
+      <button class="w3-button w3-secondary w3-border w3-round-large" (click)="sendEmail(batchEmailSender)"><i class="fa fa-paper-plane"></i> Send</button>
+    </div>
+  </div>
+</div>

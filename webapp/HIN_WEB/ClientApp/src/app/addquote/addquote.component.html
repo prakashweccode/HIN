@@ -1,0 +1,301 @@
+<div class="w3-row">
+  <div class="w3-card-2 w3-white w3-small sfcenter w3-round-large w3-animate-zoom">
+    <div class="w3-row w3-margin-bottom-small w3-container">
+      <div class="w3-right w3-margin-top-small">
+        <a *ngIf="quote.Id" class="w3-button w3-secondary w3-round-large w3-margin-right-small" (click)="editQuote()">+ Add Proposal</a>
+        <button class="w3-button w3-right w3-margin-right w3-round-large w3-secondary" (click)="cancel()">
+          <i class="fa fa-reply"></i>
+        </button>
+      </div>
+    </div>
+    <div class="w3-row w3-container w3-animate-opacity w3-secondary-l5 w3-border-top w3-border-bottom">
+      <div class="w3-left w3-margin-left w3-xlarge">
+        <b>Proposal</b>
+      </div>
+      <div *ngIf="quote.DealId" class="w3-row w3-left w3-margin-left w3-container">
+        <div class="w3-row">
+          <label class="">
+            <b>Opportunity Name</b>
+          </label>
+        </div>
+        <div class="w3-row">
+          <label class="w3-small" style="cursor:pointer" (click)="editLeadModal()">
+            {{getCompanyName(deal.DealId)}} &nbsp;<i class="fa fa-link" style="color:red;"></i>
+          </label>
+        </div>
+      </div>
+      <div *ngIf="quote.DealId" class="w3-row w3-left w3-margin-left w3-container">
+        <div class="w3-row">
+          <label class="">
+            <b>Company</b>
+          </label>
+        </div>
+        <div class="w3-row">
+          <label class="w3-small" style="cursor:pointer" (click)="editLead()">
+            {{lead.CompanyName}} &nbsp;<i class="fa fa-link" style="color:red;"></i>
+          </label>
+        </div>
+      </div>
+      <!--<button class="w3-button w3-secondary w3-right w3-round-large w3-margin-right" (click)="cancel()">
+        <i class="fa fa-reply"></i>
+      </button>-->
+    </div>
+    <div class="w3-panel w3-margin-top-small">
+      <div class="w3-row">
+        <div class="marginform">
+          <div class="w3-quarter w3-container">
+            <div class="w3-full">
+              <label (click)="editLead()">Opportunity *</label>
+              <select class="w3-input w3-border" [(ngModel)]="quote.DealId" #leadSelect (change)="assignLeadToDeal(leadSelect.value)">
+                <option [ngValue]="0" disabled>--Select--</option>
+                <option *ngFor="let dealDrop of lstDeal" value="{{dealDrop.DealId}}">{{dealDrop.DealName}}</option>
+              </select>
+            </div>
+            <div class="w3-full">
+              <label>Date</label>
+              <input class="w3-input w3-border" type="date" [ngModel]="FormatDate(quote.Date)" (ngModelChange)="quote.Date = $event">
+            </div>
+            <div class="w3-full">
+              <label>Proposal Number</label>
+              <input class="w3-input w3-border" type="text" disabled="disabled" [(ngModel)]="quote.DocumentNumber">
+            </div>
+            <div class="w3-full">
+              <label>Status</label>
+              <app-customdropdown [getApiPath]="'CustomDropDown/GetStatusDrop'" [isAddEnabled]="true" [selectedValue]="quote.StatusId" (saveSelectedValue)="quote.StatusId=$event" [saveApiPath]="'CustomDropDown/SaveStatusDrop'"></app-customdropdown>
+            </div>
+            <div class="w3-full">
+              <label>Assigned To</label>
+              <app-assignedto (sendAssignedId)="quote.AssignedToId=$event" [assignedTo]="quote.AssignedToId"></app-assignedto>
+            </div>
+            <div class="w3-full">
+              <label>Description *</label>
+              <input class="w3-input w3-border" type="text" [(ngModel)]="quote.QuoteDescription">
+            </div>
+          </div>
+          <div class="w3-half w3-container">
+            <div class="w3-full">
+              <label>Payment Terms</label>
+              <app-customdropdown [getApiPath]="'CustomDropDown/GetPaymentTerms'" [isAddEnabled]="true" [selectedValue]="quote.PaymentTermsId" (saveSelectedValue)="quote.PaymentTermsId=$event" [saveApiPath]="'CustomDropDown/SavePaymentTerms'"></app-customdropdown>
+            </div>
+            <div class="w3-full">
+              <label>Type Of Sale</label>
+              <app-customdropdown [getApiPath]="'CustomDropDown/GetTypeOfSale'" [isAddEnabled]="true" [selectedValue]="quote.TypeOfSaleId" (saveSelectedValue)="quote.TypeOfSaleId=$event" [saveApiPath]="'CustomDropDown/SaveTypeOfSale'"></app-customdropdown>
+            </div>
+            <div class="w3-full">
+              <label>Profit(%)</label>
+              <input class="w3-input w3-border" type="text" placeholder="%" suffix="%" mask="000" [(ngModel)]="quote.ProfitPercentage">
+            </div>
+            <div class="w3-full">
+              <label>Tax</label>
+              <app-customdropdown [getApiPath]="'CustomDropDown/GetTax'" [isAddEnabled]="true" [selectedValue]="quote.TaxId" (saveSelectedValue)="quote.TaxId=$event" [saveApiPath]="'CustomDropDown/SaveTax'"></app-customdropdown>
+            </div>
+            <div class="w3-full">
+              <label>Profit($)</label>
+              <input class="w3-input w3-border" type="text" placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" [(ngModel)]="quote.ProfitDollar">
+            </div>
+          </div>
+          <div class="w3-quarter w3-container">
+            <div class="w3-full">
+              <label>Total</label>
+              <input class="w3-input w3-border" type="text" placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" [(ngModel)]="quote.Total">
+            </div>
+            <div class="w3-row">
+              <div class="w3-third">
+                <label>Discount</label>
+                <app-customdropdown [getApiPath]="'CustomDropDown/GetDiscount'" [isAddEnabled]="true" [selectedValue]="quote.DiscountType" (saveSelectedValue)="selectDiscountType($event)" [saveApiPath]="'CustomDropDown/SaveDiscount'"></app-customdropdown>
+              </div>
+              <div class="w3-twothird w3-full w3-padding-left-10">
+                <label>Discount Value</label>
+                <input *ngIf="quote.DiscountType == 0 || !quote.DiscountType" class="w3-input w3-border" type="text" [(ngModel)]="quote.DiscountValue" />
+                <input *ngIf="quote.DiscountType == 1" placeholder="%" suffix="%" mask="000" class="w3-input w3-border" type="text" [(ngModel)]="quote.DiscountValue" />
+                <input *ngIf="quote.DiscountType == 2" placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" class="w3-input w3-border" type="text" [(ngModel)]="quote.DiscountValue" />
+              </div>
+            </div>
+            <div class="w3-full">
+              <label>Total After Discount</label>
+              <input class="w3-input w3-border" type="text" placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" [(ngModel)]="quote.TotalAfterDiscount">
+            </div>
+            <div class="w3-full">
+              <label>Total Tax</label>
+              <input class="w3-input w3-border" type="text" placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" [(ngModel)]="quote.TotalTax">
+            </div>
+            <div class="w3-full">
+              <label>Final Price</label>
+              <input class="w3-input w3-border" type="text" placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" [(ngModel)]="quote.FinalPrice">
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+      <!--<div class="w3-row">
+        <div class="marginform">
+          <div class="w3-full">
+            <div class="w3-third w3-container">
+              <label (click)="editLead()">Opportunity *</label>-->
+      <!--<input class="w3-input w3-border" type="text" [(ngModel)]="quote.Customer">
+      <app-customdropdown [getApiPath]="'CustomDropDown/GetCustomer'" [isAddEnabled]="true" [selectedValue]="quote.CustomerId" (saveSelectedValue)="quote.CustomerId=$event" [saveApiPath]="'CustomDropDown/SaveCustomer'"></app-customdropdown>-->
+      <!--<select class="w3-input w3-border" [(ngModel)]="quote.DealId" #leadSelect (change)="assignLeadToDeal(leadSelect.value)">
+          <option [ngValue]="0" disabled>--Select--</option>
+          <option *ngFor="let dealDrop of lstDeal" value="{{dealDrop.DealId}}">{{dealDrop.DealName}}</option>
+        </select>
+
+      </div>
+      <div class="w3-third w3-container">
+        <label>Payment Terms</label>-->
+      <!--<input class="w3-input w3-border" type="number" [(ngModel)]="quote.PaymentTerms">-->
+      <!--<app-customdropdown [getApiPath]="'CustomDropDown/GetPaymentTerms'" [isAddEnabled]="true" [selectedValue]="quote.PaymentTermsId" (saveSelectedValue)="quote.PaymentTermsId=$event" [saveApiPath]="'CustomDropDown/SavePaymentTerms'"></app-customdropdown>
+        </div>
+        <div class="w3-third w3-container">
+          <label>Total</label>
+          <input class="w3-input w3-border" type="number" [(ngModel)]="quote.Total">
+        </div>
+      </div>
+      <div class="w3-row w3-full">
+        <div class="w3-third w3-container">
+          <label>Date</label>
+          <input class="w3-input w3-border" type="date" [ngModel]="FormatDate(quote.Date)" (ngModelChange)="quote.Date = $event">
+        </div>
+        <div class="w3-third w3-container">
+          <label>Type Of Sale</label>-->
+      <!--<input class="w3-input w3-border" type="number" [(ngModel)]="quote.TypeOfSale">-->
+      <!--<app-customdropdown [getApiPath]="'CustomDropDown/GetTypeOfSale'" [isAddEnabled]="true" [selectedValue]="quote.TypeOfSaleId" (saveSelectedValue)="quote.TypeOfSaleId=$event" [saveApiPath]="'CustomDropDown/SaveTypeOfSale'"></app-customdropdown>
+      </div>
+      <div class="w3-third w3-container">
+        <label>Discount</label>-->
+      <!--<input class="w3-input w3-border" type="text" [(ngModel)]="quote.Discount">-->
+      <!--<app-customdropdown [getApiPath]="'CustomDropDown/GetDiscount'" [isAddEnabled]="true" [selectedValue]="quote.DiscountId" (saveSelectedValue)="quote.DiscountId=$event" [saveApiPath]="'CustomDropDown/SaveDiscount'"></app-customdropdown>
+        </div>
+      </div>
+      <div class="w3-row w3-full">
+        <div class="w3-third w3-container">
+          <label>Proposal Number</label>
+          <input class="w3-input w3-border" type="text" disabled="disabled" [(ngModel)]="quote.DocumentNumber">
+        </div>
+        <div class="w3-third w3-container">
+          <label>Profit(%)</label>
+          <input class="w3-input w3-border" type="number" [(ngModel)]="quote.ProfitPercentage">
+        </div>-->
+      <!--<div class="w3-third w3-container">
+      <label>Cost Center</label>-->
+      <!--<input class="w3-input w3-border" type="number" [(ngModel)]="quote.CostCenterId">-->
+      <!--<app-customdropdown [getApiPath]="'CustomDropDown/GetCostCenter'" [isAddEnabled]="true" [selectedValue]="quote.CostCenterId" (saveSelectedValue)="quote.CostCenterId=$event" [saveApiPath]="'CustomDropDown/SaveCostCenter'"></app-customdropdown>
+      </div>-->
+      <!--<div class="w3-third w3-container">
+          <label>Total After Discount</label>
+          <input class="w3-input w3-border" type="number" [(ngModel)]="quote.TotalAfterDiscount">
+        </div>
+      </div>
+      <div class="w3-row w3-full">
+        <div class="w3-third w3-container">
+          <label>Status</label>-->
+      <!--<input class="w3-input w3-border" type="text" [(ngModel)]="quote.StatusId">-->
+      <!--<app-customdropdown [getApiPath]="'CustomDropDown/GetStatusDrop'" [isAddEnabled]="true" [selectedValue]="quote.StatusId" (saveSelectedValue)="quote.StatusId=$event" [saveApiPath]="'CustomDropDown/SaveStatusDrop'"></app-customdropdown>
+      </div>
+      <div class="w3-third w3-container">
+        <label>Tax</label>-->
+      <!--<input class="w3-input w3-border" type="number" [(ngModel)]="quote.TaxId">-->
+      <!--<app-customdropdown [getApiPath]="'CustomDropDown/GetTax'" [isAddEnabled]="true" [selectedValue]="quote.TaxId" (saveSelectedValue)="quote.TaxId=$event" [saveApiPath]="'CustomDropDown/SaveTax'"></app-customdropdown>
+        </div>
+        <div class="w3-third w3-container">
+          <label>Total Tax</label>
+          <input class="w3-input w3-border" type="number" [(ngModel)]="quote.TotalTax">
+        </div>
+      </div>
+      <div class="w3-row w3-full">
+        <div class="w3-third w3-container">
+          <label>Assigned To</label>-->
+      <!--<input class="w3-input w3-border" type="number" [(ngModel)]="quote.AssignedToId">
+      <app-customdropdown [getApiPath]="'CustomDropDown/GetAssignedTo'" [isAddEnabled]="true" [selectedValue]="quote.AssignedToId" (saveSelectedValue)="quote.AssignedToId=$event" [saveApiPath]="'CustomDropDown/SaveAssignedTo'"></app-customdropdown>-->
+      <!--<app-assignedto (sendAssignedId)="quote.AssignedToId=$event" [assignedTo]="quote.AssignedToId"></app-assignedto>
+            </div>
+            <div class="w3-third w3-container">
+              <label>Profit($)</label>
+              <input class="w3-input w3-border" type="number" [(ngModel)]="quote.ProfitDollar">
+            </div>
+            <div class="w3-third w3-container">
+              <label>Final Price</label>
+              <input class="w3-input w3-border" type="number" [(ngModel)]="quote.FinalPrice">
+            </div>
+          </div>
+          <div class="w3-row w3-full">
+            <div class="w3-third w3-container">
+              <label>Description</label>
+              <input class="w3-input w3-border" type="text" [(ngModel)]="quote.QuoteDescription">
+            </div>
+            <div class="w3-third w3-container">
+
+            </div>
+
+          </div>
+        </div>
+      </div>-->
+
+
+      <div class="w3-bar w3-center w3-margin-top w3-border-secondary">
+        <div class="w3-left">
+          <a [class]="activeContainer == 'tab1'?'w3-button w3-round-large w3-secondary w3-margin-right-small w3-margin-left':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab1'">Line Items</a>
+        </div>
+      </div>
+      <div class="w3-white" *ngIf="activeContainer == 'tab1'">
+        <div class="w3-animate-opacity w3-container">
+          <div class="w3-row">
+            <!--<button type="button" (click)="addPartCatalog()" class="w3-button w3-secondary w3-border w3-round-large w3-right">New Part Catalog</button>-->
+          </div>
+          <div class="w3-row"><button class="w3-button w3-secondary w3-border w3-round-large" (click)="isExtended=!isExtended">Extended View</button></div>
+          <table class="w3-table w3-bordered">
+            <thead>
+              <tr>
+                <td><strong>Line</strong></td>
+                <td style="width:10%"><strong>Part #</strong></td>
+                <td><strong>Part description</strong></td>
+                <td style="width:5%"><strong>Quantity</strong></td>
+                <td style="width:6%"><strong>Unit price</strong></td>
+                <td><strong>Tax</strong></td>
+                <td><strong>Discount by line</strong></td>
+                <!--<td *ngIf="isExtended">Available</td>-->
+                <td *ngIf="isExtended"><strong>Profit $</strong></td>
+                <td *ngIf="isExtended"><strong>Profit %</strong></td>
+                <td *ngIf="isExtended"><strong>Expected ship date</strong></td>
+                <td style="width:10%"><strong>Total price</strong></td>
+                <td><strong>Action</strong></td>
+              </tr>
+            </thead>
+
+            <tr *ngFor="let linePart of listQuoteCatalog; let i=index;">
+              <td>
+                <select class="w3-input w3-border" [ngModel]="linePart.PartCatalogId" (ngModelChange)="SelectLineItems($event, linePart)">
+                  <option [ngValue]="0" disabled>--Select--</option>
+                  <option *ngFor="let partcatalog of listPartCatalog" value="{{partcatalog.Id}}">{{partcatalog.PartDescription}}</option>
+                </select>
+              </td>
+              <td><input class="w3-input w3-border" type="text" [(ngModel)]="linePart.Name" /></td>
+              <td><textarea class="w3-input w3-border" rows="1" [(ngModel)]="linePart.PartDescription"></textarea></td>
+              <td><input class="w3-input w3-border" type="number" [(ngModel)]="linePart.Quantity" /></td>
+              <td><input class="w3-input w3-border" type="text" placeholder="$" [(ngModel)]="linePart.UnitPrice" /></td>
+
+              <td>
+                <input id="tax{{i}}" type="checkbox" disabled="disabled" [(ngModel)]="linePart.Tax" name="tax{{i}}" />
+                <label for="tax{{i}}">&nbsp;</label>
+              </td>
+              <td><input class="w3-input w3-border" type="number" [(ngModel)]="linePart.DiscountByLine" /></td>
+              <!--<td *ngIf="isExtended"><input class="w3-input w3-border" type="number" [(ngModel)]="linePart.Available" /></td>-->
+              <td *ngIf="isExtended"><input class="w3-input w3-border" type="text" placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" [(ngModel)]="linePart.ProfitDollar" /></td>
+              <td *ngIf="isExtended"><input class="w3-input w3-border" type="text" placeholder="%" suffix="%" mask="000" [(ngModel)]="linePart.ProfitPercentage" /></td>
+              <td *ngIf="isExtended"><input class="w3-input w3-border" type="date" [(ngModel)]="linePart.ExpectedShipDate" /></td>
+              <td><input class="w3-input w3-border" type="text" placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" [ngModel]="getTotalPrice(linePart)" /></td>
+              <td><button class="w3-input w3-secondary w3-border w3-round-large" (click)="SaveLines(linePart)">Save</button></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="w3-margin w3-right">
+        <button class="w3-button w3-border w3-round-large w3-margin-right-small" (click)="cancel()">Cancel</button>
+        <button class="w3-button w3-secondary w3-border w3-round-large" (click)="saveQuote(quote)">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

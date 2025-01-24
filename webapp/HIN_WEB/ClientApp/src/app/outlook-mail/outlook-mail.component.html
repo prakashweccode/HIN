@@ -1,0 +1,87 @@
+<div class="w3-display-middle">
+  <div class="loader" *ngIf="show">
+  </div>
+</div>
+<div class="w3-card w3-white w3-margin-right w3-margin-left w3-margin-bottom w3-round-large">
+  <br />
+  <div class="w3-row w3-padding w3-margin-top-small w3-animate-opacity w3-secondary-l5 w3-border-top w3-border-bottom">
+    <div class="w3-left w3-xlarge"><b>Office 365 Email</b></div>
+    <div class="w3-right">
+      <app-connectoffice365 (statusEmitter)="statusEmitter($event)"></app-connectoffice365>
+    </div>
+  </div>
+  <div class="w3-container">
+    <div class="w3-col" style="width:15%;">
+      <div style="height:78vh; overflow-y:auto;overflow-x:hidden;border:1px solid #ccc;margin-top:15px;margin-bottom:15px;">
+        <div class="w3-row" *ngIf="isConnected">
+          <div (click)="newEmail()" class="w3-row w3-padding-top-large w3-padding-bottom-large w3-padding-right-large w3-padding-left-large w3-cursor w3-hover-light-grey">
+            <span><i class="fa fa-plus w3-small" aria-hidden="true"></i></span> New Email
+          </div>
+          <div (click)="favToggle=!favToggle" class="w3-row w3-padding-top-large w3-padding-bottom-large w3-padding-right-large w3-padding-left-large">
+            <strong><span><i [ngClass]="favToggle ? 'fa fa-caret-down' : 'fa fa-caret-right'" aria-hidden="true"></i></span> Mailbox</strong>
+          </div>
+          <div class="w3-row-padding" *ngIf="favToggle">
+            <button *ngFor="let folder of mailFolders" (click)="getOffice365FolderItems(folder, 100, 0);" class="w3-bar-item w3-button w3-block w3-left-align" [ngClass]="folder.activeFolder ? 'w3-gray' : 'w3-white'">{{folder.displayName}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="w3-col" style="width:30%;position:relative;">
+      <div style="height:78vh; overflow-y:auto;overflow-x:hidden;border-top:1px solid #ccc;border-right:1px solid #ccc;border-bottom:1px solid #ccc;margin-top:15px;margin-bottom:15px;">
+        <div class="w3-row" *ngIf="isConnected">
+          <div class="w3-row w3-white w3-padding-medium w3-border-bottom w3-border-gray" style="position:fixed;width:25.2%;">
+            <div class="w3-col" style="width:80%">
+              <div class="w3-row w3-section w3-margin-0">
+                <div class="w3-col w3-center w3-right w3-round-medium w3-cursor" style="width:30px;border:1px solid #ccc;"><i class="fa fa-search"></i></div>
+                <div class="w3-rest">
+                  <input type="search" class="w3-input w3-border w3-rest" placeholder="search" />
+                </div>
+              </div>
+
+              <!--<button class="w3-button w3-tiny w3-padding-small w3-round-small" style="width:25px;"><i class="fa fa-search"></i></button>-->
+            </div>
+            <div class="w3-col w3-center" style="width:20%">
+              <button [disabled]="pageNumber <= 0" (click)="gotoPrevious()" class="w3-button w3-tiny w3-padding-small w3-round-small" title="Previous"><</button>
+              <button [disabled]="disableNextPage()" (click)="gotoNext()" class="w3-button w3-tiny w3-padding-small w3-round-small" title="Next">></button>
+            </div>
+          </div>
+          <div class="w3-row" style="margin-top:40px;">
+            <div *ngFor="let mail of folderItems">
+              <div class="w3-border-bottom w3-border-gray w3-padding-medium" [ngClass]="mail.activeMail ? 'w3-primary-l4' : ''" (click)="getMailById(mail.id)">
+                <h6 class="w3-margin-0 w3-large">{{mail.from ? (mail.from.emailAddress.name | truncate:50) : ''}}</h6>
+                <p class="w3-margin-0 w3-small">{{mail.subject | truncate:50}}<span class="w3-right">{{mail.receivedDateTime | date: 'MM-dd-yyyy'}}</span></p>
+                <p class="w3-margin-0 w3-small">{{mail.bodyPreview | truncate:50}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="w3-row w3-padding-medium" *ngIf="folderItems && folderItems.length == 0">
+            <h6 class="w3-margin-0 w3-large w3-center">Folder is empty...</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="w3-col" style="width:55%;">
+      <div style="height:78vh; overflow-y:auto;overflow-x:hidden;border-top:1px solid #ccc;border-right:1px solid #ccc;border-bottom:1px solid #ccc;margin-top:15px;margin-bottom:15px;">
+        <div class="w3-row w3-padding-medium" *ngIf="mailItem">
+            <p>From : <span title="{{mailItem.sender.emailAddress.address}}">{{mailItem.sender.emailAddress.name}}</span></p>
+            <p> To : <span title="{{toMail.emailAddress.address}}" *ngFor="let toMail of mailItem.toRecipients">{{toMail.emailAddress.name}}, </span></p>
+            <h5>Subject : {{mailItem.subject}}</h5>
+          </div>
+          <div *ngIf="mailItem && mailItem.body && mailItem.body.content" class="w3-row w3-padding w3-border-top w3-border-gray" [innerHTML]="bindPreviewHTML(mailItem.body.content)">
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="emailToggle" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large">
+    <div class="w3-container">
+      <span (click)="closeToggle()" class="w3-button w3-display-topright">&times;</span>
+      <div class="w3-white w3-small sfcenter w3-margin-top">
+        <app-composeemail (closeEmailToggle)="closeEmailToggle($event)"></app-composeemail>
+      </div>
+    </div>
+  </div>
+</div>

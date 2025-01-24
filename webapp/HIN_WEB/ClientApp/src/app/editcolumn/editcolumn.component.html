@@ -1,0 +1,13 @@
+<div class="w3-panel">
+  <div class="w3-row">
+    <i class="fa fa-user" aria-hidden="true"></i>
+    <label>
+      {{test}}
+    </label>
+    <button class="w3-right"><i class="fa fa-pencil" (click)="toogle=!toogle" aria-hidden="true"></i></button>
+  </div>
+  <div class="w3-margin w3-right" *ngIf="toogle">
+    <button class="w3-button w3-border w3-round-small w3-margin-right">Cancel</button>
+    <button class="w3-button w3-secondary w3-border w3-round-small">Save</button>
+  </div>
+</div>

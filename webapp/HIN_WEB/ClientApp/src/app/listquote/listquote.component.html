@@ -1,0 +1,11 @@
+<div class="w3-row">
+  <div class="w3-panel w3-card-2 w3-white w3-small sfcenter marginform w3-round-large">
+    <h4 class="w3-left w3-xlarge w3-margin-top w3-margin-bottom"><b>Proposals</b></h4>
+    <button class="w3-button w3-right w3-secondary w3-round-large w3-margin-top w3-margin-bottom" (click)="addNewQuote()">Add Proposal</button>
+    <div class="w3-row">
+      <app-data-grid [gridHeaders]="gridHeaders" [actions]="actions" [dataSource]="dataSource" [filterColumns]="filterColumns" [apiUrl]="'/api/Quote/GetODataQuote'" [pageSize]="25"
+                     [isResponsive]="false" [isSearchEnabled]="true" [isPaginationEnabled]="true" [pageLengthOptions]="pageLengthOptions" (rowClick)="editQuote($event);">
+      </app-data-grid>
+    </div>
+  </div>
+</div>

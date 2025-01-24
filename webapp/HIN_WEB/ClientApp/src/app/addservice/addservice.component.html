@@ -1,0 +1,467 @@
+<div class="w3-row">
+  <div class="w3-card w3-white w3-small w3-margin-right w3-margin-left w3-round-large w3-animate-zoom">
+    <br />
+    <div class="w3-row w3-padding w3-animate-opacity w3-margin-bottom w3-secondary-l5 w3-border-top w3-border-bottom">
+      <div class="w3-left w3-container w3-xlarge"><b>Appointment</b></div>
+      <div class="w3-row w3-left w3-container" style="width:40%;">
+        <div class="w3-row">
+          <div class="w3-half">
+            <label class="">
+              <b>Patient Name</b>
+            </label>
+          </div>
+        </div>
+        <div class="w3-row">
+          <div class="w3-half">
+            <label class="w3-small" style="cursor:pointer" (click)="editLeadModal()">
+              {{getCompanyName(service.LeadId)}} &nbsp;<i class="fa fa-link" style="color:red;"></i>
+            </label>
+          </div>
+        </div>
+      </div>
+      <!--<div class="w3-right"><app-connectoffice365 (statusEmitter)="statusEmitter($event)"></app-connectoffice365></div>-->
+      <div class="w3-right">
+        <!--<input type="button" (click) ="EnableOnedrive()"  class="w3-button w3-right w3-round-large w3-secondary w3-margin-right-small" value="Enable Onedrive" />-->
+
+        <button permissionCheck="4.2.2" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" *ngIf="service.Id" (click)="addNewService()"><i class="fa fa-plus"></i> Add New</button>
+        <button class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="reloadCurrentRoute()"><i class="fa fa-refresh"></i> Refresh</button>
+        <button permissionCheck="4.2.1" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="backToList()">Back</button>
+      </div>
+    </div>
+    <div class="w3-container w3-white">
+      <div class="w3-row">
+        <div class="w3-full" *ngIf="service?.Id && service?.Id > 0 && service?.CreatedOn">
+          <label class="w3-left w3-margin-left"><span class="w3-margin-right">Created On : {{service.CreatedOn | date : 'MM/dd/yyyy'}}</span></label>
+        </div>
+        <button type="button" (click)="addServiceCustomField()" class="w3-button w3-secondary w3-border w3-round-large w3-right">+ Add New Field</button>
+      </div>
+      <div class="w3-row">
+        <div class="w3-row">
+
+          <div class="w3-full">
+            <div class="w3-half w3-container marginform">
+              <div class="w3-row">
+                <div class="w3-half" permissionCheck="4.2.3">
+                  <label>EMR Appointment Number*</label>
+                  <input class="w3-input w3-border" [(ngModel)]="service.ServiceNumber" type="text" disabled="disabled" />
+                </div>
+                <div class="w3-half w3-padding-left-10" permissionCheck="4.2.4">
+                  <!--<div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+           (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+        <label (click)="editLead()">EMR Patient Name <i class="fa fa-link" aria-hidden="true"></i>* </label>
+        <select class="w3-input w3-border" (dragover)="noAllowDrop($event)" [disabled]="disableLead" [(ngModel)]="service.LeadId" #leadSelect (change)="assignLeadToService(leadSelect.value)">
+          <option value="0" disabled>
+            --select Patient--
+          </option>
+          <option *ngFor="let data of lstLeads" value="{{data.LeadId}}">{{data.LeadName}}</option>
+        </select>
+      </div>-->
+                  <label>Practice Name</label>
+                  <select class="w3-input w3-border" [(ngModel)]="service.DealId">
+                    <option value="0" disabled>-select-</option>
+                    <option *ngFor="let data of lstOpportunities;" value="{{data.DealId}}">{{data.DealNumber}} - {{data.DealName}}</option>
+                  </select>
+
+                </div>
+              </div>
+
+              <div class="w3-row">
+                <div class="w3-half" permissionCheck="4.2.5">
+                  <label>Patient Name</label>
+                  <select class="w3-input w3-border" [(ngModel)]="service.LeadId">
+                    <option value="0" disabled>
+                      --select lead--
+                    </option>
+                    <option *ngFor="let data of lstLeads" value="{{data.LeadId}}">{{data.LeadNumber}} - {{data.LeadName}}</option>
+                  </select>
+                </div>
+                <div class="w3-half w3-padding-left-10" permissionCheck="4.2.6">
+                  <label>Event Name</label>
+                  <select class="w3-input w3-border" (dragover)="noAllowDrop($event)" [(ngModel)]="service.EventId">
+                    <option value="0" disabled>
+                      --select lead--
+                    </option>
+                    <option *ngFor="let data of lstEvents" value="{{data.Id}}">{{data.EventNumber}} - {{data.EventName}}</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="w3-half" permissionCheck="4.2.7">
+                <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                     (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                  <label>Funnel *</label>
+                  <select class="w3-input w3-border" (dragover)="noAllowDrop($event)" [(ngModel)]="service.PipelineGroupId" (change)="getPipeLineByPipeLineGroupId(service.PipelineGroupId)" [class.w3-border-red]="checkValidation(funnel)" #funnel="ngModel" required>
+                    <option [ngValue]="0">--Select Pipeline--</option>
+                    <option [ngValue]="-1">+ New Funnel</option>
+                    <option *ngFor="let pipeLineGroup of listPipeLineGroup" [ngValue]="pipeLineGroup.PipelineGroupId">{{pipeLineGroup.Name}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="w3-row" permissionCheck="4.2.7">
+                <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                     (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                  <div class="w3-full">
+                    <label>Funnel stage</label>
+                    <div class="sf-stage-selector">
+                      <label class="{{selectedPipeIndex==i?'w3-display-container sf-stage-selector__stage sf-stage-selector__stage--current':'w3-display-container sf-stage-selector__stage'}} tooltip" (click)="selectedPipeIndex=i;service.PipelineId=pipeline.PipelineId" *ngFor="let pipeline of sortBy('DisplayOrder');let i = index">
+                        <span class="bottomtooltiptext">{{pipeline.Name}}</span>
+                        <i class="fa fa-angle-right w3-text-white fa-3x w3-display-right" style="margin-right: 6px;margin-top: -1px;"></i>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="w3-full w3-border w3-border-secondary-l5 w3-margin-top" permissionCheck="4.2.8">
+                <div class="w3-row w3-secondary-l5 w3-padding-medium w3-cursor w3-border-bottom">
+                  <div class="w3-left w3-margin-top-small" (click)="showAddress = !showAddress"><i [ngClass]="showAddress?'fa fa-angle-down' : 'fa fa-angle-right'"></i> <label class="w3-center"> Address of the appointment</label></div>
+                  <div class="w3-right">
+                    <div class="w3-margin-right" [ngClass]="service.LeadId ? '' : 'w3-disabled'">
+                      <!--<input id="copyLeadAddress" type="checkbox" (change)="copyAddressFromLead(service, $event)" />
+          <label for="copyLeadAddress">&nbsp;Copy address from lead</label>-->
+                      <button type="button" class="w3-button w3-padding-small w3-small w3-white w3-round-large w3-border w3-border-grey" (click)="copyAddressFromLead(service, $event)">Copy address from patient</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="w3-row w3-margin-medium" *ngIf="showAddress">
+                  <div class="w3-half">
+                    <label>Address</label>
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="service.Address" />
+                  </div>
+                  <div class="w3-half w3-padding-left-10">
+                    <label>City</label>
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="service.City" />
+                  </div>
+                  <div class="w3-half">
+                    <label>State</label>
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="service.State" />
+                  </div>
+                  <div class="w3-half w3-padding-left-10">
+                    <label>Zipcode</label>
+                    <input class="w3-input w3-border" type="text" [(ngModel)]="service.ZipCode" />
+                  </div>
+                  <div class="w3-half">
+                    <div>
+                      <label>Country</label>
+                      <input class="w3-input w3-border" type="text" [(ngModel)]="service.Country" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <app-customsection [entityType]="entityType" [alignment]="'left'" [customFields]="customFields" [entityId]="service.Id" [customFieldValues]="leftServiceCustomFieldValues"></app-customsection>
+            </div>
+            <div class="w3-container w3-half marginform">
+              <div class="w3-row">
+                <div class="w3-half" permissionCheck="4.2.9">
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                    <label>Appointment Type</label>
+                    <!--<select class="w3-input w3-border" #serviceType [(ngModel)]="service.Type" (change)="chageLeadStatus(serviceType.value)">
+                      <option value="1">General</option>
+                      <option value="2">Others</option>
+                    </select>-->
+                    <input type="text" class="w3-input w3-border" [(ngModel)]="service.ApplicationRemarks" />
+                  </div>
+                </div>
+                <div class="w3-half w3-padding-left-10" permissionCheck="4.2.10">
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                    <label>Security Group *</label>
+                    <select class="w3-input w3-border" [(ngModel)]="service.SecurityGroup" [class.w3-border-red]="checkValidation(securityGroup)" #securityGroup="ngModel" required>
+                      <option value="0" disabled>-select-</option>
+                      <option *ngFor="let data of lstGroups;" value="{{data.UserGroupId}}">{{data.Name}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-half" permissionCheck="4.2.11">
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                    <label>
+                      Assigned To
+                    </label>
+                    <app-assignedtogrid [assignedToGrid]="assignedToGrid" (sendAssignedId)="selectAssignedValue($event)"></app-assignedtogrid>
+                  </div>
+                </div>
+
+                <div class="w3-half w3-padding-left-10" permissionCheck="4.2.12">
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                    <label>Created By</label>
+                    <app-createdby [createdby]="service.CreatedBy"></app-createdby>
+                  </div>
+                </div>
+              </div>
+              <div class="w3-row">
+
+                <div class="w3-half" permissionCheck="4.2.13">
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                    <label>Status</label>
+                    <app-customdropdown [getApiPath]="'CustomDropDown/GetServiceStatus'" [selectedValue]="service.StatusId" (saveSelectedValue)="selectedOpportunityStatus($event)" [saveApiPath]="'CustomDropDown/SaveServiceStatus'"></app-customdropdown>
+                  </div>
+                </div>
+                <div class="w3-half w3-padding-left-10" permissionCheck="4.2.14">
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                    <label>Color</label>
+                    <div class="w3-row">
+                      <div class="w3-col s10"><input type="text" (dragover)="noAllowDrop($event)" class="w3-disabled w3-input w3-border" [(ngModel)]="service.Color"></div>
+                      <div class="w3-col s2"><input class="color-picker" (dragover)="noAllowDrop($event)" value="{{service.Color ? service.Color : '#ffffff'}}" type="color" /></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="w3-row" *ngIf="service.StatusId == 4">
+                <div class="w3-full" draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                     (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                  <label>Cancel Reason *</label>
+                  <app-customdropdown [getApiPath]="'CustomDropDown/GetReason'" [isAddEnabled]="true" [selectedValue]="service.CancelReason" (saveSelectedValue)="service.CancelReason=$event" [saveApiPath]="'CustomDropDown/SaveReason'"></app-customdropdown>
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-half" permissionCheck="4.2.15">
+                  <label>NPI</label>
+                  <input type="text" class="w3-input w3-border" [(ngModel)]="service.ApplicationNeeded">
+                </div>
+              </div>
+              <div class="w3-full" permissionCheck="4.2.16">
+                <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                     (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                  <label>Remarks</label>
+                  <textarea class="w3-input w3-border" rows="3" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="service.Remarks"></textarea>
+                </div>
+              </div>
+              <div class="w3-full">
+                <div class="w3-half" permissionCheck="4.2.17">
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                    <label class="w3-cursor" title="start" (click)="setCurrentDateTime()">Appointment Date </label>
+                    <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" placeholder="MM/DD/YYYY" type="datetime-local" [ngModel]="changeEstimateDateFormat(service.StartDate)"
+                           (ngModelChange)="service.StartDate = $event" />
+                  </div>
+                </div>
+                <!--<div class="w3-half w3-padding-left-10" permissionCheck="4.2.18">
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                    <label>Appointment Time </label>
+                    <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" placeholder="MM/DD/YYYY" type="time" [ngModel]="changeEndDateFormat(service.EndDate)"
+                           (ngModelChange)="service.EndDate = $event" />
+                  </div>
+                </div>-->
+              </div>
+              <app-customsection [entityType]="entityType" [alignment]="'right'" [customFields]="customFields" [entityId]="service.Id" [customFieldValues]="rightServiceCustomFieldValues"></app-customsection>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w3-bar w3-container w3-center w3-margin-top w3-border-secondary">
+        <div class="w3-left">
+          <button permissionCheck="4.2.19" *ngIf="service.Id" [class]="activeContainer == 'tabContacts'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tabContacts'">Contact Information ({{contactInformations.length}})</button>
+          <button permissionCheck="4.2.20" *ngIf="service.Id" [class]="activeContainer == 'tabNotes'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tabNotes'">Notes ({{notesInfos.length}})</button>
+          <button permissionCheck="4.2.21" *ngIf="loggedUser.User.IsAdmin && service.Id" [class]="activeContainer == 'tab3'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tabDrive'">Files</button>
+        </div>
+      </div>
+
+      <div *ngIf="activeContainer == 'tabDrive'" class="w3-white " permissionCheck="4.2.21">
+        <div class="w3-margin w3-animate-opacity">
+          <h6 class="w3-left w3-margin-0">Files</h6>
+          <div class="w3-row">
+            <app-onedrive-explorer [EmrNo]="emrNo"></app-onedrive-explorer>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="activeContainer == 'tabPercentage'" class="w3-container w3-white">
+        <div class="w3-full w3-margin-top">
+          <button type="button" (click)="addServicePercentCustomField()" class="w3-button w3-secondary w3-border w3-round-large w3-right">+ Add New Field</button>
+        </div>
+        <div class="w3-row w3-padding ">
+          <div class="w3-full">
+            <div class="w3-half marginform">
+              <div class="w3-full">
+                <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                     (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                  <label>Percentage</label>
+                  <input class="w3-input w3-border" placeholder="%" suffix="%" mask="000" type="text" [(ngModel)]="service.Percentage" />
+                </div>
+              </div>
+
+              <app-customsection [entityType]="servicePercentType" [alignment]="'left'" [customFields]="customFields" [entityId]="service.Id" [customFieldValues]="servicePercentLeftCustomFieldValues"></app-customsection>
+            </div>
+            <div class="w3-container w3-half marginform">
+              <div class="w3-half">
+                <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                     (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                  <label class="w3-cursor" title="start" (click)="setCurrentDateTime()">Start Date *</label>
+                  <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" placeholder="MM/DD/YYYY" type="datetime-local" [ngModel]="changeEstimateDateFormat(service.StartDate)"
+                         (ngModelChange)="service.StartDate = $event" />
+                </div>
+              </div>
+              <div class="w3-half w3-padding-left-10">
+                <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                     (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                  <label>End Date *</label>
+                  <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" placeholder="MM/DD/YYYY" type="datetime-local" [ngModel]="changeEndDateFormat(service.EndDate)"
+                         (ngModelChange)="service.EndDate = $event" />
+                </div>
+              </div>
+              <app-customsection [entityType]="servicePercentType" [alignment]="'right'" [customFields]="customFields" [entityId]="service.Id" [customFieldValues]="servicePercentRightCustomFieldValues"></app-customsection>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="activeContainer == 'tabServiceReq'" class="w3-container w3-white">
+        <div class="w3-full w3-margin-top">
+          <button type="button" (click)="addServiceReqCustomField()" class="w3-button w3-secondary w3-border w3-round-large w3-right">+ Add New Field</button>
+        </div>
+        <div class="w3-row w3-padding ">
+          <div class="w3-full">
+            <div class="w3-half marginform">
+              <div class="w3-full">
+                <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                     (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                  <label>Application Needed</label>
+                  <input class="w3-input w3-border" type="text" [(ngModel)]="service.ApplicationNeeded" />
+                </div>
+              </div>
+              <div class="w3-full">
+                <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                     (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                  <label>Requirements</label>
+                  <input class="w3-input w3-border" type="text" [(ngModel)]="service.ApplicationRequirements" />
+                </div>
+              </div>
+              <app-customsection [entityType]="serviceRequestType" [alignment]="'left'" [customFields]="customFields" [entityId]="service.Id" [customFieldValues]="serviceReqLeftCustomFieldValues"></app-customsection>
+            </div>
+            <div class="w3-container w3-half marginform">
+              <div class="w3-full">
+                <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                     (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                  <label>Remarks</label>
+                  <textarea class="w3-input w3-border" [(ngModel)]="service.ApplicationRemarks"></textarea>
+                </div>
+              </div>
+
+              <app-customsection [entityType]="serviceRequestType" [alignment]="'right'" [customFields]="customFields" [entityId]="service.Id" [customFieldValues]="serviceReqRightCustomFieldValues"></app-customsection>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="activeContainer == 'tabCost'" class="w3-container w3-white">
+        <div class="w3-full w3-margin-top">
+          <button type="button" (click)="addServiceCostCustomField()" class="w3-button w3-secondary w3-border w3-round-large w3-right">+ Add New Field</button>
+        </div>
+        <div class="w3-row w3-padding ">
+          <div class="w3-full">
+            <div class="w3-half marginform">
+              <div class="w3-half">
+                <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                     (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                  <label>Expected Cost</label>
+                  <input class="w3-input w3-border" type="text" placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" [(ngModel)]="service.ExpectedCost" />
+                </div>
+              </div>
+              <div class="w3-half w3-padding-left-10">
+                <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                     (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                  <label>Actual Cost</label>
+                  <input disabled="disabled" class="w3-input w3-border" type="text" placeholder="$" mask="separator.2" thousandSeparator="," separatorLimit="9999999999999" prefix="$" [(ngModel)]="serviceActualCost" />
+                </div>
+              </div>
+              <app-customsection [entityType]="serviceCostType" [alignment]="'left'" [customFields]="customFields" [entityId]="service.Id" [customFieldValues]="serviceCostLeftCustomFieldValues"></app-customsection>
+            </div>
+            <div class="w3-container w3-half marginform">
+              <app-customsection [entityType]="serviceCostType" [alignment]="'right'" [customFields]="customFields" [entityId]="service.Id" [customFieldValues]="serviceCostRightCustomFieldValues"></app-customsection>
+            </div>
+          </div>
+        </div>
+        <div class="w3-container">
+          <div class="w3-row" *ngIf="service.Id">
+            <div class="w3-bar w3-center w3-margin-top-large w3-margin-bottom-large w3-border-secondary">
+              <div class="w3-left">
+                <button [ngClass]="showStepsCost?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-border w3-border-grey'" (click)="showStepsCost = !showStepsCost">{{showStepsCost ? '-':'+'}} Steps Cost</button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="showStepsCost" class="w3-row">
+            <div class="w3-responsive">
+              <table class="w3-table-all">
+                <thead>
+                  <tr>
+                    <th>Steps</th>
+                    <th>Time Cost</th>
+                    <th>Material Cost</th>
+                    <th>Total Cost</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of stepDetails.Item2">
+                    <td><a class="w3-cursor" (click)="openCostModal(data)">{{data.Item1.StartDate | date:'MM/dd/yyyy HH:mm'}}</a></td>
+                    <td>${{getTotalTimeCost(data.Item3) | number : '1.1-2'}}</td>
+                    <td>${{getTotalMaterialCost(data.Item2) | number : '1.1-2'}}</td>
+                    <td>${{getTotalCost(data.Item3, data.Item2) | number : '1.1-2'}}</td>
+                  </tr>
+                  <tr *ngIf="stepDetails.Item2.length > 0">
+                    <td><b>Total</b></td>
+                    <td></td>
+                    <td></td>
+                    <td>${{getAllTotalCost(stepDetails, 0) | number : '1.1-2'}}</td>
+                  </tr>
+                  <tr *ngIf="stepDetails.Item2.length == 0">
+                    <td>No Records Found.</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="activeContainer == 'tabContacts'" class="w3-container w3-white" permissionCheck="4.2.19">
+        <div class="w3-row w3-padding ">
+          <div class="w3-full">
+            <app-contactinformation [leadId]="service.LeadId" [dataSource]="contactInformations" [additionalInfo]="false" [entityType]="entityType" [entityId]="service.Id"></app-contactinformation>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="activeContainer == 'tabNotes'" class="w3-container w3-white" permissionCheck="4.2.20">
+        <div class="w3-row w3-padding ">
+          <div class="w3-full">
+            <app-notesinfo [entityType]="entityType" [notesDataSource]="notesInfos" [entityId]="service.Id"></app-notesinfo>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="activeContainer == 'tabFiles'" class="w3-white ">
+        <div class="w3-margin w3-animate-opacity">
+          <h6 class="w3-left">Files</h6>
+          <div class="w3-row">
+            <app-sf-file-explorer [entity]="entityType" [entityNumber]="entityNumber"></app-sf-file-explorer>
+          </div>
+        </div>
+      </div>
+      <div class="w3-row">
+        <div class="w3-margin w3-right">
+          <button [disabled]="isSaveDisabled" class="w3-button w3-secondary w3-border w3-round-large" (click)="saveService()">Save</button>
+        </div>
+      </div>
+    </div>
+    <br />
+  </div>
+</div>
+<div class="row">
+  <div *ngIf="addCustomToggle" class="w3-modal w3-show">
+    <div class="w3-modal-content w3-secondary w3-round-large w3-secondary-button">
+      <div class="w3-row">
+        <div class="w3-container w3-center">
+          <p>Add Field</p>
+          <span (click)="closeError()" class="w3-button w3-display-topright">&times;</span>
+        </div>
+        <app-addnewfield [addCustomToggle]="addCustomToggle" [entityTypeId]="entityType" (dataExist)="dataExist($event)" (saveSuccess)="saveSuccess($event)"></app-addnewfield>
+      </div>
+    </div>
+  </div>
+</div>

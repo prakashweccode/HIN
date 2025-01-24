@@ -1,0 +1,35 @@
+<div class="w3-card-2 w3-white w3-small w3-margin-right w3-margin-left w3-round-large w3-animate-zoom">
+  <div class="w3-container">
+    <div class="">
+      <h4>Security Permission</h4>
+    </div>
+    <div class="w3-container w3-white">
+      <div class="w3-row w3-padding ">
+        <div class="w3-full">
+          <div class="w3-half w3-container marginform">
+            <div class="w3-full" permissionCheck="10.6.1">
+              <label>Group Name</label>
+              <select class="w3-input w3-border" [(ngModel)]="groupId" (change)="groupChange()" permissionCheck="10.6.1">
+                <option value="0">-- Select --</option>
+                <option *ngFor="let group of userGroups" value="{{group.UserGroupId}}">{{group.Name}}</option>
+              </select>
+            </div>
+            <div class="w3-full">
+              <button class="w3-button w3-right w3-secondary w3-round-large">Cancel</button>
+              <button (click)="saveChanges()" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small">Save</button>
+              <button [disabled]="treeModel.length === 0" (click)="collapseAll()" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small">Collapse All</button>
+              <button [disabled]="treeModel.length === 0" (click)="expandAll()" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small">ExpandAll</button>
+            </div>
+          </div>
+          <div class="w3-half w3-container marginform">
+
+            <div class="w3-full" *ngIf="treeModel.length > 0">
+              <label>Permissions</label>
+              <tree-view [nodeData]="treeModel" [treeData]="treeModel"></tree-view>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
