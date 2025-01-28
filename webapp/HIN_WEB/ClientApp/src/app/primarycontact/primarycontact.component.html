@@ -53,11 +53,21 @@
         <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.Extension" />
       </div>
       <div class="w3-half w3-padding-left-10">
-        <label>Office Number</label>
+        <label>Home Number</label>
         <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.OfficeNumber" />
       </div>
     </div>
 
+    <!--<div class="w3-row">
+      <div class="w3-half">
+        <input id="cont1" type="checkbox" [(ngModel)]="contactInfo.IsContact" />
+        <label for="cont1">&nbsp;Have Emergency Contact?</label>
+      </div>
+      <div class="w3-half w3-padding-left-10" *ngIf="contactInfo.IsContact">
+        <label>Emergency Contact</label>
+        <input class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.EmergencyContact" />
+      </div>
+    </div>-->
 
 
     <!--<div class="w3-half w3-padding-left-10">

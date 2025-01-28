@@ -300,7 +300,7 @@ export class AgendaComponent implements OnInit {
   }
 
   getServiceByStatus(id, tab) {
-    debugger;
+    
     this.filterByServiceStatusById = id;
     this.getByStatus(id, tab);
     //this.getPipeLineGroup('tab10');
@@ -1151,7 +1151,7 @@ export class AgendaComponent implements OnInit {
   }
 
   updateEventPipelineId(eventId, pipelineId) {
-    debugger;
+    
     this.addEventService.updateEventPipelineId(eventId, pipelineId).subscribe(data => {
       this.getPipeLineGroup('Event');
     }, err => { }, () => { });

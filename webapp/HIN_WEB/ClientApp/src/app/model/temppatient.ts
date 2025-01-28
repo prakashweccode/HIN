@@ -86,4 +86,7 @@ export class Temppatient {
   public IsConsentEn: boolean;
   public IsConsentimiento: boolean;
   public PracticeCode: string;
+  public PatientNumber: string;
+  public Status: number;
+  public ServicesId: number;
 }

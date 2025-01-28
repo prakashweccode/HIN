@@ -31,7 +31,7 @@ export class OnedrivegraphAuthService {
         form: false
       },
     },
-      { redirect_uri: '/' }
+      { redirect_uri: window.location.origin }
     );
 
     hello.on('auth.login', function (auth) {
@@ -48,11 +48,11 @@ export class OnedrivegraphAuthService {
           if (data) {
             explorerValues.authentication.user = data;
             localStorage.setItem('hin-msft-user', JSON.stringify(data));
-            graphService.ValidateUserInHinPortal(explorerValues.authentication.user).subscribe(_data => {
-              if (_data) {
-                localStorage.setItem("userDetail", JSON.stringify(_data));
-              }
-            });
+            //graphService.ValidateUserInHinPortal(explorerValues.authentication.user).subscribe(_data => {
+            //  if (_data) {
+            //    localStorage.setItem("userDetail", JSON.stringify(_data));
+            //  }
+            //});
           }
         });
         //const params = '?$select=displayName,mail,userPrincipalName,jobTitle,mobilePhone,department,officeLocation';

@@ -45,6 +45,8 @@ export class Contactinformation {
   public PartnerId: number;
   public IsPrimary: boolean;
   public Website: string;
+  public IsContact: boolean;
+  public EmergencyContact: string;
 }
 export class DealContact {
   public Id: number;

@@ -14,7 +14,7 @@ export class SignpadComponent implements OnInit, AfterViewInit {
   @ViewChild('sPad', { static: true }) signaturePadElement: ElementRef | undefined;
   signaturePad: any;
 
-
+  @Input() canvasWidth: number;
   @Output() image = new EventEmitter();
   @Input() color: string = 'rgb(0,0,0)';
 

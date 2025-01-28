@@ -1,0 +1,437 @@
+<div class="top_header">
+  <header class="px-3 py-1 text-white">
+    <div class="container">
+      <div class="row mx-0">
+        <div class="col-lg-8 col-12 px-0">
+          <ul class="nav justify-content-center justify-content-lg-start">
+
+            <li>
+              <a href="#" class="nav-link px-2 text-white em_sec">
+                <i class="fa-solid fa-envelope-open-text pr-2" style="color:#27a2bd;"></i> info@healthinformation.network
+              </a>
+            </li>
+            <li><a href="#" class="nav-link px-2 text-white em_sec"><i class="fa-solid fa-headphones-simple pr-2" style="color:#27a2bd;"></i> 24/7 Customer Support</a></li>
+          </ul>
+        </div>
+        <!--<div class="col-lg-4 col-12 px-0">
+          <ul class="nav justify-content-center justify-content-lg-end">
+            <li><a href="#" class="nav-link px-2"><i class="fa-brands fa-whatsapp" style="color:#27a2bd;"></i></a></li>
+            <li><a href="#" class="nav-link px-2"><i class="fa-brands fa-linkedin" style="color:#27a2bd;"></i></a></li>
+            <li><a href="#" class="nav-link px-2"><i class="fa-brands fa-youtube" style="color:#27a2bd;"></i></a></li>
+          </ul>
+        </div>-->
+      </div>
+    </div>
+  </header>
+
+  <div class=""></div>
+</div>
+<div class="res_divmb">
+  <div class="logo_res">
+    <a href="index.html"><img src="../../assets/images/logo-hin92.png" /></a> <a (click)="loginRedirect()" class="log_mb">Log In</a>
+  </div>
+
+
+
+
+
+</div>
+<div class="header">
+  <div class="container">
+    <div class="row d_flex row_sec">
+      <div class="col-md-3 col-sm-6 col logo_section mobile_hide">
+        <div class="full">
+          <div class="center-desk">
+            <div class="logo">
+              <a href="index.html"><img src="../../assets/images/logo-hin92.png" /></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-7 col-sm-12">
+        <nav class="navigation navbar navbar-expand-md navbar-dark">
+          <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04"
+             aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+             <span class="navbar-toggler-icon"></span>
+          </button> -->
+          <button class="navbar-toggler" type="button" aria-label="Toggle navigation" (click)="toggleSideBar()">
+            <span class="navbar-toggler-icon">
+            </span>
+          </button>
+          <div class="collapse navbar-collapse d-none d-md-block" id="navbarsExample04">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="index.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">About Us </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">News</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Contact Us</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div class="col-md-2 mobile_hide">
+        <ul class="email text_align_right desk_log">
+          <li class="d_none"><a href="#" class="log" (click)="loginRedirect()">Log In</a></li>
+          <li class="d_none"> <a href="#" class="user"><i class="fa fa-user" aria-hidden="true"></i></a> </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end header inner -->
+<!-- end header -->
+<!-- Start Mobile SideBar -->
+<aside id="mobileSidebar" class="bg-light mobileAsideBar-close" role="navigation">
+  <div class="d-flex justify-content-end">
+    <div class="mr-3 mt-2">
+      <i class="fa-solid fa-circle-xmark fa-xl" style="color: #27a2bd;" (click)="toggleSideBar()"></i>
+    </div>
+  </div>
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a class="nav-link" href="index.html">Home</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">About Us </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">News</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Contact Us</a>
+    </li>
+  </ul>
+</aside>
+
+
+<!-- Sidebar Overlay -->
+<div class="position-absolute d-none" id="sidebarOverlay" style="left: 0;right: 0;height: 100vh;top: 0;width: 100vw;z-index: 5;background-color: rgba(0, 0, 0, 0.548);" (click)="toggleSideBar()"></div>
+<!-- Sidebar Overlay -->
+<!-- End Mobile SideBar -->
+<!-- top -->
+<div class="full_bg">
+  <div class="slider_main">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- carousel code -->
+          <div id="carouselExampleIndicators" class="carousel slide">
+            <ol class="carousel-indicators">
+              <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+              <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+              <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+              <!-- first slide -->
+              <div class="active">
+                <div class="carousel-caption relative">
+                  <div class="row d_flex">
+                    <div class="col-md-6">
+
+
+
+                      <div class="board">
+                        <span class="medical-logo"> <img src="../../assets/images/medical-logo.png"> </span>
+                        <h3>
+                          Medical  <br>
+                          Associates <br>
+                          Network
+
+                        </h3>
+                        <p>
+                          We are a team of experienced and compassionate healthcare professionals who are committed to providing you with the highest quality of care in both English and Spanish. We offer a wide range of services, including:
+                        </p>
+                        <ul>
+                          <li><i class="fa fa-circle" aria-hidden="true"></i> Primary care</li>
+                          <li><i class="fa fa-circle" aria-hidden="true"></i> Internal medicine</li>
+                          <li><i class="fa fa-circle" aria-hidden="true"></i> Pediatrics</li>
+                          <li><i class="fa fa-circle" aria-hidden="true"></i> Pediatrics</li>
+                          <li><i class="fa fa-circle" aria-hidden="true"></i> Women's health</li>
+                          <li><i class="fa fa-circle" aria-hidden="true"></i> Urgent care</li>
+                        </ul>
+
+                        <p class="phra_mb1">
+                          Your health information is safe with us.
+                          We are proud to be partners with Health Information Network, a leading provider of healthcare IT solutions. This partnership allows us to meet the highest standards of HIPAA and PCI compliance, so you can be confident that your medical records and patient information are safe and secure.
+                          Call us today at (786) 638-1717 to learn more or to schedule an appointment.
+                        </p>
+
+
+                        <!--
+                                                               <div class="link_btn">
+                                                                  <input id="search-input" type="search" placeholder="Search Site" id="form1"
+                                                                     class="" />
+                                                                  <i class="fa fa-search" style="cursor: pointer;" aria-hidden="true"></i>
+
+                                                               </div>-->
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 order_2_mobile">
+                      <div class="banner_img">
+                        <div class="dicover_sec">  <a href="#" class="dicover"> Dicover More <i class="fa fa-arrow-right" aria-hidden="true"></i></a></div>
+                        <figure><img class="img_responsive" src="../../assets/images/banner_img.png">  </figure>
+
+                        <h4> <b> Latest Health Information News </b>	 </h4>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end banner -->
+<!-- testimonial  -->
+<div class="testimonial_slide_bg">
+  <div class="container">
+    <div class="row d_flex d_grid text_dev">
+      <div class="col-md-6 order_3_mobile">
+        <div class="shop_img text_align_center text_health" data-aos="fade-right">
+
+          <p>
+            Your health information is safe with us.
+            We are proud to be partners with Health Information Network, a leading provider of healthcare IT solutions. This partnership allows us to meet the highest standards of HIPAA and PCI compliance, so you can be confident that your medical records and patient information are safe and secure.
+            Call us today at (786) 638-1717 to learn more or to schedule an appointment.
+          </p>
+
+          <div id="carouselExampleControls" class="carousel slide top_spaceslide" data-ride="carousel">
+            <div class="carousel-inner border_div">
+              <div class="carousel-item w3-animate-opacity active">
+                <img class="d-block w-100 " src="../../assets/images/1.jpg" alt="First slide">
+              </div>
+              <div class="carousel-item w3-animate-opacity">
+                <img class="d-block w-100" src="../../assets/images/2.jpg" alt="Second slide">
+              </div>
+              <div class="carousel-item w3-animate-opacity">
+                <img class="d-block w-100" src="../../assets/images/3.jpg" alt="Third slide">
+              </div>
+              <div class="carousel-item w3-animate-opacity">
+                <img class="d-block w-100" src="../../assets/images/4.jpg" alt="Third slide">
+              </div>
+              <div class="carousel-item w3-animate-opacity">
+                <img class="d-block w-100" src="../../assets/images/5.jpg" alt="Third slide">
+              </div>
+            </div>
+            <a class="carousel-control-prev" (click)="plusSlides(-1)" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" (click)="plusSlides(1)" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+
+
+        </div>
+      </div>
+
+
+      <div class="col-md-6 order_1_mobile">
+        <div class="right_sec ">
+          <div class="dicover_sec_btn">
+            <b> Patient Forms </b>
+            <!--<select  class="w3-button w3-round-large w3-right"  >
+              <option value="0" disabled >Patient ID</option>
+              <option *ngFor="let data of lstForms;" value="{{data.Id}}">{{data.Activity}}</option>
+            </select>-->
+            <a href="#" class="dicover_btn" id="myBtn" (click)="loginFormsRedirect()">
+              Patient ID
+              <i class="fa fa-arrow-right" aria-hidden="true"></i>
+            </a>
+
+          </div>
+          <img class="" src="../../assets/images/right.png" alt="#" />
+
+        </div>
+      </div>
+
+      <div class="col-md-6 order_2_mobile_mb">
+        <div class="banner_img">
+          <div class="dicover_sec">  <a href="#" class="dicover"> Dicover More <i class="fa fa-arrow-right" aria-hidden="true"></i></a></div>
+          <figure><img class="img_responsive" src="../../assets/images/banner_img.png">  </figure>
+
+          <h4> <b> Latest Health Information News </b>	 </h4>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isOpen" id="myModal" class="modal" style="display:block">
+  <span class="close">&times;</span>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <span (click)="closePracticeCode()" class="w3-button w3-display-topright-custom">&times;</span>
+        <div id="bottom_footer" class="password_sec text_align_center">
+
+          <div class="desktop">
+            <img class="imgHinLogo" src="../../assets/images/medical-logo.png" alt="#">
+
+          </div>
+          <div class="inner_div">
+            <h2> Health <br>  Information<br> Network </h2>
+
+            <div class="pass_sec">
+              <h3> Enter Patient ID </h3>
+              <input id="search-input1" type="password" placeholder="********" maxlength="8" class="" [(ngModel)]="patientNumber">
+              <input id="search-input12" type="Submit" placeholder=" " class="" (click)="patientIdValidate()">
+
+            </div>
+
+          </div>
+
+          <div class="created mb_res">
+            <h4> Created by:  <img src="../../assets/images/created.png" alt="#">  </h4>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="isForms" class="w3-modal" style="display:block;">
+  <div class="w3-modal-content w3-round-large w3-secondary-button">
+    <span (click)="closeTemplate()" class="w3-button w3-margin-right-small w3-display-topright">&times;</span>
+    <div class="w3-small sfcenter w3-margin-top">
+      <div class="w3-animate-opacity marginform">
+        <div class="w3-row w3-round-large w3-secondary-button w3-container w3-padding">
+          <h5 class="w3-center"> Forms </h5>
+          <!--<button type="button" class="w3-button w3-round-large w3-right w3-border w3-secondary mr30">+ Add New Field</button>-->
+        </div>
+        <div class="w3-row w3-padding w3-primary-l4">
+          <div class="w3-row">
+            <div class="w3-container w3-half">
+              <div class="w3-full">
+                <label>Appointment</label>
+                <select class="w3-input w3-border" [(ngModel)]="patientAppointmentId" (change)="appointmentChange(patientAppointmentId)" >
+                  <option value="0" disabled>--Select--</option>
+                  <option *ngFor="let data of lstPatientAppointmentForms"  [ngValue]="data.Id">{{data.Name}}-{{data.ServiceNumber}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w3-row w3-round-bottom-left w3-round-bottom-right w3-secondary-button">
+          <div class="w3-margin w3-right">
+            <button class="w3-button w3-border w3-round-large w3-margin-right w3-secondary" (click)="gotoForms(patientAppointmentId)" >Ok</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- end testimonial -->
+<!-- testimonial -->
+<!-- Footer -->
+<footer class="text-lg-start text-muted">
+  <section class="py-5 sec_tp_ft bottom_space_ft">
+    <div class="container  text-md-start mt-5">
+      <!-- Grid row -->
+      <div class="row mt-3 footer_sectop">
+        <!-- Grid column -->
+        <div class="col-md-4 footer_into">
+          <!-- Content -->
+          <h6 class="text-uppercase fw-bold mb-3 ">
+            MEDICAL ASSOCIATES NETWORK
+
+          </h6>
+          <p class="hide_text">
+            We are committed to providing you with the highest quality of medical care in a patient-centered environment. We value transparency and honesty in our communication, and are here to answer any questions you may have about your health.
+          </p>
+          <span class="ft_text">
+            Experienced and compassionate healthcare team
+            offering a wide range of services in English and Spanish.
+          </span>
+        </div>
+        <!-- Grid column -->
+        <!-- Grid column -->
+        <div class="col-md-2 col- footer_into box_ft1 new_ft1 f2_space">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-3 ">
+            MENU
+          </h6>
+          <p>
+            <a href="#!" class="text-reset ">Home</a>
+          </p>
+          <p>
+            <a href="#!" class="text-rese">About Us</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset ">News</a>
+          </p>
+          <p>
+            <a href="#!" class="text-reset ">Contact Us</a>
+          </p>
+
+
+        </div>
+        <!-- Grid column -->
+        <!-- Grid column -->
+        <div class="col-md-3 col- footer_into box_ft1 new_ft1">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-3 ">Contact</h6>
+          <p class=""><i class="fas fa-home me-3  mx-2"></i> 3107 W Hallandale Beach  </p>
+          <p class=""><i class="fas fa-home me-3  mx-2" style="visibility:hidden;"></i> Blvd • Suite 102 • Pembroke  </p>
+          <p class=""><i class="fas fa-home me-3  mx-2" style="visibility:hidden;"></i> Park, FL, 33009  </p>
+          <p class="">
+            <i class="fas fa-envelope me-3  mx-2"></i>
+            info@example.com
+          </p>
+          <p class=""><i class="fas fa-phone me-3  mx-2"></i> (786) 638-4747</p>
+          <p class=""><i class="fas fa-print me-3  mx-2"></i>  (954) 367-3763</p>
+        </div>
+        <!-- Grid column -->
+        <!-- Grid column -->
+        <div class="col-md-3 footer_into space_box4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-3">
+            Newsletter
+          </h6>
+          <div class="news">
+            <input type="text" id="mc_email1" class="field-input" name="mc_email"
+                   placeholder=" Enter Your Email Address...">
+            <input class="subscribe-btn bgcolor" id="btn_newsletter_1" type="submit" value="Sign Up">
+          </div>
+
+        </div>
+        <!-- Grid column -->
+
+      </div>
+      <!-- Grid row -->
+    </div>
+  </section>
+  <!-- Section: Links  -->
+  <!-- Copyright -->
+  <div class="text-center p-4 footer_bottom">
+    HEALTH INFORMATION NETWORK Copyright © 2023. All rights reserved.
+    <!-- <a class="text-reset fw-bold " href=""></a> -->
+  </div>
+  <!-- Copyright -->
+</footer>

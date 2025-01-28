@@ -48,6 +48,23 @@ import { PrimarycontactComponent } from '../primarycontact/primarycontact.compon
 import { Services } from '../model/services';
 import { OnedrivegraphService } from '../onedriveservice/onedrivegraph.service';
 import { Gender } from '../model/gender';
+import { Templatelist } from '../model/templatelist';
+import { TemplateService } from '../template/template.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { VoiceToTextService } from '../voice-to-text/voice-to-text.service';
+import jsPDF from 'jspdf';
+import SignaturePad from 'signature_pad';
+import { Template, TemplateStatus } from '../model/template';
+import { Temppatient } from '../model/temppatient';
+import { Onedriveconfig } from '../helper/onedriveconfig';
+import { stringify } from 'uuid';
+import { GraphService } from '../officeauth/graph.service';
+import { formatDate } from '@angular/common';
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { parseInput } from 'rrule/dist/esm/src/rrulestr';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { debuglog } from 'util';
+
 
 @Component({
   selector: 'app-addleads',
@@ -61,7 +78,7 @@ export class AddleadsComponent implements OnInit {
   @ViewChild(PrimarycontactComponent, { static: false }) public primaryContact: PrimarycontactComponent;
   @ViewChildren(CustomsectionComponent) public CustomFieldSection: QueryList<CustomsectionComponent>;
   //@ViewChild(CustomsectionComponent, { static: false }) public CustomFieldSection: CustomsectionComponent;
-  constructor(public addGroupService: AddgroupService, private service: ContactinformationService, public categoryService: CategorylistService, private notesService: NotesinfoService, private customFieldService: CustomFieldsService, private contactService: ContactinformationService, public router: Router, private userService: UsersService, private organizationService: ListorganizationService, private addLeadService: AddleadsService, private notyHelper: NotyHelper, private addCurrencyService: AddcurrencyService, public dataShared: Datashared, public addEventShowService: AddeventshowService, public pipelineService: PipelineService, public dealService: AdddealsService, public listDealService: ListdealsService, public addPartCatalogService: AddpartcatalogService, private modalService: ModalService, public addQuoteService: AddquoteService, public addUserService: AdduserService, private graphService: OnedrivegraphService) { }
+  constructor(private speechService: VoiceToTextService, private sanitizer: DomSanitizer, public addGroupService: AddgroupService, private service: ContactinformationService, public categoryService: CategorylistService, private notesService: NotesinfoService, private customFieldService: CustomFieldsService, private contactService: ContactinformationService, public router: Router, private userService: UsersService, private organizationService: ListorganizationService, private addLeadService: AddleadsService, private notyHelper: NotyHelper, private addCurrencyService: AddcurrencyService, public dataShared: Datashared, public addEventShowService: AddeventshowService, public pipelineService: PipelineService, public dealService: AdddealsService, public listDealService: ListdealsService, public addPartCatalogService: AddpartcatalogService, private modalService: ModalService, public addQuoteService: AddquoteService, public addUserService: AdduserService, private graphService: OnedrivegraphService, public templateService: TemplateService, private graph: GraphService) { }
   contactInfo: Contactinformation = new Contactinformation();
   newContactToggle: boolean = false;
   contactModal: boolean = false;
@@ -133,28 +150,66 @@ export class AddleadsComponent implements OnInit {
   public lstLeadGroupMapping: Array<LeadGroupMapping> = [];
   listPipeLineGroup: Array<PipelineGroup> = [];
   selectedPipeIndex = 0;
-  firstLetter: string = "TEMP-P";
+  firstLetter: string = "P";
   public listofPipeline: Array<Pipeline>;
   lstDeal: Array<Deal> = [];
   deal: Deal = new Deal();
   allUsers: Array<Users> = [];
   listGender: Array<Gender> = [];
+  public lstTemplate: Array<Templatelist> = [];
+  public templateId: number;
+  strSelectedTemplate: string = '';
+  selectedTemplatePage: any = '';
+  selectedTemplateHtml: any = '';
+  selectedTemplateName: string = '';
+  public isTemplate: boolean = false;
+  currentCtrl: HTMLInputElement;
+  signaturePad: any;
+  image: any;
+  loggedUserData: Users = new Users();
+  selectedAppointment: any;
+  previewHtml: any = '';
+  isPreview: boolean = false;
+  show = false;
+  template: Template = new Template();
+  appointmentId: number = 0;
+  lstLead: Array<Lead> = [];
+  lstTempPatient: Array<Temppatient> = [];
+  UserName: any;
+  public userInformation: UserDetail;
+  isAdmin: any;
+  public isOpen: boolean = false;
+  patientAppointmentId: number;
+  lstAppointment: Array<Services> = [];
+  public selectedGroupId: any = [];
+  public domain: string;
+  public showAge: any;
+  dropdownSettings: IDropdownSettings = {};
+  selectedItems: any = {};
+  public showEmergencyContact: boolean = true;
 
   ngOnInit() {
+    let urlDomain = 'medicalassociates';
+    this.domain = urlDomain;
+    this.getTemplateFormsList();
     if (this.lead && this.lead.LeadStatus == null) {
       this.lead.LeadStatus = 3;
     }
-
-
+    this.dropdownSettings = {
+      idField: 'UserGroupId',
+      textField: 'Name',    
+     
+    };
+    
     this.loggedUser = JSON.parse(localStorage.getItem("userDetail"));
     //this.lead.Owner = this.loggedUser.User.UserId;
     this.userId = this.loggedUser.User.UserId;
     this.ownerName = this.loggedUser.User.FirstName;
     this.getUsers();
-    this.getUserGroups();
     this.getPipeLineGroup();
     this.getLeadOriginType();
     this.getSocialMediaType();
+    this.getUserGroups();
     this.getPipeline();
     this.getVendor();
     this.getPartner();
@@ -218,9 +273,20 @@ export class AddleadsComponent implements OnInit {
   getLeadById(id) {
     this.addLeadService.getLeadById(id).subscribe(data => {
       this.lead = data;
+      let lstSecurityGroup = data.SecurityGroupId.split(',');
+      this.selectedItems = [];
+      lstSecurityGroup.forEach(x => {
+        var group = { UserGroupId: 1, Name: '' };
+        group.UserGroupId = parseInt(x);
+        group.Name = this.lstGroups.find(y => y.UserGroupId == group.UserGroupId).Name
+        this.selectedItems.push(group);
+      });
+      
     }, err => { }, () => { });
   }
 
+ 
+                                                                                                                                                                                                                                          
   calculateCreatedByDays(date) {
     if (date) {
       var start = moment(date);
@@ -331,14 +397,14 @@ export class AddleadsComponent implements OnInit {
     this.addGroupService.GetUserGroups().subscribe(data => {
       if (data)
         this.lstGroups = data;
-      if (!this.lead.SecurityGroupId || this.lead.SecurityGroupId < 1) {
-        if (this.lstGroups.length > 0) {
-          var adminGroup = this.lstGroups.find(x => x.Name == "admin");
-          if (adminGroup) {
-            this.lead.SecurityGroupId = adminGroup.UserGroupId;
-          }
-        }
-      }
+      //if (!this.lead.SecurityGroupId || this.lead.SecurityGroupId < 1) {
+      //  if (this.lstGroups.length > 0) {
+      //    var adminGroup = this.lstGroups.find(x => x.Name == "admin");
+      //    if (adminGroup) {
+      //      this.lead.SecurityGroupId = adminGroup.UserGroupId;
+      //    }
+      //  }
+      //}
     }, err => { });
   }
 
@@ -755,18 +821,40 @@ export class AddleadsComponent implements OnInit {
     });
   }
 
-  saveLead() {
+  async getMicrosoftAccount(user: any): Promise<any> {
+    await this.graphService.executeQuery('POST', Onedriveconfig.graphV1UrlExcludeMe + 'users', user).subscribe(result => {
+      if (result) {
+        console.log(result);
+      }
 
+    }, err => {  }, () => { });
+  }
+
+
+
+  saveLead() {
+    const inputFields = document.getElementsByName('mandatory');
+    for (let i = 0; i < inputFields.length; i++) {
+      const inputField = inputFields[i] as HTMLInputElement;
+
+      if (!inputField.value) {
+    
+        inputField.style.border = '1px solid red';
+        
+      } else {
+        inputField.style.border = '1px solid #ccc';
+      }
+    }
+    this.lead.SecurityGroupId = this.selectedItems.map(item => item.UserGroupId).join(',');
     if (!this.lead.OriginsDate) {
       this.lead.OriginsDate = this.changeEstimateDateFormat(new Date().toISOString());
     }
-    console.log(this.lead);
-    if (!this.lead.LeadName || !this.lead.SecurityGroupId || !this.lead.PatientLastName || !this.lead.Age || !this.lead.BatchNumber) {
+    if (this.isSaveDisabled = false) {
+      this.notyHelper.ShowNoty("Please Fill in Required Field");
+    }
+    if (!this.lead.LeadName || !this.lead.SecurityGroupId || !this.lead.PatientLastName || !this.lead.Age || !this.lead.BatchNumber || !this.lead.Address || !this.lead.EmailAddress || !this.lead.City || !this.lead.State || !this.lead.Country || !this.lead.ZipCode || !this.lead.CellNumber) {
       this.notyHelper.ShowNoty("Please fill required field");
     }
-    //if (this.reasonNotes && !this.lead.Reason) {
-    //  this.notyHelper.ShowNoty("Please enter the reason");
-    //}
     else {
       this.isSaveDisabled = true;
       this.addLeadService.saveLead(this.lead).subscribe(data => {
@@ -775,6 +863,24 @@ export class AddleadsComponent implements OnInit {
             this.contactInformations[i].EntityId = data.LeadId;
             this.contactInformations[i].Type = this.entityType;
           }
+
+          /*var Name = this.lead.LeadName + this.lead.PatientLastName;*/
+          //const UserName = {
+          //  displayName: Name,
+          //  identities: [
+          //    {
+          //      signInType: this.lead.UserName,
+          //      issuer: 'https://login.microsoftonline.com/d5012b81-b915-4802-a60b-8c494578cbd4/v2.0',
+          //      issuerAssignedId: this.lead.UserName
+          //    }
+          //  ],
+          //  passwordProfile: {
+          //    password: 'Test@123',
+          //    forceChangePasswordNextSignIn: true
+          //  },
+          //  passwordPolicies: 'DisablePasswordExpiration'
+
+          //};
           this.contactService.SaveContactInfos(this.contactInformations).subscribe(data => { }, err => { }, () => { });
         }
         this.entityId = data.LeadId;
@@ -784,7 +890,6 @@ export class AddleadsComponent implements OnInit {
         else {
           this.categoryService.deleteCategoryValues(this.entityType, this.entityId).subscribe(data => { }, err => { }, () => { });
         }
-
         //this.CustomFieldSection.forEach(x => x.SaveCustomFieldValues(data.LeadId));
         this.CustomFieldSection.forEach(x => {
           x.SaveCustomFieldValues(data.LeadId)
@@ -810,12 +915,56 @@ export class AddleadsComponent implements OnInit {
         //  this.CreatePatientEMRFolder(content);
         //}
         this.notyHelper.ShowNoty("Data saved successfully !!!");
+        //
+        //let baseUrl = window.location.origin;
+        //let urlDomain = baseUrl.replace('https://', '');
+        //var Name = this.lead.LeadName + this.lead.PatientLastName;
+        //const UserName = { accountEnabled: true, city: this.lead.City, country: this.lead.Country, department: 'Medical', displayName: Name, givenName: Name, jobTitle: 'Patient', mailNickname: Name, passwordPolicies: 'DisablePasswordExpiration', passwordProfile: { password: 'Test@123', forceChangePasswordNextSignIn: true }, officeLocation: this.lead.Address, postalCode: this.lead.ZipCode, preferredLanguage: 'en-US', state: this.lead.State, streetAddress: this.lead.Address, surname: Name, mobilePhone: this.lead.CellNumber, usageLocation: 'US', userPrincipalName: this.lead.UserName + '@' + urlDomain };
+        //this.graph.PostUser(UserName).then(x => {
+        //  var mail = {
+        //    message: {
+        //      subject: 'HIN-Account Details',
+        //      body: {
+        //        contentType: 'Html',
+        //        content: `<div style=\"width:100%;\">\r\n<p style=\"font-family:Arial;font-weight:bold;font-size:18px;color:gray\">HIN Account</p>\r\n<h1 style=\"color:cornflowerblue;font-family:Arial;font-weight:normal\"> Account Details </h1>\r\n<p style=\"font-family:Arial\">Please use the following account details to access your HIN account</p>\r\n<p style=\"font-family:Arial\">UserName : ${UserName.userPrincipalName}</p>\r\n<p style=\"font-family:Arial\">Password : Test@123</p>\r\n<div style=\"font-family:Arial\">Thanks,</div>\r\n<div style=\"font-family:Arial\">HIN Team</div>\r\n</div>`
+        //      },
+        //      toRecipients: [
+        //        {
+        //          emailAddress: {
+        //            address: this.lead.EmailAddress
+        //          }
+        //        }
+        //      ],
+        //      ccRecipients: [
+        //        {
+        //          emailAddress: {
+        //            address: this.lead.EmailAddress
+        //          }
+        //        }
+        //      ]
+        //    },
+        //    saveToSentItems: 'true'
+        //  };
+        //  this.graph.sendMail(mail);
+
+        //}, err => { });
+
+
+
+
+
         this.isSaveDisabled = false;
         this.reloadCurrentRoute();
         //this.router.navigate(['/listleads']);
       }, err => { }, () => { });
     }
+    if (this.reasonNotes && !this.lead.Reason) {
+      this.notyHelper.ShowNoty("Please enter the reason");
+    }
+    
   }
+
+  
 
   CreatePatientEMRFolder(content: any) {
     let status = this.graphService.checkIfPatientFolderExist(content);
@@ -935,7 +1084,7 @@ export class AddleadsComponent implements OnInit {
   checkTempPatient() {
     if (!(this.liveServices && this.liveServices.length > 0)) {
       if (this.lead.LeadNumber.indexOf("TEMP-") == -1) {
-        this.lead.LeadNumber = "TEMP-" + this.lead.LeadNumber;
+        this.lead.LeadNumber =  this.lead.LeadNumber;
         this.firstLetter = "TEMP-"
 
       }
@@ -1013,4 +1162,459 @@ export class AddleadsComponent implements OnInit {
     })
   }
 
+  getTemplateFormsList() {
+    this.addLeadService.getTemplateList().subscribe(data => {
+      if (data) {
+        this.lstTemplate = data;
+      }
+    });
+  }
+
+  editTemplate(data) {
+    this.templateId = data.Id;
+    /*this.loadTemplatePage(this.templateId);*/
+    this.isOpen = true;
+    this.getAppointment(this.lead.LeadId);
+    this.appointmentId = 0;
+  }
+
+  bindPreviewHTML(html) {
+    if (html) {
+      let safeHTML = this.sanitizer.bypassSecurityTrustHtml(html);
+      return safeHTML;
+    }
+  }
+
+  loadTemplatePage(templateId) {
+    if (this.templateId) {
+      this.templateService.getTemplatePageById(this.templateId).subscribe(_data => {
+        if (_data) {
+          this.strSelectedTemplate = _data.templatePage;
+          this.selectedTemplatePage = this.sanitizer.bypassSecurityTrustHtml(_data.templatePage ? _data.templatePage : '');
+          this.selectedTemplateHtml = _data.templateHtml ? _data.templateHtml : '';
+          this.selectedTemplateName = _data.templateName ? _data.templateName : '';
+          this.isTemplate = true;
+          setTimeout(() => {
+            this.bindStartButtonEvent();
+            this.bindStopButtonEvent();
+            this.bindSignatureAdd();
+            this.bindSignatureClear();
+            this.bindLoadSignature();
+            this.bindDefaultValues();
+            this.bindTextFocusoutEvent();
+            this.isOpen = false;
+          }, 500);
+        }
+        else {
+          this.selectedTemplatePage = '';
+          this.selectedTemplateHtml = '';
+        }
+      }, _error => { console.log(_error); }, () => { });
+    }
+  }
+  bindStartButtonEvent() {
+    var buttons = document.getElementsByClassName('app-speech-input-btn');
+    if (buttons && buttons.length > 0) {
+      for (var i = 0; i < buttons.length; i++) {
+        var button = buttons[i] as HTMLButtonElement;
+        button.addEventListener('click', this.voiceToText.bind(this));
+      }
+    }
+  }
+  voiceToText(evt: any) {
+    if (evt) {
+      this.speechService.init(document);
+      var targetElementId = evt.target.name;
+      if (targetElementId) {
+        var txtCtrl = document.getElementById(targetElementId) as HTMLInputElement;
+        txtCtrl.focus();
+        txtCtrl.style.borderColor = "red";
+        this.currentCtrl = txtCtrl;
+        let currentCtrlIndex = parseInt(this.currentCtrl.getAttribute('tabindex'));
+        var stopButton = document.getElementsByName(targetElementId + "_stop")[0];
+        if (stopButton) {
+          stopButton.style.display = 'block';
+          evt.target.style.display = 'none';
+        }
+        this.speechService.counter = currentCtrlIndex;
+        this.speechService.startAllDictation();
+        this.speechService.speechInput().subscribe(data => {
+          //this.currentCtrl.value = data;
+        }, err => { }, () => { });
+      }
+      else {
+        this.currentCtrl = null;
+      }
+    }
+  }
+  bindStopButtonEvent() {
+    var buttons = document.getElementsByClassName('app-speech-stop-btn');
+    if (buttons && buttons.length > 0) {
+      for (var i = 0; i < buttons.length; i++) {
+        var button = buttons[i] as HTMLButtonElement;
+        button.addEventListener('click', this.stopVoiceToText.bind(this));
+      }
+    }
+  }
+  stopVoiceToText(evt: any) {
+    var targetElementId = evt.target.name;
+    var startElementId = targetElementId.replace('_stop', '');
+    var txtCtrl = document.getElementById(startElementId) as HTMLInputElement;
+    this.currentCtrl = txtCtrl;
+    let currentCtrlIndex = parseInt(this.currentCtrl.getAttribute('tabindex'));
+    if (targetElementId && startElementId) {
+      var startButton = document.getElementsByName(startElementId)[0];
+      if (startButton) {
+        startButton.style.display = 'block';
+        evt.target.style.display = 'none';
+      }
+      this.speechService.counter = currentCtrlIndex;
+      this.speechService.stopAllDictation();
+      this.ResetInputBorderColor();
+    }
+  }
+  ResetInputBorderColor() {
+    document.querySelectorAll('[tabindex]').forEach((ctrl: HTMLInputElement) => {
+      if (ctrl)
+        ctrl.style.borderColor = "#999";
+    });
+  }
+  bindSignatureAdd() {
+    var canvas = document.getElementById('signatureCtrl');
+    if (canvas) {
+      var cns = canvas as HTMLCanvasElement;
+      this.loadSignaturePad(cns);
+      cns.addEventListener('click', this.selectSignature.bind(this));
+
+    }
+  }
+  loadSignaturePad(ele: any): void {
+    this.signaturePad = new SignaturePad(document.getElementById('signatureCtrl') as HTMLCanvasElement, {
+      backgroundColor: 'rgba(255, 255, 255, 0)',
+      penColor: 'rgb(0, 0, 0)'
+    });
+  }
+  selectSignature() {
+    this.image = "";
+    const dataURL = this.signaturePad.toDataURL();
+    //const parts = dataURL.split(';base64,');
+    this.image = dataURL;
+  }
+  bindSignatureClear() {
+    var button = document.getElementById('signatureClear');
+    if (button) {
+      var btn = button as HTMLButtonElement;
+      btn.addEventListener('click', this.clear.bind(this));
+    }
+  }
+  clear() {
+    this.signaturePad.clear();
+  }
+  bindLoadSignature() {
+    var button = document.getElementById('loadSignature');
+    if (button) {
+      var btn = button as HTMLButtonElement;
+      btn.addEventListener('click', this.loadSignature.bind(this));
+    }
+  }
+
+  loadSignature() {
+    if (this.loggedUser && this.loggedUser.User && this.loggedUser.User.Signature) {
+      this.signaturePad = new SignaturePad(document.getElementById('signatureCtrl') as HTMLCanvasElement, {
+        backgroundColor: 'rgba(255, 255, 255, 0)',
+        penColor: 'rgb(0, 0, 0)'
+      });
+      this.signaturePad.fromDataURL("data:image/png;base64," + this.loggedUserData.Signature);
+      setTimeout(() => {
+        this.selectSignature();
+      }, 500);
+    }
+  }
+
+  bindDefaultValues() {
+    if (this.strSelectedTemplate && this.lead) {
+      this.setTextControlValue("patientName", this.lead.LeadName);
+      this.setTextControlValue("patientDob", this.getDateStringFormat('YMD', this.lead.Dob, "-"));
+      this.setTextControlValue("patientAge", this.lead.Age);
+      this.setTextControlValue("patientOccupation", this.lead.Occupation);
+      this.setTextControlValue("name1", this.lead.LeadName);
+      this.setTextControlValue("name2", this.lead.LeadName);
+      this.setTextControlValue("firstName", this.lead.FirstName);
+      this.setTextControlValue("lastName", this.lead.LastName);
+      var appointmentDate = formatDate(this.selectedAppointment.AppointmentDate, 'yyyy-MM-dd', 'en-US');
+      this.setTextControlValue("ie_appointmentDate", appointmentDate);
+
+    }
+    return;
+  }
+  setTextControlValue(strId, val) {
+    var txtCtrl = document.getElementById(strId) as HTMLInputElement;
+    if (txtCtrl)
+      txtCtrl.value = val;
+  }
+
+  getDateStringFormat(startType: string, date: any, splitter: string) {
+    let oDate = new Date(date);
+    if (oDate) {
+      switch (startType) {
+        case 'MDY':
+          return ("0" + (oDate.getMonth() + 1)).slice(-2) + splitter + ("0" + oDate.getDate()).slice(-2) + splitter + oDate.getFullYear();
+        case 'DMY':
+          return ("0" + oDate.getDate()).slice(-2) + splitter + ("0" + (oDate.getMonth() + 1)).slice(-2) + splitter + oDate.getFullYear();
+        case 'YMD':
+          return oDate.getFullYear() + splitter + ("0" + (oDate.getMonth() + 1)).slice(-2) + splitter + ("0" + oDate.getDate()).slice(-2);
+        default:
+          return ("0" + oDate.getDate()).slice(-2) + splitter + ("0" + (oDate.getMonth() + 1)).slice(-2) + splitter + oDate.getFullYear();
+      }
+    }
+  }
+
+  bindTextFocusoutEvent() {
+    var textCtrls = document.querySelectorAll('[control-type="text"]');
+    if (textCtrls && textCtrls.length > 0) {
+      for (var i = 0; i < textCtrls.length; i++) {
+        var ctrl = textCtrls[i] as HTMLInputElement;
+        ctrl.addEventListener('focusout', this.assignCtrlTextValue.bind(this));
+      }
+    }
+  }
+
+  assignCtrlTextValue(evt: any) {
+    var txtValue = evt.target.value;
+    var txtElem = evt.target as HTMLInputElement;
+    if (txtElem && txtElem.type === 'textarea') {
+      txtElem.innerText = txtValue;
+    }
+    else {
+      txtElem.value = txtValue;
+    }
+  }
+
+  closeTemplateHtmlOpen() {
+    this.isTemplate = false;
+  }
+
+
+  previewTemplate(templateId) {
+    if (templateId) {
+      this.previewHtml = this.selectedTemplateHtml;
+      this.getFormControlValues();
+      this.isPreview = true;
+    }
+  }
+
+  getFormControlValues() {
+    let formControls = document.querySelectorAll('[binding="true"]');
+    formControls.forEach(ctrl => {
+      let controlType = ctrl.getAttribute('control-type');
+      switch (controlType) {
+        case 'text':
+          let textControl = ctrl as HTMLInputElement;
+          let idText = textControl.id;
+          let textValue = textControl.value;
+          this.previewHtml = this.previewHtml.replace('{#' + idText + '}', textValue);
+          break;
+        case 'radio':
+          let rdoControl = ctrl as HTMLInputElement;
+          if (rdoControl.checked) {
+            let rdoName = rdoControl.name;
+            let rdoValue = rdoControl.value;
+            this.previewHtml = this.previewHtml.replace('{#' + rdoName + '}', rdoValue);
+          }
+          break;
+        case 'checkbox':
+          let chkControl = ctrl as HTMLInputElement;
+          let chkControlName = chkControl.name;
+          if (chkControl.checked == true) {
+            this.previewHtml = this.previewHtml.replace('selected="{#' + chkControlName + '}"', 'checked="true"');
+          }
+          else {
+            this.previewHtml = this.previewHtml.replace('selected="{#' + chkControlName + '}"', '');
+          }
+        default:
+          break;
+      }
+      this.previewHtml = this.previewHtml.replace('{#signature}', this.image);
+    });
+  }
+  closePreview() {
+    this.isPreview = false;
+  }
+
+  appointmentChange(id: number) {
+    if (id && id > 0) {
+      this.templateService.getSelectedAppointmentDetail(id).subscribe(_data => {
+        if (_data) {
+          this.selectedAppointment = _data;
+          
+         
+          /*this.bindDefaultValues();*/
+        }
+      }, _err => { console.log(_err); }, () => { });
+    }
+  }
+
+  sendToOneDrive() {
+
+    if (!this.lead) {
+      this.notyHelper.ShowNoty("Please select an appointment.");
+    }
+    else {
+      var patientName = this.selectedAppointment.FirstName + '_' + this.selectedAppointment.LastName + '_' + this.selectedAppointment.LeadNumber;
+      var appointmentDate = formatDate(this.selectedAppointment.AppointmentDate, 'yyyy-MM-dd', 'en-US');
+      var practiceName = this.selectedAppointment.PracticeName;
+      if (this.previewHtml) {
+        this.show = true;
+        var result: ArrayBuffer;
+        var elementHTML = this.previewHtml;
+        var doc = new jsPDF();
+        var graphServive = this.graphService;
+        var fileName = this.lead.LeadName + "_" + this.lead.LeadNumber + "-" + this.selectedTemplateName;
+       /* var appointmentDate = this.getDateStringFormat("YMD", this.lead.CreatedOn, "-");*/
+        /*var practiceName = this.lead.CompanyName;*/
+        var practiceAddress = this.trimAddress(this.lead.Address);
+        var patientNameEmr = this.lead.LeadName + "_" + this.lead.LeadNumber;
+        //var patientEmr = this.selectedAppointment.PatientEmr;
+        //var templateName = this.selectedTemplateName;
+        doc.html(elementHTML, {
+          callback: function (doc) {
+            // Save the PDF
+            result = doc.output("arraybuffer");
+            //doc.output("pdfobjectnewwindow");
+            //let fileResult = new File([result], "InitialTemplate_1.pdf", { type: "application/pdf" });
+            let urlDomain = "medicalassociates";
+            let content = {
+              "name": fileName + ".pdf",
+              "size": result.byteLength,
+              "file": result
+            }
+            /*this.graph.SaveFile(Onedriveconfig.graphV1Url + 'drive/root:/' + urlDomain + '/' + practiceName + '/' + appointmentDate + '/' + patientName + '/Documents' + ':/content', content.name);*/
+            graphServive.SaveTemplateForAppointment(content, practiceName, appointmentDate, urlDomain, patientName);
+          },
+          margin: [5, 5, 5, 5],
+          autoPaging: 'text',
+          x: 0,
+          y: 0,
+          width: 150, //target width in the PDF document
+          windowWidth: 700 //window width in CSS pixels
+        });
+        this.show = false;
+      }
+      this.template.Status = 1;
+      this.template.AppointmentId = this.appointmentId;
+      this.template.TemplateId = this.templateId;
+      this.templateService.saveTemplate(this.template).subscribe(data => {
+        if (data) {
+          this.notyHelper.ShowNoty("Data saved successfully !!!");
+        }
+      }, err => { console.log(err); }, () => { });
+      this.notyHelper.ShowNoty("File Sent to Ondrive.");
+    }
+  }
+
+  trimAddress(str) {
+    return this.trim(str, 10);
+  }
+  trim(str, length) {
+    return str.substring(0, length);
+  }
+
+  saveAsDraft(templateId, appointmentId, draftTemplate: HTMLDivElement) {
+
+    if (templateId && appointmentId) {
+      this.getFormControlValues();
+      this.template.AppointmentId = appointmentId;
+      this.template.TemplateId = templateId;
+      this.template.Status = TemplateStatus.Draft;
+      this.template.DraftHtml = this.getDraftHtml(draftTemplate.innerHTML);
+      setTimeout(() => {
+        this.templateService.SaveDraftTemplate(this.template).subscribe(_data => {
+          if (_data) {
+            this.notyHelper.ShowNoty("Data Saved Successfully.");
+          }
+        }, err => { console.log(err); }, () => { });
+      }, 2000);
+    }
+  }
+
+  getDraftHtml(html) {
+    let formControls = document.querySelectorAll('[binding="true"]');
+    formControls.forEach(ctrl => {
+      let controlType = ctrl.getAttribute('control-type');
+      switch (controlType) {
+        case 'text':
+          let textControl = ctrl as HTMLInputElement;
+          let idText = textControl.id;
+          let textValue = textControl.value;
+          html = html.replace('{#' + idText + '}', textValue);
+          break;
+        case 'radio':
+          let rdoControl = ctrl as HTMLInputElement;
+          if (rdoControl.checked) {
+            let rdoName = rdoControl.name;
+            let rdoValue = rdoControl.value;
+            html = html.replace('{#' + rdoName + '}', rdoValue);
+          }
+          break;
+        case 'checkbox':
+          let chkControl = ctrl as HTMLInputElement;
+          let chkControlName = chkControl.name;
+          if (chkControl.checked == true) {
+            html = html.replace('selected="{#' + chkControlName + '}"', 'checked="true"');
+          }
+          else {
+            html = html.replace('selected="{#' + chkControlName + '}"', '');
+          }
+        default:
+          break;
+      }
+    });
+    html = html.replace('{#signature}', this.image);
+    return html;
+  }
+
+  checkIsAdmin() {
+    if (this.userInformation.isAdmin == true) {
+
+    }
+
+  }
+
+  closeTemplate() {
+    this.isOpen = false;
+  }
+
+  
+
+  getAppointment(leadId) {
+    if (leadId) {
+      this.addQuoteService.getAllLeadServices(leadId).subscribe(data => {
+        if (data) {
+          this.lstAppointment = data;
+          
+
+        }
+      }, err => { }, () => { });
+    }
+  }
+
+  ageCalculator(event: any) {
+    if (this.lead.Dob) {
+      const convertAge = new Date(this.lead.Dob);
+      const timeDiff = Math.abs(Date.now() - convertAge.getTime());
+      this.showAge = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365);
+      this.lead.Age = this.showAge;
+    }
+   
+  }
+  onItemSelect(evt: any) {
+  }
+  // Function to save selections
+ 
 }
+
+
+  
+      
+
+

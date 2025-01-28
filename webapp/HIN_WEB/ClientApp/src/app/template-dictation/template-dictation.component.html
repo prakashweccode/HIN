@@ -1,4 +1,4 @@
-<div class="w3-row">
+<!--<div class="w3-row">
   <div class="w3-card w3-white w3-small w3-margin-left w3-margin-right w3-round-large w3-animate-zoom">
     <br />
     <div class="w3-row w3-padding w3-animate-opacity w3-margin-bottom w3-secondary-l5 w3-border-top w3-border-bottom">
@@ -6,24 +6,24 @@
         <b>Template Dictation</b>
       </div>
       <button *ngIf="ddlTemplate.value > 0" class="w3-button w3-primary w3-round-large w3-right w3-margin-left-small" type="button" (click)="saveAsDraft(ddlTemplate.value,patientName.value, templateWrapper);">Save as draft</button>
-      <button *ngIf="ddlTemplate.value > 0" class="w3-button w3-primary w3-round-large w3-right w3-margin-left-small" type="button" (click)="previewTemplate(ddlTemplate.value);">Preview</button>
-      <!--<button *ngIf="ddlTemplate.value > 0 && !isListening" class="w3-button w3-primary w3-round-large w3-right" type="button" (click)="dictateAll();">Dictate All</button>-->
-      <!--<button *ngIf="ddlTemplate.value > 0 && isListening" class="w3-button w3-primary w3-round-large w3-right" type="button" (click)="stopAllDictation();">Stop Recording</button>-->
-    </div>
-    <div class="w3-container marginform">
-      <div class="w3-row">
-        <div class="w3-half">
-          <label>Appointment</label>
-          <ng-select class="w3-input w3-border" [(ngModel)]="appointmentId" #patientName (change)="appointmentChange(appointmentId)">
-            <ng-option *ngFor="let data of lstAppointment" [value]="data.id">{{data.serviceNumber +"-"+ data.leadName}}</ng-option>
-          </ng-select>
-          <!--<select class="w3-input w3-border" [(ngModel)]="appointmentId" #patientName (change)="appointmentChange(patientName.value)">
-            <option value="0" disabled>
-              --select Appointment--
-            </option>
-            <option *ngFor="let data of lstAppointment" value="{{data.id}}">{{data.serviceNumber +"-"+ data.leadName}}</option>
-          </select>-->
-        </div>
+      <button *ngIf="ddlTemplate.value > 0" class="w3-button w3-primary w3-round-large w3-right w3-margin-left-small" type="button" (click)="previewTemplate(ddlTemplate.value);">Preview</button>-->
+<!--<button *ngIf="ddlTemplate.value > 0 && !isListening" class="w3-button w3-primary w3-round-large w3-right" type="button" (click)="dictateAll();">Dictate All</button>-->
+<!--<button *ngIf="ddlTemplate.value > 0 && isListening" class="w3-button w3-primary w3-round-large w3-right" type="button" (click)="stopAllDictation();">Stop Recording</button>-->
+<!--</div>
+<div class="w3-container marginform">
+  <div class="w3-row">
+    <div class="w3-half">
+      <label>PatientId</label>
+      <ng-select class="w3-input w3-border" [(ngModel)]="appointmentId" #patientName (change)="appointmentChange(appointmentId)">
+        <ng-option *ngFor="let data of lstAppointment" [value]="data.id">{{data.serviceNumber +"-"+ data.leadName}}</ng-option>
+      </ng-select>-->
+<!--<select class="w3-input w3-border" [(ngModel)]="appointmentId" #patientName (change)="appointmentChange(patientName.value)">
+  <option value="0" disabled>
+    --select Appointment--
+  </option>
+  <option *ngFor="let data of lstAppointment" value="{{data.id}}">{{data.serviceNumber +"-"+ data.leadName}}</option>
+</select>-->
+<!--</div>
         <div class="w3-half w3-padding-left-10">
           <label>Template </label>
           <select #ddlTemplate class="w3-input w3-border" [(ngModel)]="templateId" (change)="loadTemplatePage(ddlTemplate.value);">
@@ -40,10 +40,8 @@
     </div>
     <br />
   </div>
-</div>
-
+</div>-->
 <!-- Preview Modal Starts -->
-
 <div class="row">
   <div *ngIf="isPreview" class="w3-modal w3-show">
     <div class="w3-modal-content w3-round-large w3-secondary-button" style="width:1035px;">
@@ -54,20 +52,89 @@
         </div>
       </div>
       <button class="w3-button w3-secondary w3-tiny w3-margin-top-small w3-right w3-margin-right w3-border w3-round-large" (click)="sendToOneDrive()">Send to Onedrive</button>
-
-      <!--<button class="w3-button w3-secondary w3-tiny w3-margin-top-small w3-right w3-margin-right-small w3-border w3-round-large" (click)="sendToEmail(patientName.value);">Send Mail</button>-->
+      <button class="w3-button w3-secondary w3-tiny w3-margin-top-small w3-right w3-margin-right-small w3-border w3-round-large" (click)="sendToEmail(patientName.value);">Send Mail</button>
       <div class="w3-row" style="width: 1035px;height:75vh;overflow-x:auto;" [innerHTML]="bindPreviewHTML(previewHtml)"></div>
     </div>
   </div>
 </div>
-
 <!-- Preview Modal Ends -->
-
-<div class="overlay" *ngIf="show">
+<!--<div class="overlay" *ngIf="show">
   <div class="w3-display-middle">
     <div class="loader">
     </div>
 
   </div>
 
-</div>
+</div>-->
+
+
+<br /><div *ngIf="!templateOpen" class="w3-card-2 w3-white w3-small w3-margin-left w3-margin-right w3-round-large w3-animate-zoom">
+        <div class="w3-container">
+            <div class="w3-left w3-container w3-xlarge">
+              <b>Forms</b>
+            </div>
+            <div class="w3-container" permissionCheck="7.1">
+              <app-data-grid [gridHeaders]="gridHeaders" [actions]="actions" [dataSource]="dataSource" [filterColumns]="filterColumns" [apiUrl]="'/api/TemplateDictation/OdataTemplateList'" [pageSize]="25"
+                             [pageLengthOptions]="pageLengthOptions" [isResponsive]="false" [isSearchEnabled]="true" [isPaginationEnabled]="true" (rowClick)="editTemplate($event);">
+              </app-data-grid>
+            </div>
+            
+          </div>
+        </div>
+<br/>
+      <div *ngIf="templateOpen" class="w3-card-2 w3-white w3-small w3-margin-left w3-margin-right w3-round-large w3-animate-zoom">
+        <div  class="w3-container">
+          <div class="w3-header w3-margin w3-right">
+            <button *ngIf="templateOpen" class="w3-button w3-primary w3-round-large w3-right w3-margin-left-large" type="button" (click)="saveAsDraft(templateDictationId,patientName, templateWrapper);">Save as draft</button>
+            <button *ngIf="templateOpen" class="w3-button w3-primary w3-round-large w3-right w3-margin-left-large" type="button" (click)="previewTemplate(templateDictationId);">Preview</button>
+            <button *ngIf="templateOpen" class="w3-button w3-primary w3-round-large w3-right w3-margin-left-large" type="button" (click)="closeTemplateHtmlOpen();">Cancel</button>
+          </div>
+          <div class="w3-row w3-margin-top">
+            <div class="w3-border w3-border-light-gray" #templateWrapper [innerHTML]="selectedTemplatePage | safe: 'html'"></div>
+          </div>
+        </div>
+        </div>
+
+
+
+
+
+
+        <div *ngIf="isOpen" class="w3-modal" style="display:block;">
+          <div class="w3-modal-content w3-round-large w3-secondary-button">
+            <span (click)="closeTemplate()" class="w3-button w3-margin-right-small w3-display-topright">&times;</span>
+            <div class="w3-small sfcenter w3-margin-top">
+              <div class="w3-animate-opacity marginform">
+                <div class="w3-row w3-round-large w3-secondary-button w3-container w3-padding">
+                  <h5 class="w3-center"> Template </h5>
+                  <!--<button type="button" class="w3-button w3-round-large w3-right w3-border w3-secondary mr30">+ Add New Field</button>-->
+                </div>
+                <div class="w3-row w3-padding w3-primary-l4">
+                  <div class="w3-row">
+
+                    <div class="w3-container w3-half">
+                      <div class="w3-full">
+                        <label>Patient Id</label>
+                        <select class="w3-input w3-border" [(ngModel)]="appointmentId" #patientName (change)="appointmentChange(appointmentId)">
+                          <option *ngFor="let data of lstAppointment" [value]="data.id">{{data.serviceNumber +"-"+ data.leadName}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="w3-row w3-round-bottom-left w3-round-bottom-right w3-secondary-button">
+                  <div class="w3-margin w3-right">
+                    <button class="w3-button w3-border w3-round-large w3-margin-right w3-secondary" (click)="loadTemplatePage(templateDictationId);">Ok</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+

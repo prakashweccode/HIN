@@ -89,7 +89,12 @@
 /* Base for label styling */
 [type="checkbox"]:not(:checked),
 [type="checkbox"]:checked {
-  position: absolute;
+  /*position: absolute;*/
+  left: -9999px;
+}
+
+[type="checkbox"]:not(:checked),
+[type="checkbox"]:checked {
   left: -9999px;
 }
 

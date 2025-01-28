@@ -62,6 +62,7 @@ export class ListleadsComponent implements OnInit {
   public isOpen: Boolean = false;
   activeContainer: string = 'tab1';
   //public userDetails: UserDetail = new UserDetail();
+  public securityGroup: boolean = false;
   constructor(public router: Router,public addusers:AdduserService, public addleadsService: AddleadsService, public dataShared: Datashared, public listLeadsService:ListleadsService, public noty:NotyHelper) { }
 
   ngOnInit() {
@@ -92,7 +93,7 @@ export class ListleadsComponent implements OnInit {
     let ArrStatus = [{ id: 1, Name: "Cold" }, { id: 2, Name: "Hot" }];
         this.gridHeaders = [
       //{ displayName: 'Select', propertyName: 'x', dataType: '', secondPropertyName: '', filter: '', isLink: false, serializeArray: null, className: '', isCheckBox:true},
-          { displayName: 'Patient Number', propertyName: 'LeadNumber', dataType: 'string', secondPropertyName: '', filter: '', isLink: true, serializeArray: null, className: '', isCheckBox: true },
+          { displayName: 'Patient Number', propertyName: 'LeadNumber', dataType: 'string', secondPropertyName: '', filter: '', isLink: true, serializeArray: null, className: '', isCheckBox: false },
           { displayName: 'Patient EMR', propertyName: 'BatchNumber', dataType: 'string', secondPropertyName: '', filter: '', isLink: true, serializeArray: null, className: '' },
           { displayName: 'Patient Name', propertyName: 'LeadName', dataType: 'string', secondPropertyName: '', filter: '', isLink: true, serializeArray: null, className: '', gridPermissionCheck: '2.1.1'},
       //{ displayName: 'Status', propertyName: 'LeadStatus', dataType: 'number', secondPropertyName: '', filter: '', isLink: false, serializeArray: this.leadStatus, className: '' },

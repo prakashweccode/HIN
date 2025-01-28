@@ -4,6 +4,7 @@ import { Currency } from '../model/currency';
 import { Lead, LeadOriginType, LeadStatus, SocialMediaType } from '../model/lead';
 import { Networking } from '../model/networking';
 import { Industrytype } from '../model/industrytype';
+import { Templatelist } from '../model/templatelist';
 
 @Injectable({
   providedIn: 'root'
@@ -54,6 +55,13 @@ export class AddleadsService {
   getLeadStatus() {
     return this.http.get<Array<LeadStatus>>("/api/Lead/GetLeadStatus").pipe();
   }
+  getTemplateList() {
+    return this.http.get<Array<Templatelist>>("/api/Authentication/GetTemplateList").pipe();
+  }
+  getValidatePatient() {
+    return this.http.get<any>("/api/Authentication/GetValidatePatientNumber").pipe();
+  }
+
   
 
 }

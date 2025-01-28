@@ -7,7 +7,7 @@ export class Services {
   public AssignedTo: number;
   public Owner: number;
   public Color: string;
-  public SecurityGroup: number;
+  public SecurityGroupId: number;
   public PipelineGroupId: number;
   public PipelineId: number;
   public CancelReason: number;
@@ -38,4 +38,5 @@ export class Services {
   public SubIssueTypeId: number;
   public DealId: number;
   public EventId: number;
+  public IsPatientFormSelected: boolean;
 }

@@ -6,6 +6,8 @@ import { SideMenuStyleService } from '../loader.service';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { SideMenuStyle } from '../loader';
+import { MsalService } from '@azure/msal-angular';
+import { Users } from '../users/users';
 
 @Component({
   selector: 'app-sidenav',
@@ -25,10 +27,21 @@ export class SidenavComponent implements OnInit {
   systemToggle: boolean = false;
   showSubMenu: boolean = false;
   mobileMenuToggle: boolean = false;
-  constructor(public navBarService: NavbarService, public router: Router, public sideMenuStyleService: SideMenuStyleService) { }
+  constructor(public navBarService: NavbarService, public router: Router, public sideMenuStyleService: SideMenuStyleService, private graphService: MsalService)
+  {
+    if (navBarService.userInformation) {
+      this.user = new UserDetail();
+      this.user.User = new Users();
+      this.user.Token = navBarService.userInformation.Token;
+      this.user.User.Email = navBarService.userInformation.User.Email;
+      this.user.User.FirstName = navBarService.userInformation.User.FirstName;
+    }
+    
+
+  }
 
   ngOnInit() {
-    this.user = JSON.parse(localStorage.getItem("userDetail"));
+    //this.user = JSON.parse(localStorage.getItem("userDetail"));
   }
 
   ngAfterViewInit() {
@@ -41,6 +54,7 @@ export class SidenavComponent implements OnInit {
     localStorage.clear();
     this.navBarService.clearUser();
     this.router.navigate(['/login']);
+    this.graphService.logout();
   }
 
   w3_open() {

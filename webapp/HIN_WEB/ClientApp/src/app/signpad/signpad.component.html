@@ -2,7 +2,7 @@
 
 <div>
     <div class="w3-border signature-pad w3-margin-bottom-small w3-mobile" >
-     <canvas #sPad width="720" height="150" style="touch-action: none; " (click)="selectSignature()" ></canvas>
+     <canvas #sPad [width]="canvasWidth" height="150" style="touch-action: none; " (click)="selectSignature()"></canvas>
     </div>
     <section>
       <div class="row">

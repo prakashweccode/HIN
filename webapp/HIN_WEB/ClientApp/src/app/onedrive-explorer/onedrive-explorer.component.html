@@ -5,7 +5,7 @@
 <div class="w3-container">
   <div class="w3-right">
     <!--<app-connectoffice365 (statusEmitter)="statusEmitter($event)"></app-connectoffice365>-->
-    <app-onedrive-connect></app-onedrive-connect>
+    <!--<app-onedrive-connect></app-onedrive-connect>-->
   </div>
 </div>
 <div class="w3-margin-top w3-margin-bottom w3-row-padding">
@@ -13,18 +13,20 @@
     <div class="w3-row">
       <div class="w3-col s11" *ngIf="selectedNode">
         <!--<button *ngIf="!isDownloadEnabled" class="w3-button w3-margin-right-small" (click)="createNewFolder();"><i class="fa fa-folder-o"></i> New directory</button>
-        <button *ngIf="!isDownloadEnabled" class="w3-button w3-margin-right-small" (click)="uploadFiles();"><i class="fa fa-cloud-upload"></i> Upload files</button>
-        <button *ngIf="!isDownloadEnabled" class="w3-button w3-margin-right-small" (click)="uploadFolder();"><i class="fa fa-caret-square-o-up"></i> Upload folder</button>-->
-        <button *ngIf="!selectedNode.file" class="w3-button w3-margin-right-small" (click)="openDrive()"><i class="fa fa-folder-o"></i> Open Folder</button>
-        <button *ngIf="!selectedNode.file" class="w3-button w3-margin-right-small" (click)="shareDriveToggle()"><i class="fa fa-folder-o"></i> Share Folder</button>
+  <button *ngIf="!isDownloadEnabled" class="w3-button w3-margin-right-small" (click)="uploadFiles();"><i class="fa fa-cloud-upload"></i> Upload files</button>
+  <button *ngIf="!isDownloadEnabled" class="w3-button w3-margin-right-small" (click)="uploadFolder();"><i class="fa fa-caret-square-o-up"></i> Upload folder</button>-->
+        <input type="file" style="display:none" (change)="onFileUpload($event)" #fileUpload>
+        <button *ngIf="selectedNode && isMyFilesToggle" class="w3-button w3-margin-right-small" (click)="fileUpload.click()"><i class="fa fa-folder-o"></i> Upload File</button>
+        <button *ngIf="selectedNode && !selectedNode.file" class="w3-button w3-margin-right-small" (click)="openDrive()"><i class="fa fa-folder-o"></i> Open Folder</button>
+        <button *ngIf="selectedNode" class="w3-button w3-margin-right-small" (click)="shareDriveToggle()"><i class="fa fa-folder-o"></i> {{selectedNode.file ? 'Share File' : 'Share Folder'}}</button>
         <!--<button *ngIf="selectedNode.file" class="w3-button w3-margin-right-small" (click)="download()"><i class="fa fa-download"></i> Download</button>
-        <button *ngIf="selectedNode.file" class="w3-button w3-margin-right-small" (click)="preview()"><i class="fa fa-eye"></i> Preview</button>-->
+  <button *ngIf="selectedNode.file" class="w3-button w3-margin-right-small" (click)="preview()"><i class="fa fa-eye"></i> Preview</button>-->
         <!--<button class="w3-button w3-margin-right-small" (click)="rename()"><i class="fa fa-pencil-square-o"></i> Rename</button>-->
         <!--<span class="w3-border-right w3-border-light-grey">&nbsp;</span>&nbsp;
-        <button class="w3-button" (click)="delete()"><i class="fa fa-trash"></i> Delete</button>-->
+  <button class="w3-button" (click)="delete()"><i class="fa fa-trash"></i> Delete</button>-->
         <!--<div class="w3-right">
-          <button class="w3-button" (click)="clearSelection();"><i class="fa fa-times"></i> Clear selection</button>
-        </div>-->
+    <button class="w3-button" (click)="clearSelection();"><i class="fa fa-times"></i> Clear selection</button>
+  </div>-->
       </div>
       <div class="w3-col s11" *ngIf="!selectedNode">&nbsp;</div>
       <div class="w3-col s1">
@@ -82,78 +84,115 @@
             <span class="w3-border-right w3-border-grey">&nbsp;</span>&nbsp;
           </div>
           <!--<div class="w3-rest w3-padding-top-xsmall w3-padding-bottom-xsmall">
-            <ul class="breadcrumb w3-margin-0">
-              <li><button class="w3-button w3-tiny" (click)="getDrive(rootDrive);">{{rootDrive?.driveType}}</button></li>
-              <ng-container *ngFor="let childItems of lstSelectedChilds">
-                <i class="fa fa-caret-right w3-margin-right-xsmall w3-margin-left-xsmall"></i>
-                <li><button class="w3-button w3-tiny" (click)="getDrive(childItems);">{{childItems?.name}}</button></li>
-              </ng-container>
-            </ul>
-          </div>-->
+        <ul class="breadcrumb w3-margin-0">
+          <li><button class="w3-button w3-tiny" (click)="getDrive(rootDrive);">{{rootDrive?.driveType}}</button></li>
+          <ng-container *ngFor="let childItems of lstSelectedChilds">
+            <i class="fa fa-caret-right w3-margin-right-xsmall w3-margin-left-xsmall"></i>w3-container w3-margin-top w3-margin-bottom
+            <li><button class="w3-button w3-tiny" (click)="getDrive(childItems);">{{childItems?.name}}</button></li>
+          </ng-container>
+        </ul>
+      </div>-->
         </div>
       </div>
-      <div *ngIf="isListView" class="w3-container w3-margin-top w3-margin-bottom">
-        <div class="w3-center w3-hover-white w3-hover-shadow w3-left w3-margin-right w3-margin-top-large w3-round-large w3-tooltip" [ngClass]="child.isSelected ? 'w3-secondary' : ''" (dblclick)="getDrive(child);" (click)="selectDrive(child);" style="width:100px;height:100px;cursor:pointer;" *ngFor="let child of driveDatas; let i = index;">
-          <div class="w3-row">
-            <i class="fa fa-3x fa-fw w3-margin-top" [ngClass]="child.file ? 'fa-file w3-text-blue':'fa-folder-open w3-text-yellow'"></i>
-          </div>
-          <div class="w3-row">
-            <span class="w3-tiny">
-              {{child.name | truncate:10}}
-            </span>
-          </div>
-          <span style="position:relative;right:-75px;bottom:-30px;z-index:1;"
-                class="w3-text w3-white w3-border w3-padding w3-text-grey">Name:{{child.name}}<br />Size:{{child.size > 0 ? (child.size | fileSize) : '0 KB'}}</span>
+      <div class="w3-row">
+        <div class="w3-col" style="width: 10%;">
+          <button class="w3-button w3-border-0 w3-mobile" [ngClass]="isMyFilesToggle ? 'w3-secondary' : ''" style="width:100%;" (click)="isMyFilesToggle=true;getMyOneDrive();">My Files</button>
+          <button class="w3-button w3-border-0 w3-mobile" [ngClass]="!isMyFilesToggle ? 'w3-secondary' : ''" style="width:100%;" (click)="isMyFilesToggle=false;getSharedDriveFolder();">Shared Files</button>
         </div>
-        <div class="w3-row" *ngIf="driveDatas.length == 0">
-          <div class="w3-continer w3-center">
-            <div class="w3-row">
-              <i class="fa fa-4x fa-fw fa-folder-open w3-text-grey w3-margin-top"></i>
-            </div>
-            <div class="w3-row">
-              <span class="w3-small w3-text-grey">
-                This folder is empty.
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div *ngIf="!isListView" class="w3-row w3-margin-bottom">
-        <table class="w3-table w3-hoverable">
-          <thead class="w3-border-bottom">
-            <tr>
-              <!--<td><input type="checkbox" id="chkHeaderAll" /></td>-->
-              <td>Name</td>
-              <td>Date</td>
-              <td>Size</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colspan="3">
-                <div class="w3-row w3-center" *ngIf="driveDatas.length == 0">
-                  <div class="w3-continer">
-                    <div class="w3-row">
-                      <i class="fa fa-4x fa-fw fa-folder-open w3-text-grey w3-margin-top"></i>
-                    </div>
-                    <div class="w3-row">
-                      <span class="w3-small w3-text-grey">
-                        This folder is empty.
-                      </span>
-                    </div>
-                  </div>
+        <div class="w3-col" style="width: 90%; border-right: 1px solid #ccc;">
+          <div *ngIf="isListView" class="w3-container w3-margin-top w3-margin-bottom">
+            <div class="w3-row" *ngIf="isMyFilesToggle">
+              <div class="w3-center w3-hover-white w3-hover-shadow w3-left w3-margin-right w3-margin-top-large w3-round-large w3-tooltip" [ngClass]="child.isSelected ? 'w3-secondary' : ''" (dblclick)="getDrive(child);" (click)="selectDrive(child);" style="width:100px;height:100px;cursor:pointer;" *ngFor="let child of driveDatas; let i = index;">
+                <div class="w3-row">
+                  <i class="fa fa-3x fa-fw w3-margin-top" [ngClass]="child.file ? 'fa-file w3-text-blue':'fa-folder-open w3-text-yellow'"></i>
                 </div>
-              </td>
+                <div class="w3-row">
+                  <span class="w3-tiny">
+                    {{child.name | truncate:10}}
+                  </span>
+                </div>
+                <span style="position:relative;right:-75px;bottom:-30px;z-index:1;"
+                      class="w3-text w3-white w3-border w3-padding w3-text-grey">Name:{{child.name}}<br />Size:{{child.size > 0 ? (child.size | fileSize) : '0 KB'}}</span>
+              </div>
+            </div>
+            <div class="w3-row" *ngIf="!isMyFilesToggle">
+              <div class="w3-center w3-hover-white w3-hover-shadow w3-left w3-margin-right w3-margin-top-large w3-round-large w3-tooltip" [ngClass]="child.isSelected ? 'w3-secondary' : ''" (dblclick)="getDrive(child.remoteItem ? child.remoteItem : child);" (click)="selectDrive(child);" style="width:100px;height:100px;cursor:pointer;" *ngFor="let child of driveDatas; let i = index;">
+                <div class="w3-row">
+                  <i class="fa fa-3x fa-fw w3-margin-top" [ngClass]="child.file ? 'fa-file w3-text-blue':'fa-folder-open w3-text-yellow'"></i>
+                </div>
+                <div class="w3-row">
+                  <span class="w3-tiny">
+                    {{child.name | truncate:10}}
+                  </span>
+                </div>
+                <span style="position:relative;right:-75px;bottom:-30px;z-index:1;"
+                      class="w3-text w3-white w3-border w3-padding w3-text-grey">Name:{{child.name}}<br />Size:{{child.size > 0 ? (child.size | fileSize) : '0 KB'}}</span>
+              </div>
+            </div>
+            <div class="w3-row" *ngIf="driveDatas.length == 0">
+              <div class="w3-continer w3-center">
+                <div class="w3-row">
+                  <i class="fa fa-4x fa-fw fa-folder-open w3-text-grey w3-margin-top"></i>
+                </div>
+                <div class="w3-row">
+                  <span class="w3-small w3-text-grey">
+                    This folder is empty.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="!isListView" class="w3-row w3-margin-bottom">
+            <table class="w3-table w3-hoverable">
+              <thead class="w3-border-bottom">
+                <tr>
+                  <!--<td><input type="checkbox" id="chkHeaderAll" /></td>-->
+                  <td>Name</td>
+                  <td>Date</td>
+                  <td>Size</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="3">
+                    <div class="w3-row w3-center" *ngIf="driveDatas.length == 0">
+                      <div class="w3-continer">
+                        <div class="w3-row">
+                          <i class="fa fa-4x fa-fw fa-folder-open w3-text-grey w3-margin-top"></i>
+                        </div>
+                        <div class="w3-row">
+                          <span class="w3-small w3-text-grey">
+                            This folder is empty.
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
 
-            </tr>
-            <tr (dblclick)="getDrive(child);" [ngClass]="child.isSelected ? 'w3-secondary' : ''" (click)="selectDrive(child);" *ngFor="let child of driveDatas;let i = index;">
-              <td><i class="fa fa-fw" [ngClass]="child.file ? 'fa-file w3-text-blue':'fa-folder-open w3-text-yellow'"></i> {{child.name | truncate:25}}</td>
-              <td>{{child.createdDateTime | date:'MM/dd/yyyy hh:mm a'}}</td>
-              <td>{{child.size > 0 ? (child.size | fileSize) : '0'}}</td>
-            </tr>
-          </tbody>
-        </table>
+                </tr>
+                <ng-container *ngIf="isMyFilesToggle">
+                  <tr (dblclick)="getDrive(child);" [ngClass]="child.isSelected ? 'w3-secondary' : ''" (click)="selectDrive(child);" *ngFor="let child of driveDatas;let i = index;">
+                    <td><i class="fa fa-fw" [ngClass]="child.file ? 'fa-file w3-text-blue':'fa-folder-open w3-text-yellow'"></i> {{child.name | truncate:25}}</td>
+                    <td>{{child.createdDateTime | date:'MM/dd/yyyy hh:mm a'}}</td>
+                    <td>{{child.size > 0 ? (child.size | fileSize) : '0'}}</td>
+                  </tr>
+                </ng-container>
+                <ng-container *ngIf="!isMyFilesToggle">
+                  <tr (dblclick)="getDrive(child.remoteItem ? child.remoteItem : child);" [ngClass]="child.isSelected ? 'w3-secondary' : ''" (click)="selectDrive(child);" *ngFor="let child of driveDatas;let i = index;">
+                    <td><i class="fa fa-fw" [ngClass]="child.file ? 'fa-file w3-text-blue':'fa-folder-open w3-text-yellow'"></i> {{child.name | truncate:25}}</td>
+                    <td>{{child.createdDateTime | date:'MM/dd/yyyy hh:mm a'}}</td>
+                    <td>{{child.size > 0 ? (child.size | fileSize) : '0'}}</td>
+                  </tr>
+                </ng-container>
+                  
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
+    
+
+      
     </div>
   </div>
 </div>
@@ -257,7 +296,7 @@
   <div class="w3-modal-content w3-secondary w3-round-large w3-secondary-button">
     <div class="w3-row">
       <div class="w3-center">
-        <p>Share Report</p>
+        <p>Share Folder/File</p>
         <span (click)="closeDriveToggle()" class="w3-button w3-display-topright">&times;</span>
       </div>
 

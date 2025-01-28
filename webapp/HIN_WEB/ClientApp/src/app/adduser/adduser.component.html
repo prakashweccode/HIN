@@ -26,13 +26,16 @@
 </div>
 
 
-<div class="w3-card-2 w3-white w3-small w3-margin-right w3-margin-left w3-round-large w3-animate-zoom">
+<br /><div class="w3-card-2 w3-white w3-small w3-margin-left w3-margin-right w3-round-large w3-animate-zoom">
   <br />
   <div class="w3-row w3-padding w3-animate-opacity w3-secondary-l5 w3-border-top w3-border-bottom w3-margin-bottom-small">
     <div class="w3-left w3-xlarge">
       <b>User</b>
     </div>
     <!--<input *ngIf="user.UserId" type="button" (click)="EnableOnedrive()" class="w3-button w3-right w3-round-large w3-secondary" value="Enable Onedrive" />-->
+    <button class="w3-button w3-right w3-margin-right w3-round-large w3-secondary" (click)="cancel()">
+      <i class="fa fa-reply"></i>
+    </button>
     <input type="button" (click)="MainUserCustomField()" class="w3-button w3-right w3-round-large w3-secondary w3-margin-right-small" value="Add New Field" />
     <input *ngIf="user.UserId" type="button" class="w3-button w3-right w3-round-large w3-secondary w3-margin-right-small" (click)="addNewUser()" value="Add New User" />
   </div>
@@ -60,10 +63,10 @@
               </div>
             </div>
             <div class="w3-half">
-              <div class="w3-half">
+              <!--<div class="w3-half">
                 <input id="isTwoFactorEnabled" type="checkbox" [(ngModel)]="user.IsTwoFactorEnabled" />
                 <label for="isTwoFactorEnabled">&nbsp;TwoFactor Enabled</label>
-              </div>
+              </div>-->
               <div class="w3-half">
                 <input id="isAdmin" type="checkbox" [(ngModel)]="user.IsAdmin" />
                 <label for="isAdmin">&nbsp;Admin</label>
@@ -98,15 +101,15 @@
               <label>Skills</label>
               <input class="w3-input w3-border" type="text" [(ngModel)]="user.Skills" permissionCheck="10.1.1.2.10">
             </div>
-            
+
 
             <!--<div class="w3-full " permissionCheck="10.1.1.2.12">
-    <label>Security role</label>
-    <select class="w3-input w3-border" [(ngModel)]="user.RoleId" permissionCheck="10.1.1.2.12">
-      <option value="0">--Select Security role--</option>
-      <option *ngFor="let role of lstRoles" [ngValue]="role.RoleId">{{role.RoleName}}</option>
-    </select>
-  </div>-->
+              <label>Security role</label>
+              <select class="w3-input w3-border" [(ngModel)]="user.RoleId" permissionCheck="10.1.1.2.12">
+                <option value="0">--Select Security role--</option>
+                <option *ngFor="let role of lstRoles" [ngValue]="role.RoleId">{{role.RoleName}}</option>
+              </select>
+            </div>-->
             <div class="w3-full w3-margin-right">
               <app-customsection [entityType]="entityType" [alignment]="'left'" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="userLeftCustomFieldValues"></app-customsection>
             </div>
@@ -114,9 +117,9 @@
           <div class="w3-half">
             <div class="w3-full w3-margin-left" permissionCheck="10.1.1.2.3">
               <label>
-                Last name*
+                Last name
               </label>
-              <input class="w3-input w3-border" type="text" permissionCheck="10.1.1.2.3" [(ngModel)]="user.LastName" [class.w3-border-red]="checkValidation(last)" #last="ngModel" required>
+              <input class="w3-input w3-border" type="text" permissionCheck="10.1.1.2.3" [(ngModel)]="user.LastName">
             </div>
             <div class="w3-full w3-margin-left" permissionCheck="10.1.1.2.5">
               <label>Email*</label>
@@ -140,12 +143,12 @@
               <input class="w3-input w3-border" type="text" permissionCheck="10.1.1.2.11" [(ngModel)]="user.CostPerHour">
             </div>
             <!--<div class="w3-full w3-margin-left" permissionCheck="10.1.1.2.13">
-    <label>Groups</label>
-    <select class="w3-input w3-border" [(ngModel)]="user.GroupId" permissionCheck="10.1.1.2.13">
-      <option value="0">--Select group--</option>
-      <option *ngFor="let group of lstGroups" [ngValue]="group.UserGroupId">{{group.Name}}</option>
-    </select>
-  </div>-->
+              <label>Groups</label>
+              <select class="w3-input w3-border" [(ngModel)]="user.GroupId" permissionCheck="10.1.1.2.13">
+                <option value="0">--Select group--</option>
+                <option *ngFor="let group of lstGroups" [ngValue]="group.UserGroupId">{{group.Name}}</option>
+              </select>
+            </div>-->
             <div class="w3-full w3-margin-left">
               <app-customsection [entityType]="entityType" [alignment]="'right'" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="userRightCustomFieldValues"></app-customsection>
             </div>
@@ -639,9 +642,9 @@
         </div>
         <div class="w3-margin w3-right">
           <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="Cancel()">Cancel</button>
-          <button class="w3-button w3-secondary w3-border w3-round-large" [disabled]="checkReqValidation(first)||checkReqValidation(username)||checkReqValidation(last)||checkReqValidation(email)||checkReqValidation(cPassword)||checkReqValidation(password) || checkReqValidation(aPassword) || checkReqValidation(caPassword)" (click)="saveUser(user)">Save</button>
+          <button class="w3-button w3-secondary w3-border w3-round-large" [disabled]="checkReqValidation(first)||checkReqValidation(username)||checkReqValidation(email)||checkReqValidation(cPassword)||checkReqValidation(password) || checkReqValidation(aPassword) || checkReqValidation(caPassword)" (click)="saveUser(user)">Save</button>
         </div>
-        <br>
+        <br />
       </div>
     </div>
   </div>

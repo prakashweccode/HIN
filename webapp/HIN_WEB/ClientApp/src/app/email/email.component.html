@@ -1,5 +1,5 @@
 <div class="w3-row">
-  <div class="w3-card-2 w3-white w3-small w3-margin-right w3-margin-left w3-round-large w3-animate-zoom">
+  <br/><div class="w3-card-2 w3-white w3-small w3-margin-left w3-margin-right w3-round-large w3-animate-zoom">
     <div class="w3-col w3-border" style="width:250px;min-height:60vh">
       <div class="w3-row-padding w3-margin-top-small" style="min-height:55vh">
         <button class="w3-bar-item w3-button w3-block w3-left-align w3-secondary" (click)="addEmail()" permissionCheck="6.5.12.1"><i class="fa fa-pencil w3-margin-right"></i> Compose</button>
@@ -15,7 +15,7 @@
       <div class="w3-full" style="min-height:60vh" >
         <div class="w3-row">
           <h4>Email History</h4> <div class="w3-right">
-            <div class="w3-right w3-margin-right-small">
+            <!--<div class="w3-right w3-margin-right-small">
               <div class="w3-full" *ngIf="!authenticated">
                 <button class="w3-button w3-round-large w3-secondary" (click)="signIn()">Connect Office 365</button>
               </div>
@@ -23,7 +23,7 @@
                 <span class="w3-tag w3-orange w3-text-white w3-round-large w3-padding w3-margin-right-small" (click)="getCalendars()">Connected to office 365</span>
                 <button class="w3-button w3-round-large w3-secondary" (click)="signOut()">Disconnect</button>
               </div>
-            </div>
+            </div>-->
           </div>
         </div>
 
@@ -89,13 +89,13 @@
             <div class="w3-right">
               <div class="w3-padding w3-medium">
                 <label class="w3-margin-right-xxlarge">
-                  <input class="w3-radio" type="radio" name="send" value="office" (change)="setMailType($event)">
+                  <input class="w3-radio" [checked]='true' type="radio" name="send" value="office" (change)="setMailType($event)">
                   MS Office
                 </label>
-                <label>
+                <!--<label>
                   <input class="w3-radio" type="radio" name="send" value="gmail" (change)="setMailType($event)">
                   Gmail
-                </label>
+                </label>-->
               </div>
             </div>
           </div>

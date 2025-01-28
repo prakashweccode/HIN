@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { LandingpageRoutingModule } from './landingpage-routing.module';
 import { LandingpageComponent } from './landingpage.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LandingpagehealthinformationModule } from '../landingpagehealthinformation/landingpagehealthinformation.module';
+import { LandingpagemedicalassociatesModule } from '../landingpagemedicalassociates/landingpagemedicalassociates.module';
 
 
 @NgModule({
@@ -12,7 +14,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    LandingpageRoutingModule
+    LandingpageRoutingModule,
+    LandingpagehealthinformationModule,
+    LandingpagemedicalassociatesModule
   ]
 })
 export class LandingpageModule { }

@@ -11,7 +11,6 @@ import { compareAsc } from 'date-fns';
 @Component({
   selector: 'app-basicform',
   templateUrl: './basicform.component.html',
-  styleUrls: ['./basicform.component.css']
 })
 export class BasicformComponent implements OnInit {
   public printPage: boolean = false;
@@ -29,6 +28,9 @@ export class BasicformComponent implements OnInit {
   activeContainer: string = 'tab1';
   logo: string;
   practiceCode: string;
+  public lstTempPatient: Array<Temppatient> = [];
+  activityTypes: any[];
+  public isOpen: boolean = false;
 
   constructor(public router: Router, private actRoute: ActivatedRoute, public basicFormService: BasicformService, public noty: NotyHelper, private speechService: VoiceToTextService) {
     this.actRoute.params.subscribe(routeParams => {
@@ -44,6 +46,7 @@ export class BasicformComponent implements OnInit {
     this.tempPatient.IsConsentEn = true;
     this.speechService.init(document);
     this.speechService.InitAllDictation(document);
+    this.getMaritalStatusList();
   }
 
   getTenantDetails() {
@@ -138,6 +141,41 @@ export class BasicformComponent implements OnInit {
       }, err => { }, () => { });
     }
   }
+
+  //getMaritalStatusList() {
+  //  this.basicFormService.getMaritalStatus().subscribe(data => {
+  //    if (data) {
+  //      this.lstTempPatient = data;
+  //    }
+  //  });
+  //}
+
+  Notify(tempPatient) {
+    //if (!this.tempPatient.PatientName || !this.tempPatient.Address || !this.tempPatient.City || !this.tempPatient.State || !this.tempPatient.Zipcode || !this.tempPatient.Age || !this.tempPatient.Gender || !this.tempPatient.Dob || !this.tempPatient.CellPhone || !this.tempPatient.EmailAddress || !this.tempPatient.EmergencyContact) {
+    //  this.noty.ShowNoty("Please fill all required fields");
+    //}
+    //else {
+    //  this.isOpen = true;
+    //}
+    this.isOpen = true;
+
+  }
+  CloseNotify() {
+    this.isOpen = false;
+  }
+
+  getMaritalStatusList() {
+    this.activityTypes = [
+      { Id: 1, Activity: "Never married" },
+      { Id: 2, Activity: "Married" },
+      { Id: 3, Activity: "Separated" },
+      { Id: 4, Activity: "Divorced" },
+      { Id: 5, Activity: "Widowed" },
+      { Id: 6, Activity: "Others" },
+    ];
+  }
+  
+
 
   goToLogin() {
     this.router.navigate(['/login']);
