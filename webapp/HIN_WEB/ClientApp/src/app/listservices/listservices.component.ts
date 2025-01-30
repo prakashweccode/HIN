@@ -28,17 +28,20 @@ export class ListservicesComponent implements OnInit {
   public pageLengthOptions: Array<number>;
   public serviceType = [{ id: 1, Name: "Service" }, { id: 2, Name: "Job" }];
   constructor(public router: Router, public dataShared: Datashared, public noty: NotyHelper) { }
-  //Init
+
   ngOnInit() {
+    // Initializes the grid headers for displaying appointment services data in the table.
     this.gridHeaders = [
-      { displayName: 'Number', propertyName: 'ServiceNumber', dataType: 'string', secondPropertyName: '', filter: '', isLink: true, serializeArray: null },
-      { displayName: 'Patient', propertyName: 'LeadName', dataType: 'string', secondPropertyName: '', filter: '', isLink: false, serializeArray: null },
+     
+      { displayName: 'Number', propertyName: 'ServiceNumber', dataType: 'string', secondPropertyName: '', filter: '', isLink: true, serializeArray: null },     
+      { displayName: 'Patient', propertyName: 'LeadName', dataType: 'string', secondPropertyName: '', filter: '', isLink: false, serializeArray: null },     
       { displayName: 'Company', propertyName: 'CompanyName', dataType: 'string', secondPropertyName: '', filter: '', isLink: false, serializeArray: null },
-      /*{ displayName: 'Appointment Type', propertyName: 'ApplicationRemarks', dataType: 'string', secondPropertyName: '', filter: '', isLink: false, serializeArray: null },*/
-      { displayName: 'Assigned To', propertyName: 'AssignedTo', dataType: 'string', secondPropertyName: '', filter: '', isLink: false, serializeArray: null },
-      { displayName: 'Created On', propertyName: 'CreatedOn', dataType: 'date', secondPropertyName: '', filter: '', isLink: false, serializeArray: null },
+      /*{ displayName: 'Appointment Type', propertyName: 'ApplicationRemarks', dataType: 'string', secondPropertyName: '', filter: '', isLink: false, serializeArray: null },*/    
+      { displayName: 'Assigned To', propertyName: 'AssignedTo', dataType: 'string', secondPropertyName: '', filter: '', isLink: false, serializeArray: null },      
+      { displayName: 'Created On', propertyName: 'CreatedOn', dataType: 'date', secondPropertyName: '', filter: '', isLink: false, serializeArray: null },      
       { displayName: 'Created By', propertyName: 'CreatedBy', dataType: 'string', secondPropertyName: '', filter: '', isLink: false, serializeArray: null }
     ];
+    // Initializes the data source and filter columns for the grid or table.
     this.dataSource = new Array<any>();
     this.filterColumns = [
       { column: "ServiceNumber", value: "", type: "contains" },

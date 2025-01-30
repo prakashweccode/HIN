@@ -1,210 +1,226 @@
 <div class="w3-row w3-animate-zoom">
   <br/><div class="w3-card-2 w3-white w3-small w3-margin-left w3-margin-right w3-round-large w3-animate-zoom">
-    <div class="w3-row calendar-wrapper">
-      <div class="w3-row calendar-title-wrapper">
-        <div class="w3-row">
-          &nbsp;
-        </div>
-        <div class="w3-row w3-padding w3-margin-top-small w3-animate-opacity w3-secondary-l5 w3-border-top w3-border-bottom">
-          <div class="w3-left w3-xlarge w3-col s3">
-            <b>Calendar</b>
-          </div>
-          <button class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="refreshCalendar()"><i class="fa fa-refresh"></i></button>
-          <button class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="addNewTodo()">+ Add To Do</button>
-          <button class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="addNewService()">+ Add Appointment</button>
-          <!--<app-connectoffice365 class="w3-right w3-margin-right-small" (statusEmitter)="statusEmitter($event)"></app-connectoffice365>-->
-        </div>
-      </div>
-      <div class="w3-row" *ngIf="isOffice365Connected">
-        <div class="w3-left w3-margin-large">
-          <input id="showOfficeData" type="checkbox" [(ngModel)]="showOfficeData" (change)="getCalendarEventsByRange()" name="showOfficeData" />
-          <label for="showOfficeData">&nbsp;Show office 365 events</label>
-        </div>
-      </div>
-      <div class="w3-row calendar-header-wrapper w3-animate-opacity w3-border-top w3-border-bottom w3-margin-top-medium w3-margin-bottom-medium">
-        <calendar-header [(view)]="view" [(viewDate)]="viewDate" (viewDateChange)="getCalendarEventsByRange()" (viewChange)="getCalendarEventsByRange()">
-        </calendar-header>
-      </div>
-      <!--<div *ngIf="addEvent && modalEmpty">
-        <div [style.left]="menuTopLeftPosition.x"
-             [style.top]="menuTopLeftPosition.y" class="dropdown-content">
-          <div><h5 class="w3-margin-left">Add Event</h5><a (click)="closeEventAdd()" class="w3-display-topright w3-button">x</a></div>
-          <a permissionCheck="6.3" (click)="addTodo()">To Do</a>
-          <a (click)="addDeal()">Opportunity</a>
-          <a (click)="addService()">Service</a>
-          <a (click)="addJob()">Job</a>
-        </div>
-      </div>-->
+         <div class="w3-row calendar-wrapper">
+           <div class="w3-row calendar-title-wrapper">
+             <div class="w3-row">
+               &nbsp;
+             </div>
+             <!-- Header Section -->
+             <div class="w3-row w3-padding w3-margin-top-small w3-animate-opacity w3-secondary-l5 w3-border-top w3-border-bottom">
+               <div class="w3-left w3-xlarge w3-col s3">
+                 <b>Calendar</b>
+               </div>
+               <!--refreshCalendar button-->
+               <button class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="refreshCalendar()"><i class="fa fa-refresh"></i></button>
+               <!--Add to Do button-->
+               <button class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="addNewTodo()">+ Add To Do</button>
+               <!--Add appoinment button-->
+               <button class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="addNewService()">+ Add Appointment</button>
+               <!--<app-connectoffice365 class="w3-right w3-margin-right-small" (statusEmitter)="statusEmitter($event)"></app-connectoffice365>-->
+             </div>
+           </div>
+           <!--visibility of Office 365 events-->
+           <div class="w3-row" *ngIf="isOffice365Connected">
+             <div class="w3-left w3-margin-large">
+               <input id="showOfficeData" type="checkbox" [(ngModel)]="showOfficeData" (change)="getCalendarEventsByRange()" name="showOfficeData" />
+               <label for="showOfficeData">&nbsp;Show office 365 events</label>
+             </div>
+           </div>
+           <!-- Row for calendar header -->
+           <div class="w3-row calendar-header-wrapper w3-animate-opacity w3-border-top w3-border-bottom w3-margin-top-medium w3-margin-bottom-medium">
+             <calendar-header [(view)]="view" [(viewDate)]="viewDate" (viewDateChange)="getCalendarEventsByRange()" (viewChange)="getCalendarEventsByRange()">
+             </calendar-header>
+           </div>
+           <!--<div *ngIf="addEvent && modalEmpty">
+    <div [style.left]="menuTopLeftPosition.x"
+         [style.top]="menuTopLeftPosition.y" class="dropdown-content">
+      <div><h5 class="w3-margin-left">Add Event</h5><a (click)="closeEventAdd()" class="w3-display-topright w3-button">x</a></div>
+      <a permissionCheck="6.3" (click)="addTodo()">To Do</a>
+      <a (click)="addDeal()">Opportunity</a>
+      <a (click)="addService()">Service</a>
+      <a (click)="addJob()">Job</a>
+    </div>
+  </div>-->
 
-      <div class="w3-row calendar-content-wrapper">
-        <context-menu #basicMenu>
-          <ng-template contextMenuItem (execute)="addTodo($event.item)">
-            Add Todo
-          </ng-template>
-          <ng-template contextMenuItem (execute)="addService($event.item)">
-            Add Service
-          </ng-template>
-        </context-menu>
-        <ng-template #monthCellTemplate
-                     let-day="day"
-                     let-openDay="openDay"
-                     let-locale="locale"
-                     let-tooltipPlacement="tooltipPlacement"
-                     let-highlightDay="highlightDay"
-                     let-unhighlightDay="unhighlightDay"
-                     let-eventClicked="eventClicked">
-          <div class="fill-height"
-               [contextMenu]="basicMenu"
-               [contextMenuSubject]="day.date">
-            <div class="cal-cell-top">
-              <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}</span>
-              <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
-            </div>
-            <div class="cal-events">
-              <div class="cal-event"
-                   *ngFor="let event of day.events"
-                   [style.backgroundColor]="event.color.primary"
-                   [ngClass]="event?.cssClass"
-                   (mouseenter)="highlightDay.emit({event: event})"
-                   (mouseleave)="unhighlightDay.emit({event: event})"
-                   [mwlCalendarTooltip]="event.title | calendarEventTitle:'monthTooltip':event"
-                   [tooltipPlacement]="tooltipPlacement"
-                   (click)="$event.stopPropagation(); eventClicked.emit({event: event})"></div>
-            </div>
-          </div>
-        </ng-template>
+           <div class="w3-row calendar-content-wrapper">
+             <context-menu #basicMenu>
+               <!--To add a new To-Do-->
+               <ng-template contextMenuItem (execute)="addTodo($event.item)">
+                 Add Todo
+               </ng-template>
+               <!--To add a new service-->
+               <ng-template contextMenuItem (execute)="addService($event.item)">
+                 Add Service
+               </ng-template>
+             </context-menu>
+             <!-- Template for a calendar day cell -->
+             <ng-template #monthCellTemplate
+                          let-day="day"
+                          let-openDay="openDay"
+                          let-locale="locale"
+                          let-tooltipPlacement="tooltipPlacement"
+                          let-highlightDay="highlightDay"
+                          let-unhighlightDay="unhighlightDay"
+                          let-eventClicked="eventClicked">
+               <div class="fill-height"
+                    [contextMenu]="basicMenu"
+                    [contextMenuSubject]="day.date">
+                 <div class="cal-cell-top">
+                   <!-- Display badge if there are events for the day-->
+                   <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}</span>
+                   <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+                 </div>
+                 <div class="cal-events">
+                   <!-- Events section for the calendar day -->
+                   <div class="cal-event"
+                        *ngFor="let event of day.events"
+                        [style.backgroundColor]="event.color.primary"
+                        [ngClass]="event?.cssClass"
+                        (mouseenter)="highlightDay.emit({event: event})"
+                        (mouseleave)="unhighlightDay.emit({event: event})"
+                        [mwlCalendarTooltip]="event.title | calendarEventTitle:'monthTooltip':event"
+                        [tooltipPlacement]="tooltipPlacement"
+                        (click)="$event.stopPropagation(); eventClicked.emit({event: event})"></div>
+                 </div>
+               </div>
+             </ng-template>
+             <!-- Template for the calendar week header -->
+             <ng-template #weekHeaderTemplate
+                          let-days="days"
+                          let-locale="locale"
+                          let-dayHeaderClicked="dayHeaderClicked">
+               <div class="cal-day-headers">
+                 <!-- Loop through each day of the week and create a header for each -->
+                 <div class="cal-header"
+                      *ngFor="let day of days"
+                      [class.cal-past]="day.isPast"
+                      [class.cal-today]="day.isToday"
+                      [class.cal-future]="day.isFuture"
+                      [class.cal-weekend]="day.isWeekend"
+                      (click)="dayHeaderClicked.emit({day: day})"
+                      [contextMenu]="basicMenu"
+                      [contextMenuSubject]="day.date">
+                   <b>{{ day.date | calendarDate:'weekViewColumnHeader':locale }}</b><br />
+                   <span>{{ day.date | calendarDate:'weekViewColumnSubHeader':locale }}</span>
+                 </div>
+               </div>
+             </ng-template>
+             <!-- Template for each hour segment in the day view -->
+             <ng-template #dayHourSegmentTemplate
+                          let-segment="segment"
+                          let-locale="locale"
+                          let-segmentHeight="segmentHeight">
+               <div class="cal-hour-segment"
+                    [style.height.px]="segmentHeight"
+                    [class.cal-hour-start]="segment.isStart"
+                    [class.cal-after-hour-start]="!segment.isStart"
+                    [ngClass]="segment.cssClass"
+                    [contextMenu]="basicMenu"
+                    [contextMenuSubject]="segment.date">
+                 <div class="cal-time">
+                   {{ segment.date | calendarDate: 'dayViewHour':locale }}
+                 </div>
+               </div>
+             </ng-template>
+             <!-- Hour segment for the week view -->
+             <ng-template #weekViewHourSegment
+                          let-segment="segment"
+                          let-locale="locale"
+                          let-segmentHeight="segmentHeight"
+                          let-isTimeLabel="isTimeLabel">
 
-        <ng-template #weekHeaderTemplate
-                     let-days="days"
-                     let-locale="locale"
-                     let-dayHeaderClicked="dayHeaderClicked">
-          <div class="cal-day-headers">
-            <div class="cal-header"
-                 *ngFor="let day of days"
-                 [class.cal-past]="day.isPast"
-                 [class.cal-today]="day.isToday"
-                 [class.cal-future]="day.isFuture"
-                 [class.cal-weekend]="day.isWeekend"
-                 (click)="dayHeaderClicked.emit({day: day})"
-                 [contextMenu]="basicMenu"
-                 [contextMenuSubject]="day.date">
-              <b>{{ day.date | calendarDate:'weekViewColumnHeader':locale }}</b><br />
-              <span>{{ day.date | calendarDate:'weekViewColumnSubHeader':locale }}</span>
-            </div>
-          </div>
-        </ng-template>
-
-        <ng-template #dayHourSegmentTemplate
-                     let-segment="segment"
-                     let-locale="locale"
-                     let-segmentHeight="segmentHeight">
-          <div class="cal-hour-segment"
-               [style.height.px]="segmentHeight"
-               [class.cal-hour-start]="segment.isStart"
-               [class.cal-after-hour-start]="!segment.isStart"
-               [ngClass]="segment.cssClass"
-               [contextMenu]="basicMenu"
-               [contextMenuSubject]="segment.date">
-            <div class="cal-time">
-              {{ segment.date | calendarDate: 'dayViewHour':locale }}
-            </div>
-          </div>
-        </ng-template>
-
-        <ng-template #weekViewHourSegment
-                     let-segment="segment"
-                     let-locale="locale"
-                     let-segmentHeight="segmentHeight"
-                     let-isTimeLabel="isTimeLabel">
-          <div class="cal-hour-segment"
-               [style.height.px]="segmentHeight"
-               [class.cal-hour-start]="segment.isStart"
-               [class.cal-after-hour-start]="!segment.isStart"
-               [ngClass]="segment.cssClass"
-               [contextMenu]="basicMenu"
-               [contextMenuSubject]="segment.date">
-            <div class="cal-time" *ngIf="isTimeLabel">
-              {{ segment.date | calendarDate: 'weekViewHour':locale }}
-            </div>
-          </div>
-        </ng-template>
-        <div permissionCheck="6.1" class="w3-container" [ngSwitch]="view">
-          <mwl-calendar-month-view *ngSwitchCase="'month'"
-                                   class="custom-cal-month-view"
-                                   [viewDate]="viewDate"
-                                   [events]="events"
-                                   [refresh]="refresh"
-                                   [cellTemplate]="monthCellTemplate"
-                                   [activeDayIsOpen]="activeDayIsOpen"
-                                   (dayClicked)="dayClicked($event.day)"
-                                   (eventClicked)="handleEvent('Clicked', $event.event)"
-                                   (eventTimesChanged)="eventTimesChanged($event)">
-          </mwl-calendar-month-view>
-          <mwl-calendar-week-view *ngSwitchCase="'week'"
-                                  [viewDate]="viewDate"
-                                  class="custom-cal-week-view"
-                                  [events]="events"
-                                  [refresh]="refresh"
-                                  [headerTemplate]="weekHeaderTemplate"
-                                  [hourSegmentTemplate]="weekViewHourSegment"
-                                  (hourSegmentClicked)="hourSegmentClicked($event)"
-                                  (eventClicked)="handleEvent('Clicked', $event.event)"
-                                  (eventTimesChanged)="eventTimesChanged($event)">
-          </mwl-calendar-week-view>
-          <mwl-calendar-day-view *ngSwitchCase="'day'"
-                                 class="custom-cal-day-view"
-                                 [viewDate]="viewDate"
-                                 [events]="events"
-                                 [refresh]="refresh"
-                                 [hourSegmentTemplate]="dayHourSegmentTemplate"
-                                 (hourSegmentClicked)="hourSegmentClicked($event)"
-                                 (eventClicked)="handleEvent('Clicked', $event.event)"
-                                 (eventTimesChanged)="eventTimesChanged($event)">
-          </mwl-calendar-day-view>
-        </div>
-      </div>
-      <div class="w3-row calendar-footer-wrapper">
-        &nbsp;
-      </div>
+               <div class="cal-hour-segment"
+                    [style.height.px]="segmentHeight"
+                    [class.cal-hour-start]="segment.isStart"
+                    [class.cal-after-hour-start]="!segment.isStart"
+                    [ngClass]="segment.cssClass"
+                    [contextMenu]="basicMenu"
+                    [contextMenuSubject]="segment.date">
+                 <div class="cal-time" *ngIf="isTimeLabel">
+                   {{ segment.date | calendarDate: 'weekViewHour':locale }}
+                 </div>
+               </div>
+             </ng-template>
+             <div permissionCheck="6.1" class="w3-container" [ngSwitch]="view">
+               <!--Month view-->
+               <mwl-calendar-month-view *ngSwitchCase="'month'"
+                                        class="custom-cal-month-view"
+                                        [viewDate]="viewDate"
+                                        [events]="events"
+                                        [refresh]="refresh"
+                                        [cellTemplate]="monthCellTemplate"
+                                        [activeDayIsOpen]="activeDayIsOpen"
+                                        (dayClicked)="dayClicked($event.day)"
+                                        (eventClicked)="handleEvent('Clicked', $event.event)"
+                                        (eventTimesChanged)="eventTimesChanged($event)">
+               </mwl-calendar-month-view>
+               <!--week view-->
+               <mwl-calendar-week-view *ngSwitchCase="'week'"
+                                       [viewDate]="viewDate"
+                                       class="custom-cal-week-view"
+                                       [events]="events"
+                                       [refresh]="refresh"
+                                       [headerTemplate]="weekHeaderTemplate"
+                                       [hourSegmentTemplate]="weekViewHourSegment"
+                                       (hourSegmentClicked)="hourSegmentClicked($event)"
+                                       (eventClicked)="handleEvent('Clicked', $event.event)"
+                                       (eventTimesChanged)="eventTimesChanged($event)">
+               </mwl-calendar-week-view>
+               <!--day view-->
+               <mwl-calendar-day-view *ngSwitchCase="'day'"
+                                      class="custom-cal-day-view"
+                                      [viewDate]="viewDate"
+                                      [events]="events"
+                                      [refresh]="refresh"
+                                      [hourSegmentTemplate]="dayHourSegmentTemplate"
+                                      (hourSegmentClicked)="hourSegmentClicked($event)"
+                                      (eventClicked)="handleEvent('Clicked', $event.event)"
+                                      (eventTimesChanged)="eventTimesChanged($event)">
+               </mwl-calendar-day-view>
+             </div>
+           </div>
+             <div class="w3-row calendar-footer-wrapper">
+               &nbsp;
+             </div>
+           </div>
     </div>
   </div>
-</div>
 
-<!--Office 356 info popup starts-->
-<div *ngIf="officeToggle" class="w3-modal" style="display:block;">
-  <div class="w3-modal-content w3-round-large">
-    <div class="w3-container">
-      <span (click)="closeOfficeToggle()" class="w3-button w3-display-topright">&times;</span>
-      <div class="w3-white w3-small sfcenter w3-margin-top">
-        <div class="w3-margin w3-animate-opacity">
-          <div class="w3-row">
-            <h3 class="w3-container">Meeting Info</h3>
-          </div>
-          <div class="w3-row w3-padding">
-            <div class="marginform">
-              <h5>Meeting: (Priority:{{officeInfo?.importance}})</h5>
-              <p><b>Start:</b> {{officeInfo?.start?.dateTime | date: 'full'}} <b>End:</b> {{officeInfo?.end?.dateTime | date: 'full'}}</p>
-              <p><b>Subject:</b> {{officeInfo?.subject}}</p>
-              <p><b>Body:</b></p>
-              <div [innerHTML]="officeInfo?.body.content"></div>
-              <p><span>Location:</span></p>
-              <div [innerHTML]="officeInfo?.location?.displayName"></div>
-              <div *ngIf="officeInfo?.attendees?.length>0">
-                <p><b>Attendees</b></p>
-                <ng-container *ngFor="let attendee of officeInfo?.attendees">
-                  <p>
-                    {{attendee.emailAddress.name}} ({{attendee.emailAddress.address}})
-                  </p>
-                  <p>
-                    <b>Status:</b> ({{attendee.type}}) | <b>Response:</b> ({{attendee.status.response}} at {{attendee.status.time  | date: 'full' }})
-                  </p>
-                </ng-container>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!--Office 356 info popup starts-->
+  <!--Office 356 info popup starts-->
+                   <div *ngIf="officeToggle" class="w3-modal" style="display:block;">
+                     <div class="w3-modal-content w3-round-large">
+                       <div class="w3-container">
+                         <span (click)="closeOfficeToggle()" class="w3-button w3-display-topright">&times;</span>
+                         <div class="w3-white w3-small sfcenter w3-margin-top">
+                           <div class="w3-margin w3-animate-opacity">
+                             <div class="w3-row">
+                               <h3 class="w3-container">Meeting Info</h3>
+                             </div>
+                             <div class="w3-row w3-padding">
+                               <div class="marginform">
+                                 <h5>Meeting: (Priority:{{officeInfo?.importance}})</h5>
+                                 <p><b>Start:</b> {{officeInfo?.start?.dateTime | date: 'full'}} <b>End:</b> {{officeInfo?.end?.dateTime | date: 'full'}}</p>
+                                 <p><b>Subject:</b> {{officeInfo?.subject}}</p>
+                                 <p><b>Body:</b></p>
+                                 <div [innerHTML]="officeInfo?.body.content"></div>
+                                 <p><span>Location:</span></p>
+                                 <div [innerHTML]="officeInfo?.location?.displayName"></div>
+                                 <div *ngIf="officeInfo?.attendees?.length>0">
+                                   <p><b>Attendees</b></p>
+                                   <ng-container *ngFor="let attendee of officeInfo?.attendees">
+                                     <p>
+                                       {{attendee.emailAddress.name}} ({{attendee.emailAddress.address}})
+                                     </p>
+                                     <p>
+                                       <b>Status:</b> ({{attendee.type}}) | <b>Response:</b> ({{attendee.status.response}} at {{attendee.status.time  | date: 'full' }})
+                                     </p>
+                                   </ng-container>
+                                 </div>
+                               </div>
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                   <!--Office 356 info popup starts-->

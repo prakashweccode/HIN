@@ -36,7 +36,7 @@ export class TodolistComponent implements OnInit {
         }));
       }
 
-
+      // Initializes the grid headers for displaying To do data in the table.
       this.gridHeaders = [
         { displayName: 'To Do Number', propertyName: 'TodoNumber', dataType: 'string', secondPropertyName: '', filter: '', isLink: true, serializeArray: null },
         { displayName: 'Name', propertyName: 'TodoName', dataType: 'string', secondPropertyName: '', filter: '', isLink: true, serializeArray: null },
@@ -50,6 +50,7 @@ export class TodolistComponent implements OnInit {
       ];
 
     }, err => { }, () => { });
+    // Initializes the data source and filter columns for the grid or table.
     this.dataSource = new Array<any>();
     this.filterColumns = [
 
@@ -64,10 +65,12 @@ export class TodolistComponent implements OnInit {
     ];
     this.pageLengthOptions = [25, 100, 250];
   }
+  // Method to handle adding a new Todo
   addTodo() {
     this.dataShared.setPermissionBaseValue("5.2");
     this.router.navigate(['/todo']);
   }
+  // Method to edit Todo
   editTodo(evt) {
     this.dataShared.setPermissionBaseValue("5.2");
     this.dataShared.setValue(evt.dataRow);

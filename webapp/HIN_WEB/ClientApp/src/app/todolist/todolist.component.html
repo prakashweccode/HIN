@@ -1,8 +1,12 @@
-
-<br/><div class="w3-card-2 w3-white w3-small w3-margin-left w3-margin-right marginform w3-round-large w3-animate-zoom">
+<!-- Card Container for To Do List -->
+<br />
+<div class="w3-card-2 w3-white w3-small w3-margin-left w3-margin-right marginform w3-round-large w3-animate-zoom">
   <div class="w3-container">
+    <!-- Header Section -->
     <h4 class="w3-left w3-xlarge w3-margin-top w3-margin-bottom"><b>To Do List</b></h4>
+    <!-- Add To Do Button -->
     <button class="w3-button w3-right w3-secondary w3-round-large w3-margin-top w3-margin-bottom" (click)="addTodo()" permissionCheck="6.2">+ Add To Do</button>
+    <!-- Data Grid Section for displaying To Do items -->
     <div class="w3-container" permissionCheck="6.1">
       <app-data-grid [gridHeaders]="gridHeaders" [actions]="actions" [dataSource]="dataSource" [filterColumns]="filterColumns" [apiUrl]="'/api/Todo/GetODataTodoList'" [pageSize]="25"
                      [isResponsive]="false" [isSearchEnabled]="true" [enableRowNumber]="enableRowNumber" [isPaginationEnabled]="true" [isSecurityEnabled]="true" [pageLengthOptions]="pageLengthOptions" (rowClick)="editTodo($event);">
@@ -10,4 +14,4 @@
     </div>
   </div>
 </div>
-<br/>
+<br />

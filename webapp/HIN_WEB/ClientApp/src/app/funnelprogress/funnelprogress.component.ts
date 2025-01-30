@@ -32,6 +32,7 @@ export class FunnelprogressComponent implements OnInit {
   cancel() {
     this.router.navigate(['/reports']);
   }
+  // Method to fetch funnel progress data based on the selected filters
   getFunnelProgress() {
     this.addDealReportService.getFunnelProgress(this.funnelProgressRequest).subscribe(data => {
       if (data)
@@ -42,11 +43,12 @@ export class FunnelprogressComponent implements OnInit {
 
     });
   }
+  // Method to fetch funnel progress data based on the selected filters
   selectAssignedValue(evt) {
     this.funnelProgressRequest.Funnels = evt;
   }
 
-
+  // Set up the API URL and required parameters for the grid
   getAssignedToGridData() {
     this.assignedToGrid.ApiUrl = "/api/Pipeline/GetPipeLineGroup";
     this.assignedToGrid.AssignedToId = this.funnel.PipelineGroupId;

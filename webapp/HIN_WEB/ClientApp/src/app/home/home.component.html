@@ -46,11 +46,11 @@
       <app-chart-widget></app-chart-widget>
     </div>
   </div>-->
+    <!-- Displays a Google Chart for each chart configuration from the dashboardCharts array with the specified data, type, and options -->
     <div class="w3-panel">
       <div class="w3-container" style="margin:0 -16px">
         <div class="w3-half" *ngFor="let chartConfig of dashboardChartConfigs;index as i;">
           <div class="w3-white w3-round-large w3-margin-right-large">
-            <!--This displays a Google Chart with data and a title-->
             <div class="w3-margin w3-animate-opacity">
               <app-angular-google-charts [title]="chartConfig.ChartConfigName"
                                          [type]="(chartConfig.ChartType == 1 ? 'PieChart' : (chartConfig.ChartType == 2 ? 'BarChart' : (chartConfig.ChartType == 3 ? 'ColumnChart' : 'LineChart')))"
@@ -63,6 +63,7 @@
             </div>
           </div>
         </div>
+
         <!-- Container to display a message when no dashboard charts are configured -->
         <div class="w3-row w3-white w3-round-large" *ngIf="dashboardChartConfigs.length <= 0">
           <div class="w3-row w3-center w3-margin w3-animate-opacity">
@@ -75,6 +76,7 @@
             </div>
           </div>
         </div>
+
         <!--<div class="w3-half">-->
         <!--<h5>Regions</h5>-->
         <!--<div class="w3-white w3-round-large">

@@ -74,11 +74,12 @@ export class NewcalendarComponent implements OnInit {
         return <string>k;
     return null;
   }
+  // Refreshes the events displayed on the calendar by fetching updated data
   refreshCalendar() {
     this.getCalendarEventsByRange();
     this.getRecurrenceEvents();
   }
-
+  //show officedata method data
   async getCalendarEventsRange() {
     
     const getStart: any = {
@@ -95,7 +96,7 @@ export class NewcalendarComponent implements OnInit {
     this.filterByDate.EndDate = new Date(format(getEnd(this.viewDate), 'yyyy-MM-dd'));
     let calendarEvent = this.graphService.getCalendarEventsByRange(this.filterByDate.StartDate, this.filterByDate.EndDate, this.clientTimeZone);
   }
-
+  // Retrieves calendar events within a specified date range and processes recurring events.
   async getCalendarEventsByRange() {
     const getStart: any = {
       month: startOfMonth,
@@ -168,6 +169,7 @@ export class NewcalendarComponent implements OnInit {
         });
       }
     }, _err => { }, () => { });
+    // Fetch Office 365 events if connected
     if (this.isOffice365Connected && this.showOfficeData) {
       this.notification.ShowNoty("Loading office 365 data...");
       this.calendars = await this.graphService.getCalendarEventsByRange(this.filterByDate.StartDate.toISOString(), this.filterByDate.EndDate.toISOString(), this.clientTimeZone);
@@ -179,7 +181,7 @@ export class NewcalendarComponent implements OnInit {
       this.notification.ShowNoty("Office 365 data loaded successfully.");
     }
   }
-
+  //Retrieves recurring events and formats them for inclusion in the calendar.
   getRecurrenceEvents() {
     this.newCalendarService.getServiceRecurrenceEvents().subscribe(data => {
       if (data.Item1) {
@@ -309,7 +311,7 @@ export class NewcalendarComponent implements OnInit {
       }
     });
   }
-
+  //Adds a new Office 365 calendar event to the events list.
   addOffice365CalendarEvent(start, end, id, type, title, officeData) {
     this.events.push({
       id: id,
@@ -326,11 +328,11 @@ export class NewcalendarComponent implements OnInit {
     });
     this.refresh.next();
   }
-
+  //Closes the Office 365 toggle view by setting the flag to false.
   closeOfficeToggle() {
     this.officeToggle = false;
   }
-
+  //Emits the Office 365 connection status and fetches calendar events if connected.
   statusEmitter(value) {
     this.isOffice365Connected = value;
     this.getCalendarEventsByRange();
@@ -339,7 +341,7 @@ export class NewcalendarComponent implements OnInit {
   hourSegmentClicked(evt) {
 
   }
-
+  //Handles calendar event actions based on the event type.
   handleEvent(action: string, event: SfCalendarEvent): void {
     if (event.actionType == "Todo") {
       this.newCalendarService.getTodoById(event.id).subscribe(data => {
@@ -367,6 +369,7 @@ export class NewcalendarComponent implements OnInit {
       }
     }
   }
+ // Handles the action when a day is clicked on the calendar.
   dayClicked({ date, events }: { date: Date; events: SfCalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
       if (
@@ -380,7 +383,7 @@ export class NewcalendarComponent implements OnInit {
       this.viewDate = date;
     }
   }
-
+ //update event start and end time
   eventTimesChanged({
     event,
     newStart,
@@ -394,13 +397,13 @@ export class NewcalendarComponent implements OnInit {
   closeEventAdd() {
     //this.addEvent = false;
   }
-
+  // Adds a new Todo by opening the 'todomodal'
   addTodo(date: Date): void {
     this.dataHelper.resetSession();
     this.dataHelper.setDateValue(date);
     this.navigate('todomodal', true);
   }
-
+  // Adds a new service by opening the 'addservicemodal'
   addService(date: Date): void {
     this.dataHelper.resetSession();
     this.dataHelper.setDateValue(date);
@@ -416,12 +419,12 @@ export class NewcalendarComponent implements OnInit {
       this.router.navigate(['/' + path]);
     }
   }
-
+  // add newservice
   addNewService() {
     this.dataHelper.resetSession();
     this.navigate('addservicemodal', true);
   }
-
+  //add Todo
   addNewTodo() {
     this.dataHelper.resetSession();
     this.navigate('todomodal', true);
