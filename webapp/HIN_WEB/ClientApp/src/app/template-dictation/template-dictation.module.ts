@@ -6,13 +6,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RxSpeechRecognitionService, SpeechRecognitionModule, SpeechRecognitionService } from '@kamiazya/ngx-speech-recognition';
 import { SafePipe } from '../helper/safe.pipe';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { DirectiveHelperModule } from '../helper/directive/DirectiveHelperModule';
+import { DataGridModule } from '../data-grid/data-grid.module';
+import { EditcolumnModule } from '../editcolumn/editcolumn.module';
 
 
 @NgModule({
   declarations: [TemplateDictationComponent, SafePipe],
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule,
-    TemplateDictationRoutingModule, NgSelectModule,
+    TemplateDictationRoutingModule, DataGridModule, EditcolumnModule, DirectiveHelperModule, NgSelectModule,
     SpeechRecognitionModule.withConfig({
       lang: 'en-US',
       interimResults: true,

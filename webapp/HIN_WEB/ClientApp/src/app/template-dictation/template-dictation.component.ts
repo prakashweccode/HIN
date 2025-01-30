@@ -42,20 +42,63 @@ export class TemplateDictationComponent implements OnInit, OnDestroy {
   loggedUserData: Users = new Users();
   isListening: boolean = false;
   currentCtrl: HTMLInputElement;
+  templateDictationId: number = 0;
+
+
+
+
+  public dynamicFilter: any;
+  public staticFilter: any;
+  public filterQuery: any;
+  public orderBy: any;
+  public gridHeaders: Array<any>;
+  public dataSource: Array<any>;
+  public filterColumns: Array<any>;
+  public apiUrl: string;
+  public pageSize: number;
+  public isResponsive: boolean;
+  public isSearchEnabled: boolean;
+  public isPaginationEnabled: boolean;
+  public actions: Array<any>;
+  public isSecurityEnabled: boolean = false;
+  public pageLengthOptions: Array<number>;
+  public status: any;
+  public isOpen: boolean = false;
+  public templateOpen: boolean = false;
   constructor(public loaderService: LoaderService, public userService: UsersService, public router: Router, private route: ActivatedRoute, private sanitizer: DomSanitizer, private notyHelper: NotyHelper, public templateService: TemplateService, private speechService: VoiceToTextService, private graphService: OnedrivegraphService) {
-    this.loggedUser = JSON.parse(localStorage.getItem("userDetail"));
-    this.userService.getUserById(this.loggedUser.User.UserId).subscribe(_data => {
-      if (_data)
-        this.loggedUserData = _data
-    }, err => { }, () => { });
+    //this.loggedUser = JSON.parse(localStorage.getItem("userDetail"));
+    //this.userService.getUserById(this.loggedUser.User.UserId).subscribe(_data => {
+    //  if (_data)
+    //    this.loggedUserData = _data
+    //}, err => { }, () => { });
   }
   ngOnDestroy() {
     this.speechService.stop();
   }
   ngOnInit() {
+    this.gridHeaders = [
+      { displayName: 'Template', propertyName: 'TemplateName', dataType: 'string', secondPropertyName: '', filter: '', isLink: true, serializeArray: null },
+      { displayName: 'Actions', propertyName: 'x', dataType: 'string', secondPropertyName: '', filter: '', isLink: false, serializeArray: null, gridPermissionCheck: '10.4.1.4' }
+      //{ displayName: 'Created On', propertyName: 'CreatedOn', dataType: 'date', secondPropertyName: '', filter: '', isLink: false, className: '' },
+      //{ displayName: 'Created By', propertyName: 'CreatedBy', dataType: 'string', secondPropertyName: '', filter: '', isLink: false, className: '' },
+      //{ displayName: 'Status', propertyName: 'Status', dataType: 'number', secondPropertyName: '', filter: '', isLink: false, className: '', serializeArray: this.status }
+    ];
+    this.dataSource = new Array<any>();
+    this.filterColumns = [
+      { column: "TemplateName", value: "", type: "contains" },
+      //{ column: "CreatedOn", value: "", type: "contains" },
+      //{ column: "CreatedBy", value: "", type: "contains" },
+      //{ column: "Status", value: "", type: "contains" }
+    ];
+    this.actions = [
+      { name: 'open', icon: 'fa fa-file-word-o' }
+    ];
+    this.pageLengthOptions = [25, 100, 250];
+
     this.speechService.init(document);
     this.speechService.InitAllDictation(document);
     this.initializeScreen();
+
     let templateId = this.route.snapshot.paramMap.get('id');
     if (templateId) {
       this.templateService.getTemplateById(templateId).subscribe(_data => {
@@ -79,6 +122,8 @@ export class TemplateDictationComponent implements OnInit, OnDestroy {
     }
   }
 
+
+
   loadSignaturePad(ele: any): void {
     this.signaturePad = new SignaturePad(document.getElementById('signatureCtrl') as HTMLCanvasElement, {
       backgroundColor: 'rgba(255, 255, 255, 0)',
@@ -90,6 +135,24 @@ export class TemplateDictationComponent implements OnInit, OnDestroy {
     const dataURL = this.signaturePad.toDataURL();
     //const parts = dataURL.split(';base64,');
     this.image = dataURL;
+  }
+
+  //editTemplate(data) {
+  //  this.templateDictationId = data.dataRow.Id;
+  //  if (data.dataAction == "open") {
+  //    this.isOpen = true;
+  //    this.appointmentId = 0;
+  //  }
+  //}
+
+  editTemplate(data) {
+    this.templateDictationId = data.dataRow.Id;
+    this.isOpen = true;
+    this.appointmentId = 0;
+  }
+
+  closeTemplate() {
+    this.isOpen = false;
   }
 
   clear() {
@@ -124,7 +187,7 @@ export class TemplateDictationComponent implements OnInit, OnDestroy {
     const color = 'rgb(' + r + ',' + g + ',' + b + ')';
     this.signaturePad.penColor = color;
   }
-
+  ///
   initializeScreen() {
     this.templateService.getDefaultData().subscribe(_data => {
       if (_data) {
@@ -136,14 +199,18 @@ export class TemplateDictationComponent implements OnInit, OnDestroy {
     }, _error => { console.log(_error); }, () => { });
   }
 
+
+
   loadTemplatePage(id: number) {
-    if (id) {
-      this.templateService.getTemplatePageById(id).subscribe(_data => {
+    if (this.templateDictationId) {
+      this.templateService.getTemplatePageById(this.templateDictationId).subscribe(_data => {
         if (_data) {
           this.strSelectedTemplate = _data.templatePage;
           this.selectedTemplatePage = this.sanitizer.bypassSecurityTrustHtml(_data.templatePage ? _data.templatePage : '');
           this.selectedTemplateHtml = _data.templateHtml ? _data.templateHtml : '';
           this.selectedTemplateName = _data.templateName ? _data.templateName : '';
+          this.closeTemplate();
+          this.templateHtmlOpen();
           setTimeout(() => {
             this.bindStartButtonEvent();
             this.bindStopButtonEvent();
@@ -152,6 +219,7 @@ export class TemplateDictationComponent implements OnInit, OnDestroy {
             this.bindLoadSignature();
             this.bindDefaultValues();
             this.bindTextFocusoutEvent();
+
           }, 500);
         }
         else {
@@ -161,6 +229,16 @@ export class TemplateDictationComponent implements OnInit, OnDestroy {
       }, _error => { console.log(_error); }, () => { });
     }
   }
+
+  templateHtmlOpen() {
+    this.templateOpen = true;
+  }
+
+  closeTemplateHtmlOpen() {
+    this.appointmentChange(0);
+    this.templateOpen = false;
+  }
+
   bindSignatureAdd() {
     var canvas = document.getElementById('signatureCtrl');
     if (canvas) {
@@ -351,20 +429,22 @@ export class TemplateDictationComponent implements OnInit, OnDestroy {
     });
   }
 
+  ///
   appointmentChange(id: number) {
+
     if (id && id > 0) {
       this.templateService.getSelectedAppointmentDetail(id).subscribe(_data => {
         if (_data) {
           this.selectedAppointment = _data;
           console.log(this.selectedAppointment);
-          this.bindDefaultValues();
+          /*this.bindDefaultValues();*/
         }
       }, _err => { console.log(_err); }, () => { });
     }
   }
 
-  previewTemplate(templateId) {
-    if (templateId) {
+  previewTemplate(templateDictationId) {
+    if (templateDictationId) {
       this.previewHtml = this.selectedTemplateHtml;
       this.getFormControlValues();
       this.isPreview = true;
@@ -383,6 +463,7 @@ export class TemplateDictationComponent implements OnInit, OnDestroy {
   }
 
   sendToOneDrive() {
+   
     if (!this.selectedAppointment) {
       this.notyHelper.ShowNoty("Please select an appointment.");
     }
@@ -424,7 +505,7 @@ export class TemplateDictationComponent implements OnInit, OnDestroy {
       }
       this.template.Status = 1;
       this.template.AppointmentId = this.appointmentId;
-      this.template.TemplateId = this.templateId;
+      this.template.TemplateId = this.templateDictationId;
       this.templateService.saveTemplate(this.template).subscribe(data => {
         if (data) {
           this.notyHelper.ShowNoty("Data saved successfully !!!");
@@ -492,11 +573,13 @@ export class TemplateDictationComponent implements OnInit, OnDestroy {
   //  }
   //}
 
-  saveAsDraft(templateId, appointmentId, draftTemplate: HTMLDivElement) {
-    if (templateId && appointmentId) {
+  saveAsDraft(templateDictationId, appointmentId, draftTemplate: HTMLDivElement) {
+
+    if (templateDictationId && appointmentId) {
+      
       this.getFormControlValues();
       this.template.AppointmentId = appointmentId;
-      this.template.TemplateId = templateId;
+      this.template.TemplateId = templateDictationId;
       this.template.Status = TemplateStatus.Draft;
       this.template.DraftHtml = this.getDraftHtml(draftTemplate.innerHTML);
       setTimeout(() => {

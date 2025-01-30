@@ -16,7 +16,7 @@ export class AuthService {
   constructor(
     private msalService: MsalService, private noty: NotyHelper) {
     this.authenticated = false;
-    this.user = JSON.parse(localStorage.getItem("userDetail"));
+    this.user = JSON.parse(localStorage.getItem("userDetail") || '{}');
   }
 
   // Prompt the user to sign in and

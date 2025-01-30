@@ -19,14 +19,19 @@ import { AssignedtoModule } from '../assignedto/assignedto.module';
 import { AssignedtogridModule } from '../assignedtogrid/assignedtogrid.module';
 import { PrimarycontactModule } from '../primarycontact/primarycontact.module';
 import { OnedriveExplorerModule } from '../onedrive-explorer/onedrive-explorer.module';
+import { TemplateDictationModule } from '../template-dictation/template-dictation.module';
+import { PatientFileExplorerModule } from '../patient-file-explorer/patient-file-explorer.module';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+
+
 
 
 @NgModule({
   declarations: [AddleadsComponent],
   imports: [
-    CommonModule, FormsModule, ReactiveFormsModule, CategorylistModule,
+    CommonModule, FormsModule, ReactiveFormsModule, CategorylistModule, 
     AddleadsRoutingModule, CurrencyModule, ContactinformationModule, CustomsectionModule, NotesinfoModule, AddnewfieldModule, CustomdropdownModule,
-    DirectiveHelperModule, CustomstringdropdownModule, SfFileExplorerModule, CreatedbyModule, AssignedtoModule, AssignedtogridModule, PrimarycontactModule, OnedriveExplorerModule
+    DirectiveHelperModule, CustomstringdropdownModule, SfFileExplorerModule, CreatedbyModule, AssignedtoModule, AssignedtogridModule, PrimarycontactModule, OnedriveExplorerModule, PatientFileExplorerModule, TemplateDictationModule, NgMultiSelectDropDownModule.forRoot()
   ]
 })
 export class AddleadsModule { }

@@ -17,10 +17,23 @@ export class GraphService {
     private alertsService: ErrorHandler, private http: HttpClient) {
     let loggedUserDetails = <UserDetail>JSON.parse(localStorage.getItem("userDetail"));
     if (loggedUserDetails && loggedUserDetails.User && loggedUserDetails.User.OfficeToken) {
+      
       this.graphClient = Client.init({
         authProvider: async (done) => {
-          done(null, loggedUserDetails.User.OfficeToken);
-          authService.authenticated = true;
+          // Get the token from the auth service
+          let token = await this.authService.getAccessToken()
+
+            .catch((reason) => {
+              done(reason, null);
+            });
+          if (token) {
+            done(null, token);
+            authService.authenticated = true;
+          } else {
+            done("Could not get an access token", null);
+          }
+          //done(null, loggedUserDetails.User.OfficeToken);
+          //authService.authenticated = true;
         }
       })
     }
@@ -43,11 +56,21 @@ export class GraphService {
       });
     }
   }
+  async searchDrive(searchString: string) {
+    return await this.graphClient.api("/me/drive/root/search(q='Franklin')").get();
+  }
 
-  async sendMail(mail): Promise<void> {
+  async getFilteredSharedDrive(request: any) {
+    return await this.graphClient.api("/search/query").post(request);
+  }
+  
+  async sendMail(mail): Promise<any> {
     return await this.graphClient.api("/me/sendMail").post(mail);
   }
-  async getMails(): Promise<void> {
+  async PostUser(request): Promise<any> {
+    return await this.graphClient.api("/users").post(request);
+  }
+  async getMails(): Promise<any> {
 
     return await this.graphClient.api("/me/messages").get();
   }
@@ -55,36 +78,54 @@ export class GraphService {
     return await this.graphClient.api("/me/messages/" + id).expand("attachments").get();
   }
 
-  async getDrive(): Promise<void> {
-    return await this.graphClient.api("/drive").get();
+  async getDrive(): Promise<any> {
+    return await this.graphClient.api("/me/drive").get();
   }
-  async getSharedDrive(): Promise<void> {
-    return await this.graphClient.api("/me/drive/sharedWithMe").get();
+  async getSharedDrive(): Promise<any> {
+    return await this.graphClient.api("/me/drive/sharedWithMe?allowexternal=true").get();
+  }
+  async updateFile(id, fileName, request): Promise<any> {
+    return await this.graphClient.api("/me/drive/items/" + id + ":/" + fileName + ":/content").putStream(request);
   }
 
-  async getOneDriveItems(driveId, id): Promise<void> {
-    return await this.graphClient.api("/drives/" + driveId + "/items/" + id + "/children").get();
+
+  async getOneDriveItems(driveId, id): Promise<any> {
+    return await this.graphClient.api("/me/drives/" + driveId + "/items/" + id + "/children").get();
   }
-  async getDriveItems(id): Promise<void> {
+  async getDriveItems(id): Promise<any> {
     return await this.graphClient.api("/me/drives/items/" + id + "/children").get();
   }
 
-  async getItems(parent, id): Promise<void> {
-    return await this.graphClient.api("/drives/" + parent + "/items/" + id + "/children").get();
+  async getItems(parent, id): Promise<any> {
+    return await this.graphClient.api("/me/drives/" + parent + "/items/" + id + "/children").get();
+  }
+
+  async shareDrive(parent, id, request) {
+    return await this.graphClient.api("/me/drives/" + parent + "/items/" + id + "/invite").post(request);
   }
 
   async AddAccess(id, data): Promise<void> {
     return await this.graphClient.api("/me/drive/items/" + id + "/invite").post(data);
   }
 
-  async getRootItems(): Promise<void> {
-    return await this.graphClient.api("/drive/root/children").get();
+  async getRootItems(): Promise<any> {
+    return await this.graphClient.api("/me/drive/root/children").get();
+
+  }
+  async SaveFile(path, request) {
+    
+    return await this.graphClient.api(path).putStream(request);
   }
 
-  async getCalendars(): Promise<void> {
+  async CreateFolder(path, request) {
+    
+    return await this.graphClient.api(path).post(request);
+  }
+  
+  async getCalendars(): Promise<any> {
     return await this.graphClient.api("/me/calendars").get();
   }
-  async getCalendar(id): Promise<void> {
+  async getCalendar(id): Promise<any> {
     return await this.graphClient.api("/me/calendars/" + id).get();
   }
   async getCalendarEvents(id, date, clientTimeZone): Promise<void> {
@@ -104,6 +145,10 @@ export class GraphService {
   }
   async getCalendarEventsByRange(from, to, clientTimeZone): Promise<void> {
     return await this.graphClient.api("me/calendar/events?$filter=start/dateTime ge '" + from + "' and start/dateTime lt '" + to + "'").header('Prefer', 'outlook.timezone="' + clientTimeZone + '"').get();
+  }
+
+  async createTenentFolder(request: any) {
+    return await this.graphClient.api('/me/drive/items/01SESOOENHWHK3R5OSQBHI34MUSAXKKVBR/children').post(request);
   }
 
  

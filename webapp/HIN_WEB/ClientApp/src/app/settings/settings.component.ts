@@ -7,6 +7,7 @@ import { NotyHelper } from '../helper/NotyHelper';
 import { AuthService } from '../officeauth/auth.service';
 import { GraphService } from '../officeauth/graph.service';
 import { K9erpsetting } from '../model/k9erpsetting';
+import { UserDetail } from '../login/login';
 
 @Component({
   selector: 'app-settings',
@@ -20,11 +21,13 @@ export class SettingsComponent implements OnInit {
   public user: Users = new Users;
   public themes = [{ Id: 1, Name: "Dark", FileName: "blackandgreen.css" }, { Id: 2, Name: "Cherry Tomato", FileName: "cherrytomato.css" }, { Id: 3, Name: "Martini Olive", FileName: "martiniolive.css" }, { Id: 4, Name: "Navy Peony", FileName: "navypeony.css" }, { Id: 5, Name: "Nebulas Blue", FileName: "nebulasblue.css" }, { Id: 6, Name: "Purple", FileName: "purple.css" }, { Id: 7, Name: "Red Pear", FileName: "redpear.css" }, { Id: 8, Name: "Russet Orange", FileName: "russetorange.css" }, { Id: 9, Name: "Sailor Blue", FileName: "sailorblue.css" }, { Id: 10, Name: "Snorkel Blue", FileName: "snorkelblue.css" }, { Id: 11, Name: "Ultra Violet", FileName: "ultraviolet.css" }];
   public isSignPad: boolean = false;
+  public loggedUser: any;
 
   constructor(public router: Router, public themeService: ThemeService, public settingService: SettingsService, public notyHelper: NotyHelper, private officeService: AuthService, private graphService: GraphService, public notification: NotyHelper) { }
 
   ngOnInit() {
     var data = JSON.parse(localStorage.getItem("userDetail"));
+    this.loggedUser = JSON.parse(localStorage.getItem("userDetail"));
     if (localStorage.getItem("userDetail")) {
       this.getUserById(data.User.UserId);
     }
@@ -38,10 +41,12 @@ export class SettingsComponent implements OnInit {
   getUserById(id) {
     this.settingService.getUserById(id).subscribe(data => {
       if (data) {
-        if (data.Signature) {
-          let signatureModel = JSON.parse(atob(data.Signature));
-          data.Signature = signatureModel.signature;
-        }
+        //if (data.Signature) {
+        //  let signatureModel = JSON.parse(atob(data.Signature));
+        //  console.log(signatureModel);
+        //  data.Signature = signatureModel.signature;
+        //  console.log(data.Signature);
+        //}
         this.user = data;
         this.themeId = this.themes.find(x => x.FileName == (this.user.UserTheme ? this.user.UserTheme : 'Dark')).Id;
         this.isSignPad = true;
@@ -69,13 +74,22 @@ export class SettingsComponent implements OnInit {
       this.themeId = 1;
     }
     this.user.UserTheme = this.themes.find(x => x.Id == this.themeId).FileName;
-    let signatureModel = { signature: user.Signature, secretKey: "HINAPP123", clientKey: "DP123" }
-    user.Signature = btoa(JSON.stringify(signatureModel));
+    //let signatureModel = { signature: user.Signature, secretKey: "HINAPP123", clientKey: "DP123" }
+    //user.Signature = btoa(JSON.stringify(signatureModel));
     this.settingService.updateUser(user).subscribe(data => {
       if (data) {
         this.user = data;
+        this.notyHelper.ShowNoty("User updated successfully..");
+        //localStorage.clear();
+        let userDetails = <UserDetail>JSON.parse(localStorage.getItem("userDetail"));
+        userDetails.User = this.user;
+        localStorage.setItem("userDetail", JSON.stringify(userDetails));
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.loggedUser = null;
   }
 
   selectTheme(themeId) {

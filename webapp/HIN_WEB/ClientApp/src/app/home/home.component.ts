@@ -74,21 +74,29 @@ export class HomeComponent {
     //this.timeLines = data;
   }
 
+  // begin region Get Dashboard Charts Method
   getDashboardCharts(userId) {
+    // Fetch all chart configurations from the service
     this.chartService.getAllChartConfig().subscribe(_data => {
       if (_data) {
         this.dashboardChartConfigs = _data;
+        // For each chart configuration, fetch the corresponding chart data
         this.dashboardChartConfigs.forEach(_x => {
           this.getChartData(_x);
         });
       }
     }, _err => { }, () => { });
   }
+  
+// Method to fetch chart data for a specific chart configuration
   getChartData(chartConfig) {
+    // Check if the chart should be displayed
     if (chartConfig.DisplayChart) {
       this.chartService.getChartData(chartConfig).subscribe(_data => {
+        // If data is returned
         if (_data) {
           let data = [];
+          // Group the data based on the GroupById
           _data.forEach(_x => {
             switch (chartConfig.GroupById)
             {
@@ -105,12 +113,16 @@ export class HomeComponent {
                 break;
             }
           });
+          // Update the chart configuration with the grouped data
           chartConfig.ChartData = data;
         }
       }, _err => { }, () => { });
     }
   }
+  
+  // Method to navigate the user to the dashboard configuration page
   gotoDashboardConfig() {
     this.router.navigate(['/listDashboardConfig']);
   }
+  
 }

@@ -90,7 +90,7 @@ export class Lead {
   public LeadStatus: number;
   public PartnerId: number;
   public ReferralId: number;
-  public SecurityGroupId: number;
+  public SecurityGroupId: string;
   public Reason: string;
   public LeadFunnelStatus: number;
   public OriginLeadId: number;
@@ -109,6 +109,11 @@ export class Lead {
   public Dob: Date;
   public Occupation: string;
   public Age: number;
+  public EmergencyFirstName: string;
+  public EmergencyLastName: string;
+  public EmergencyMiddleName: string;
+  public EmergencyCellNumber: string;
+  public EmergencyContactTitle: string;
 }
 
 export class LeadOriginType {
@@ -135,4 +140,8 @@ export class LeadStatus {
 export class PatientForm {
   public Allergies: number;
   public Gender: number;
+}
+
+export class LeadExtend extends Lead {
+  public EmergencyContact: string;
 }

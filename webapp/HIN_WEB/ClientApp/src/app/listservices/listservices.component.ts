@@ -10,6 +10,7 @@ import { NotyHelper } from '../helper/NotyHelper';
 })
 export class ListservicesComponent implements OnInit {
   //declarations
+  public additionalFilter: any;
   public dynamicFilter: any;
   public staticFilter: any;
   public filterQuery: any;
@@ -23,7 +24,7 @@ export class ListservicesComponent implements OnInit {
   public isSearchEnabled: boolean;
   public isPaginationEnabled: boolean;
   public actions: Array<any>;
-  public isSecurityEnabled: boolean = false;
+  public isSecurityEnabled: boolean = true;
   public pageLengthOptions: Array<number>;
   public serviceType = [{ id: 1, Name: "Service" }, { id: 2, Name: "Job" }];
   constructor(public router: Router, public dataShared: Datashared, public noty: NotyHelper) { }

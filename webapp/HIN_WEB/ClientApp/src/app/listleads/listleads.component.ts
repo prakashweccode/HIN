@@ -62,6 +62,7 @@ export class ListleadsComponent implements OnInit {
   public isOpen: Boolean = false;
   activeContainer: string = 'tab1';
   //public userDetails: UserDetail = new UserDetail();
+  public securityGroup: boolean = false;
   constructor(public router: Router,public addusers:AdduserService, public addleadsService: AddleadsService, public dataShared: Datashared, public listLeadsService:ListleadsService, public noty:NotyHelper) { }
 
   ngOnInit() {
@@ -92,7 +93,7 @@ export class ListleadsComponent implements OnInit {
     let ArrStatus = [{ id: 1, Name: "Cold" }, { id: 2, Name: "Hot" }];
         this.gridHeaders = [
       //{ displayName: 'Select', propertyName: 'x', dataType: '', secondPropertyName: '', filter: '', isLink: false, serializeArray: null, className: '', isCheckBox:true},
-          { displayName: 'Patient Number', propertyName: 'LeadNumber', dataType: 'string', secondPropertyName: '', filter: '', isLink: true, serializeArray: null, className: '', isCheckBox: true },
+          { displayName: 'Patient Number', propertyName: 'LeadNumber', dataType: 'string', secondPropertyName: '', filter: '', isLink: true, serializeArray: null, className: '', isCheckBox: false },
           { displayName: 'Patient EMR', propertyName: 'BatchNumber', dataType: 'string', secondPropertyName: '', filter: '', isLink: true, serializeArray: null, className: '' },
           { displayName: 'Patient Name', propertyName: 'LeadName', dataType: 'string', secondPropertyName: '', filter: '', isLink: true, serializeArray: null, className: '', gridPermissionCheck: '2.1.1'},
       //{ displayName: 'Status', propertyName: 'LeadStatus', dataType: 'number', secondPropertyName: '', filter: '', isLink: false, serializeArray: this.leadStatus, className: '' },
@@ -138,8 +139,9 @@ export class ListleadsComponent implements OnInit {
   }
 
 
-  
+  // Method to set up grid data for the "Assigned To" section
   getAssignedToGridData() {
+    // Set API URL to fetch users
     this.assignedToGrid.ApiUrl = "/api/Users/GetUsers";
     this.assignedToGrid.AssignedToId = this.assignedId;
     this.assignedToGrid.AssignedToType = "";
@@ -148,25 +150,31 @@ export class ListleadsComponent implements OnInit {
     this.assignedToGrid.KeyValue = "";
     this.assignedToGrid.DisplayName = "Name";
     this.assignedToGrid.GridHeaders = [
+      // Define grid headers for displaying user information (Name, Email)
       { displayName: 'Name', propertyName: 'Name' },
       { displayName: 'Email', propertyName: 'Email' }
     ];
+    // Define additional headers for unapproved patients list
     this.assignedToGrid.unapprovedgridHeaders = [
       { displayName: 'Patient Name', propertyName: 'PatientName'},
     ];
   }
-
+  
   addLead() {
+    // Sets permission based on a specific value (for access control)
     this.dataShared.setPermissionBaseValue("2.2");
+    // Navigates to the "addleads" page to add a new lead
     this.router.navigate(['/addleads']);
   }
-
+  // Navigates to the 'leadimport' page
   gotoImport() {
     this.router.navigate(['/leadimport']);
   }
+  // Handles the selection of leads and prepares the data for bulk assignment
   selectedArray(evt) {
     if (evt) {
       this.selectedLeads = evt;
+      // If any leads are selected, prepare them for bulk assignment
       if (this.selectedLeads.length > 0) {
         this.selectedLeads.forEach(_data => {
           var assignedInput = new AssignedInput();
@@ -175,7 +183,7 @@ export class ListleadsComponent implements OnInit {
           this.bulkAssign.ArrayOfData.push(assignedInput);
         });
         this.bulkAssignToggle = true;
-      }
+      }// If no leads are selected, disable bulk assignment
       else {
         this.bulkAssignToggle = false;
       }
@@ -198,57 +206,61 @@ export class ListleadsComponent implements OnInit {
   //    this.bulkAssignToggle = false;
   //  }
   //}
-
+  // Opens the status change modal by setting the changeStatus flag to true
   openStatusModal() {
     this.changeStatus = true;
   }
-
+  //Opens the modal for changing the security group
   openSecurityGroup() {
     this.changeSecurityGroup = true;
   }
-
+  // Opens the modal for assigning a user
   openAssignedTo() {
     this.changeAssignedTo = true;
   }
 
-
+  // Closes the status modal and resets the new bulkAssign object
   closeStatusModal() {
     this.bulkAssign = new Bulkassign();
     this.changeStatus = false;
   }
-
+  // Closes the securitygroupmodal and resets the new bulkAssign object
   closeSecurityGrouptModal() {
     this.bulkAssign = new Bulkassign();
     this.changeSecurityGroup = false;
   }
-
+  // Closes the assigned modal and resets the new bulkAssign object
   closeAssignedToModal() {
     this.bulkAssign = new Bulkassign();
     this.changeAssignedTo = false;
   }
-
+  // Updates the status of the leads using the bulkAssign object
   updateStatus() {
     this.listLeadsService.updateStatus(this.bulkAssign).subscribe(data => {
       if (data) {
-        this.noty.ShowNoty("Lead status updated successfully.");
+        // Displays success notification when the status is updated successfully
+        this.noty.ShowNoty("Lead status updated successfully.")
+        // Resets the bulkAssign object and closes the modal
         this.bulkAssign = new Bulkassign();
         this.changeStatus = false;
         this.reloadCurrentRoute();
       }
     }, err => { }, () => { });
   }
-
+  // Updates the security group of the leads using the bulkAssign object
   updateSecurityGroup() {
     this.listLeadsService.updateSecurityGroup(this.bulkAssign).subscribe(data => {
       if (data) {
-        this.noty.ShowNoty("SecurityGroup updated successfully.");
+        // Displays success notification when the status is updated successfully
+        this.noty.ShowNoty("Lead status updated successfully.")
+        this.noty.ShowNoty("SecurityGroup updated successfully.")
         this.bulkAssign = new Bulkassign();
         this.changeSecurityGroup = false;
         this.reloadCurrentRoute();
       }
     }, err => { }, () => { });
   }
-
+  // Updates the 'Assigned To' field for leads using the bulkAssign object
   updateAssignedTo() {
     this.listLeadsService.updateAssignedTo(this.bulkAssign).subscribe(data => {
       if (data) {
@@ -260,33 +272,42 @@ export class ListleadsComponent implements OnInit {
     }, err => { }, () => { });
   }
 
-
+  // Reloads the current route to reflect any updates
   reloadCurrentRoute() {
     let currentUrl = this.router.url;
+    // Navigates to the root URL temporarily to reset the route
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       this.router.navigate([currentUrl]);
     });
   }
 
-
+  // Method to handle the event when a lead is edited
+  // It sets the permission level, stores the lead data, and navigates to the 'addleads' page
   editLead(evt) {
     this.dataShared.setPermissionBaseValue("2.2");
     this.dataShared.setValue(evt.dataRow);
     this.router.navigate(['/addleads']);
   }
 
+  // Method to handle the event when a TempPatient is edited
+  // It sets the permission level, stores the TempPatient data, and navigates to the 'addtemppatient' page
   editTempPatient(evt) {
     this.dataShared.setValue(evt.dataRow);
     this.router.navigate(['/addtemppatient']);
   }
 
+  // Method to open the temporary patient list
+  // It sets the 'isOpen' flag to true to display the list
   tempPatientList() {
     this.isOpen = true;
   }
 
+  // Method to navigate to the patient list page
+  // It uses the router to navigate to the '/listleads' URL
   moveToPatientList() {
     this.router.navigate(['/listleads']);
   }
+
   //getSecurityFilterQuery(userId): void {
   //  if (userId) {
   //    this.leadService.getUserLeadIds(userId).subscribe(data => {

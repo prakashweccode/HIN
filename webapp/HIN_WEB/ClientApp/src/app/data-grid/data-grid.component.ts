@@ -37,6 +37,7 @@ export class DataGridComponent implements OnInit {
   @Input() multiSelectType: string;
   @Input() enableSelectAll: boolean;
   @Input() enableRowNumber: boolean;
+  @Input() securityGroup: boolean = false;
   checkedData: boolean = false;
   selectAllToggle: boolean;
   startRange: number = 1;
@@ -62,8 +63,10 @@ export class DataGridComponent implements OnInit {
     this.filterQuery = this.filterQuery ? this.filterQuery : null;
     if (data && this.isSecurityEnabled) {
       this.userDetails = data;
-      this.getSecurityFilterQuery(this.userDetails.User.UserId);
+      this.getSecurityFilterQuery(this.userDetails.User.UserId,this.securityGroup );
     }
+    
+
     else if (this.isSecurityEnabled == false) {
       this.getActiveFilterQuery();
     }
@@ -80,7 +83,7 @@ export class DataGridComponent implements OnInit {
       this.additionalFilter = 'Inactive eq null or Inactive eq false';
     }
     if (this.isSecurityEnabled) {
-      this.getSecurityFilterQuery(this.userDetails.User.UserId);
+      this.getSecurityFilterQuery(this.userDetails.User.UserId, this.securityGroup);
     }
     else {
       this.getActiveFilterQuery();
@@ -216,7 +219,7 @@ export class DataGridComponent implements OnInit {
     });
     this.filterQuery = null;
     if (this.isSecurityEnabled) {
-      this.getSecurityFilterQuery(this.userDetails.User.UserId);
+      this.getSecurityFilterQuery(this.userDetails.User.UserId, this.securityGroup);
     }
     else {
       this.getData();
@@ -290,7 +293,7 @@ export class DataGridComponent implements OnInit {
     }
     this.filterQuery = filter.toString().replace('(, )', '');
     if (this.userDetails && this.isSecurityEnabled) {
-      this.getSecurityFilterQuery(this.userDetails.User.UserId);
+      this.getSecurityFilterQuery(this.userDetails.User.UserId, this.securityGroup);
     }
     else {
       this.getData();
@@ -311,7 +314,7 @@ export class DataGridComponent implements OnInit {
     // get current page of items
     this.skip = (page - 1) * this.pageSize;
     if (this.userDetails && this.isSecurityEnabled) {
-      this.getSecurityFilterQuery(this.userDetails.User.UserId);
+      this.getSecurityFilterQuery(this.userDetails.User.UserId, this.securityGroup);
     }
     else {
       this.getData();
@@ -329,7 +332,7 @@ export class DataGridComponent implements OnInit {
       this.reverse = !reverse;
     }
     if (this.userDetails && this.isSecurityEnabled) {
-      this.getSecurityFilterQuery(this.userDetails.User.UserId);
+      this.getSecurityFilterQuery(this.userDetails.User.UserId, this.securityGroup);
     }
     else {
       this.getData();
@@ -348,16 +351,36 @@ export class DataGridComponent implements OnInit {
   }
 
 
-  getSecurityFilterQuery(userId): void {
+  getSecurityFilterQuery(userId,securityGroup): void {
     if (userId) {
       this.leadService.getUserLeadIds(userId).subscribe(data => {
         if (data) {
-          if (this.additionalFilter) {
-            this.staticFilter = '(' + this.additionalFilter + ') and ' + '(SecurityGroupId in (' + data.join(', ') + ') or SecurityGroupId eq null)';
+          if (this.additionalFilter && securityGroup) {
+            let arrIndex = [];
+            this.staticFilter = "(" + this.additionalFilter + ") and ";
+            data.forEach(x => {
+              arrIndex.push("(indexof(SecurityGroupId, '" + x + "')  gt - 1)");
+            });
+            this.staticFilter += "(" + arrIndex.join(' or ') + ")";
+            //this.staticFilter += ")";
+            //this.staticFilter = "(" + this.additionalFilter + ") and SecurityGroupId in ('2')";
+            //this.staticFilter = "(" + this.additionalFilter + ") and " + "substringof('1', SecurityGroupId)";
+            /*this.staticFilter = "(" + this.additionalFilter + ") and " + "(indexof(SecurityGroupId,'" + data.join(', ') + "') gt -1)";*/
+          }
+          
+           else if (this.additionalFilter) {
+            this.staticFilter = "(" + this.additionalFilter + ") and " + "(SecurityGroupId substringof ('" + data.join(', ') + "') or SecurityGroupId eq null)";
+            
           }
           else {
             this.staticFilter = '(SecurityGroupId in (' + data.join(', ') + ') or SecurityGroupId eq null)';
           }
+          //if (this.additionalFilter && securityGroup) {
+          //  this.staticFilter = "(" + this.additionalFilter + ") and " + "(indexof(SecurityGroupId,'" + data.join(', ') + "') gt -1)";
+          //}
+          //else {
+          //  this.staticFilter = "(indexof(SecurityGroupId, '" + data.join(', ') + "') gt -1)";
+          //}
           if (this.dynamicFilter) {
             this.staticFilter = '(' + this.dynamicFilter + ') and (' + this.staticFilter + ')';
           }

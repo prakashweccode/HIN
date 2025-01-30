@@ -1,5 +1,5 @@
 <div class="w3-container">
-  <div class="w3-card-2 w3-white w3-small w3-margin-right w3-margin-left w3-round-large w3-animate-zoom">
+  <br /><div class="w3-card-2 w3-white w3-small w3-margin-left w3-margin-right w3-round-large w3-animate-zoom">
     <div class="w3-row w3-margin-bottom-small">
       <div class="w3-right w3-margin-top-small">
         <a class="w3-button w3-secondary w3-round-large w3-margin-right-small" (click)="reloadCurrentRoute()"><i class="fa fa-refresh"></i> Refresh</a>
@@ -25,7 +25,7 @@
           </div>
           <div class="w3-col s5" style="width:38.5%;" permissionCheck="2.2.4">
             <label>Patient Number From EMR*</label>
-            <input class="w3-input w3-border" [(ngModel)]="lead.BatchNumber" type="text" />
+            <input class="w3-input" name="mandatory" style="border: 1px solid #ccc" [(ngModel)]="lead.BatchNumber" type="text" />
           </div>
           <div class="w3-col s5" *ngIf="lead?.LeadId && lead?.LeadId > 0 && lead?.CreatedOn">
             <label class="w3-right"><span class="w3-margin-right">Created On : {{lead.CreatedOn | date : 'MM/dd/yyyy'}}</span><span>Oldest by : {{calculateCreatedByDays(lead.CreatedOn)}} days</span></label>
@@ -44,20 +44,20 @@
                   <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
                        (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" permissionCheck="2.2.6">
                     <label>First Name*</label>
-                    <div class="w3-border w3-input" (dragover)="noAllowDrop($event)">
+                    <div (dragover)="noAllowDrop($event)">
                       <!--[class.w3-border-red]="checkValidation(name)" #lname="ngModel" required-->
-                      <input class="w3-border-none w3-secondary-l5" type="text" *ngIf="!selectedUser || selectedUser.UserId == 0" style="border:none;width:80%" (keypress)="userSearch($event)" [(ngModel)]="lead.LeadName" />
+                      <input class="w3-input" name="mandatory" type="text" *ngIf="!selectedUser || selectedUser.UserId == 0" style="border: 1px solid #ccc" [(ngModel)]="lead.LeadName" />
                       <!--<span class="w3-tag w3-teal" *ngIf="!selectedUser || selectedUser.UserId == 0" style="border:none;width:20%">New</span>-->
-                      <span class="w3-tag w3-teal" *ngIf="selectedUser && selectedUser.UserId > 0">{{selectedUser.FirstName}} <i class="fa fa-close" (click)="selectedUser=null"></i></span>
+                      <!--<span class="w3-tag w3-teal" *ngIf="selectedUser && selectedUser.UserId > 0">{{selectedUser.FirstName}} <i class="fa fa-close" (click)="selectedUser=null"></i></span>-->
                     </div>
-                    <div class="w3-display-container w3-row">
+                    <!--<div class="w3-display-container w3-row">
                       <div class="w3-display-topleft w3-card-2 w3-white w3-bar-block w3-animate-opacity w3-border w3-show" style="width:100%;margin-top:-8px;" *ngIf="UserDetails.length>0">
                         <div class="w3-bar-item">
                           Search List <i class="w3-red fa fa-close w3-right w3-padding-small" (click)="UserDetails.length=0"></i>
                         </div>
                         <a class="w3-button w3-bar-item" *ngFor="let userDetail of UserDetails" (click)="selectedUser = userDetail;UserDetails.length=0;lead.ContactId=selectedUser.UserId;lead.ContactPersonName=userDetail.FirstName;">{{userDetail.FirstName}}</a>
                       </div>
-                    </div>
+                    </div>-->
                   </div>
                 </div>
               </div>
@@ -78,7 +78,7 @@
                 <div class="">
                   <div class="w3-half" permissionCheck="2.2.9">
                     <label>Last Name *</label>
-                    <input class="w3-input w3-border" type="text" [(ngModel)]="lead.PatientLastName" />
+                    <input class="w3-input " style="border: 1px solid #ccc" name="mandatory" type="text" [(ngModel)]="lead.PatientLastName" />
                   </div>
                 </div>
                 <div class="w3-half w3-padding-left-10" permissionCheck="2.2.10">
@@ -90,12 +90,12 @@
               <div class="w3-row">
                 <div class="w3-half" permissionCheck="2.2.11">
                   <label>D.O.B *</label>
-                  <input class="w3-input w3-border" type="date" [ngModel]="changeEstimateDateFormat(lead.Dob)"
+                  <input class="w3-input w3-border" type="date" [ngModel]="changeEstimateDateFormat(lead.Dob)" (change)="ageCalculator($event)"
                          (ngModelChange)="lead.Dob = $event" />
                 </div>
                 <div class="w3-half w3-padding-left-10" permissionCheck="2.2.12">
                   <label>Age *</label>
-                  <input class="w3-input w3-border" [(ngModel)]="lead.Age" type="number" />
+                  <input class="w3-input " style="border: 1px solid #ccc" name="mandatory" [(ngModel)]="lead.Age" type="number" />
                 </div>
               </div>
 
@@ -114,25 +114,34 @@
               </div>
 
               <div class="w3-row">
-                <div class="w3-half">
-                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
-                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" permissionCheck="2.2.15">
-                    <label> Employer </label>
-                    <div class="w3-border w3-input" (dragover)="noAllowDrop($event)">
-                      <input class="w3-border-none w3-secondary-l5" type="text" *ngIf="!selectedOrg || selectedOrg.Id == 0" style="border:none;width:80%" (keypress)="orgSearch($event)" [(ngModel)]="lead.CompanyName" />
-                      <!--<span class="w3-tag w3-teal" *ngIf="!selectedOrg || selectedOrg.Id == 0" style="border:none;width:20%">New</span>-->
-                      <span class="w3-tag w3-teal" *ngIf="selectedOrg && selectedOrg.Id > 0">{{selectedOrg.Name}} <i class="fa fa-close" (click)="selectedOrg=null"></i></span>
-                    </div>
-                    <div class="w3-display-container w3-row">
-                      <div class="w3-display-topleft w3-card-2 w3-white w3-bar-block w3-animate-opacity w3-border w3-show" style="width:100%;margin-top:-8px;" *ngIf="organizations.length>0">
-                        <div class="w3-bar-item">Search List <i class="w3-red fa fa-close w3-right w3-padding-small" (click)="organizations.length=0"></i></div>
-                        <a class="w3-bar-item w3-button" *ngFor="let organization of organizations" (click)="selectedOrg = organization;organizations.length=0;lead.OrganizationId=organization.Id;lead.OrganizationName=organization.Name;">{{organization.Name}}</a>
-                      </div>
-                    </div>
+                <!--<div class="w3-half">
+                <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                     (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" permissionCheck="2.2.15">
+                  <label> Company Name*</label>
+                  <div (dragover)="noAllowDrop($event)">
+                    <input class="w3-input " style="border: 1px solid #ccc" name="mandatory" type="text" [(ngModel)]="lead.CompanyName" />-->
+                <!--<span class="w3-tag w3-teal" *ngIf="!selectedOrg || selectedOrg.Id == 0" style="border:none;width:20%">New</span>-->
+                <!--<span class="w3-tag w3-teal" *ngIf="selectedOrg && selectedOrg.Id > 0">{{selectedOrg.Name}} <i class="fa fa-close" (click)="selectedOrg=null"></i></span>-->
+                <!--</div>-->
+                <!--<div class="w3-display-container w3-row">
+                  <div class="w3-display-topleft w3-card-2 w3-white w3-bar-block w3-animate-opacity w3-border w3-show" style="width:100%;margin-top:-8px;" *ngIf="organizations.length>0">
+                    <div class="w3-bar-item">Search List <i class="w3-red fa fa-close w3-right w3-padding-small" (click)="organizations.length=0"></i></div>
+                    <a class="w3-bar-item w3-button" *ngFor="let organization of organizations" (click)="selectedOrg = organization;organizations.length=0;lead.OrganizationId=organization.Id;lead.OrganizationName=organization.Name;">{{organization.Name}}</a>
                   </div>
-
+                </div>-->
+                <!--</div>
+                </div>-->
+                <div class="w3-half">
+                  <label>Email Address*</label>
+                  <input class="w3-input " style="border: 1px solid #ccc" name="mandatory" type="text" [(ngModel)]="lead.EmailAddress" />
                 </div>
                 <div class="w3-half w3-padding-left-10">
+                  <label>User Name</label>
+                  <input class="w3-input w3-border" style="text-transform:lowercase;" type="text" disabled="disabled" [(ngModel)]="lead.UserName" />
+                </div>
+              </div>
+              <div class="w3-row">
+                <div class="w3-half">
                   <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
                        (dragover)="dragOver($event);" (dragleave)="dragLeave($event);" permissionCheck="2.2.16">
                     <label>Funnel</label>
@@ -177,10 +186,14 @@
                     <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
                          (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
                       <label>Security Group*</label>
-                      <select class="w3-input w3-border" [(ngModel)]="lead.SecurityGroupId" [class.w3-border-red]="checkValidation(securityGroupId)" #securityGroupId="ngModel" required>
+                      <ng-multiselect-dropdown [data]="lstGroups"
+                                               [settings]="dropdownSettings"
+                                               [(ngModel)]="selectedItems">
+                      </ng-multiselect-dropdown>
+                      <!--<select  class="w3-input" style="border: 1px solid #ccc" name="mandatory" multiple [(ngModel)]="selectedGroupId" required>
                         <option value="0" disabled>-select-</option>
-                        <option *ngFor="let data of lstGroups;" value="{{data.UserGroupId}}">{{data.Name}}</option>
-                      </select>
+                        <option selected="selected" *ngFor="let data of lstGroups;" value="{{data.UserGroupId}}">{{data.Name}}</option>
+                      </select>-->
                     </div>
                   </div>
                 </div>
@@ -218,8 +231,8 @@
               <div class="w3-full" permissionCheck="2.2.22">
                 <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
                      (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
-                  <label>Address</label>
-                  <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.Address" />
+                  <label>Address*</label>
+                  <input class="w3-input " style="border: 1px solid #ccc" name="mandatory" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.Address" />
                 </div>
               </div>
 
@@ -228,15 +241,15 @@
                   <div class="w3-half" permissionCheck="2.2.23">
                     <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
                          (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
-                      <label>City</label>
-                      <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.City" />
+                      <label>City*</label>
+                      <input class="w3-input" style="border: 1px solid #ccc" name="mandatory" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.City" />
                     </div>
                   </div>
                   <div class="w3-half w3-padding-left-10" permissionCheck="2.2.24">
                     <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
                          (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
-                      <label>State</label>
-                      <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.State" />
+                      <label>State*</label>
+                      <input class="w3-input" style="border: 1px solid #ccc" name="mandatory" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.State" />
                     </div>
                   </div>
                 </div>
@@ -246,36 +259,35 @@
                   <div class="w3-half" permissionCheck="2.2.25">
                     <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
                          (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
-                      <label>Country</label>
-                      <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.Country" />
+                      <label>Country*</label>
+                      <input class="w3-input" style="border: 1px solid #ccc" name="mandatory" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.Country" />
                     </div>
                   </div>
                   <div class="w3-half w3-padding-left-10" permissionCheck="2.2.26">
                     <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
                          (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
-                      <label>Zipcode</label>
-                      <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.ZipCode" />
+                      <label>Zipcode*</label>
+                      <input class="w3-input" style="border: 1px solid #ccc" name="mandatory" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.ZipCode" />
                     </div>
                   </div>
                 </div>
               </div>
-
               <div class="w3-row">
-
                 <div class="w3-half" permissionCheck="2.2.27">
-                  <label>Office Number</label>
+                  <label>Home Number</label>
                   <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.OfficeNumber" />
                 </div>
-
-                <div class="w3-half w3-padding-left-10" permissionCheck="2.2.28">
+                <div class="w3-half w3-padding-left-10">
+                  <label>Cell Number*</label>
+                  <input class="w3-input" style="border: 1px solid #ccc" name="mandatory" type="number" [(ngModel)]="lead.CellNumber" maxlength="10" />
+                </div>
+                <!--<div class="w3-half w3-padding-left-10" permissionCheck="2.2.28">
                   <div>
                     <label>Website</label>
                     <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.Website" />
                   </div>
-                </div>
-
+                </div>-->
               </div>
-
               <div class="w3-full">
                 <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
                      (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
@@ -283,29 +295,173 @@
                   <textarea class="w3-input w3-border" rows="3" (dragover)="noAllowDrop($event)" type="text" [(ngModel)]="lead.Reason"></textarea>
                 </div>
               </div>
+              <div class="w3-full w3-border w3-border-secondary-l5 w3-margin-top">
+                <div class="w3-row w3-secondary-l5 w3-padding-medium w3-cursor">
+                  <div (click)="showEmergencyContact = !showEmergencyContact">
+                    <i [ngClass]="showEmergencyContact?'fa fa-angle-down' : 'fa fa-angle-right'"></i> <label class="w3-center w3-margin-left">Emergency Contact</label>
+                  </div>
+                </div>
+                <div class="w3-row w3-margin-medium" *ngIf="showEmergencyContact">
+                  <div class="w3-row">
+                    <div class="w3-half w3-margin-0">
+                      <label>First Name</label>
+                      <input class="w3-input w3-border" type="text" [(ngModel)]="lead.EmergencyFirstName" />
+                    </div>
+                    <div class="w3-half w3-padding-left-10 w3-margin-0">
+                      <label>Middle Name</label>
+                      <input class="w3-input w3-border" type="text" [(ngModel)]="lead.EmergencyMiddleName" />
+                    </div>
+                  </div>
+                  <div class="w3-row">
+                    <div class="w3-half ">
+                      <label>Last Name</label>
+                      <input class="w3-input w3-border" type="text" [(ngModel)]="lead.EmergencyLastName" />
+                    </div>
+                    <div class="w3-half w3-padding-left-10">
+                      <label>Contact Title</label>
+                      <div>
+                        <app-customstringdropdown [getApiPath]="'CustomDropDown/GetContactTitle'" [selectedValue]="lead.EmergencyContactTitle" (saveSelectedValue)="lead.EmergencyContactTitle=$event" [saveApiPath]="'CustomDropDown/SaveContactTitle'"></app-customstringdropdown>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w3-row">
+                    <div class="w3-half">
+                      <label>Cell Number</label>
+                      <input class="w3-input w3-border" type="text" [(ngModel)]="lead.EmergencyCellNumber" />
+                    </div>
+                  </div>
+                </div>
+              </div>
               <app-customsection [entityType]="entityType" [alignment]="'right'" [customFields]="customFields" [entityId]="entityId" [customFieldValues]="rightLeadCustomFieldValues"></app-customsection>
             </div>
           </div>
         </div>
 
-
         <div class="w3-bar w3-container w3-center w3-margin-top-xxlarge w3-border-secondary">
           <div class="w3-left">
-            <button [class]="activeContainer == 'tab1'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab1'" permissionCheck="2.2.29">Origins</button>
-            <button [disabled]="!lead.LeadId" [class]="activeContainer == 'tab5'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab5'" permissionCheck="2.2.30">Contacts ({{contactInformations.length}})</button>
-            <button [disabled]="!lead.LeadId" [class]="activeContainer == 'tab2'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab2'" permissionCheck="2.2.31">Notes ({{notesInfos.length}})</button>
-            <button [disabled]="!lead.LeadId" [class]="activeContainer == 'tab9'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab9'" permissionCheck="2.2.32">Appointments ({{liveServices.length}})</button>
-            <button [disabled]="!lead.LeadId" [class]="activeContainer == 'insurance'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'insurance'" permissionCheck="2.2.33">Insurance</button>
-            <button [disabled]="!lead.LeadId" [class]="activeContainer == 'employer'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'employer'" permissionCheck="2.2.34">Employer </button>
-            <button [disabled]="!lead.LeadId" *ngIf="loggedUser.User.IsAdmin" [class]="activeContainer == 'onedrive'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'onedrive'" permissionCheck="2.2.35">Files</button>
+            <button [class]="activeContainer == 'tab1'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab1';closeTemplateHtmlOpen()" permissionCheck="2.2.29">Origins</button>
+            <button [disabled]="!lead.LeadId" [class]="activeContainer == 'tab5'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab5';closeTemplateHtmlOpen()" permissionCheck="2.2.30">Contacts ({{contactInformations.length}})</button>
+            <button [disabled]="!lead.LeadId" [class]="activeContainer == 'tab2'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab2';closeTemplateHtmlOpen()" permissionCheck="2.2.31">Notes ({{notesInfos.length}})</button>
+            <button [disabled]="!lead.LeadId" [class]="activeContainer == 'tab9'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab9';closeTemplateHtmlOpen()" permissionCheck="2.2.32">Appointments ({{liveServices.length}})</button>
+            <button [disabled]="!lead.LeadId" [class]="activeContainer == 'insurance'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'insurance';closeTemplateHtmlOpen()" permissionCheck="2.2.33">Insurance</button>
+            <!--<button [disabled]="!lead.LeadId" [class]="activeContainer == 'forms'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'forms';closeTemplateHtmlOpen()" permissionCheck="2.2.36">Forms </button>-->
+            <!--<button [disabled]="!lead.LeadId" [class]="activeContainer == 'employer'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'employer'" permissionCheck="2.2.34">Employer </button>-->
+            <button [disabled]="!lead.LeadId" [class]="activeContainer == 'onedrive'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'onedrive';closeTemplateHtmlOpen()" permissionCheck="2.2.35">Files</button>
           </div>
         </div>
+
+        <div *ngIf="!isTemplate">
+          <div *ngIf="activeContainer == 'forms'" class="w3-white" permissionCheck="2.2.32">
+            <div class="w3-animate-opacity">
+              <!--<h6 class="w3-left w3-margin-0">Forms </h6>-->
+
+              <div class="w3-full">
+                <table class="w3-table w3-bordered">
+                  <thead>
+                    <tr>
+                      <th>Template Name</th>
+                      <th>Action</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of lstTemplate">
+                      <td><a class="hyper-link" (click)="editTemplate(data)">{{data.TemplateName}}</a></td>
+                      <td><a class="hyper-link fa fa-file-word-o" (click)="editTemplate(data)"></a></td>
+
+                    </tr>
+                    <tr *ngIf="lstTemplate.length == 0">
+                      <td>No records</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="isOpen" class="w3-modal" style="display:block;">
+          <div class="w3-modal-content w3-round-large w3-secondary-button">
+            <span (click)="closeTemplate()" class="w3-button w3-margin-right-small w3-display-topright">&times;</span>
+            <div class="w3-small sfcenter w3-margin-top">
+              <div class="w3-animate-opacity marginform">
+                <div class="w3-row w3-round-large w3-secondary-button w3-container w3-padding">
+                  <h5 class="w3-center"> Template </h5>
+                  <!--<button type="button" class="w3-button w3-round-large w3-right w3-border w3-secondary mr30">+ Add New Field</button>-->
+                </div>
+                <div class="w3-row w3-padding w3-primary-l4">
+                  <div class="w3-row">
+
+                    <div class="w3-container w3-half">
+                      <div class="w3-full">
+                        <label>Appointment</label>
+                        <select class="w3-input w3-border" [(ngModel)]="patientAppointmentId" (change)="appointmentChange(patientAppointmentId)">
+                          <option value="0" disabled>--Select--</option>
+                          <option *ngFor="let appointment of lstAppointment" [ngValue]="appointment.Id">{{appointment.ServiceNumber}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="w3-row w3-round-bottom-left w3-round-bottom-right w3-secondary-button">
+                  <div class="w3-margin w3-right">
+                    <button class="w3-button w3-border w3-round-large w3-margin-right w3-secondary" (click)="loadTemplatePage(id)">Ok</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <br />
+
+
+        <div *ngIf="isTemplate" class="w3-card-2 w3-white w3-small w3-margin-left w3-margin-right w3-round-large w3-animate-zoom">
+          <div class="w3-container">
+            <div class="w3-header w3-margin w3-right">
+              <button *ngIf="isTemplate" class="w3-button w3-primary w3-round-large w3-right w3-margin-left-large" type="button" (click)="saveAsDraft(templateId,patientName, templateWrapper);">Save as draft</button>
+              <button *ngIf="isTemplate" class="w3-button w3-primary w3-round-large w3-right w3-margin-left-large" type="button" (click)="previewTemplate(templateId);">Preview</button>
+              <button *ngIf="isTemplate" class="w3-button w3-primary w3-round-large w3-right w3-margin-left-large" type="button" (click)="closeTemplateHtmlOpen();">Cancel</button>
+            </div>
+            <div class="w3-row w3-margin-top">
+              <div class="w3-border w3-border-light-gray" #templateWrapper [innerHTML]="selectedTemplatePage | safe: 'html'"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div *ngIf="isPreview" class="w3-modal w3-show">
+            <div class="w3-modal-content w3-round-large w3-secondary-button" style="width:1200px;">
+              <div class="w3-row w3-secondary">
+                <div class="w3-container w3-center">
+                  <p>Preview</p>
+                  <span (click)="closePreview()" class="w3-button w3-display-topright">&times;</span>
+                </div>
+              </div>
+              <button class="w3-button w3-secondary w3-tiny w3-margin-top-small w3-right w3-margin-right w3-border w3-round-large" (click)="sendToOneDrive()">Send to Onedrive</button>
+              <button class="w3-button w3-secondary w3-tiny w3-margin-top-small w3-right w3-margin-right-small w3-border w3-round-large">Send Mail</button>
+              <div class="w3-row" style="width: 1200px;height:75vh;overflow-x:auto;" [innerHTML]="bindPreviewHTML(previewHtml)"></div>
+            </div>
+          </div>
+        </div>
+
+
+
 
         <div *ngIf="activeContainer == 'onedrive'" class="w3-white" permissionCheck="2.2.35">
           <div class="w3-margin w3-animate-opacity">
             <!--<h6 class="w3-left w3-margin-0">One Drive</h6>-->
             <div class="w3-row" *ngIf="lead.LeadId">
-              <app-onedrive-explorer [EmrNo]="lead.BatchNumber" [searchString]="lead.LeadName+' '+lead.PatientLastName+'_'+lead.BatchNumber+'-'"></app-onedrive-explorer>
+              <!--<ng-container >
+                <app-onedrive-explorer [EmrNo]="lead.BatchNumber" [searchString]="lead.LeadName+' '+lead.PatientLastName+'_'+lead.BatchNumber+'-'"></app-onedrive-explorer>
+              </ng-container>-->
+              <!--<ng-container *ngIf="isAdmin == false">
+                <app-patient-file-explorer [EmrNo]="lead.BatchNumber" [searchString]="lead.LeadName+'_'+lead.LeadNumber+'-'"></app-patient-file-explorer>
+              </ng-container>-->
+              <app-patient-file-explorer [EmrNo]="lead.BatchNumber" [searchString]="lead.LeadName+'_'+lead.LeadNumber+'-'"></app-patient-file-explorer>
             </div>
           </div>
         </div>
@@ -327,19 +483,23 @@
               <table class="w3-table w3-bordered" *ngIf="serviceTabs == 'presentServices'">
                 <thead>
                   <tr>
-                    <th>Number</th>
-                    <th>Oppointment</th>
+                    <th>Appointment Number</th>
+                    <th>Appointment Date</th>
                     <th>Type</th>
-                    <th>Status</th>
+                    <!--<th>Practice Name</th>-->
                     <th>Assignee</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let data of liveServices">
                     <td><a class="hyper-link" (click)="redirectToService(data)">{{data.ServiceNumber}}</a></td>
-                    <td><a class="hyper-link" (click)="redirectToService(data)">{{data.ServiceName}}</a></td>
-                    <td>{{data.Type == 1 ? 'Service' : 'Job'}}</td>
-                    <td>{{data.StatusId == null?'Inprogress':getServiceStatusById(data.StatusId)}}</td>
+                    <td><a class="hyper-link" (click)="redirectToService(data)">{{data.StartDate}}</a></td>
+                    <td>{{data.Type == 1 ? 'Virtual' : 'presential'}}</td>
+
+
+
+                    <!--<td>{{getPracticeById(data.DealId)}}</td>-->
+                    <!--<td>{{data.StatusId == null?'Inprogress':getServiceStatusById(data.StatusId)}}</td>-->
                     <td>{{getAssignedNameById(data.AssignedTo)}}</td>
                   </tr>
                   <tr *ngIf="liveServices.length == 0">
@@ -987,7 +1147,7 @@
         <div class="w3-margin-right w3-margin-bottom w3-margin-top-medium w3-right">
           <button class="w3-button w3-border w3-round-large w3-margin-right-small" (click)="cancel()">Cancel</button>
           <!--[disabled]="checkReqValidation(name)||checkReqValidation(number)"-->
-          <button class="w3-button w3-secondary w3-border w3-round-large" [disabled]="isSaveDisabled" (click)="saveLead()">Save</button>
+          <button class="w3-button w3-secondary w3-border w3-round-large" (click)="saveLead()">Save</button>
           <!--[disabled]="checkReqValidation(leadprovider)||checkReqValidation(leadcost)"-->
         </div>
         <br>
@@ -1079,6 +1239,7 @@
               <div class="w3-full" permissionCheck="{{basePermission}}.52">
                 <label>Contact Title *</label>
                 <app-customstringdropdown [getApiPath]="'CustomDropDown/GetContactTitle'" [isAddEnabled]="true" [selectedValue]="contactInfo.ContactTitle" (saveSelectedValue)="contactInfo.ContactTitle=$event" [saveApiPath]="'CustomDropDown/SaveContactTitle'"></app-customstringdropdown>
+                gd
                 do
                 <!--<input permissionCheck="{{basePermission}}.52" class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.ContactTitle" [class.w3-border-red]="checkValidation(title)" #title="ngModel" required />-->
               </div>
@@ -1106,7 +1267,7 @@
               </div>
               <div class="w3-full" permissionCheck="{{basePermission}}.58">
                 <label>Cell Number</label>
-                <input permissionCheck="{{basePermission}}.58" class="w3-input w3-border" type="text" [(ngModel)]="contactInfo.CellNumber" />
+                <input class="w3-input w3-border" type="number" [(ngModel)]="contactInfo.CellNumber" />
               </div>
               <div class="w3-full" permissionCheck="{{basePermission}}.59">
                 <label>Email</label>
@@ -1121,6 +1282,9 @@
             <button class="w3-button w3-border w3-round-large w3-secondary" (click)="saveContactInfo(contactInfo)" [disabled]="checkReqValidation(title) || checkReqValidation(firstName) || checkReqValidation(lastName)" permissionCheck="{{basePermission}}.63">Save</button>
           </div>
         </div>
+
+
+
       </div>
     </div>
   </div>

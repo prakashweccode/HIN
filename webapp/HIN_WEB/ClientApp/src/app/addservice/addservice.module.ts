@@ -18,14 +18,19 @@ import { Connectoffice365Module } from '../connectoffice365/connectoffice365.mod
 import { CreatedbyModule } from '../createdby/createdby.module';
 import { OnedriveExplorerModule } from '../onedrive-explorer/onedrive-explorer.module';
 import { DirectiveHelperModule } from '../helper/directive/DirectiveHelperModule';
+import { NewdatepickerModule } from '../newdatepicker/newdatepicker.module';
+import { BasicformModule } from '../basicform/basicform.module';
+import { BasicformmedicalassociatesModule } from '../basicformmedicalassociates/basicformmedicalassociates.module';
+import { PatientformApprovedModule } from '../patientform-approved/patientform-approved.module';
+import { TemplateDictationModule } from '../template-dictation/template-dictation.module';
 
 
 @NgModule({
   declarations: [AddserviceComponent],
   imports: [
     CommonModule,
-    AddserviceRoutingModule, FormsModule, ReactiveFormsModule, CustomsectionModule, ContactinformationModule, NotesinfoModule,
-    AddnewfieldModule, CustomstringdropdownModule, CustomdropdownModule, AssignednameModule, SfFileExplorerModule, AssignedtogridModule, NgxMaskModule, Connectoffice365Module, CreatedbyModule, OnedriveExplorerModule, DirectiveHelperModule
+    AddserviceRoutingModule, FormsModule, ReactiveFormsModule, CustomsectionModule, ContactinformationModule, NotesinfoModule, NewdatepickerModule,
+    AddnewfieldModule, CustomstringdropdownModule, CustomdropdownModule, AssignednameModule, SfFileExplorerModule, AssignedtogridModule, NgxMaskModule, Connectoffice365Module, CreatedbyModule, OnedriveExplorerModule, DirectiveHelperModule, PatientformApprovedModule, TemplateDictationModule
   ]
 })
 export class AddserviceModule { }

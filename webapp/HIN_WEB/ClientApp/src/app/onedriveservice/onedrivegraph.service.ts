@@ -3,21 +3,38 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as hello from 'hellojs/dist/hello.all.js';
 import { Onedriveconfig } from '../helper/onedriveconfig';
+import { MsalService } from '@azure/msal-angular';
+import { OAuthSettings } from '../helper/oauth';
+import { GraphService } from '../officeauth/graph.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OnedrivegraphService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private msalService: GraphService) { }
 
-  getAccessToken() {
-    const msft = hello('msft').getAuthResponse();
+  async getAccessToken() {
+    
+    //return sessionStorage.getItem('msal.idtoken');
+    //return this.msalService.acquireTokenSilent(OAuthSettings);
+  const msft = hello('msft').getAuthResponse();
+    //const silentRequest = {
+    //  scopes: ["User.Read", "Mail.Read"],
+    //  loginHint: "dinesh@healthinformation.com"
+    //};
+    //try {
+    //  const loginResponse = await this.msalService.ssoSilent(silentRequest);
+    //  console.log(loginResponse.idToken.rawIdToken);
+    //  return loginResponse.idToken.rawIdToken;
+    //} catch (err) {
+      
+    //}
     const accessToken = msft.access_token;
     return accessToken;
-
   }
 
   executeQuery(queryType, query, postBody?, requestHeaders?: HttpHeaders): Observable<any> {
+   
     let newHeaders: HttpHeaders = new HttpHeaders();
     let newToken = this.getAccessToken();
     if (requestHeaders === undefined) {
@@ -49,7 +66,7 @@ export class OnedrivegraphService {
     return this.http.post<any>("/api/Authentication/ValidateHinPortalAccount", microsoftAccDetails).pipe();
   }
   //CreatePatientAppointmentDirectory(content, practiceName, appDate, patientName) {
-  //  debugger;
+  //  
   //  this.executeQuery('POST', Onedriveconfig.graphV1Url + 'drive/root:/Health/' + practiceName + '/' + appDate + '/' + patientName + ':/children', content).subscribe((result: any) => {
   //    if (result) {
   //      //let subDirectories = ['EMR NO', 'Appointment DOS', 'Provider', 'Additional Documentation'];
@@ -117,12 +134,20 @@ export class OnedrivegraphService {
     }, (error: any) => { console.log(error); }, () => { });
   }
 
-  SaveTemplateForAppointment(content, practiceName, appointmentDate, patientNameEmr, practiceAddress) {
-    this.executeQuery('PUT_BINARY', Onedriveconfig.graphV1Url + 'drive/root:/Health/' + practiceAddress + '/' + practiceName + '/' + appointmentDate + '/' + patientNameEmr + '/Documents/' + content.name + ':/content', content.file).subscribe((result: any) => {
-      if (result) {
-        
-      }
-    }, (error: any) => { console.log(error); }, () => { });
+  SaveTemplateForAppointment(content, practiceName, appointmentDate, urlDomain, patientName) {
+    
+    
+    //this.executeQuery('PUT_BINARY', Onedriveconfig.graphV1Url + 'drive/root:/Health/' + practiceAddress + '/' + practiceName + '/' + appointmentDate + '/' + patientNameEmr + '/Documents/' + content.name + ':/content', content.file).subscribe((result: any) => {
+    //  if (result) {
+
+    //  }
+    //}, (error: any) => { console.log(error); }, () => { });
+    this.msalService.SaveFile(Onedriveconfig.graphV1Url + 'drive/root:/' + urlDomain + '/' + practiceName + '/' + appointmentDate + '/' + patientName +  '/Documents/' + content.name + ':/content', content.file);
+
+  }
+
+  checkPatientUserName(userName) {
+    return this.http.get<any>("/api/Authentication/CheckPatientUserName?userName=" + userName).pipe();
   }
 
 }

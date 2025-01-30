@@ -86,71 +86,78 @@
         <button class="w3-button w3-secondary w3-round-large w3-margin-right-small" (click)="backToList()">Back To List</button>
       </div>
     </div>
-    <div style="display: block;padding: 20px 30px;">
-      <div style="display: -webkit-box;">
-        <div style="width: 50%;float: left;"><img style="max-width: 185px;" src="assets/images/logo.png"></div>
-        <div class="w3-right w3-margin-right" style="width: 40%;float: right;">
-          <h3 style="font-size: 26px;font-weight: 600;text-align:right;margin:0px;">Patient Information</h3>
+    <div style="display: block;padding: 20px 30px;" >
+      <div style="display: flow-root;"  >
+        <div  class="w3-mobile">
+        <img style="max-width: 185px;" src="assets/images/logo.png">
+        </div>
+        <div class="w3-right w3-margin-right" >
+          <h3>Patient Information</h3>
         </div>
       </div>
       <div style="padding-top: 50px;padding-bottom: 10px;">
         <div id="pdf-form">
-          <div style="display: flow-root;margin-bottom: 14px;">
-            <div style="width: 50%;float: left;">
+          <div style="display: flow-root;margin-bottom: 14px;" >
+            <div style="width: 50%;float: left;"  class="w3-mobile">
               <label>First Name  * : </label> <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.PatientName" />
             </div>
-            <div style="width: 50%;float: right;">
+            <div style="width: 50%;float: right;"  class="w3-mobile">
               <label>Last Name * : </label> <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.LastName" />
             </div>
           </div>
           <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
-            <div style="width: 100%;float: left;">
-              <label>Address * : </label> <input style="width: 90%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Address" />
+            <div style="width:50%;float: left;" class="w3-mobile">
+              <label>Address * : </label> <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Address" />
+            </div>
+            <div style="width:50%;float: right;" class="w3-mobile">
+              <label>      City* : </label>
+              <input class="w3-mobile" style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.City">
             </div>
           </div>
           <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
-            <div style="width: 33%;float: left;">
-              <label>City * : </label> <input style="width: 85%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.City">
+            <div style="width: 50%;float: left;"  class="w3-mobile">
+              <label>State * : </label>
+              <input class="w3-mobile" style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.State">
             </div>
-            <div style="width: 33%;float: left;">
-              <label>State * : </label> <input style="width: 85%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.State">
-            </div>
-            <div style="width: 33%;float: left;">
-              <label>Zip Code * : </label> <input style="width: 75%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Zipcode">
+            <div style="width: 50%;float: right;"  class="w3-mobile">
+              <label>Zip Code * : </label>
+              <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Zipcode">
             </div>
           </div>
           <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
-            <div style="width: 30%;float: left;">
-              <label>Age * : </label> <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Age">
+            <div  style="width: 30%;float: left;"  class="w3-mobile">
+              <label>Age * : </label>
+              <input class="w3-mobile"  style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Age">
             </div>
-            <div style="width: 30%;float: left;">
+            <div class="w3-margin-top-xlarge w3-mobile" style="width: 30%;float: left;">
               <label>Gender * : </label> <input [(ngModel)]="tempPatient.Gender" type="radio" name="Gender" [value]="true" (change)="changeGender($event)" /> M / <input type="radio" [(ngModel)]="tempPatient.Gender" name="Gender" [value]="false" (change)="changeGender($event)" /> F
             </div>
-            <div style="width: 30%;float: left;">
-              <label>D.O.B * : </label> <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="datetime" [(ngModel)]="tempPatient.Dob">
+            <div style="width: 30%;float: left;"  class="w3-mobile">
+              <label>D.O.B * : </label>
+              <input class="w3-mobile" style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="datetime" [(ngModel)]="tempPatient.Dob">
             </div>
           </div>
           <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
-            <div style="width: 30%;float: left;">
-              <label> Home Phone : </label> <input style="width: 75%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.HomePhone">
+            <div style="width: 30%;float: left;"  class="w3-mobile">
+              <label> Home Phone : </label> <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.HomePhone">
             </div>
-            <div style="width: 30%;float: left;">
-              <label> Cell Phone * : </label> <input style="width: 75%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.CellPhone">
+            <div style="width: 30%;float: left;"  class="w3-mobile">
+              <label> Cell Phone * : </label> <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.CellPhone">
             </div>
-            <div style="width: 30%;float: left;">
-              <label>Marital Status : </label> <input style="width: 75%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.MaritalStatus" />
+            <div style="width: 30%;float: left;"  class="w3-mobile">
+              <label>Marital Status : </label> <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.MaritalStatus" />
             </div>
           </div>
           <div style="display: flow-root;margin-bottom: 14px;">
-            <div style="width: 100%;float: left;">
-              <label>Email Address * : </label> <input style="width: 85%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.EmailAddress">
+            <div style="width: 100%;float: left;"  class="w3-mobile">
+              <label>Email Address * : </label> <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.EmailAddress">
             </div>
           </div>
           <div class="w3-margin-top-xlarge" style="display: flow-root;margin-bottom: 14px;">
-            <div style="width: 50%;float: left;">
+            <div style="width: 50%;float: left;"  class="w3-mobile">
               <label> Emergency Contact * : </label> <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.EmergencyContact">
             </div>
-            <div style="width: 50%;float: left;">
+            <div style="width: 50%;float: left;"  class="w3-mobile">
               <label> Telephone : </label> <input style="width: 80%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Telephone">
             </div>
           </div>
@@ -225,16 +232,16 @@
           <br />
 
           <label>Other medical Problems</label>
-          <table class="w3-table">
+          <table class="w3-table-all">
             <tbody>
-              <tr><td style="height: 30px"><input style="width: 100%; border: none; margin-left: -12px" type="text" [(ngModel)]="tempPatient.OtherMedicalProblems"></td></tr>
+              <tr><td style="height: 30px"><input  style="width: 100%; border: none; margin-left: -12px" type="text" [(ngModel)]="tempPatient.OtherMedicalProblems"></td></tr>
             </tbody>
           </table>
           <br />
           <br />
 
           <label>Past surgeries and hospitalization </label>
-          <table class="w3-table">
+          <table class="w3-table-all">
             <tbody>
               <tr><td style="height: 30px"><input style="width: 100%; border: none; margin-left: -12px" type="text" [(ngModel)]="tempPatient.PastSurgeriesAndHospitalization"></td></tr>
               <!--<tr>
@@ -270,19 +277,19 @@
   </div>-->
         </div>
       </div>
-      <div style="margin-top: 20px;">
+      <!--<div style="margin-top: 20px;">
         <div style="text-align: center;margin: 0px;">
           <p>3107W hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
           <p>Office:(786) 638-4747 <sup>.</sup>Fax:(954) 367-3763</p>
         </div>
-      </div>
+      </div>-->
     </div>
 
 
     <div style="display: block;padding: 20px 30px;">
-      <div style="display: -webkit-box;">
+      <!--<div style="display: -webkit-box;">
         <div style="width: 50%;float: left;"><img style="max-width: 185px;" src="assets/images/logo.png"></div>
-      </div>
+      </div>-->
       <div style="padding-top: 50px;padding-bottom: 10px;">
         <div id="pdf-form">
           <div class="w3-center">
@@ -298,7 +305,7 @@
                     <label style="text-align: center; display: block;"><b>Excersice</b></label>
                     <ul style="list-style-type: none; padding-inline-start: 10px;">
                       <li><input style="border: none; margin-left: -12px" [(ngModel)]="tempPatient.Sedentary" type="checkbox"><label style="margin-left:5px">Sedentary (No excersice)</label></li>
-                      <li><input style="border: none; margin-left: -12px" [(ngModel)]="tempPatient.MildExercise" type="checkbox"><label style="margin-left:5px">mild exercise (Walking, wolf)</label></li>
+                      <li><input style="border: none; margin-left: -12px" [(ngModel)]="tempPatient.MildExercise" type="checkbox"><label style="margin-left:5px">Mild exercise (Walking, wolf)</label></li>
                       <li><input style="border: none; margin-left: -12px" [(ngModel)]="tempPatient.RegularVigorius" type="checkbox"><label style="margin-left:5px">Regular Vigorius exercise (4x/week)</label></li>
                     </ul>
                   </td>
@@ -314,7 +321,7 @@
                     <label style="text-align: center; display: block;"><b>Tobacco</b></label>
                     <ul style="list-style-type: none; padding-inline-start: 10px;">
                       <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.UseTobocco"><label style="margin-left:5px">Use tobocco</label></li>
-                      <li><label>Packs per day? </label><input style="width: 7%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.PacksPerDay"><label style="margin-left:5px">no of years? </label><input style="width: 7%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Years"><label style="margin-left:5px">year quit </label><input style="width: 7%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.YearsToQuit"></li>
+                      <li><label>Packs per day? </label><input style="width: 77%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.PacksPerDay"><label style="margin-left:5px">no of years? </label><input style="width: 75%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.Years"><label style="margin-left:5px">year quit </label><input style="width: 75%;border: none;border-bottom: 1px solid #999;outline:none;" type="text" [(ngModel)]="tempPatient.YearsToQuit"></li>
 
                     </ul>
                   </td>
@@ -324,7 +331,7 @@
                     <label style="text-align: center; display: block;"><b>Drugs</b></label>
                     <ul style="list-style-type: none; padding-inline-start: 10px;">
                       <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.StreetDrugs"><label style="margin-left:5px">Currently use recreational or street drugs</label></li>
-                      <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.StreetDrugNeedle"><label style="margin-left:5px">used street drugs with a needle in the past</label></li>
+                      <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.StreetDrugNeedle"><label style="margin-left:5px">Used street drugs with a needle in the past</label></li>
                     </ul>
                   </td>
                   <td style="border: 1px solid #999;">
@@ -391,20 +398,20 @@
           <br />
           <br />
 
-          <div style="margin-top: 20px;">
+          <!--<div style="margin-top: 20px;">
             <div style="text-align: center;margin: 0px;">
               <p>3107W hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
               <p>Office:(786) 638-4747 <sup>.</sup>Fax:(954) 367-3763</p>
             </div>
-          </div>
+          </div>-->
         </div>
       </div>
     </div>
 
     <div style="display: block;padding: 20px 30px;">
-      <div style="display: -webkit-box;">
+      <!--<div style="display: -webkit-box;">
         <div style="width: 50%;float: left;"><img style="max-width: 185px;" src="assets/images/logo.png"></div>
-      </div>
+      </div>-->
       <div style="padding-top: 50px;padding-bottom: 10px;">
         <div id="pdf-form">
           <div *ngIf="tempPatient.IsConsentEn == true">
@@ -503,18 +510,18 @@
 
         </div>
       </div>
-      <div style="margin-top: 20px;">
+      <!--<div style="margin-top: 20px;">
         <div style="text-align: center;margin: 0px;">
           <p>3107W hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
           <p>Office:(786) 638-4747 <sup>.</sup>Fax:(954) 367-3763</p>
         </div>
-      </div>
+      </div>-->
     </div>
 
     <div style="display: block;padding: 20px 30px;">
-      <div style="display: -webkit-box;">
+      <!--<div style="display: -webkit-box;">
         <div style="width: 50%;float: left;"><img style="max-width: 185px;" src="assets/images/logo.png"></div>
-      </div>
+      </div>-->
       <div style="padding-top: 50px;padding-bottom: 10px;">
         <div id="pdf-form">
           <div *ngIf="tempPatient.IsConsentEn == true">
@@ -578,12 +585,12 @@
             <br />
             </div>
 
-            <div style="margin-top: 20px;">
+            <!--<div style="margin-top: 20px;">
               <div style="text-align: center;margin: 0px;">
                 <p>3107W hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
                 <p>Office:(786) 638-4747 <sup>.</sup>Fax:(954) 367-3763</p>
               </div>
-            </div>
+            </div>-->
           </div>
           <div class="w3-row">
             <div class="w3-margin w3-right">
@@ -769,7 +776,7 @@
             </div>
             <div id="footer" style="margin-top: 20px;">
               <div style="text-align: center;margin: 0px;">
-                <p>3107W hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
+                <p>3107 W Hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
                 <p>Office:(786) 638-4747 <sup>.</sup>Fax:(954) 367-3763</p>
               </div>
             </div>
@@ -792,7 +799,7 @@
                         <label style="text-align: center; display: block;"><b>Excersice</b></label>
                         <ul style="list-style-type: none; padding-inline-start: 10px;">
                           <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.Sedentary"><label style="margin-left:5px">Sedentary (No excersice)</label></li>
-                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.MildExercise"><label style="margin-left:5px">mild exercise (Walking, wolf)</label></li>
+                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.MildExercise"><label style="margin-left:5px">Mild exercise (Walking, wolf)</label></li>
                           <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.RegularVigorius"><label style="margin-left:5px">Regular Vigorius exercise (4x/week)</label></li>
                         </ul>
                       </td>
@@ -818,7 +825,7 @@
                         <label style="text-align: center; display: block;"><b>Drugs</b></label>
                         <ul style="list-style-type: none; padding-inline-start: 10px;">
                           <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.StreetDrugs"><label style="margin-left:5px">Currently use recreational or street drugs</label></li>
-                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.StreetDrugNeedle"><label style="margin-left:5px">used street drugs with a needle in the past</label></li>
+                          <li><input style="border: none; margin-left: -12px" type="checkbox" [(ngModel)]="tempPatient.StreetDrugNeedle"><label style="margin-left:5px">Used street drugs with a needle in the past</label></li>
                         </ul>
                       </td>
                       <td style="border: 1px solid #999;">
@@ -902,7 +909,7 @@
             </div>
             <div id="footer" style="margin-top: 20px;">
               <div style="text-align: center;margin: 0px;">
-                <p>3107W hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
+                <p>3107 W Hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
                 <p>Office:(786) 638-4747 <sup>.</sup>Fax:(954) 367-3763</p>
               </div>
             </div>
@@ -1005,7 +1012,7 @@
               </div>
             <div id="footer" style="margin-top: 20px;">
               <div style="text-align: center;margin: 0px;">
-                <p>3107W hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
+                <p>3107 W Hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
                 <p>Office:(786) 638-4747 <sup>.</sup>Fax:(954) 367-3763</p>
               </div>
             </div>
@@ -1076,7 +1083,7 @@
               </div>
             <div id="footer" style="margin-top: 20px;">
               <div style="text-align: center;margin: 0px;">
-                <p>3107W hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
+                <p>3107 W Hallandale Beach Blvd <sup>.</sup>Suite 102 <sup>.</sup> Pembroke Park, FL 33009</p>
                 <p>Office:(786) 638-4747 <sup>.</sup>Fax:(954) 367-3763</p>
               </div>
             </div>

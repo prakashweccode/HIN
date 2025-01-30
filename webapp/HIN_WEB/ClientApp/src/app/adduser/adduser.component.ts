@@ -41,10 +41,8 @@ export class AdduserComponent implements OnInit {
   public entityNumber: string;
   customFields: Array<CustomProperty> = [];
   customFieldValues: Array<CustomPropertyValues> = [];
-
   userLeftCustomFieldValues: Array<CustomPropertyValues> = [];
   userRightCustomFieldValues: Array<CustomPropertyValues> = [];
-
   addCustomToggle: boolean = false;
   public listEmployeeTypes: Array<EmployeeType> = [];
   public listCountries: Array<Country> = [];
@@ -57,7 +55,6 @@ export class AdduserComponent implements OnInit {
   public selectedHeaderChartMappingArray: Array<Userchartmapping> = [];
   public selectedDashboardChartMappingArray: Array<Userchartmapping> = [];
   public selectedUserQuoteChartMappingArray: Array<Userchartmapping> = [];
-
   public user: Users = new Users();
   public lstRoles: Array<Roles>;
   public lstGroups: Array<UserGroups>;
@@ -449,12 +446,25 @@ export class AdduserComponent implements OnInit {
       let userGroupMapping = new UserGroupMapping();
       userGroupMapping.UserId = this.user.UserId;
       userGroupMapping.GroupId = evt.target.value;
+     /* this.userUpdate(evt.target.value);*/
       this.lstUserGroupMapping.push(userGroupMapping);
     }
     else {
       this.lstUserGroupMapping = this.lstUserGroupMapping.filter(x => x.GroupId !== parseInt(evt.target.value));
     }
   }
+
+  //userUpdate(id) {
+  //  if (id > 1) {
+  //    this.user.IsAdminUser = false;
+  //  }
+  //  else {
+  //    this.user.IsAdminUser = true;
+  //  }
+
+  //}
+
+
   updateUserCost() {
     if (this.userCost.IsPerHour) {
       this.userCost.PerHourCost = 0;
@@ -518,6 +528,10 @@ export class AdduserComponent implements OnInit {
         }
       });
     }
+  }
+
+  cancel() {
+    this.router.navigate(['/manageuser']);
   }
 
   saveUserQuoteChartMapping(userId) {
@@ -692,6 +706,8 @@ export class DriveRequest {
 export interface Recipient {
   email: string;
 }
+
+
 
 
 

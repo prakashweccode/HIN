@@ -56,11 +56,11 @@ const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigato
         redirectUri: OAuthSettings.redirectUri,
         authority: OAuthSettings.authority,
         navigateToLoginRequestUrl: true,
-        postLogoutRedirectUri: '/',
+        postLogoutRedirectUri: OAuthSettings.postLogoutUri,
         validateAuthority:true
       },
       cache: {
-        cacheLocation: "localStorage",
+        cacheLocation: "sessionStorage",
         storeAuthStateInCookie: isIE // set to true for IE 11
       }
     },

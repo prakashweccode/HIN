@@ -162,6 +162,7 @@ export class EmailComponent implements OnInit {
         }
       }, err => { }, () => { });
     }
+
     else {
       await this.graphService.sendMail(message).then(x => {
         let toAddr = '';
@@ -172,7 +173,7 @@ export class EmailComponent implements OnInit {
         message.message.ccRecipients.forEach(x => {
           tocc += x.emailAddress.address + ',';
         });
-        this.emailHistory.EmailTo = toAddr;
+         this.emailHistory.EmailTo = toAddr;
         this.emailHistory.EmailSubject = message.message.subject;
         this.emailHistory.EmailBody = message.message.body.content;
         this.emailHistory.EmailCc = tocc;
@@ -184,8 +185,41 @@ export class EmailComponent implements OnInit {
             this.closeToggle();
           }
         }, err => { }, () => { });
+      }, err => {
+        if (err.code == "MailboxNotEnabledForRESTAPI") {
+          this.notification.ShowNoty("Mailbox is inactive or user doesn't have license assigned. Contact administrator.");
+        }
+        else {
+          this.notification.ShowNoty(err.message);
+        }
       });
     }
+
+    //else {
+    //  
+    //  await this.graphService.sendMail(message).then(x => {
+    //    let toAddr = '';
+    //    message.message.toRecipients.forEach(x => {
+    //      toAddr += x.emailAddress.address + ',';
+    //    });
+    //    let tocc = '';
+    //    message.message.ccRecipients.forEach(x => {
+    //      tocc += x.emailAddress.address + ',';
+    //    });
+    //    this.emailHistory.EmailTo = toAddr;
+    //    this.emailHistory.EmailSubject = message.message.subject;
+    //    this.emailHistory.EmailBody = message.message.body.content;
+    //    this.emailHistory.EmailCc = tocc;
+    //    this.emailHistory.CreatedOn = new Date();
+    //    this.emailService.saveEmailHistory(this.emailHistory).subscribe(data => {
+    //      if (data) {
+    //        this.notification.ShowNoty("Email sent successfully.");
+    //        this.getEmailHistory();
+    //        this.closeToggle();
+    //      }
+    //    }, err => { }, () => { });
+    //  });
+    //}
   }
 
   async getMailFolder() {

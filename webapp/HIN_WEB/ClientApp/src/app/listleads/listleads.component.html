@@ -1,46 +1,55 @@
 
+<br />
 <div class="w3-card-2 w3-white w3-small w3-margin-left w3-margin-right w3-round-large w3-animate-zoom">
   <div class="w3-container">
+    <!-- Display 'Patients' heading if activeContainer is 'tab1' -->
     <h4 *ngIf="activeContainer == 'tab1'" class="w3-left w3-xlarge w3-margin-top w3-margin-bottom w3-container"><b>Patients</b></h4>
-
+    <!-- Display 'Unapproved Patients' heading if activeContainer is 'tab2' -->
     <h4 *ngIf="activeContainer == 'tab2'" class="w3-left w3-xlarge w3-margin-top w3-margin-bottom w3-container"><b>Unapproved Patients</b></h4>
-    <div *ngIf="activeContainer == 'tab1'"  class="w3-right">
+    <!-- Button to add a new patient, visible only when activeContainer is 'tab1' -->
+    <div *ngIf="activeContainer == 'tab1'" class="w3-right">
       <button class="w3-button w3-margin-right-small w3-round-large w3-secondary w3-margin-top" (click)="addLead()">+ Add Patient</button>
     </div>
-    
+
     <div class="w3-bar w3-container w3-center w3-margin-top-xxlarge w3-border-secondary w3-margin-bottom">
       <div class="w3-left">
+        <!-- Button for 'Approved List', toggles 'activeContainer' to 'tab1' -->
         <button [class]="activeContainer == 'tab1'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab1'">Approved List </button>
+        <!-- Button for 'Unapproved List', toggles 'activeContainer' to 'tab2' -->
         <button [class]="activeContainer == 'tab2'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tab2'">Unapproved List</button>
       </div>
     </div>
-
+    <!-- Condition to check if 'tab1' is active, display the content inside this div -->
     <div *ngIf="activeContainer == 'tab1'">
+      <!-- Row with padding for the lead data grid with a permission check -->
       <div class="w3-row-padding" permissionCheck="2.1">
+        <!-- Data Grid component for displaying leads -->
         <app-data-grid [gridHeaders]="gridHeaders" [actions]="actions" [multiSelectType]="'lead'" [dataSource]="dataSource" [filterColumns]="filterColumns" [selectedArray]="selectedLeads" [apiUrl]="'/api/Lead/GetODataLeadList'" [pageSize]="25"
-                       [isResponsive]="false" [isSearchEnabled]="true" [enableRowNumber]="false" [isSecurityEnabled]="isSecurityEnabled" [isPaginationEnabled]="true" [pageLengthOptions]="pageLengthOptions" [allLead]="true" [staticFilter]="staticFilter" [additionalFilter]="additionalFilter" (selectedArrayOfData)="selectedArray($event)" (rowClick)="editLead($event);">
+                       [isResponsive]="false" [isSearchEnabled]="true" [enableRowNumber]="false" [securityGroup]="true" [isSecurityEnabled]="isSecurityEnabled" [isPaginationEnabled]="true" [pageLengthOptions]="pageLengthOptions" [allLead]="true" [staticFilter]="staticFilter" [additionalFilter]="additionalFilter" (selectedArrayOfData)="selectedArray($event)" (rowClick)="editLead($event);">
         </app-data-grid>
       </div>
     </div>
-
-
+    <!-- Dropdown container for bulk assignment options, positioned to the right -->
     <div class="w3-dropdown-click w3-right w3-hover-none">
-
+      <!-- Button to open the 'Change Status' modal, visible if bulkAssignToggle is true -->
       <button *ngIf="bulkAssignToggle" class="w3-button w3-margin-right-small w3-round-large w3-secondary w3-margin-top" (click)="openStatusModal()">Change Status</button>
+      <!-- Button to open the 'Change Security Group' modal, visible if bulkAssignToggle is true -->
       <button *ngIf="bulkAssignToggle" class="w3-button w3-margin-right-small w3-round-large w3-secondary w3-margin-top" (click)="openSecurityGroup()">Change Security Group</button>
+      <!-- Button to open the 'Change Assigned To' modal, visible if bulkAssignToggle is true -->
       <button *ngIf="bulkAssignToggle" class="w3-button w3-margin-right-small w3-round-large w3-secondary w3-margin-top" (click)="openAssignedTo()">Change Assigned To</button>
 
 
 
       <!--<button permissionCheck="2.2" (click)="toggle=!toggle" class="w3-button w3-round-top-right w3-round-bottom-right w3-secondary w3-margin-top"><i [class]="toggle?'fa w3-medium fa-chevron-up':'fa w3-medium fa-chevron-down'"></i></button>
-    <div id="Demo" class="w3-dropdown-content w3-bar-block w3-border w3-show" *ngIf="toggle">
-      <a class="w3-bar-item w3-button w3-border-bottom w3-light-gray" (click)="addLead()">Add Lead</a>
-      <a class="w3-bar-item w3-button w3-light-gray" (click)="gotoImport()">Import Data</a>
-    </div>-->
+      <div id="Demo" class="w3-dropdown-content w3-bar-block w3-border w3-show" *ngIf="toggle">
+        <a class="w3-bar-item w3-button w3-border-bottom w3-light-gray" (click)="addLead()">Add Lead</a>
+        <a class="w3-bar-item w3-button w3-light-gray" (click)="gotoImport()">Import Data</a>
+      </div>-->
     </div>
-
+    <!-- Conditionally display content for 'tab2' when the activeContainer is set to 'tab2' -->
     <div *ngIf="activeContainer == 'tab2'">
       <div class="w3-row-padding">
+        <!-- Data grid for displaying unapproved patients, with dynamic headers, actions, and data -->
         <app-data-grid [gridHeaders]="unapprovedgridHeaders" [actions]="unapprovedactions" [dataSource]="unapproveddataSource" [filterColumns]="unapprovedfilterColumns" [apiUrl]="'/api/Patient/GetTempPatient'" [pageSize]="25" [pageLengthOptions]="unapprovedpageLengthOptions" [staticFilter]="unapprovedstaticFilter" (rowClick)="editTempPatient($event);">
         </app-data-grid>
       </div>
@@ -48,6 +57,7 @@
 
   </div>
 </div>
+<br />
 
 <!--<div class="w3-display-container">
   <div class="w3-sidebar w3-sidebar w3-card-2 w3-bar-block w3-display-right w3-animate-right" *ngIf="editToggle" style="width:50%;right:0; margin-top:55px;">
@@ -77,10 +87,10 @@
   </div>
 
 </div>-->
-
-
+<!-- Modal for changing the status, visible when changeStatus is true -->
 <div *ngIf="changeStatus" class="w3-modal" style="display:block;">
   <div class="w3-modal-content w3-round-large w3-animate-zoom w3-secondary-button">
+    <!-- Close button for the modal -->
     <span (click)="closeStatusModal()" class="w3-button w3-round-top-right w3-display-topright">&times;</span>
     <div class="w3-small sfcenter">
       <div class="w3-animate-opacity marginform">
@@ -92,9 +102,11 @@
             <div class="w3-half w3-container marginform">
               <div class="w3-full w3-margin-bottom">
                 <label>Status</label>
+                <!-- Status selection dropdown -->
                 <app-customdropdown [getApiPath]="'CustomDropDown/GetStatus'" [selectedValue]="bulkAssign.LeadFunnelStatusId" (saveSelectedValue)="bulkAssign.LeadFunnelStatusId = ($event)" [saveApiPath]="'CustomDropDown/SaveStatus'"></app-customdropdown>
               </div>
             </div>
+            <!-- Reason input field (visible if selected status is 3 or 4) -->
             <div class="w3-half w3-container marginform" *ngIf="bulkAssign.LeadFunnelStatusId == 3 || bulkAssign.LeadFunnelStatusId == 4">
               <div class="w3-full w3-margin-bottom">
                 <label>Reason *</label>
@@ -103,6 +115,7 @@
             </div>
           </div>
         </div>
+        <!-- Footer buttons -->
         <div class="w3-row w3-round-bottom-left w3-round-bottom-right w3-secondary-button">
           <div class="w3-margin w3-right">
             <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeStatusModal()">Cancel</button>
@@ -113,9 +126,10 @@
     </div>
   </div>
 </div>
-
+<!-- Modal for changing the security group, visible when changeSecurityGroup is true -->
 <div *ngIf="changeSecurityGroup" class="w3-modal" style="display:block;">
   <div class="w3-modal-content w3-round-large w3-animate-zoom w3-secondary-button">
+    <!-- Close button for the modal -->
     <span (click)="closeSecurityGrouptModal()" class="w3-button w3-round-top-right w3-display-topright">&times;</span>
     <div class="w3-small sfcenter">
       <div class="w3-animate-opacity marginform">
@@ -126,11 +140,13 @@
           <div class="w3-full">
             <div class="w3-half w3-container marginform">
               <div class="w3-full w3-margin-bottom">
+                <!-- Security Group selection dropdown -->
                 <app-customdropdown [getApiPath]="'CustomDropDown/GetUserGroups'" [selectedValue]="bulkAssign.SecurityGroup" (saveSelectedValue)="bulkAssign.SecurityGroup = ($event)" [saveApiPath]="'CustomDropDown/SaveUserGroups'"></app-customdropdown>
               </div>
             </div>
           </div>
         </div>
+        <!-- Footer buttons -->
         <div class="w3-row w3-round-bottom-left w3-round-bottom-right w3-secondary-button">
           <div class="w3-margin w3-right">
             <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeSecurityGrouptModal()">Cancel</button>
@@ -141,9 +157,10 @@
     </div>
   </div>
 </div>
-
+<!-- Modal for changing the "Assigned To" field, visible when changeAssignedTo is true -->
 <div *ngIf="changeAssignedTo" class="w3-modal" style="display:block;">
   <div class="w3-modal-content w3-round-large w3-animate-zoom w3-secondary-button">
+    <!-- Close button for the modal -->
     <span (click)="closeAssignedToModal()" class="w3-button w3-round-top-right w3-display-topright">&times;</span>
     <div class="w3-small sfcenter">
       <div class="w3-animate-opacity marginform">
@@ -154,11 +171,13 @@
           <div class="w3-full">
             <div class="w3-half w3-container marginform">
               <div class="w3-full w3-margin-bottom">
+                <!-- "Assigned To" selection dropdown -->
                 <app-assignedto [assignedTo]="bulkAssign.AssignedToId" (sendAssignedId)="bulkAssign.AssignedToId = $event"></app-assignedto>
               </div>
             </div>
           </div>
         </div>
+        <!-- Footer buttons -->
         <div class="w3-row w3-round-bottom-left w3-round-bottom-right w3-secondary-button">
           <div class="w3-margin w3-right">
             <button class="w3-button w3-border w3-round-large w3-margin-right" (click)="closeAssignedToModal()">Cancel</button>

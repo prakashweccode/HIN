@@ -48,7 +48,7 @@ export class NewcalendarComponent implements OnInit {
   refresh = new Subject<void>();
   public activeDayIsOpen: boolean = false;
   public officeToggle: boolean = false;
-  public isOffice365Connected: boolean = false;
+  public isOffice365Connected: boolean = true;
   public showOfficeData: boolean = false;
   public officeInfo: any;
   public calendars: any;
@@ -78,6 +78,24 @@ export class NewcalendarComponent implements OnInit {
     this.getCalendarEventsByRange();
     this.getRecurrenceEvents();
   }
+
+  async getCalendarEventsRange() {
+    
+    const getStart: any = {
+      month: startOfMonth,
+      week: startOfWeek,
+      day: startOfDay,
+    }[this.view];
+    const getEnd: any = {
+      month: endOfMonth,
+      week: endOfWeek,
+      day: endOfDay,
+    }[this.view];
+    this.filterByDate.StartDate = new Date(format(getStart(this.viewDate), 'yyyy-MM-dd'));
+    this.filterByDate.EndDate = new Date(format(getEnd(this.viewDate), 'yyyy-MM-dd'));
+    let calendarEvent = this.graphService.getCalendarEventsByRange(this.filterByDate.StartDate, this.filterByDate.EndDate, this.clientTimeZone);
+  }
+
   async getCalendarEventsByRange() {
     const getStart: any = {
       month: startOfMonth,
@@ -337,7 +355,7 @@ export class NewcalendarComponent implements OnInit {
       this.officeInfo = event.officeData;
       this.officeToggle = true;
     }
-    else if (event.actionType == "Service") {
+    else if (event.actionType == "Appointment") {
       if (event.id) {
         this.newCalendarService.getServiceById(event.id).subscribe(data => {
           if (data) {

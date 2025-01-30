@@ -51,6 +51,7 @@ export class Users {
   public GmailUserName: string;
   public GmailPassword: string;
   public Signature: string;
+  public HashData: string;
 }
 
 export class UserCost {

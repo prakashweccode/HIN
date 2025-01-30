@@ -1,4 +1,4 @@
-<div class="w3-row">
+<br><div class="w3-row">
   <div class="w3-card w3-white w3-small w3-margin-right w3-margin-left w3-round-large w3-animate-zoom">
     <br />
     <div class="w3-row w3-padding w3-animate-opacity w3-margin-bottom w3-secondary-l5 w3-border-top w3-border-bottom">
@@ -26,6 +26,8 @@
         <button permissionCheck="4.2.2" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" *ngIf="service.Id" (click)="addNewService()"><i class="fa fa-plus"></i> Add New</button>
         <button class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="reloadCurrentRoute()"><i class="fa fa-refresh"></i> Refresh</button>
         <button permissionCheck="4.2.1" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="backToList()">Back</button>
+        <button *ngIf="service.Id" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="sendEmail()">Send Email</button>
+        <button *ngIf="service.Id" class="w3-button w3-right w3-secondary w3-round-large w3-margin-right-small" (click)="goToCalendar()">Go To Calendar</button>
       </div>
     </div>
     <div class="w3-container w3-white">
@@ -47,15 +49,15 @@
                 </div>
                 <div class="w3-half w3-padding-left-10" permissionCheck="4.2.4">
                   <!--<div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
-           (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
-        <label (click)="editLead()">EMR Patient Name <i class="fa fa-link" aria-hidden="true"></i>* </label>
-        <select class="w3-input w3-border" (dragover)="noAllowDrop($event)" [disabled]="disableLead" [(ngModel)]="service.LeadId" #leadSelect (change)="assignLeadToService(leadSelect.value)">
-          <option value="0" disabled>
-            --select Patient--
-          </option>
-          <option *ngFor="let data of lstLeads" value="{{data.LeadId}}">{{data.LeadName}}</option>
-        </select>
-      </div>-->
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                    <label (click)="editLead()">EMR Patient Name <i class="fa fa-link" aria-hidden="true"></i>* </label>
+                    <select class="w3-input w3-border" (dragover)="noAllowDrop($event)" [disabled]="disableLead" [(ngModel)]="service.LeadId" #leadSelect (change)="assignLeadToService(leadSelect.value)">
+                      <option value="0" disabled>
+                        --select Patient--
+                      </option>
+                      <option *ngFor="let data of lstLeads" value="{{data.LeadId}}">{{data.LeadName}}</option>
+                    </select>
+                  </div>-->
                   <label>Practice Name</label>
                   <select class="w3-input w3-border" [(ngModel)]="service.DealId">
                     <option value="0" disabled>-select-</option>
@@ -72,10 +74,10 @@
                     <option value="0" disabled>
                       --select lead--
                     </option>
-                    <option *ngFor="let data of lstLeads" value="{{data.LeadId}}">{{data.LeadNumber}} - {{data.LeadName}}</option>
+                    <option *ngFor="let data of lstLeads" value="{{data.LeadId}}">{{data.LeadNumber}} - {{data.LeadName}} {{data.PatientLastName}} </option>
                   </select>
                 </div>
-                <div class="w3-half w3-padding-left-10" permissionCheck="4.2.6">
+                <!--<div class="w3-half w3-padding-left-10" permissionCheck="4.2.6">
                   <label>Event Name</label>
                   <select class="w3-input w3-border" (dragover)="noAllowDrop($event)" [(ngModel)]="service.EventId">
                     <option value="0" disabled>
@@ -83,20 +85,21 @@
                     </option>
                     <option *ngFor="let data of lstEvents" value="{{data.Id}}">{{data.EventNumber}} - {{data.EventName}}</option>
                   </select>
+                </div>-->
+                <div class="w3-half w3-padding-left-10" permissionCheck="4.2.7">
+                  <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
+                       (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
+                    <label>Funnel *</label>
+                    <select class="w3-input w3-border" (dragover)="noAllowDrop($event)" [(ngModel)]="service.PipelineGroupId" (change)="getPipeLineByPipeLineGroupId(service.PipelineGroupId)" [class.w3-border-red]="checkValidation(funnel)" #funnel="ngModel" required>
+                      <option [ngValue]="0">--Select Pipeline--</option>
+                      <option [ngValue]="-1">+ New Funnel</option>
+                      <option *ngFor="let pipeLineGroup of listPipeLineGroup" [ngValue]="pipeLineGroup.PipelineGroupId">{{pipeLineGroup.Name}}</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
-              <div class="w3-half" permissionCheck="4.2.7">
-                <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
-                     (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
-                  <label>Funnel *</label>
-                  <select class="w3-input w3-border" (dragover)="noAllowDrop($event)" [(ngModel)]="service.PipelineGroupId" (change)="getPipeLineByPipeLineGroupId(service.PipelineGroupId)" [class.w3-border-red]="checkValidation(funnel)" #funnel="ngModel" required>
-                    <option [ngValue]="0">--Select Pipeline--</option>
-                    <option [ngValue]="-1">+ New Funnel</option>
-                    <option *ngFor="let pipeLineGroup of listPipeLineGroup" [ngValue]="pipeLineGroup.PipelineGroupId">{{pipeLineGroup.Name}}</option>
-                  </select>
-                </div>
-              </div>
+
               <div class="w3-row" permissionCheck="4.2.7">
                 <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
                      (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
@@ -117,7 +120,7 @@
                   <div class="w3-right">
                     <div class="w3-margin-right" [ngClass]="service.LeadId ? '' : 'w3-disabled'">
                       <!--<input id="copyLeadAddress" type="checkbox" (change)="copyAddressFromLead(service, $event)" />
-          <label for="copyLeadAddress">&nbsp;Copy address from lead</label>-->
+                      <label for="copyLeadAddress">&nbsp;Copy address from lead</label>-->
                       <button type="button" class="w3-button w3-padding-small w3-small w3-white w3-round-large w3-border w3-border-grey" (click)="copyAddressFromLead(service, $event)">Copy address from patient</button>
                     </div>
                   </div>
@@ -155,18 +158,18 @@
                   <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
                        (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
                     <label>Appointment Type</label>
-                    <!--<select class="w3-input w3-border" #serviceType [(ngModel)]="service.Type" (change)="chageLeadStatus(serviceType.value)">
-                      <option value="1">General</option>
-                      <option value="2">Others</option>
-                    </select>-->
-                    <input type="text" class="w3-input w3-border" [(ngModel)]="service.ApplicationRemarks" />
+                    <select class="w3-input w3-border" #serviceType [(ngModel)]="service.Type" (change)="chageLeadStatus(serviceType.value)">
+                      <option value="1">Virtual</option>
+                      <option value="2">Presential</option>
+                    </select>
+                    <!--<input type="text" class="w3-input w3-border" [(ngModel)]="service.ApplicationRemarks" />-->
                   </div>
                 </div>
                 <div class="w3-half w3-padding-left-10" permissionCheck="4.2.10">
                   <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
                        (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
                     <label>Security Group *</label>
-                    <select class="w3-input w3-border" [(ngModel)]="service.SecurityGroup" [class.w3-border-red]="checkValidation(securityGroup)" #securityGroup="ngModel" required>
+                    <select class="w3-input w3-border" [(ngModel)]="service.SecurityGroupId" [class.w3-border-red]="checkValidation(securityGroup)" #securityGroup="ngModel" required>
                       <option value="0" disabled>-select-</option>
                       <option *ngFor="let data of lstGroups;" value="{{data.UserGroupId}}">{{data.Name}}</option>
                     </select>
@@ -194,13 +197,18 @@
               </div>
               <div class="w3-row">
 
-                <div class="w3-half" permissionCheck="4.2.13">
+                <div class="w3-half" permissionCheck="4.2.15">
+                  <label>NPI</label>
+                  <input type="text" class="w3-input w3-border" [(ngModel)]="service.ApplicationNeeded">
+                </div>
+
+                <!--<div class="w3-half" permissionCheck="4.2.13">
                   <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
                        (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
                     <label>Status</label>
                     <app-customdropdown [getApiPath]="'CustomDropDown/GetServiceStatus'" [selectedValue]="service.StatusId" (saveSelectedValue)="selectedOpportunityStatus($event)" [saveApiPath]="'CustomDropDown/SaveServiceStatus'"></app-customdropdown>
                   </div>
-                </div>
+                </div>-->
                 <div class="w3-half w3-padding-left-10" permissionCheck="4.2.14">
                   <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
                        (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
@@ -219,12 +227,7 @@
                   <app-customdropdown [getApiPath]="'CustomDropDown/GetReason'" [isAddEnabled]="true" [selectedValue]="service.CancelReason" (saveSelectedValue)="service.CancelReason=$event" [saveApiPath]="'CustomDropDown/SaveReason'"></app-customdropdown>
                 </div>
               </div>
-              <div class="w3-row">
-                <div class="w3-half" permissionCheck="4.2.15">
-                  <label>NPI</label>
-                  <input type="text" class="w3-input w3-border" [(ngModel)]="service.ApplicationNeeded">
-                </div>
-              </div>
+
               <div class="w3-full" permissionCheck="4.2.16">
                 <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
                      (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
@@ -236,19 +239,20 @@
                 <div class="w3-half" permissionCheck="4.2.17">
                   <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
                        (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
-                    <label class="w3-cursor" title="start" (click)="setCurrentDateTime()">Appointment Date </label>
-                    <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" placeholder="MM/DD/YYYY" type="datetime-local" [ngModel]="changeEstimateDateFormat(service.StartDate)"
-                           (ngModelChange)="service.StartDate = $event" />
+                    <label class="w3-cursor" title="start" (click)="setCurrentDateTime(1)">Appointment Start Date *</label>
+                    <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" placeholder="MM/DD/YYYY" type="datetime-local" [ngModel]="calendarFormatDate(service.StartDate)" (ngModelChange)="service.StartDate = $event" />
+                    <!--<input class="w3-input w3-border" (dragover)="noAllowDrop($event)" placeholder="MM/DD/YYYY" type="datetime-local" [ngModel]="changeEstimateDateFormat(service.StartDate)" (ngModelChange)="service.StartDate = $event" />-->
+                    <!--<app-newdatepicker (selecteddate)="service.StartDate = $event" [fromDate]="service.StartDate"></app-newdatepicker>-->
                   </div>
                 </div>
-                <!--<div class="w3-half w3-padding-left-10" permissionCheck="4.2.18">
+                <div class="w3-half w3-padding-left-10" permissionCheck="4.2.18">
                   <div draggable="true" (dragstart)="drag($event)" (drop)="drop($event);"
                        (dragover)="dragOver($event);" (dragleave)="dragLeave($event);">
-                    <label>Appointment Time </label>
-                    <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" placeholder="MM/DD/YYYY" type="time" [ngModel]="changeEndDateFormat(service.EndDate)"
-                           (ngModelChange)="service.EndDate = $event" />
+                    <label>Appointment End Date</label>
+                    <input class="w3-input w3-border" (dragover)="noAllowDrop($event)" placeholder="MM/DD/YYYY" type="datetime-local" [ngModel]="calendarFormatDate(service.EndDate)" (ngModelChange)="service.EndDate = $event" />
+                    <!--<input class="w3-input w3-border" (dragover)="noAllowDrop($event)" placeholder="MM/DD/YYYY" type="datetime-local" [ngModel]="changeEndDateFormat(service.EndDate)" (ngModelChange)="service.EndDate = $event" />-->
                   </div>
-                </div>-->
+                </div>
               </div>
               <app-customsection [entityType]="entityType" [alignment]="'right'" [customFields]="customFields" [entityId]="service.Id" [customFieldValues]="rightServiceCustomFieldValues"></app-customsection>
             </div>
@@ -257,11 +261,115 @@
       </div>
       <div class="w3-bar w3-container w3-center w3-margin-top w3-border-secondary">
         <div class="w3-left">
-          <button permissionCheck="4.2.19" *ngIf="service.Id" [class]="activeContainer == 'tabContacts'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tabContacts'">Contact Information ({{contactInformations.length}})</button>
-          <button permissionCheck="4.2.20" *ngIf="service.Id" [class]="activeContainer == 'tabNotes'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tabNotes'">Notes ({{notesInfos.length}})</button>
-          <button permissionCheck="4.2.21" *ngIf="loggedUser.User.IsAdmin && service.Id" [class]="activeContainer == 'tab3'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tabDrive'">Files</button>
+          <button permissionCheck="4.2.22" [class]="activeContainer == 'patientforms'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'patientforms';isForm=false;isTemplate=false">PatientForms</button>
+          <button permissionCheck="4.2.23" *ngIf="service.Id" [class]="activeContainer == 'forms'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'forms';isForm=false;isTemplate=false">Forms </button>
+          <button permissionCheck="4.2.19" *ngIf="service.Id" [class]="activeContainer == 'tabContacts'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tabContacts';isForm=false;isTemplate=false">Contact Information ({{contactInformations.length}})</button>
+          <button permissionCheck="4.2.20" *ngIf="service.Id" [class]="activeContainer == 'tabNotes'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tabNotes';isForm=false;isTemplate=false">Notes ({{notesInfos.length}})</button>
+          <!--<button permissionCheck="4.2.21" *ngIf="loggedUser.User.IsAdmin && service.Id" [class]="activeContainer == 'tab3'?'w3-button w3-round-large w3-secondary w3-margin-right-small':'w3-button w3-margin-right-small w3-round-large w3-secondary-theme2'" (click)="activeContainer = 'tabDrive'">Files</button>-->
         </div>
       </div>
+
+      <div permissionCheck="4.2.23" *ngIf="!isTemplate">
+        <div *ngIf="activeContainer == 'forms'" class="w3-white">
+          <div class="w3-animate-opacity">
+            <!--<h6 class="w3-left w3-margin-0">Forms </h6>-->
+
+            <div class="w3-full">
+              <table class="w3-table w3-bordered">
+                <thead>
+                  <tr>
+                    <th>Template Name</th>
+                    <th>Action</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let data of lstTemplate">
+                    <td><a class="hyper-link" (click)="editTemplate(data)">{{data.TemplateName}}</a></td>
+                    <td><a class="hyper-link fa fa-file-word-o" (click)="editTemplate(data)"></a></td>
+
+                  </tr>
+                  <tr *ngIf="lstTemplate.length == 0">
+                    <td>No records</td>
+                  </tr>
+                </tbody>
+              </table>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div permissionCheck="4.2.22" *ngIf="activeContainer == 'patientforms'" class="w3-container w3-white">
+        <div class="w3-animate-opacity">
+          <div class="w3-full">
+            <table class="w3-table w3-bordered">
+              <thead>
+                <tr>
+                  <th>Forms Name</th>
+                  <th>Action</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of lstAppointmentForms">
+                  <td><a class="hyper-link" (click)="OpenForms(service)">{{data.Name}}</a></td>
+                  <td class="text-center">
+                    <input type="checkbox" (click)="editForms(data)" [checked]="service.IsPatientFormSelected == true" (change)="selectForms($event)">
+                  </td>
+                  <!--<td><input type="checkbox" /></td>-->
+                </tr>
+                <tr *ngIf="lstAppointmentForms.length == 0">
+                  <td>No records</td>
+                </tr>
+              </tbody>
+            </table>
+
+
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="isForm " class="w3-margin-bottom">
+        <span class="w3-button w3-margin-right-small w3-display-topright">&times;</span>
+        <app-patientform-approved [searchString]="service.Id"></app-patientform-approved>
+      </div>
+
+      <!--<div *ngIf="isLeadForm" class="w3-margin-bottom">
+        <span class="w3-button w3-margin-right-small w3-display-topright">&times;</span>
+        <app-patientform-approved [searchLead]="lead.UserName"></app-patientform-approved>
+      </div>-->
+
+      <div *ngIf="isTemplate" class="w3-card-2 w3-white w3-small w3-margin-left w3-margin-right w3-round-large w3-animate-zoom">
+        <div class="w3-container">
+          <div class="w3-header w3-margin w3-right">
+            <button *ngIf="isTemplate" class="w3-button w3-primary w3-round-large w3-right w3-margin-left-large" type="button" (click)="saveAsDraft(templateId,patientName, templateWrapper);">Save as draft</button>
+            <button *ngIf="isTemplate" class="w3-button w3-primary w3-round-large w3-right w3-margin-left-large" type="button" (click)="previewTemplate(templateId);">Preview</button>
+            <button *ngIf="isTemplate" class="w3-button w3-primary w3-round-large w3-right w3-margin-left-large" type="button" (click)="closeTemplateHtmlOpen();">Cancel</button>
+          </div>
+          <div class="w3-row w3-margin-top">
+            <div class="w3-border w3-border-light-gray" #templateWrapper [innerHTML]="selectedTemplatePage | safe: 'html'"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div *ngIf="isPreview" class="w3-modal w3-show">
+          <div class="w3-modal-content w3-round-large w3-secondary-button" style="width:1200px;">
+            <div class="w3-row w3-secondary">
+              <div class="w3-container w3-center">
+                <p>Preview</p>
+                <span (click)="closePreview()" class="w3-button w3-display-topright">&times;</span>
+              </div>
+            </div>
+            <button class="w3-button w3-secondary w3-tiny w3-margin-top-small w3-right w3-margin-right w3-border w3-round-large" *ngIf="signaturePad" (click)="sendToOneDrive()">Send to Onedrive</button>
+            <!--<button class="w3-button w3-secondary w3-tiny w3-margin-top-small w3-right w3-margin-right-small w3-border w3-round-large">Send Mail</button>-->
+            <div class="w3-row" style="width: 1200px;height:75vh;overflow-x:auto;" [innerHTML]="bindPreviewHTML(previewHtml)"></div>
+          </div>
+        </div>
+      </div>
+
 
       <div *ngIf="activeContainer == 'tabDrive'" class="w3-white " permissionCheck="4.2.21">
         <div class="w3-margin w3-animate-opacity">
@@ -465,3 +573,4 @@
     </div>
   </div>
 </div>
+<br />

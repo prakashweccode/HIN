@@ -176,16 +176,19 @@
             <label>Edit Signature</label>
             <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="user.EmailSignature"></angular-editor>
           </div>
-          <div class="w3-half w3-margin-right">
+          <div class="w3-half">
             <label>Digital signature</label>
             <div *ngIf="!signPad()">
-              <app-signpad (image)="user.Signature = $event"></app-signpad>
+              <app-signpad [canvasWidth]="850" (image)="user.Signature = $event;"></app-signpad>
             </div>
             <div *ngIf="signPad()">
               <i class="fa fa-pencil-square w3-right w3-hover" style="height:20px; width:20px;" aria-hidden="true" (click)="toggleSignPad()"></i>
-              <img style="margin-left: 50px;" [src]="'data:image/jpg;base64,'+user.Signature" />
+              <img style="margin-left: 50px;" [src]="'data:image/png;base64,'+user.Signature" />
             </div>
-
+          </div>
+          <div class="w3-half w3-padding-left-10">
+            <label>Hash Code</label>
+            <input class="w3-input w3-border" type="text" [(ngModel)]="user.HashData" />
           </div>
         </div>
 

@@ -15,7 +15,7 @@ import { SignpadModule } from '../signpad/signpad.module';
   declarations: [SettingsComponent],
   imports: [
     CommonModule,
-    SettingsRoutingModule, FormsModule, ReactiveFormsModule, DirectiveHelperModule, AngularEditorModule, NgxEditorModule, NgxMaskModule, SignpadModule
+    SettingsRoutingModule, FormsModule, ReactiveFormsModule, DirectiveHelperModule, SignpadModule, AngularEditorModule, NgxEditorModule, NgxMaskModule
   ]
 })
 export class SettingsModule { }

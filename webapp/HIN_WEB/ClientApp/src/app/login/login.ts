@@ -14,4 +14,5 @@ export class UserDetail {
   public User: Users = new Users();
   public isValid: boolean;
   public Token: string;
+  public isAdmin: boolean;
 }

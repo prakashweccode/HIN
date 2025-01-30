@@ -46,6 +46,10 @@ import * as moment from 'moment';
 import { Services } from '../model/services';
 import { Providerstatus } from '../model/providerstatus';
 import { OnedrivegraphService } from '../onedriveservice/onedrivegraph.service';
+import { MsalService } from '@azure/msal-angular';
+import { GraphService } from '../officeauth/graph.service';
+import { Onedriveconfig } from '../helper/onedriveconfig';
+
 
 @Component({
   selector: 'app-adddeals',
@@ -79,7 +83,7 @@ export class AdddealsComponent implements OnInit {
   viewNoteDetails: string;
   stepToggle: boolean = false;
   @ViewChildren(CustomsectionComponent) public CustomFieldSection: QueryList<CustomsectionComponent>;
-  constructor(private notesService: NotesinfoService, private customFieldService: CustomFieldsService, private leadService: AddleadsService, private contactService: ContactinformationService, public router: Router, private userService: UsersService, private organizationService: ListorganizationService, private adddealsService: AdddealsService, private notyHelper: NotyHelper, public dataShared: Datashared, public listDealService: ListdealsService, public addEventShowService: AddeventshowService, public addGroupService: AddgroupService, public modalService: ModalService, public addQuoteService: AddquoteService, private graphService: OnedrivegraphService) { }
+  constructor(private notesService: NotesinfoService, private customFieldService: CustomFieldsService, private leadService: AddleadsService, private contactService: ContactinformationService, public router: Router, private userService: UsersService, private organizationService: ListorganizationService, private adddealsService: AdddealsService, private notyHelper: NotyHelper, public dataShared: Datashared, public listDealService: ListdealsService, public addEventShowService: AddeventshowService, public addGroupService: AddgroupService, public modalService: ModalService, public addQuoteService: AddquoteService, private graphService: OnedrivegraphService, private msalService: GraphService) { }
   UserDetails: Array<Users> = [];
   notesInfos: Array<NotesInformation> = [];
   customFields: Array<CustomProperty> = [];
@@ -837,6 +841,16 @@ export class AdddealsComponent implements OnInit {
     //}
     else {
       this.isSaveDisabled = true;
+      if (!this.lead.DealId) {
+        let baseUrl = window.location.origin;
+        let urlDomain = "medicalassociates";
+        let content = {
+          "name": this.lead.DealName,
+          "folder": {},
+          "@microsoft.graph.conflictBehavior": "rename"
+        }
+        this.msalService.CreateFolder(Onedriveconfig.graphV1Url + 'drive/root:/' + urlDomain + ':/children', content);
+      }
       this.adddealsService.saveDeal(this.lead).subscribe(data => {
         if (data) {
           this.lead = data;
@@ -852,6 +866,8 @@ export class AdddealsComponent implements OnInit {
             x.SaveCustomFieldValues(data.DealId)
           });
           this.getContactInformation(LeadGenType.Deal, this.lead.DealId);
+            
+          
           this.notyHelper.ShowNoty("Data saved successfully !!!");
           this.isSaveDisabled = false;
           //this.router.navigate(['/listdeals']);

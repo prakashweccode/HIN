@@ -1,190 +1,198 @@
-<div class="w3-sidebar w3-bar-block w3-primary w3-xlarge h-width large-device" [style.width]="showSideMenu?'260px':'70px'" style="height:98%; overflow-x: hidden; border-bottom-right-radius: 50px;">
+<div class="w3-sidebar w3-bar-block w3-primary w3-xlarge h-width large-device" [style.width]="showSideMenu?'260px':'70px'" style="height:98%; overflow-x: hidden;">
+  <div class="w3-row">
 
-  <div>
-    <a (click)="sideMenuToogle()" class="w3-bar-item w3-medium w3-button w3-xlarge w3-hover-white w3-hover"><span class="w3-left" *ngIf="isSideMenu">HIN&nbsp;</span><span [ngClass]="showSideMenu ? 'w3-right':'w3-center'">☰</span></a>
-  </div>
-
-  <div class="w3-padding-top-small w3-padding-bottom-small">
-    <a [routerLink]="['/settings']" class="w3-bar-item w3-button w3-hover-white">
-      <i class="fa fa-user-circle w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
-      &nbsp;<span *ngIf="isSideMenu" class="w3-large">{{user.User.FirstName}}</span>
-    </a>
-  </div>
-
-
-  <div class="w3-center">
-    <div class="" permissionCheck="1">
-      <a [routerLink]="['/home']" class="w3-bar-item w3-button w3-hover-white">
-        <i class="fa fa-home w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
-        &nbsp;<span *ngIf="isSideMenu" class="w3-large">Home</span>
-      </a>
-      <!--<span class="w3-bar-item w3-small w3-center">Home</span>-->
-      <!--<span class="righttooltiptext w3-small">Home</span>-->
+    <div>
+      <a (click)="sideMenuToogle()" class="w3-bar-item w3-medium w3-button w3-xlarge w3-hover-white w3-hover"><span class="w3-left" *ngIf="isSideMenu">HIN&nbsp;</span><span [ngClass]="showSideMenu ? 'w3-right':'w3-center'">☰</span></a>
     </div>
 
-    <div class="" permissionCheck="2">
-      <a [routerLink]="['/listleads']" class="w3-bar-item w3-button w3-hover-white">
-        <i class="fa fa-user-o w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
-        &nbsp;<span *ngIf="isSideMenu" class="w3-large">Patient</span>
+    <div class="w3-padding-top-small w3-padding-bottom-small">
+      <a [routerLink]="['/settings']" class="w3-bar-item w3-button w3-hover-white">
+        <i class="fa fa-user-circle w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
+        &nbsp;<span *ngIf="isSideMenu" class="w3-large">{{user?.User?.FirstName}}</span>
       </a>
-      <!--<span class="w3-bar-item w3-small w3-center">Lead</span>-->
-      <!--<span class="righttooltiptext w3-small">Lead</span>-->
     </div>
 
-    <div class="" permissionCheck="3">
-      <a [routerLink]="['/listdeals']" class="w3-bar-item w3-button w3-hover-white">
-        <i class="fa fa-life-ring w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
-        &nbsp;<span *ngIf="isSideMenu" class="w3-large">Practice</span>
-      </a>
-      <!--<span class="w3-bar-item w3-small w3-center">Lead</span>-->
-      <!--<span class="righttooltiptext w3-small">Lead</span>-->
-    </div>
 
-    <div class="" permissionCheck="4">
-      <a [routerLink]="['/listservices']" class="w3-bar-item w3-button w3-hover-white">
-        <i class="fa fa-clock-o w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
-        &nbsp;<span *ngIf="isSideMenu" class="w3-large">Appointment</span>
-      </a>
-    </div>
-    <div class="" permissionCheck="5">
-      <a [routerLink]="['/funnel']" class="w3-bar-item w3-button w3-hover-white">
-        <i class="fa fa-filter w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
-        &nbsp;<span *ngIf="isSideMenu" class="w3-large">Funnel</span>
-      </a>
-    </div>
-    <div class="" permissionCheck="6">
-      <a [routerLink]="['/todolist']" class="w3-bar-item w3-button w3-hover-white">
-        <i class="fa fa-list-alt w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
-        &nbsp;<span *ngIf="isSideMenu" class="w3-large">To Do</span>
-      </a>
-    </div>
-    <div class="" permissionCheck="7">
-      <a [routerLink]="['/listtemplate']" class="w3-bar-item w3-button w3-hover-white">
-        <i class="fa fa-language w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
-        &nbsp;<span *ngIf="isSideMenu" class="w3-large">Template</span>
-      </a>
-    </div>
-    <!--<div class="" permissionCheck="8">
-    <a [routerLink]="['/sfcalendar']" class="w3-bar-item w3-button w3-hover-white">
-      <i class="fa fa fa-calendar w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
-      &nbsp;<span *ngIf="isSideMenu" class="w3-large">Calendar</span>
-    </a>
-  </div>-->
-    <div class="" permissionCheck="8">
-      <a [routerLink]="['/newcalendar']" class="w3-bar-item w3-button w3-hover-white">
+    <div class="w3-center">
+      <div class="" permissionCheck="1">
+        <a [routerLink]="['/home']" class="w3-bar-item w3-button w3-hover-white">
+          <i class="fa fa-home w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
+          &nbsp;<span *ngIf="isSideMenu" class="w3-large">Home</span>
+        </a>
+        <!--<span class="w3-bar-item w3-small w3-center">Home</span>-->
+        <!--<span class="righttooltiptext w3-small">Home</span>-->
+      </div>
+
+      <div class="" permissionCheck="2">
+        <a [routerLink]="['/listleads']" class="w3-bar-item w3-button w3-hover-white">
+          <i class="fa fa-user-o w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
+          &nbsp;<span *ngIf="isSideMenu" class="w3-large">Patient</span>
+        </a>
+        <!--<span class="w3-bar-item w3-small w3-center">Lead</span>-->
+        <!--<span class="righttooltiptext w3-small">Lead</span>-->
+      </div>
+
+      <div class="" permissionCheck="3">
+        <a [routerLink]="['/listdeals']" class="w3-bar-item w3-button w3-hover-white">
+          <i class="fa fa-life-ring w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
+          &nbsp;<span *ngIf="isSideMenu" class="w3-large">Practice</span>
+        </a>
+        <!--<span class="w3-bar-item w3-small w3-center">Lead</span>-->
+        <!--<span class="righttooltiptext w3-small">Lead</span>-->
+      </div>
+
+      <div class="" permissionCheck="4">
+        <a [routerLink]="['/listservices']" class="w3-bar-item w3-button w3-hover-white">
+          <i class="fa fa-clock-o w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
+          &nbsp;<span *ngIf="isSideMenu" class="w3-large">Appointment</span>
+        </a>
+      </div>
+      <div class="" permissionCheck="5">
+        <a [routerLink]="['/funnel']" class="w3-bar-item w3-button w3-hover-white">
+          <i class="fa fa-filter w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
+          &nbsp;<span *ngIf="isSideMenu" class="w3-large">Funnel</span>
+        </a>
+      </div>
+      <div class="" permissionCheck="6">
+        <a [routerLink]="['/todolist']" class="w3-bar-item w3-button w3-hover-white">
+          <i class="fa fa-list-alt w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
+          &nbsp;<span *ngIf="isSideMenu" class="w3-large">To Do</span>
+        </a>
+      </div>
+      <div class="" permissionCheck="7">
+        <a [routerLink]="['/template-dictation']" class="w3-bar-item w3-button w3-hover-white">
+          <i class="fa fa-language w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
+          &nbsp;<span *ngIf="isSideMenu" class="w3-large">Forms</span>
+        </a>
+      </div>
+      <!--<div class="" permissionCheck="8">
+      <a [routerLink]="['/sfcalendar']" class="w3-bar-item w3-button w3-hover-white">
         <i class="fa fa fa-calendar w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
         &nbsp;<span *ngIf="isSideMenu" class="w3-large">Calendar</span>
       </a>
-    </div>
-    <div class="" permissionCheck="9">
-      <a [routerLink]="['/listevent']" class="w3-bar-item w3-button w3-hover-white">
-        <i class="fa fa-list-alt w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
-        &nbsp;<span *ngIf="isSideMenu" class="w3-large">Events</span>
-      </a>
-    </div>
-    <!--<div class="">
+    </div>-->
+      <div class="" permissionCheck="8">
+        <a [routerLink]="['/newcalendar']" class="w3-bar-item w3-button w3-hover-white">
+          <i class="fa fa fa-calendar w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
+          &nbsp;<span *ngIf="isSideMenu" class="w3-large">Calendar</span>
+        </a>
+      </div>
+      <div class="" permissionCheck="9">
+        <a [routerLink]="['/listevent']" class="w3-bar-item w3-button w3-hover-white">
+          <i class="fa fa-list-alt w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
+          &nbsp;<span *ngIf="isSideMenu" class="w3-large">Events</span>
+        </a>
+      </div>
+      <!--<div class="">
       <a [routerLink]="['/basicform']" class="w3-bar-item w3-button w3-hover-white">
         <i class="fa fa-file w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
         &nbsp;<span *ngIf="isSideMenu" class="w3-large">Patient Intake Form</span>
       </a>
     </div>-->
 
-    <div class="custom-dropdown-hover w3-round-large" menuname="provider-menu" (click)="providerToggle=!providerToggle" permissionCheck="10">
-      <div class="" name="provider-menu">
-        <a class="w3-bar-item w3-button w3-hover-white" menuname="provider-menu">
-          <i class="fa fa-paper-plane-o w3-center" menuname="provider-menu" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
-          &nbsp;<span *ngIf="isSideMenu" menuname="provider-menu" class="w3-large">Provider <i class="w3-margin-left" menuname="provider-menu" [ngClass]="dropDownToggle?'fa w3-medium fa-chevron-up':'fa w3-medium fa-chevron-down'"></i> </span>
+      <div class="custom-dropdown-hover w3-round-large" menuname="provider-menu" (click)="providerToggle=!providerToggle" permissionCheck="10">
+        <div class="" name="provider-menu">
+          <a class="w3-bar-item w3-button w3-hover-white" menuname="provider-menu">
+            <i class="fa fa-paper-plane-o w3-center" menuname="provider-menu" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
+            &nbsp;<span *ngIf="isSideMenu" menuname="provider-menu" class="w3-large">Provider <i class="w3-margin-left" menuname="provider-menu" [ngClass]="dropDownToggle?'fa w3-medium fa-chevron-up':'fa w3-medium fa-chevron-down'"></i> </span>
+          </a>
+        </div>
+        <div class="w3-dropdown-content w3-card-4 w3-light-grey w3-animate-zoom w3-medium" style="position: absolute;bottom: 50px; font-size:medium; z-index:1" *ngIf="providerToggle">
+          <!--<a (click)="gotoVendor()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"> <i class="fa fa-building-o w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Vendor</span></a>-->
+          <a (click)="gotoReferral()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"> <i class="fa fa-link w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Provider</span></a>
+          <a (click)="gotoEvent()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"> <i class="fa fa-trophy w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Event</span></a>
+          <a (click)="gotoNetwork()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"> <i class="fa fa-plug w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Network</span></a>
+          <a (click)="gotoSearch()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"> <i class="fa fa-search w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Search</span></a>
+          <!--<a (click)="gotoPartner()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"> <i class="fa fa-handshake-o w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Partner</span></a>
+        <a (click)="gotoService()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"> <i class="fa fa-suitcase w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Service</span></a>-->
+        </div>
+      </div>
+
+      <div class="" permissionCheck="11">
+        <a [routerLink]="['/email']" class="w3-bar-item w3-button w3-hover-white">
+          <i class="fa fa-envelope w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
+          &nbsp;<span *ngIf="isSideMenu" class="w3-large">Email</span>
         </a>
       </div>
-      <div class="w3-dropdown-content w3-card-4 w3-light-grey w3-animate-zoom w3-medium" style="position: absolute;bottom: 50px; font-size:medium; z-index:1" *ngIf="providerToggle">
-        <!--<a (click)="gotoVendor()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"> <i class="fa fa-building-o w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Vendor</span></a>-->
-        <a (click)="gotoReferral()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"> <i class="fa fa-link w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Provider</span></a>
-        <a (click)="gotoEvent()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"> <i class="fa fa-trophy w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Event</span></a>
-        <a (click)="gotoNetwork()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"> <i class="fa fa-plug w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Network</span></a>
-        <a (click)="gotoSearch()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"> <i class="fa fa-search w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Search</span></a>
-        <!--<a (click)="gotoPartner()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"> <i class="fa fa-handshake-o w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Partner</span></a>
-      <a (click)="gotoService()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"> <i class="fa fa-suitcase w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Service</span></a>-->
+
+      <div class="custom-dropdown-hover w3-round-large" menuname="system-menu" (click)="systemToggle=!systemToggle" permissionCheck="12">
+        <div class="" name="system-menu">
+          <a class="w3-bar-item w3-button w3-hover-white" menuname="system-menu">
+            <i class="fa fa-cogs w3-center" menuname="system-menu" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
+            &nbsp;<span *ngIf="isSideMenu" menuname="system-menu" class="w3-large">Maintenance <i class="w3-margin-left" menuname="system-menu" [ngClass]="dropDownToggle?'fa w3-medium fa-chevron-up':'fa w3-medium fa-chevron-down'"></i> </span>
+          </a>
+        </div>
+        <div class="w3-dropdown-content w3-card-4 w3-light-grey w3-animate-zoom w3-medium" style="position: absolute;bottom: 50px; font-size:medium; z-index:1" *ngIf="systemToggle">
+          <a (click)="gotoUser()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"><i class="fa fa-users w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Users</span></a>
+          <a (click)="gotoCompanies()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"><i class="fa fa-briefcase w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Companies</span></a>
+          <a (click)="gotoCurrencies()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"><i class="fa fa-money w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Currencies</span></a>
+          <a (click)="manageCustomFields()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"><i class="fa fa-anchor w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Custom Columns</span></a>
+          <a (click)="gotoSettings()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"><i class="fa fa-lock w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Settings</span></a>
+          <a (click)="gotoSecurityPermission()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"><i class="fa fa-cog w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Security Permissions</span></a>
+          <a (click)="gotoCharts()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"><i class="fa fa-pie-chart w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">User Quota</span></a>
+          <a (click)="gotoImportSettings()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"><i class="fa fa-upload w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Import Settings</span></a>
+          <a (click)="gotoDashboardSettings()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"><i class="fa fa-tachometer w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>  &nbsp;<span *ngIf="isSideMenu" class="w3-large">Dashboard Settings</span></a>
+        </div>
       </div>
-    </div>
 
-    <div class="" permissionCheck="11">
-      <a [routerLink]="['/email']" class="w3-bar-item w3-button w3-hover-white">
-        <i class="fa fa-envelope w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
-        &nbsp;<span *ngIf="isSideMenu" class="w3-large">Email</span>
-      </a>
-    </div>
+      <br />
+      <br />
+      <br />
+      <br />
 
-    <div class="custom-dropdown-hover w3-round-large" menuname="system-menu" (click)="systemToggle=!systemToggle" permissionCheck="12">
-      <div class="" name="system-menu">
-        <a class="w3-bar-item w3-button w3-hover-white" menuname="system-menu">
-          <i class="fa fa-cogs w3-center" menuname="system-menu" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
-          &nbsp;<span *ngIf="isSideMenu" menuname="system-menu" class="w3-large">Maintenance <i class="w3-margin-left" menuname="system-menu" [ngClass]="dropDownToggle?'fa w3-medium fa-chevron-up':'fa w3-medium fa-chevron-down'"></i> </span>
+      <div class="">
+        <a (click)="logout()" class="w3-bar-item w3-button w3-hover-white">
+          <i class="fa fa-sign-out w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
+          &nbsp;<span *ngIf="isSideMenu" class="w3-large">Logout</span>
         </a>
       </div>
-      <div class="w3-dropdown-content w3-card-4 w3-light-grey w3-animate-zoom w3-medium" style="position: absolute;bottom: 50px; font-size:medium; z-index:1" *ngIf="systemToggle">
-        <a (click)="gotoUser()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"><i class="fa fa-users w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Users</span></a>
-        <a (click)="gotoCompanies()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"><i class="fa fa-briefcase w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Companies</span></a>
-        <a (click)="gotoCurrencies()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"><i class="fa fa-money w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Currencies</span></a>
-        <a (click)="manageCustomFields()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"><i class="fa fa-anchor w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Custom Columns</span></a>
-        <a (click)="gotoSettings()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"><i class="fa fa-lock w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Settings</span></a>
-        <a (click)="gotoSecurityPermission()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"><i class="fa fa-cog w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Security Permissions</span></a>
-        <a (click)="gotoCharts()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"><i class="fa fa-pie-chart w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">User Quota</span></a>
-        <a (click)="gotoImportSettings()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"><i class="fa fa-upload w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i> &nbsp;<span *ngIf="isSideMenu" class="w3-large">Import Settings</span></a>
-        <a (click)="gotoDashboardSettings()" class="w3-button w3-left-align w3-block w3-border-bottom w3-border-blue-gray"><i class="fa fa-tachometer w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>  &nbsp;<span *ngIf="isSideMenu" class="w3-large">Dashboard Settings</span></a>
-      </div>
+
+
+
     </div>
-
-    <br />
-    <br />
-    <br />
-    <br />
-
-    <div class="">
-      <a (click)="logout()" class="w3-bar-item w3-button w3-hover-white">
-        <i class="fa fa-sign-out w3-center" [style.width]="showSideMenu?'30px':''" aria-hidden="true"></i>
-        &nbsp;<span *ngIf="isSideMenu" class="w3-large">Logout</span>
-      </a>
-    </div>
-
-
-
   </div>
 </div>
 
 
 <div class="w3-primary small-device navbar" [ngClass]="mobileMenuToggle ? 'responsive': 'topnav'" id="myTopnav">
 
-  <a (click)="mobileMenuToggle = !mobileMenuToggle" class="w3-bar-item w3-button w3-block w3-hover-white"><span class="w3-left">HIN&nbsp;</span><span class="w3-right"><i class="fa fa-bars" aria-hidden="true"></i></span></a>
-  <a [routerLink]="['/settings']" class="w3-bar-item w3-button w3-hover-white w3-block">
-    <span class="w3-left">{{user.User.FirstName}}</span>
+  <a (click)="mobileMenuToggle = !mobileMenuToggle" class="w3-bar-item w3-button w3-block w3-hover-white">
+    <span class="w3-left">HIN&nbsp;</span>
+    <span class="w3-right">
+      <i *ngIf="!mobileMenuToggle" class="fa fa-bars" aria-hidden="true"></i>
+      <i *ngIf="mobileMenuToggle" class="fa fa-times" aria-hidden="true"></i>
+    </span>
   </a>
-  <a [routerLink]="['/home']" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">Home</span></a>
-  <a [routerLink]="['/listleads']" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">Patient</span></a>
-  <a [routerLink]="['/listdeals']" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">Practice</span></a>
-  <a [routerLink]="['/listservices']" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left" >Appointment</span></a>
-  <a [routerLink]="['/funnel']" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">Funnel</span></a>
-  <a [routerLink]="['/todolist']" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">To Do</span></a>
-  <a [routerLink]="['/listtemplate']" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">Template</span></a>
-  <a [routerLink]="['/sfcalendar']" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">Calendar</span></a>
-  <a [routerLink]="['/listevent']" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">Events</span></a>
-  <a class="dropbtn" (click)="myFunction()"><span class="w3-left">Provider</span><span class=""><i class="fa w3-medium fa-chevron-down w3-right w3-margin-left w3-margin-top-small" aria-hidden="true"></i></span></a>
+  <a [routerLink]="['/settings']" (click)="mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block">
+    <span class="w3-left">{{user?.User?.FirstName}}</span>
+  </a>
+  <a [routerLink]="['/home']" (click)="mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">Home</span></a>
+  <a [routerLink]="['/listleads']" (click)="mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">Patient</span></a>
+  <a [routerLink]="['/listdeals']" (click)="mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">Practice</span></a>
+  <a [routerLink]="['/listservices']" (click)="mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">Appointment</span></a>
+  <a [routerLink]="['/funnel']" (click)="mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">Funnel</span></a>
+  <a [routerLink]="['/todolist']" (click)="mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">To Do</span></a>
+  <a [routerLink]="['/template-dictation']" (click)="mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">Forms</span></a>
+  <a [routerLink]="['/sfcalendar']" (click)="mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">Calendar</span></a>
+  <a [routerLink]="['/listevent']" (click)="mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">Events</span></a>
+  <a class="dropbtn w3-bar-item w3-button w3-hover-white w3-block" (click)="myFunction();"><span class="w3-left">Provider</span><span class=""><i class="fa w3-medium fa-chevron-down w3-right w3-margin-left w3-margin-top-small" aria-hidden="true"></i></span></a>
   <div class="dropdown-content" id="myDropdown">
-    <a (click)="gotoReferral()" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Provider</span></a>
-    <a (click)="gotoEvent()" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Event</span></a>
-    <a (click)="gotoNetwork()" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Network</span></a>
+    <a (click)="gotoReferral();mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Provider</span></a>
+    <a (click)="gotoEvent();mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Event</span></a>
+    <a (click)="gotoNetwork();mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Network</span></a>
   </div>
-  <a [routerLink]="['/email']" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">Email</span></a>
-  <a class="dropbtn" (click)="mainFunction()"><span class="w3-left">Maintenance</span><span class=""><i class="fa w3-medium fa-chevron-down w3-right w3-margin-left w3-margin-top-small" aria-hidden="true"></i></span></a>
+  <a [routerLink]="['/email']" (click)="mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">Email</span></a>
+  <a class="dropbtn w3-bar-item w3-button w3-hover-white w3-block" (click)="mainFunction();"><span class="w3-left">Maintenance</span><span class=""><i class="fa w3-medium fa-chevron-down w3-right w3-margin-left w3-margin-top-small" aria-hidden="true"></i></span></a>
   <div class="dropdown-content" id="textDropdown">
-    <a (click)="gotoUser()" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Users</span></a>
-    <a (click)="gotoCompanies()" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Companies</span></a>
-    <a (click)="gotoCurrencies()" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Currencies</span></a>
-    <a (click)="manageCustomFields()" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Custom Columns</span></a>
-    <a (click)="gotoSettings()" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Settings</span></a>
-    <a (click)="gotoSecurityPermission()" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Security Permissions</span></a>
-    <a (click)="gotoCharts()" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">User Quota</span></a>
-    <a (click)="gotoImportSettings()" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Import Settings</span></a>
-    <a (click)="gotoDashboardSettings()" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Dashboard Settings</span></a>
+    <a (click)="gotoUser();mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Users</span></a>
+    <a (click)="gotoCompanies();mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Companies</span></a>
+    <a (click)="gotoCurrencies();mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Currencies</span></a>
+    <a (click)="manageCustomFields();mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Custom Columns</span></a>
+    <a (click)="gotoSettings();mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Settings</span></a>
+    <a (click)="gotoSecurityPermission();mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Security Permissions</span></a>
+    <a (click)="gotoCharts();mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">User Quota</span></a>
+    <a (click)="gotoImportSettings();mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Import Settings</span></a>
+    <a (click)="gotoDashboardSettings();mobileMenuToggle=false" class="w3-bar-item w3-button w3-hover-white w3-block w3-text-white"><span class="w3-left">Dashboard Settings</span></a>
   </div>
   <a (click)="logout()" class="w3-bar-item w3-button w3-hover-white w3-block"><span class="w3-left">Logout</span></a>
 

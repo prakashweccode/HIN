@@ -1,0 +1,52 @@
+<div class="w3-margin-bottom-medium">
+  <div class="cus-border" style="position:static;">
+    <div class="w3-rest w3-cursor">
+      <input type="datetime" placeholder="mm/dd/yyyy" (focusout)="checkValidDate($event)" (keyup)="dateValidate($event)" [(ngModel)]="dateSelected" class="p-text-style w3-border w3-input" />
+      <span class="fa fa-calendar-check-o field-icon eye-style" (click)="enableCalendar=!enableCalendar ; preventCloseOnClick()"></span>
+    </div>
+  </div>
+  <span *ngIf="!isValidate" class="w3-text-red">{{'Enter Valid date'}}</span>
+  <span *ngIf="!isSelectValidate" class="w3-text-red">{{'Selected date should be previous date'}}</span>
+  <div style="position: absolute; z-index: 3; width: 320px;">
+    <div class="cus-border" *ngIf="enableCalendar" style="display:block;top:0px;transform: translate(0%,0%);z-index: 1;background-color: #f7f7f7;margin-bottom:16px">
+      <div dateSelected="true">
+        <div class="w3-panel w3-theme">
+          <div class="w3-row" style="justify-content: center;">
+            <div class="w3-sm-12">
+              <button class="w3-button" (click)="prevMonth()">&lt;</button>
+              <span class="p4" style="text-transform: capitalize;">{{ currentDate.format('MMMM') }}</span>
+              <button class="w3-button" (click)="nextMonth()">&gt;</button>
+            </div>
+            <div class="w3-sm-12">
+              <button class="w3-button" (click)="prevYear()">&lt;</button>
+              <span>{{ currentDate.format('YYYY') }}</span>
+              <button class="w3-button" (click)="nextYear()">&gt;</button>
+            </div>
+          </div>
+          <div>
+            <div class="w3-row header-row">
+              <div *ngFor="let name of dayNames" class="w3-cell header-cells">
+                {{ name }}
+              </div>
+            </div>
+            <div *ngFor="let week of weeks" class="w3-row content-row">
+              <ng-container *ngFor="let day of week">
+                <div class="w3-cell content-cells disabled" *ngIf="disablePreviousDate(day.mDate)">
+                  <span class="date-text">{{ day.mDate.date() }}</span>
+                </div>
+                <div class="w3-cell content-cells enabled"
+                     *ngIf="!disablePreviousDate(day.mDate)"
+                     (click)="selectDate(day)"
+                     [ngClass]="{ selected: day.selected }">
+                  <span class="date-text" [ngClass]="{ selected: day.selected }">{{ day.mDate.date() }}</span>
+                </div>
+              </ng-container>
+            </div>
+            <button class="w3-left w3-margin-top" style="border: none;background-color: #f7f7f7;margin-top: 4px !important;" (click)="clear()">{{'Clear'}}</button>
+            <button class="w3-right w3-margin-top" style="border: none;background-color: #f7f7f7;margin-top: 4px !important;" (click)="today()">{{'Today'}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

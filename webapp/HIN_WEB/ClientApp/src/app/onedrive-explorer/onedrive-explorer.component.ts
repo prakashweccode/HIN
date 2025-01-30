@@ -1,13 +1,7 @@
-import { HttpClient, HttpEventType, HttpRequest } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { NotyHelper } from '../helper/NotyHelper';
-import { explorerValues, Onedriveconfig } from '../helper/onedriveconfig';
-import { Message, Officeemail } from '../model/officeemail';
-import { AuthService } from '../officeauth/auth.service';
 import { GraphService } from '../officeauth/graph.service';
-import { OnedrivegraphService } from '../onedriveservice/onedrivegraph.service';
-import { DirectoryInfos, NewFolder, SelectedNode } from '../sf-file-explorer/sf-file-explorer';
-import { SfFileExplorerService } from '../sf-file-explorer/sf-file-explorer.service';
+import { DirectoryInfos } from '../sf-file-explorer/sf-file-explorer';
 
 @Component({
   selector: 'app-onedrive-explorer',
@@ -41,17 +35,19 @@ export class OnedriveExplorerComponent implements OnInit {
   public shareMessage: string;
   public parentReference: any;
   public sharedFolder: any;
-  constructor(private graphService: OnedrivegraphService, private noty: NotyHelper) {
+  public sharedFile: any;
+  isMyFilesToggle: boolean = true;
+  constructor(private noty: NotyHelper, private graph: GraphService) {
 
   }
 
   ngOnInit() {
-    if (explorerValues.authentication.status === 'authenticated') {
-      this.intializeComponent();
-    }
-    else {
-      this.driveDatas = [];
-    }
+    //if (explorerValues.authentication.status === 'authenticated') {
+    this.intializeComponent();
+    //}
+    //else {
+    //this.driveDatas = [];
+    //}
     //if (this.EmrNo) {
     //  let content = {
     //    "name": this.EmrNo,
@@ -66,36 +62,50 @@ export class OnedriveExplorerComponent implements OnInit {
   //}
   intializeComponent() {
     //this.getRootDrive();
-    this.getPatientFiles();
+    //this.getPatientFiles();
+    //this.graph.getSharedDrive();
+    this.getMyOneDrive();
   }
 
-  async getPatientFiles() {
-    if (this.searchString) {
-      let request = {
-        "requests": [
-          {
-            "entityTypes": [
-              "driveItem"
-            ],
-            "query": {
-              "queryString": this.searchString + " AND ContentType:Document"
-            }
-          }
-        ]
-      };
-      await this.graphService.executeQuery('POST', Onedriveconfig.graphV1UrlExcludeMe + 'search/query', request).subscribe(data => {
-        if (data) {
-          this.driveDatas = [];
-          this.rootDrive = data.value[0].hitsContainers[0].hits;
-          this.rootDrive.forEach(x => {
-            x.resource.file = true;
-            this.driveDatas.push(x.resource);
-          });
-          console.log(this.driveDatas);
-        }
-      }, err => { }, () => { });
-    }
+
+
+  getMyOneDrive() {
+    this.graph.getRootItems().then(x => {
+      if (x) {
+        this.driveDatas = [];
+        this.driveDatas = x.value;
+        this.selectedNode = null;
+      }
+    }, err => { this.noty.ShowNoty(err.message); });
   }
+
+  //async getPatientFiles() {
+  //  if (this.searchString) {
+  //    let request = {
+  //      "requests": [
+  //        {
+  //          "entityTypes": [
+  //            "driveItem"
+  //          ],
+  //          "query": {
+  //            "queryString": this.searchString + " AND ContentType:Document"
+  //          }
+  //        }
+  //      ]
+  //    };
+  //    await this.graphService.executeQuery('POST', Onedriveconfig.graphV1UrlExcludeMe + 'search/query', request).subscribe(data => {
+  //      if (data) {
+  //        this.driveDatas = [];
+  //        this.rootDrive = data.value[0].hitsContainers[0].hits;
+  //        this.rootDrive.forEach(x => {
+  //          x.resource.file = true;
+  //          this.driveDatas.push(x.resource);
+  //        });
+  //        console.log(this.driveDatas);
+  //      }
+  //    }, err => { }, () => { });
+  //  }
+  //}
 
   closePreviewToggle() {
     this.previewToggle = false;
@@ -121,7 +131,7 @@ export class OnedriveExplorerComponent implements OnInit {
 
   download() {
     if (this.selectedNode && this.selectedNode.file) {
-      
+
     }
   }
   preview() {
@@ -148,12 +158,24 @@ export class OnedriveExplorerComponent implements OnInit {
 
   }
   home() {
-    this.getPatientFiles();
+    //this.graph.getDrive();
+    //this.getPatientFiles();
     //this.getRootDrive();
+    //this.graph.getRootItems();
+    this.getMyOneDrive();
   }
   getDrive(node) {
+    console.log(node);
     if (node) {
-      this.loadItems(node);
+      //this.loadItems(node);
+      this.graph.getItems(node.parentReference.driveId, node.id).then(x => {
+        if (x) {
+          console.log(x);
+          this.driveDatas = [];
+          this.driveDatas = x.value;
+          this.selectedNode = null;
+        }
+      });
     }
   }
   selectDrive(node) {
@@ -164,31 +186,92 @@ export class OnedriveExplorerComponent implements OnInit {
     }
   }
 
-  async getRootDrive(): Promise<void> {
-    await this.graphService.executeQuery('GET', Onedriveconfig.graphV1Url + 'drive/root:/Health/' + this.EmrNo + ':/').subscribe(x => {
-      this.driveDatas = [];
-      this.rootDrive = x;
-      if (this.rootDrive) {
-        this.driveDatas.push(x);
-      }
-      this.clearSelection();
-    }, err => {
-      if (err.status === 404) {
+  //async getRootDrive(): Promise<void> {
+  //  await this.graphService.executeQuery('GET', Onedriveconfig.graphV1Url + 'drive/root:/Health/' + this.EmrNo + ':/').subscribe(x => {
+  //    this.driveDatas = [];
+  //    this.rootDrive = x;
+  //    if (this.rootDrive) {
+  //      this.driveDatas.push(x);
+  //    }
+  //    this.clearSelection();
+  //  }, err => {
+  //    if (err.status === 404) {
+  //      this.driveDatas = [];
+  //      this.getMySharedDrive(this.EmrNo);
+  //    }
+  //  }, () => { });
+  //}
+  //async getMySharedDrive(currentFolderName: string): Promise<any> {
+  //  await this.graphService.executeQuery('GET', Onedriveconfig.graphV1Url + 'drive/sharedwithme?allowexternal=true').subscribe(data => {
+  //    //this.driveDatas = [];
+  //    //this.rootDrive = x;
+  //    this.sharedFolder = data;
+  //    if (data) {
+  //      this.getSharedFolder(this.sharedFolder.value, currentFolderName);
+  //    }
+  //    //this.clearSelection();
+  //  }, err => { }, () => { });
+  //}
+
+  getSharedDriveFolder() {
+    this.graph.getSharedDrive().then(x => {
+      if (x) {
         this.driveDatas = [];
-        this.getMySharedDrive(this.EmrNo);
+        this.driveDatas = x.value;
+        this.selectedNode = null;
       }
-    }, () => { });
+    }, err => { this.noty.ShowNoty(err.message); })
   }
-  async getMySharedDrive(currentFolderName: string): Promise<any> {
-    await this.graphService.executeQuery('GET', Onedriveconfig.graphV1Url + 'drive/sharedwithme?allowexternal=true').subscribe(data => {
-      //this.driveDatas = [];
-      //this.rootDrive = x;
-      this.sharedFolder = data;
-      if (data) {
-        this.getSharedFolder(this.sharedFolder.value, currentFolderName);
-      }
-      //this.clearSelection();
-    }, err => { }, () => { });
+
+  readFile(file: File) {
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const arrayBuffer = e.target;
+      console.log('ArrayBuffer:', arrayBuffer);
+
+      // Now you can use the arrayBuffer as needed
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
+
+  convertFileToArrayBuffer(file: File): Promise<ArrayBuffer> {
+    return new Promise<ArrayBuffer>((resolve, reject) => {
+      const fileReader = new FileReader();
+
+      fileReader.onload = (event: any) => {
+        resolve(event.target.result);
+      };
+
+      fileReader.onerror = (event: any) => {
+        reject(event.target.error);
+      };
+
+      fileReader.readAsArrayBuffer(file);
+    });
+  }
+
+  onFileUpload(evt: any) {
+    const file: File = evt.target.files[0];
+    if (file && this.selectedNode.id) {
+      this.convertFileToArrayBuffer(file)
+        .then((arrayBuffer: ArrayBuffer) => {
+          this.graph.updateFile(this.selectedNode.id, file.name, arrayBuffer).then(x => {
+            if (x) {
+              this.noty.ShowNoty("File uploaded successfully");
+            }
+
+          }, err => {
+            this.noty.ShowNoty(err);
+          })
+        })
+        .catch((error) => {
+          console.error('Error converting file to ArrayBuffer:', error);
+        });
+
+    }
+
   }
 
   getSharedFolder(sharedfolder, foldername) {
@@ -202,68 +285,91 @@ export class OnedriveExplorerComponent implements OnInit {
 
   openDrive() {
     if (this.selectedNode) {
-      this.loadItems(this.selectedNode);
+      //this.loadItems(this.selectedNode);
+      this.getDrive(this.selectedNode.remoteItem ? this.selectedNode.remoteItem : this.selectedNode);
     }
   }
 
-  async loadItems(node): Promise<void> {
-    if (node.folder) {
-      let parentNodeId = node.parentReference ? node.parentReference.driveId : node.remoteItem.parentReference.driveId;
-      await this.graphService.executeQuery('GET', Onedriveconfig.graphV1Url + 'drives/' + parentNodeId + '/items/' + node.id + '/children').subscribe(x => {
-        this.rootDrive = x;
-        if (this.rootDrive.value) {
-          this.driveDatas = [];
-          this.rootDrive.value.forEach(x => {
-            this.driveDatas.push(x);
-          });
-        }
+  //async loadItems(node): Promise<void> {
+  //  if (node.folder) {
+  //    let parentNodeId = node.parentReference ? node.parentReference.driveId : node.remoteItem.parentReference.driveId;
+  //    await this.graphService.executeQuery('GET', Onedriveconfig.graphV1Url + 'drives/' + parentNodeId + '/items/' + node.id + '/children').subscribe(x => {
+  //      this.rootDrive = x;
+  //      if (this.rootDrive.value) {
+  //        this.driveDatas = [];
+  //        this.rootDrive.value.forEach(x => {
+  //          this.driveDatas.push(x);
+  //        });
+  //      }
 
-        this.parentReference = node.parentReference;
-        this.clearSelection();
-      }, err => { });
-    }
-    else if (node.file) {
-      window.open(node.webUrl, "_blank");
-    }
-  }
+  //      this.parentReference = node.parentReference;
+  //      this.clearSelection();
+  //    }, err => { });
+  //  }
+  //  else if (node.file) {
+  //    window.open(node.webUrl, "_blank");
+  //  }
+  //}
+
+
+  //async loadItems(node): Promise<void> {
+  //  if (node.folder) {
+  //    let parentNodeId = node.parentReference ? node.parentReference.driveId : node.remoteItem.parentReference.driveId;
+  //    await this.graphService.executeQuery('GET', Onedriveconfig.graphV1Url + 'drives/' + parentNodeId + '/items/' + node.id + '/children').subscribe(x => {
+  //      this.rootDrive = x;
+  //      if (this.rootDrive.value) {
+  //        this.driveDatas = [];
+  //        this.rootDrive.value.forEach(x => {
+  //          this.driveDatas.push(x);
+  //        });
+  //      }
+
+  //      this.parentReference = node.parentReference;
+  //      this.clearSelection();
+  //    }, err => { });
+  //  }
+  //  else if (node.file) {
+  //    window.open(node.webUrl, "_blank");
+  //  }
+  //}
 
   goBack() {
     if (this.parentReference) {
-      this.getPreviousItem(this.parentReference);
+      //this.getPreviousItem(this.parentReference);
     }
   }
 
-  async getPreviousItem(el: any) {
-    if (el) {
-      let rootPath = Onedriveconfig.graphV1Url + 'drive/root:/Health/' + this.EmrNo + ':/';
-      let absolutePath = Onedriveconfig.graphV1Url + 'drives/' + el.driveId + '/items/' + el.id + '/children';
-      let path = this.validateRelativePath(el.path);
-      if (path) {
-        await this.graphService.executeQuery('GET', absolutePath).subscribe(x => {
-          this.rootDrive = x;
-          if (this.rootDrive.value) {
-            this.driveDatas = [];
-            this.rootDrive.value.forEach(x => {
-              this.driveDatas.push(x);
-            });
-          }
-          this.parentReference = el;
-          this.clearSelection();
-        }, err => { });
-      }
-      else {
-        await this.graphService.executeQuery('GET', rootPath).subscribe(x => {
-          this.driveDatas = [];
-          this.rootDrive = x;
-          if (this.rootDrive) {
-            this.driveDatas.push(x);
-          }
-          this.clearSelection();
-        }, err => { }, () => { });
-      }
+  //async getPreviousItem(el: any) {
+  //  if (el) {
+  //    let rootPath = Onedriveconfig.graphV1Url + 'drive/root:/Health/' + this.EmrNo + ':/';
+  //    let absolutePath = Onedriveconfig.graphV1Url + 'drives/' + el.driveId + '/items/' + el.id + '/children';
+  //    let path = this.validateRelativePath(el.path);
+  //    if (path) {
+  //      await this.graphService.executeQuery('GET', absolutePath).subscribe(x => {
+  //        this.rootDrive = x;
+  //        if (this.rootDrive.value) {
+  //          this.driveDatas = [];
+  //          this.rootDrive.value.forEach(x => {
+  //            this.driveDatas.push(x);
+  //          });
+  //        }
+  //        this.parentReference = el;
+  //        this.clearSelection();
+  //      }, err => { });
+  //    }
+  //    else {
+  //      await this.graphService.executeQuery('GET', rootPath).subscribe(x => {
+  //        this.driveDatas = [];
+  //        this.rootDrive = x;
+  //        if (this.rootDrive) {
+  //          this.driveDatas.push(x);
+  //        }
+  //        this.clearSelection();
+  //      }, err => { }, () => { });
+  //    }
 
-    }
-  }
+  //  }
+  //}
 
   validateRelativePath(path) {
     let arrpath = path.split('/');
@@ -926,6 +1032,7 @@ export class OnedriveExplorerComponent implements OnInit {
 
   async shareDrive() {
     if (this.selectedNode) {
+      let parentDriveId = this.selectedNode.remoteItem ? this.selectedNode.remoteItem.parentReference.driveId : this.selectedNode.parentReference.driveId;
       let content = {
         "recipients": this.listOfShareEmails,
         "message": this.shareMessage,
@@ -933,14 +1040,18 @@ export class OnedriveExplorerComponent implements OnInit {
         "sendInvitation": true,
         "roles": ["write"]
       };
-      this.graphService.executeQuery('POST', Onedriveconfig.graphV1Url + 'drives/' + this.selectedNode.parentReference.driveId + '/items/' + this.selectedNode.id
-        + '/invite', content).subscribe((result: any) => {
-          this.noty.ShowNoty("Invite sent to the uers successfully");
-        }, (error: any) => {
-          this.noty.ShowNoty(error.code);
-        }, () => {
-          this.isSharedDrive = false;
-        });
+      this.graph.shareDrive(parentDriveId, this.selectedNode.id, content).then(x => {
+        this.isSharedDrive = false;
+        this.noty.ShowNoty("Shared successfully");
+      });
+      //this.graphService.executeQuery('POST', Onedriveconfig.graphV1Url + 'drives/' + this.selectedNode.parentReference.driveId + '/items/' + this.selectedNode.id
+      //  + '/invite', content).subscribe((result: any) => {
+      //    this.noty.ShowNoty("Invite sent to the uers successfully");
+      //  }, (error: any) => {
+      //    this.noty.ShowNoty(error.code);
+      //  }, () => {
+      //    this.isSharedDrive = false;
+      //  });
     }
   }
 }
